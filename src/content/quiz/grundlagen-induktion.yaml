@@ -75,6 +75,22 @@ fragen:
     einheit: V
     erklaerung: '$U = 4{,}44 \cdot f \cdot N \cdot \hat{\Phi} = 4{,}44 \cdot 50 \cdot 100 \cdot 0{,}002\,\mathrm{V} = 44{,}4\,\mathrm{V}$'
 
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Trafokern hat $A_\mathrm{Fe} = 5\,\mathrm{cm^2}$ und darf mit $B_\mathrm{max} = 1\,\mathrm{T}$ betrieben werden. Wie viele Primärwindungen braucht er an $230\,\mathrm{V}$, $50\,\mathrm{Hz}$ mindestens (ganze Zahl)?'
+    loesung: 2073
+    einheit: ''
+    toleranz: 1
+    toleranzArt: absolut
+    erklaerung: '$N_1 = U_1 / (4{,}44 \cdot f \cdot A_\mathrm{Fe} \cdot B_\mathrm{max}) = 230 / (4{,}44 \cdot 50 \cdot 5 \cdot 10^{-4} \cdot 1) \approx 2072{,}1$ → aufrunden auf 2073, damit $B$ unter 1 T bleibt.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Die Sekundärwicklung eines Trafos soll $6\,\mathrm{A}$ führen, die Stromdichte darf $3\,\mathrm{A/mm^2}$ betragen. Welcher Drahtquerschnitt ist mindestens nötig?'
+    loesung: 2
+    einheit: mm²
+    erklaerung: '$A_\mathrm{Cu} = I / J_\mathrm{max} = 6\,\mathrm{A} / 3\,\mathrm{A/mm^2} = 2\,\mathrm{mm^2}$ (Durchmesser $d = \sqrt{4A/\pi} \approx 1{,}6\,\mathrm{mm}$)'
+
   - typ: mc
     stufe: standard
     frage: Welcher Effekt wird bei einer Freilaufdiode an einer Relaisspule genutzt bzw. entschärft?
