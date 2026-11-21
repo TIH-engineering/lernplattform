@@ -1,0 +1,62 @@
+---
+title: Leistungselektronik
+description: "Übersicht: MOSFETs, Motorbrücken, Gate-Treiber, DC/DC-Wandler, Sperrwandler, passive Bauelemente und Layout."
+sidebar:
+  label: Übersicht
+---
+
+import { LinkCard, CardGrid, Card } from '@astrojs/starlight/components';
+
+Leistungselektronik **wandelt elektrische Energie** – möglichst verlustarm. Ob Handy-Ladegerät,
+LED-Treiber, Motorsteuerung oder Elektroauto: Überall schalten Halbleiter tausende bis Millionen Mal
+pro Sekunde ein und aus, und Spulen und Kondensatoren glätten das Ergebnis.
+
+## Lernziele
+
+Nach diesem Themenbereich kannst du …
+
+- erklären, warum Schaltwandler einen viel höheren Wirkungsgrad als Linearregler erreichen,
+- die Verluste eines MOSFETs (Durchlass- und Schaltverluste) abschätzen,
+- Halbbrücke und H-Brücke beschreiben und die Schaltzustände für einen Gleichstrommotor angeben,
+- die Aufgaben eines Gate-Treibers und das Bootstrap-Prinzip erklären,
+- Tiefsetzsteller, Hochsetzsteller und invertierenden Buck-Boost-Wandler berechnen
+  (Tastverhältnis, Drosselstrom, Stromwelligkeit, Spannungsrippel),
+- das Prinzip des Sperrwandlers mit galvanischer Trennung erklären,
+- reale Kondensatoren, Drosseln und Transformatoren mithilfe von Datenblättern beurteilen,
+- heiße Pfade im Leiterplattenlayout erkennen.
+
+## Theorie
+
+<CardGrid>
+	<LinkCard title="1 · Einführung" description="Was ist Leistungselektronik? Linearregler vs. Schaltwandler" href="/leistungselektronik/theorie/einfuehrung/" />
+	<LinkCard title="2 · Leistungshalbleiter" description="MOSFET als Schalter, Verluste abschätzen" href="/leistungselektronik/theorie/leistungshalbleiter/" />
+	<LinkCard title="3 · Motorbrücken" description="Halbbrücke, H-Brücke, Bremsen und Rückspeisung" href="/leistungselektronik/theorie/motorbruecken/" />
+	<LinkCard title="4 · Gate-Treiber" description="Treiberaufgaben, Bootstrap, Ladungspumpe" href="/leistungselektronik/theorie/gate-treiber/" />
+	<LinkCard title="5 · DC/DC-Wandler" description="Buck, Boost, Buck-Boost, Rippel" href="/leistungselektronik/theorie/dc-dc-wandler/" />
+	<LinkCard title="6 · Sperrwandler" description="Flyback und weitere isolierende Wandler" href="/leistungselektronik/theorie/sperrwandler/" />
+	<LinkCard title="7 · Passive Bauelemente" description="Kondensatoren, Drosseln, Transformatoren" href="/leistungselektronik/theorie/passive-bauelemente/" />
+	<LinkCard title="8 · Layout und EMV" description="Heiße Pfade und Kommutierungszellen" href="/leistungselektronik/theorie/layout-emv/" />
+</CardGrid>
+
+## Üben und Anwenden
+
+<CardGrid>
+	<Card title="Rechenbeispiele" icon="pencil">
+		[Zu den Rechenbeispielen](/leistungselektronik/rechenbeispiele/) – vom Wirkungsgrad bis zur kompletten Buck-Auslegung.
+	</Card>
+	<Card title="Praxisbeispiele" icon="setting">
+		[Zu den Praxisbeispielen](/leistungselektronik/praxisbeispiele/) – echte ICs, Drosselauswahl, Netzteil, Layout, Messen.
+	</Card>
+	<Card title="Quiz" icon="approve-check">
+		[Zum Quiz](/leistungselektronik/quiz/) – teste dein Wissen.
+	</Card>
+	<Card title="Simulationen" icon="laptop">
+		[Zu den Simulationen](/leistungselektronik/simulationen/) – LTspice-Dateien zum Ausprobieren.
+	</Card>
+</CardGrid>
+
+:::note[Grundlage]
+Die Inhalte basieren auf dem Unterrichtsskript *Leistungselektronik* (H. Tiefenthaler, HTL Rankweil, 2026),
+das fachlich auf der Vorlesung *Leistungselektronik* von Prof. Dr.-Ing. Martin März (FAU Erlangen-Nürnberg)
+sowie auf Herstellerdatenblättern aufbaut. Details zu den Quellen findest du unter [Literatur & Links](/leistungselektronik/literatur/).
+:::

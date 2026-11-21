@@ -1,0 +1,39 @@
+---
+title: Literatur & Links
+description: Quellen, Datenblätter, Application Notes, Bücher und Simulationswerkzeuge zur Leistungselektronik.
+---
+
+## Quellen dieser Seiten
+
+- H. Tiefenthaler: *Leistungselektronik – Unterrichtsskript*, HTL Rankweil, 2026.
+- M. März: *Leistungselektronik*, Vorlesung, Friedrich-Alexander-Universität Erlangen-Nürnberg, WS 2025/26.
+  Fachliche Grundlage des Skripts (nichtkommerzielle Nutzung mit Genehmigung des Autors).
+- Herstellerdatenblätter und Application Notes (siehe unten).
+
+## Datenblätter und Application Notes
+
+| Bauteil | Hersteller | Was du dort findest |
+| --- | --- | --- |
+| [DRV8212P](https://www.ti.com/product/DRV8212P) | Texas Instruments | integrierte H-Brücke: Blockdiagramm, Kennwerte, Schutzfunktionen |
+| [TPS61023](https://www.ti.com/product/TPS61023) | Texas Instruments | synchroner Boost-Wandler: Blockdiagramm, Anwendungsschaltung |
+| AP61100 / AP61102 | Diodes Incorporated ([diodes.com](https://www.diodes.com)) | synchroner Buck-Wandler: Beschaltung, Bauteilwahl, Layoutvorschlag – auf der Herstellerseite nach „AP61100“ suchen |
+| VIPER17, Application Note AN2864 | STMicroelectronics ([st.com](https://www.st.com)) | Flyback-Netzteil mit 5-V-Ausgang – nach „AN2864“ suchen |
+| LPS4018-Serie | Coilcraft ([coilcraft.com](https://www.coilcraft.com)) | geschirmte Leistungsdrosseln: $L$, $I_\mathrm{sat}$, $I_\mathrm{rms}$, $R_\mathrm{DC}$ – nach „LPS4018“ suchen |
+
+**Sehr empfehlenswert zum Selbstrechnen** (Texas Instruments, englisch):
+
+- [Basic Calculation of a Buck Converter's Power Stage (SLVA477)](https://www.ti.com/lit/an/slva477b/slva477b.pdf)
+- [Basic Calculation of a Boost Converter's Power Stage (SLVA372)](https://www.ti.com/lit/an/slva372d/slva372d.pdf)
+
+## Bücher
+
+- J. Specovius: *Grundkurs Leistungselektronik*. Springer Vieweg – gut lesbare Einführung.
+- D. Schröder: *Leistungselektronische Schaltungen*. Springer Vieweg – umfangreiches Nachschlagewerk.
+- R. W. Erickson, D. Maksimović: *Fundamentals of Power Electronics*. Springer – das Standardwerk (englisch, Hochschulniveau).
+
+## Simulation
+
+- [LTspice](https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html) (Analog Devices) –
+  kostenloser Schaltungssimulator; unsere Dateien findest du bei den [Simulationen](/leistungselektronik/simulationen/).
+- [CircuitJS (Falstad)](https://www.falstad.com/circuit/circuitjs.html) – Simulator direkt im Browser, ohne Installation.
+  Gut geeignet, um Stromflüsse animiert zu sehen.

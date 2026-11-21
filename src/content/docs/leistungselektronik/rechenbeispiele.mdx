@@ -1,0 +1,387 @@
+---
+title: Rechenbeispiele
+description: Rechenbeispiele zur Leistungselektronik in drei Schwierigkeitsstufen – Wirkungsgrad, Buck, Boost, Buck-Boost, MOSFET-Verluste, Gate-Treiber, Rippel und Sperrwandler.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+
+**So arbeitest du:** Lies die Angabe, schreib *Gegeben* und *Gesucht* heraus, rechne selbst – und klapp erst dann die Lösung auf.
+Alle Beispiele gehen von idealen Bauteilen und nicht lückendem Betrieb (CCM) aus, wenn nichts anderes steht.
+
+Schwierigkeit: <Stufe wert="grundlagen" /> <Stufe wert="standard" /> <Stufe wert="vertiefung" />
+
+## Linearregler oder Schaltwandler?
+
+<Stufe wert="grundlagen" />
+
+Ein Mikrocontroller-Board braucht **3,3 V bei 1 A** aus einer **12-V**-Versorgung.
+Vergleiche einen Linearregler mit einem Schaltwandler mit dem Wirkungsgrad $\eta = 90\,\%$.
+
+**Gegeben:** $U_\mathrm{e} = 12\,\mathrm{V}$, $U_\mathrm{a} = 3{,}3\,\mathrm{V}$, $I_\mathrm{a} = 1\,\mathrm{A}$, $\eta_\mathrm{S} = 0{,}9$
+
+**Gesucht:** Wirkungsgrad und Verlustleistung beider Lösungen
+
+<Loesung>
+
+Ausgangsleistung: $P_\mathrm{a} = U_\mathrm{a} \cdot I_\mathrm{a} = 3{,}3\,\mathrm{V} \cdot 1\,\mathrm{A} = 3{,}3\,\mathrm{W}$
+
+**Linearregler** (Eingangsstrom = Ausgangsstrom):
+
+$$
+P_\mathrm{V,lin} = (U_\mathrm{e} - U_\mathrm{a}) \cdot I_\mathrm{a} = 8{,}7\,\mathrm{V} \cdot 1\,\mathrm{A} = 8{,}7\,\mathrm{W}
+\qquad
+\eta_\mathrm{lin} = \frac{3{,}3\,\mathrm{W}}{12\,\mathrm{W}} = 27{,}5\,\%
+$$
+
+**Schaltwandler:**
+
+$$
+P_\mathrm{e} = \frac{P_\mathrm{a}}{\eta_\mathrm{S}} = \frac{3{,}3\,\mathrm{W}}{0{,}9} = 3{,}67\,\mathrm{W}
+\qquad
+P_\mathrm{V,S} = P_\mathrm{e} - P_\mathrm{a} = 0{,}37\,\mathrm{W}
+$$
+
+**Ergebnis:** Der Linearregler verheizt rund **24-mal so viel** Leistung (8,7 W statt 0,37 W) und bräuchte einen großen Kühlkörper.
+
+</Loesung>
+
+## Tiefsetzsteller
+
+<Stufe wert="standard" />
+
+Ein Buck-Wandler erzeugt aus **24 V** eine Ausgangsspannung von **12 V** bei **3 A**.
+Drossel: $L = 100\,\mu\mathrm{H}$, Schaltfrequenz $f_\mathrm{s} = 100\,\mathrm{kHz}$, Ausgangskondensator $C_\mathrm{a} = 47\,\mu\mathrm{F}$ (ESR vernachlässigbar).
+
+**Gegeben:** $U_\mathrm{e} = 24\,\mathrm{V}$, $U_\mathrm{a} = 12\,\mathrm{V}$, $I_\mathrm{a} = 3\,\mathrm{A}$, $L$, $f_\mathrm{s}$, $C_\mathrm{a}$
+
+**Gesucht:** $D$, $\Delta I_\mathrm{L}$, $I_\mathrm{L,max}$, $I_\mathrm{L,min}$, $\Delta U_\mathrm{a,C}$
+
+<Loesung>
+
+$$
+D = \frac{U_\mathrm{a}}{U_\mathrm{e}} = \frac{12\,\mathrm{V}}{24\,\mathrm{V}} = 0{,}5
+$$
+
+$$
+\Delta I_\mathrm{L} = \frac{(U_\mathrm{e} - U_\mathrm{a}) \cdot D}{L \cdot f_\mathrm{s}}
+= \frac{12\,\mathrm{V} \cdot 0{,}5}{100\,\mu\mathrm{H} \cdot 100\,\mathrm{kHz}} = \frac{6\,\mathrm{V}}{10\,\Omega} = 0{,}6\,\mathrm{A}
+$$
+
+(Einheitencheck: $\mathrm{H} \cdot \mathrm{Hz} = \mathrm{V\,s/A} \cdot 1/\mathrm{s} = \mathrm{V/A} = \Omega$.)
+
+$$
+I_\mathrm{L,max} = I_\mathrm{a} + \frac{\Delta I_\mathrm{L}}{2} = 3{,}3\,\mathrm{A}
+\qquad
+I_\mathrm{L,min} = I_\mathrm{a} - \frac{\Delta I_\mathrm{L}}{2} = 2{,}7\,\mathrm{A}
+$$
+
+Da $I_\mathrm{L,min} > 0$, arbeitet der Wandler tatsächlich im CCM. ✔
+
+$$
+\Delta U_\mathrm{a,C} = \frac{\Delta I_\mathrm{L}}{8 \cdot f_\mathrm{s} \cdot C_\mathrm{a}}
+= \frac{0{,}6\,\mathrm{A}}{8 \cdot 100\,\mathrm{kHz} \cdot 47\,\mu\mathrm{F}} \approx 16\,\mathrm{mV}
+$$
+
+</Loesung>
+
+## Hochsetzsteller
+
+<Stufe wert="standard" />
+
+Ein Boost-Wandler soll aus **12 V** eine Spannung von **24 V** bei **2 A** erzeugen.
+$L = 100\,\mu\mathrm{H}$, $f_\mathrm{s} = 100\,\mathrm{kHz}$, $C_\mathrm{a} = 100\,\mu\mathrm{F}$.
+
+**Gegeben:** $U_\mathrm{e} = 12\,\mathrm{V}$, $U_\mathrm{a} = 24\,\mathrm{V}$, $I_\mathrm{a} = 2\,\mathrm{A}$, $L$, $f_\mathrm{s}$, $C_\mathrm{a}$
+
+**Gesucht:** $D$, $\bar{I}_\mathrm{L}$, $\Delta I_\mathrm{L}$, $I_\mathrm{L,max}$, $\Delta U_\mathrm{a,C}$
+
+<Loesung>
+
+$$
+U_\mathrm{a} = \frac{U_\mathrm{e}}{1 - D}
+\;\Rightarrow\;
+D = 1 - \frac{U_\mathrm{e}}{U_\mathrm{a}} = 1 - \frac{12}{24} = 0{,}5
+$$
+
+$$
+\bar{I}_\mathrm{L} = \frac{I_\mathrm{a}}{1 - D} = \frac{2\,\mathrm{A}}{0{,}5} = 4\,\mathrm{A}
+$$
+
+$$
+\Delta I_\mathrm{L} = \frac{U_\mathrm{e} \cdot D}{L \cdot f_\mathrm{s}} = \frac{12\,\mathrm{V} \cdot 0{,}5}{10\,\Omega} = 0{,}6\,\mathrm{A}
+\qquad
+I_\mathrm{L,max} = 4\,\mathrm{A} + 0{,}3\,\mathrm{A} = 4{,}3\,\mathrm{A}
+$$
+
+$$
+\Delta U_\mathrm{a,C} = \frac{I_\mathrm{a} \cdot D}{f_\mathrm{s} \cdot C_\mathrm{a}} = \frac{2\,\mathrm{A} \cdot 0{,}5}{100\,\mathrm{kHz} \cdot 100\,\mu\mathrm{F}} = 0{,}1\,\mathrm{V}
+$$
+
+**Beobachtung:** Obwohl die Last nur 2 A zieht, müssen Drossel und Schalter bis 4,3 A aushalten. Und trotz
+des größeren Kondensators ist der Rippel viel größer als beim Buck – weil der Kondensator die Last
+während der EIN-Phase **allein** versorgen muss.
+
+</Loesung>
+
+## Invertierender Buck-Boost
+
+<Stufe wert="standard" />
+
+Aus **+12 V** soll eine Spannung von **−9 V** bei einem Laststrom von **1 A** (Betrag) erzeugt werden.
+$L = 100\,\mu\mathrm{H}$, $f_\mathrm{s} = 100\,\mathrm{kHz}$.
+
+**Gegeben:** $U_\mathrm{e} = 12\,\mathrm{V}$, $U_\mathrm{a} = -9\,\mathrm{V}$, $|I_\mathrm{a}| = 1\,\mathrm{A}$, $L$, $f_\mathrm{s}$
+
+**Gesucht:** $D$, $\bar{I}_\mathrm{L}$, $\Delta I_\mathrm{L}$, $I_\mathrm{L,max}$, Sperrspannung des Schalters
+
+<Loesung>
+
+$$
+|U_\mathrm{a}| = \frac{D}{1 - D} \cdot U_\mathrm{e}
+\;\Rightarrow\;
+D = \frac{|U_\mathrm{a}|}{U_\mathrm{e} + |U_\mathrm{a}|} = \frac{9}{21} = 0{,}429
+$$
+
+$$
+\bar{I}_\mathrm{L} = \frac{|I_\mathrm{a}|}{1 - D} = \frac{1\,\mathrm{A}}{0{,}571} = 1{,}75\,\mathrm{A}
+$$
+
+$$
+\Delta I_\mathrm{L} = \frac{U_\mathrm{e} \cdot D}{L \cdot f_\mathrm{s}} = \frac{12\,\mathrm{V} \cdot 0{,}429}{10\,\Omega} = 0{,}514\,\mathrm{A}
+\qquad
+I_\mathrm{L,max} = 1{,}75\,\mathrm{A} + 0{,}257\,\mathrm{A} \approx 2{,}01\,\mathrm{A}
+$$
+
+Sperrspannung des Schalters: $U_\mathrm{S,max} = U_\mathrm{e} + |U_\mathrm{a}| = 21\,\mathrm{V}$
+→ ein Schalter mit 20 V Sperrspannung wäre zu knapp!
+
+</Loesung>
+
+## MOSFET-Verluste
+
+<Stufe wert="standard" />
+
+Ein MOSFET in einem Schaltwandler schaltet $U_\mathrm{DS} = 24\,\mathrm{V}$ und $I_\mathrm{D} = 4\,\mathrm{A}$.
+Einschaltzeit $t_\mathrm{ein} = 40\,\mathrm{ns}$, Ausschaltzeit $t_\mathrm{aus} = 60\,\mathrm{ns}$,
+$f_\mathrm{s} = 50\,\mathrm{kHz}$, Tastverhältnis $D = 0{,}6$, $R_\mathrm{DS(on)} = 40\,\mathrm{m\Omega}$.
+
+a) Schätze die Gesamtverluste ab.
+b) Wie groß sind sie bei $f_\mathrm{s} = 200\,\mathrm{kHz}$?
+
+**Gesucht:** $P_\mathrm{schalt}$, $P_\mathrm{leit}$, $P_\mathrm{V}$
+
+<Loesung>
+
+**a)** Schaltverluste (Dreiecksnäherung):
+
+$$
+P_\mathrm{schalt} \approx \tfrac{1}{2} \cdot U_\mathrm{DS} \cdot I_\mathrm{D} \cdot (t_\mathrm{ein} + t_\mathrm{aus}) \cdot f_\mathrm{s}
+= \tfrac{1}{2} \cdot 24\,\mathrm{V} \cdot 4\,\mathrm{A} \cdot 100\,\mathrm{ns} \cdot 50\,\mathrm{kHz} = 0{,}24\,\mathrm{W}
+$$
+
+Durchlassverluste:
+
+$$
+P_\mathrm{leit} \approx D \cdot I_\mathrm{D}^2 \cdot R_\mathrm{DS(on)} = 0{,}6 \cdot (4\,\mathrm{A})^2 \cdot 0{,}040\,\Omega = 0{,}384\,\mathrm{W}
+$$
+
+$$
+P_\mathrm{V} \approx 0{,}24\,\mathrm{W} + 0{,}384\,\mathrm{W} \approx 0{,}62\,\mathrm{W}
+$$
+
+**b)** Die Schaltverluste steigen proportional zur Frequenz: $4 \cdot 0{,}24\,\mathrm{W} = 0{,}96\,\mathrm{W}$.
+Die Durchlassverluste bleiben gleich. → $P_\mathrm{V} \approx 1{,}34\,\mathrm{W}$ – mehr als doppelt so viel.
+
+</Loesung>
+
+## Gate-Strom und Bootstrap
+
+<Stufe wert="grundlagen" />
+
+Ein MOSFET hat die Gate-Ladung $Q_\mathrm{G} = 50\,\mathrm{nC}$. Er soll in $t_\mathrm{s} = 50\,\mathrm{ns}$ umgeschaltet werden,
+die Schaltfrequenz ist $100\,\mathrm{kHz}$. Der Bootstrap-Kondensator hat $C_\mathrm{BS} = 220\,\mathrm{nF}$.
+
+**Gesucht:** mittlerer Gatestrom während der Flanke, mittlerer Strom aus der Treiberversorgung, Spannungseinbruch am Bootstrap-Kondensator pro Einschaltvorgang
+
+<Loesung>
+
+$$
+I_\mathrm{G} \approx \frac{Q_\mathrm{G}}{t_\mathrm{s}} = \frac{50\,\mathrm{nC}}{50\,\mathrm{ns}} = 1\,\mathrm{A}
+$$
+
+$$
+I_\mathrm{Treiber} \approx Q_\mathrm{G} \cdot f_\mathrm{s} = 50\,\mathrm{nC} \cdot 100\,\mathrm{kHz} = 5\,\mathrm{mA}
+$$
+
+$$
+\Delta U_\mathrm{BS} \approx \frac{Q_\mathrm{G}}{C_\mathrm{BS}} = \frac{50\,\mathrm{nC}}{220\,\mathrm{nF}} \approx 0{,}23\,\mathrm{V}
+$$
+
+Der Treiber braucht also kurzzeitig einen **großen** Strom, im Mittel aber nur wenig.
+
+</Loesung>
+
+## PWM an der Halbbrücke
+
+<Stufe wert="grundlagen" />
+
+Ein Gleichstrommotor hängt an einer Halbbrücke mit $U_\mathrm{B} = 12\,\mathrm{V}$. Er soll im Mittel mit **9 V** betrieben werden.
+Die PWM-Frequenz beträgt $20\,\mathrm{kHz}$.
+
+**Gesucht:** Tastverhältnis $D$, Einschaltzeit $t_\mathrm{ein}$ des oberen MOSFETs pro Periode
+
+<Loesung>
+
+$$
+D = \frac{U_\mathrm{M}}{U_\mathrm{B}} = \frac{9\,\mathrm{V}}{12\,\mathrm{V}} = 0{,}75
+\qquad
+T = \frac{1}{20\,\mathrm{kHz}} = 50\,\mu\mathrm{s}
+\qquad
+t_\mathrm{ein} = D \cdot T = 37{,}5\,\mu\mathrm{s}
+$$
+
+Warum 20 kHz? Diese Frequenz liegt oberhalb des Hörbereichs – der Motor „pfeift“ nicht.
+
+</Loesung>
+
+## Ausgangsrippel beim Boost-IC
+
+<Stufe wert="standard" />
+
+Ein Boost-IC erzeugt aus einem Li-Ionen-Akku (**3,6 V**) **5 V bei 1 A**, $f_\mathrm{s} = 1\,\mathrm{MHz}$.
+Am Ausgang sitzt ein Keramikkondensator mit nominell $22\,\mu\mathrm{F}$.
+
+a) Berechne den kapazitiven Spannungsrippel.
+b) Wegen des DC-Bias-Effekts sind bei 5 V nur noch $11\,\mu\mathrm{F}$ wirksam. Wie groß ist der Rippel jetzt?
+
+<Loesung>
+
+$$
+D = 1 - \frac{U_\mathrm{e}}{U_\mathrm{a}} = 1 - \frac{3{,}6}{5} = 0{,}28
+$$
+
+**a)**
+$$
+\Delta U_\mathrm{a,C} = \frac{I_\mathrm{a} \cdot D}{f_\mathrm{s} \cdot C_\mathrm{a}} = \frac{1\,\mathrm{A} \cdot 0{,}28}{1\,\mathrm{MHz} \cdot 22\,\mu\mathrm{F}} \approx 12{,}7\,\mathrm{mV}
+$$
+
+**b)** Halbe Kapazität → doppelter Rippel: $\Delta U_\mathrm{a,C} \approx 25{,}5\,\mathrm{mV}$.
+Dazu kommen noch der ESR-Anteil und Schaltspitzen durch die ESL.
+
+</Loesung>
+
+## Spannungsspitze im heißen Pfad
+
+<Stufe wert="grundlagen" />
+
+Die Kommutierungszelle eines Wandlers hat eine parasitäre Induktivität von $L_\mathrm{s} = 15\,\mathrm{nH}$.
+Ein Strom von 3 A wird in 10 ns abgeschaltet.
+
+**Gesucht:** zusätzliche Spannungsspitze am MOSFET
+
+<Loesung>
+
+$$
+\Delta U = L_\mathrm{s} \cdot \frac{\Delta i}{\Delta t} = 15\,\mathrm{nH} \cdot \frac{3\,\mathrm{A}}{10\,\mathrm{ns}} = 4{,}5\,\mathrm{V}
+$$
+
+Halbiert man die Schleifenfläche (und damit ungefähr $L_\mathrm{s}$), halbiert sich auch die Spitze.
+
+</Loesung>
+
+## Eigenresonanz eines Kondensators
+
+<Stufe wert="standard" />
+
+Ein Keramikkondensator mit $C = 10\,\mu\mathrm{F}$ hat eine ESL von $1\,\mathrm{nH}$. Er wird am Ausgang eines
+Buck-Wandlers mit $f_\mathrm{s} = 2{,}2\,\mathrm{MHz}$ eingesetzt.
+
+**Gesucht:** Eigenresonanzfrequenz $f_0$ – wie verhält sich der Kondensator bei der Schaltfrequenz?
+
+<Loesung>
+
+$$
+f_0 = \frac{1}{2\pi\sqrt{\mathrm{ESL} \cdot C}} = \frac{1}{2\pi\sqrt{1\,\mathrm{nH} \cdot 10\,\mu\mathrm{F}}}
+= \frac{1}{2\pi \cdot 10^{-7}\,\mathrm{s}} \approx 1{,}59\,\mathrm{MHz}
+$$
+
+Die Schaltfrequenz (2,2 MHz) liegt **über** $f_0$ – der Kondensator verhält sich dort bereits **induktiv**.
+Seine Impedanz ist trotzdem sehr klein (einige mΩ), er glättet also noch gut. Für die steilen Schaltflanken
+(viel höhere Frequenzanteile) braucht man aber zusätzlich kleine Kondensatoren mit kleiner ESL direkt am IC.
+
+</Loesung>
+
+## Komplette Buck-Auslegung
+
+<Stufe wert="vertiefung" />
+
+Ein batteriebetriebenes Gerät braucht **1,8 V / 1 A** aus **5 V**. Verwendet wird ein synchroner Buck-IC
+(AP61100) mit $f_\mathrm{s} = 2{,}2\,\mathrm{MHz}$, $L = 1{,}0\,\mu\mathrm{H}$, $C_\mathrm{a} = 10\,\mu\mathrm{F}$ (Keramik, ESR ≈ 5 mΩ).
+
+a) Tastverhältnis, Stromwelligkeit und Spitzenstrom der Drossel
+b) kapazitiver Rippel, ESR-Anteil und eine konservative Summe
+c) Welcher Sättigungsstrom ist für die Drossel mindestens nötig?
+d) Wie ändert sich der kapazitive Rippel, wenn wegen DC-Bias nur 5 µF wirksam sind?
+
+<Loesung>
+
+**a)**
+$$
+D = \frac{1{,}8}{5} = 0{,}36
+\qquad
+\Delta I_\mathrm{L} = \frac{(5 - 1{,}8)\,\mathrm{V} \cdot 0{,}36}{1\,\mu\mathrm{H} \cdot 2{,}2\,\mathrm{MHz}} = \frac{1{,}152\,\mathrm{V}}{2{,}2\,\Omega} \approx 0{,}524\,\mathrm{A}
+$$
+
+$$
+I_\mathrm{L,max} = 1\,\mathrm{A} + 0{,}262\,\mathrm{A} \approx 1{,}26\,\mathrm{A}
+$$
+
+**b)**
+$$
+\Delta U_\mathrm{a,C} = \frac{0{,}524\,\mathrm{A}}{8 \cdot 2{,}2\,\mathrm{MHz} \cdot 10\,\mu\mathrm{F}} \approx 3{,}0\,\mathrm{mV}
+\qquad
+\Delta U_\mathrm{a,ESR} = 0{,}524\,\mathrm{A} \cdot 5\,\mathrm{m\Omega} \approx 2{,}6\,\mathrm{mV}
+$$
+
+Konservative Summe: $\approx 5{,}6\,\mathrm{mV}$ (die beiden Anteile haben ihr Maximum nicht genau gleichzeitig –
+die Summe liegt also auf der sicheren Seite).
+
+**c)** $I_\mathrm{sat}$ muss **deutlich über 1,26 A** liegen, mit Reserve für Toleranzen, Temperatur und
+Lastsprünge. Achtung: Der IC begrenzt den Strom erst bei mindestens 1,7 A – auch dabei sollte die Drossel nicht sättigen.
+
+**d)** Halbe Kapazität → doppelter kapazitiver Anteil: ≈ 6,0 mV.
+
+</Loesung>
+
+## Sperrwandler-Übersetzung
+
+<Stufe wert="vertiefung" />
+
+Ein Steckernetzteil richtet die Netzspannung gleich: $U_\mathrm{e} \approx 325\,\mathrm{V}$. Der Sperrwandler soll
+**5 V** liefern. Das Windungsverhältnis ist $N_1 : N_2 = 20 : 1$.
+
+a) Welches Tastverhältnis stellt sich (ideal, CCM) ein?
+b) Welche Spannung muss der MOSFET mindestens sperren (ohne Streuinduktivitäts-Spitze)?
+
+<Loesung>
+
+**a)**
+$$
+U_\mathrm{a} = \frac{N_2}{N_1} \cdot \frac{D}{1-D} \cdot U_\mathrm{e}
+\;\Rightarrow\;
+\frac{D}{1-D} = \frac{U_\mathrm{a} \cdot N_1}{U_\mathrm{e} \cdot N_2} = \frac{5 \cdot 20}{325} = 0{,}308
+\;\Rightarrow\;
+D = \frac{0{,}308}{1{,}308} \approx 0{,}235
+$$
+
+**b)** Reflektierte Spannung: $\dfrac{N_1}{N_2} \cdot U_\mathrm{a} = 20 \cdot 5\,\mathrm{V} = 100\,\mathrm{V}$
+
+$$
+U_\mathrm{DS,max} \approx 325\,\mathrm{V} + 100\,\mathrm{V} = 425\,\mathrm{V}
+$$
+
+Dazu kommt die Spitze durch die Streuinduktivität – deshalb verwendet man hier MOSFETs mit 650 … 800 V Sperrspannung
+und eine Klemmbeschaltung.
+
+</Loesung>

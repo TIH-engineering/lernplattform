@@ -1,0 +1,42 @@
+---
+title: So benutzt du diese Seite
+description: Aufbau der Themenbereiche, Schwierigkeitsstufen, Schreibweise der Formeln und Datenschutz.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+## Aufbau
+
+Jeder Themenbereich hat eine **Übersicht** und mehrere Teile:
+
+- **Theorie** – die Zusammenhänge, Formeln und Schaltungen
+- **Rechenbeispiele** – erst selbst rechnen, dann „Lösung anzeigen“ aufklappen
+- **Praxisbeispiele** – Schaltungen und Messungen aus Werkstätte und Labor
+- **Quiz** – Fragen mit sofortiger Rückmeldung und Erklärung
+- manchmal auch **Simulationen** und **Literatur & Links**
+
+Mit der **Suche** oben (oder <kbd>Strg</kbd> + <kbd>K</kbd>) findest du Begriffe auf allen Seiten.
+
+## Schwierigkeitsstufen
+
+| Stufe | Bedeutung |
+| --- | --- |
+| <Badge text="Grundlagen" variant="success" /> | Eine Formel direkt anwenden |
+| <Badge text="Standard" variant="caution" /> | Mehrere Schritte – typische Prüfungsaufgabe |
+| <Badge text="Vertiefung" variant="danger" /> | Dimensionieren, Sonderfälle, Transfer |
+
+## Schreibweise
+
+- $U$, $I$ (groß): Gleich- oder Effektivwerte – $u(t)$, $i(t)$ (klein): Augenblickswerte – $\hat{u}$: Scheitelwert
+- Indizes werden aufrecht geschrieben, z. B. $U_\mathrm{CE}$ oder $I_\mathrm{D}$.
+- Wir schreiben ein **Dezimalkomma**: $3{,}3\,\mathrm{V}$.
+
+## Zahleneingabe im Quiz
+
+Du kannst Komma oder Punkt verwenden (`2,5` oder `2.5`) und auch die Zehnerpotenz-Schreibweise (`4,7e-3`).
+Die Einheit steht neben dem Eingabefeld – gib nur die Zahl ein. Kleine Rundungsabweichungen werden akzeptiert.
+
+## Datenschutz
+
+Diese Seite braucht **keine Anmeldung**, setzt **keine Cookies** und verwendet **kein Tracking**.
+Deine Quiz-Antworten bleiben in deinem Browser und werden nirgends gespeichert oder gesendet.

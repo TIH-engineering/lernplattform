@@ -1,0 +1,51 @@
+---
+title: Elektronik lernen
+description: "Lernplattform für Elektronik, Mess- und Regelungstechnik an der HTL."
+template: splash
+hero:
+  tagline: Theorie, Rechenbeispiele, Praxis und Quizzes zu Elektronik, Mess- und Regelungstechnik – frei zugänglich, ohne Anmeldung, ohne Tracking.
+  actions:
+    - text: Los geht's mit Leistungselektronik
+      link: leistungselektronik/
+      icon: right-arrow
+    - text: So benutzt du diese Seite
+      link: hinweise/
+      icon: information
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkCard, Badge } from '@astrojs/starlight/components';
+
+## Themenbereiche
+
+<CardGrid>
+	<LinkCard title="Grundlagen der Elektrotechnik" description="Praxisbeispiele und Quizzes zum Schulbuch – in Arbeit" href="/grundlagen/" />
+	<LinkCard title="Transistoren" description="Bipolar- und Feldeffekttransistoren – in Arbeit" href="/transistoren/" />
+	<LinkCard title="Operationsverstärker" description="Grundschaltungen und reale Eigenschaften – in Arbeit" href="/operationsverstaerker/" />
+	<LinkCard title="Filter" description="Passive und aktive Filter – in Arbeit" href="/filter/" />
+	<LinkCard title="Oszillatoren" description="Schwingbedingung und Oszillatorschaltungen – in Arbeit" href="/oszillatoren/" />
+	<LinkCard title="Leistungselektronik" description="Gleichrichter, Schaltregler, Wechselrichter, Bauelemente" href="/leistungselektronik/" />
+	<LinkCard title="Sensoren" description="Messgrößen erfassen – in Arbeit" href="/sensoren/" />
+	<LinkCard title="Aktuatoren" description="Motoren, Relais, Ventile – in Arbeit" href="/aktuatoren/" />
+	<LinkCard title="Messtechnik" description="Messen, Messfehler, Messgeräte – in Arbeit" href="/messtechnik/" />
+	<LinkCard title="Regelungstechnik" description="Regelkreis, Regler, Stabilität – in Arbeit" href="/regelungstechnik/" />
+</CardGrid>
+
+## So ist jeder Themenbereich aufgebaut
+
+<CardGrid>
+	<Card title="Theorie" icon="open-book">
+		Die wichtigsten Zusammenhänge mit Formeln und Schaltplänen.
+	</Card>
+	<Card title="Rechenbeispiele" icon="pencil">
+		Aufgaben in drei Stufen. Zuerst selbst rechnen, dann die Lösung aufklappen.
+	</Card>
+	<Card title="Praxisbeispiele" icon="setting">
+		Echte Schaltungen, Bauteile und Messungen aus der Werkstätte und dem Labor.
+	</Card>
+	<Card title="Quiz" icon="approve-check">
+		Teste dein Wissen – nach jeder Antwort bekommst du eine Erklärung.
+	</Card>
+</CardGrid>
+
+Schwierigkeit: <Badge text="Grundlagen" variant="success" /> <Badge text="Standard" variant="caution" /> <Badge text="Vertiefung" variant="danger" />

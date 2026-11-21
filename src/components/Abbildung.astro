@@ -1,0 +1,20 @@
+---
+// Abbildung mit Bildunterschrift.
+//   import Buck from '…/assets/leistungselektronik/buck.svg';
+//   <Abbildung bild={Buck} unterschrift="Tiefsetzsteller" />
+// Für SVG-Schaltbilder (passen sich an hell/dunkel an) und normale Bilder (png/jpg).
+import { Image } from 'astro:assets';
+
+interface Props {
+	bild: any;
+	unterschrift: string;
+	alt?: string;
+}
+const { bild: Bild, unterschrift, alt = unterschrift } = Astro.props;
+const istSvg = typeof Bild === 'function';
+---
+
+<figure class="abbildung">
+	{istSvg ? <Bild /> : <Image src={Bild} alt={alt} />}
+	<figcaption>{unterschrift}</figcaption>
+</figure>

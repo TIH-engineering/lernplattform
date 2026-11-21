@@ -1,0 +1,96 @@
+---
+title: Sperrwandler und isolierende Wandler
+description: Funktionsweise des Sperrwandlers (Flyback) mit galvanischer Trennung, Vor- und Nachteile, Klemmbeschaltung und weitere isolierende Topologien.
+sidebar:
+  label: 6 · Sperrwandler
+  order: 6
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Sperrwandler from '../../../../assets/leistungselektronik/sperrwandler.svg';
+
+## Warum galvanische Trennung?
+
+Bei Netzteilen, die an 230 V hängen, darf zwischen Netz und Ausgang (z. B. USB-Buchse) **keine leitende
+Verbindung** bestehen – sonst wäre das Berühren lebensgefährlich. Die Energie muss **magnetisch** über
+einen Transformator übertragen werden: Man spricht von **galvanischer Trennung**.
+
+## Der Sperrwandler (Flyback)
+
+Der Sperrwandler ist der einfachste isolierende Wandler. Er ist im Prinzip ein
+**Buck-Boost-Wandler, dessen Drossel eine zweite Wicklung bekommen hat**.
+
+<Abbildung bild={Sperrwandler} unterschrift="Sperrwandler: Primärwicklung N1, Sekundärwicklung N2 – die Punkte zeigen den Wicklungssinn" />
+
+Die Energie wird in **zwei Phasen** übertragen:
+
+1. **Transistor EIN:** Strom fließt durch die Primärwicklung, im Kern wird **Energie im Magnetfeld gespeichert**.
+   Wegen des Wicklungssinns (Punkte!) sperrt die Sekundärdiode – daher der Name **Sperr**wandler.
+2. **Transistor AUS:** Das Magnetfeld treibt nun einen Strom durch die Sekundärwicklung, die Diode leitet,
+   und die gespeicherte Energie fließt zum Ausgang.
+
+:::tip[Merke]
+Beim Sperrwandler ist das magnetische Bauteil eigentlich kein normaler Transformator, sondern eine
+**gekoppelte Speicherdrossel**. Primär- und Sekundärseite führen **nie gleichzeitig** Strom.
+:::
+
+### Spannungsübersetzung (Vertiefung)
+
+Im nicht lückenden Betrieb gilt (ideal, $N_1, N_2$: Windungszahlen):
+
+$$
+U_\mathrm{a} = \frac{N_2}{N_1} \cdot \frac{D}{1 - D} \cdot U_\mathrm{e}
+$$
+
+Das Windungsverhältnis ist also **nicht** einfach $U_\mathrm{e} : U_\mathrm{a}$ – auch das Tastverhältnis spielt mit.
+
+Im AUS-Zustand wird die Ausgangsspannung auf die Primärseite „zurückgespiegelt“ (**reflektierte Spannung**).
+Der Transistor muss deshalb mindestens
+
+$$
+U_\mathrm{DS,max} \approx U_\mathrm{e} + \frac{N_1}{N_2} \cdot U_\mathrm{a} + \text{Spannungsspitze durch Streuinduktivität}
+$$
+
+aushalten.
+
+### Vor- und Nachteile
+
+| Vorteile | Nachteile |
+| --- | --- |
+| wenige Bauteile, günstig | hohe Spannungsspitzen am Schalter |
+| einfache Regelung und Ansteuerung | hohe Strombelastung (Energie in Portionen) |
+| mehrere Ausgangsspannungen möglich (mehrere Sekundärwicklungen) | Streuinduktivität ist kritisch |
+
+Typischer Einsatz: Ladegeräte, Steckernetzteile, Hilfsversorgungen – bis etwa 100 … 150 W.
+
+### Klemmbeschaltung (Snubber)
+
+Nicht der gesamte magnetische Fluss der Primärwicklung erreicht die Sekundärwicklung. Dieser Anteil wirkt
+wie eine kleine Spule in Reihe – die **Streuinduktivität**. Ihre Energie kann beim Abschalten nicht zur
+Sekundärseite und erzeugt eine **Spannungsspitze** am Schalter.
+
+Gegenmaßnahmen: **RCD-Klemme** (Widerstand–Kondensator–Diode), **TVS-Diode** oder eine **aktive Klemme**.
+Ein eng gekoppelter Transformator verringert die Energie, die geklemmt werden muss.
+
+### Regelung über die Isolationsgrenze
+
+Die Ausgangsspannung wird auf der Sekundärseite gemessen (z. B. mit einem **TL431** als Referenz) und über
+einen **Optokoppler** zur Primärseite übertragen – so bleibt die galvanische Trennung erhalten.
+
+:::danger[Sicherheit]
+Die Primärseite eines Netzteils ist **direkt mit dem Netz verbunden**! Netzschaltungen werden nur in
+abgesicherten Laborumgebungen und unter Aufsicht aufgebaut und gemessen. Die sichere Trennung hängt von
+Transformator, Kriech- und Luftstrecken auf der Leiterplatte und geprüften Bauteilen ab – nicht vom Schaltplan.
+:::
+
+## Weitere isolierende Topologien
+
+Für größere Leistungen gibt es weitere Wandler mit Transformator (hier nur zum Kennenlernen):
+
+| Topologie | Kurz erklärt | Leistung |
+| --- | --- | --- |
+| Eintakt-Flusswandler (*forward*) | Energie wird **während** der EIN-Phase übertragen; der Trafo arbeitet als echter Übertrager, danach Drossel wie beim Buck | bis einige 100 W |
+| Gegentakt-Flusswandler (*push-pull*) | zwei Schalter magnetisieren den Kern abwechselnd in beide Richtungen | 100 W … kW |
+| Vollbrücken-Flusswandler (PSFB) | vier Schalter an der Primärwicklung, sanftes Schalten möglich | kW |
+| Dual Active Bridge (DAB) | Vollbrücke auf beiden Seiten, Energie in **beide Richtungen** | kW bis MW |
+| LLC-Resonanzwandler | Schwingkreis macht verlustarmes Schalten möglich, sehr hoher Wirkungsgrad | W bis MW |

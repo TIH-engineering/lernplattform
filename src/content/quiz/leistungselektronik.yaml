@@ -1,0 +1,262 @@
+# Quiz Leistungselektronik
+#
+# So ist eine Frage aufgebaut:
+#   typ:         mc (Multiple Choice) oder zahl (Zahleneingabe)
+#   stufe:       grundlagen | standard | vertiefung
+#   frage:       Fragetext (Markdown, Formeln mit $...$)
+#   erklaerung:  wird nach JEDER Antwort angezeigt
+#   mc:   optionen: Liste mit text und richtig: true bei den richtigen Antworten
+#   zahl: loesung (Zahl mit Punkt!), einheit, toleranz (Standard 2), toleranzArt (prozent | absolut)
+#
+# Tipp: Texte mit Formeln in einfache Anführungszeichen '...' setzen oder als Block mit >- schreiben.
+
+titel: Leistungselektronik
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Warum hat ein Schaltwandler einen viel höheren Wirkungsgrad als ein Linearregler?
+    optionen:
+      - text: Weil der Schalter immer nur entweder fast keine Spannung oder fast keinen Strom hat.
+        richtig: true
+      - text: Weil Schaltwandler mit Wechselstrom arbeiten.
+      - text: Weil die Spule die Verlustleistung in Magnetfeld umwandelt und speichert.
+      - text: Weil Schaltwandler keine Halbleiter enthalten.
+    erklaerung: >-
+      Die Verlustleistung im Schalter ist $p = u \cdot i$. Im EIN-Zustand ist $u \approx 0$, im AUS-Zustand ist $i \approx 0$ –
+      in beiden Fällen entsteht kaum Verlust. Beim Linearregler liegen dagegen Spannungsdifferenz **und** Strom
+      gleichzeitig am Transistor.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Linearregler erzeugt aus $12\,\mathrm{V}$ eine Spannung von $5\,\mathrm{V}$ bei $0{,}5\,\mathrm{A}$. Wie groß ist die Verlustleistung im Regler?'
+    loesung: 3.5
+    einheit: W
+    erklaerung: '$P_\mathrm{V} = (U_\mathrm{e} - U_\mathrm{a}) \cdot I = 7\,\mathrm{V} \cdot 0{,}5\,\mathrm{A} = 3{,}5\,\mathrm{W}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: 'Wofür steht $R_\mathrm{DS(on)}$ im Datenblatt eines MOSFETs?'
+    optionen:
+      - text: Für den Widerstand zwischen Drain und Source im eingeschalteten Zustand.
+        richtig: true
+      - text: Für den Widerstand des Gates.
+      - text: Für den Widerstand zwischen Drain und Source im ausgeschalteten Zustand.
+      - text: Für den Innenwiderstand des Gate-Treibers.
+    erklaerung: 'Ein eingeschalteter MOSFET verhält sich wie ein kleiner Widerstand $R_\mathrm{DS(on)}$. Er verursacht die Durchlassverluste $P = I^2 \cdot R_\mathrm{DS(on)}$.'
+
+  - typ: mc
+    stufe: standard
+    frage: Was passiert mit den Schaltverlusten und den Durchlassverlusten eines MOSFETs, wenn man die Schaltfrequenz verdoppelt?
+    optionen:
+      - text: Schaltverluste verdoppeln sich, Durchlassverluste bleiben etwa gleich.
+        richtig: true
+      - text: Beide verdoppeln sich.
+      - text: Durchlassverluste verdoppeln sich, Schaltverluste bleiben gleich.
+      - text: Beide halbieren sich.
+    erklaerung: >-
+      $P_\mathrm{schalt} \approx f_\mathrm{s} \cdot (E_\mathrm{ein} + E_\mathrm{aus})$ ist proportional zur Frequenz.
+      $P_\mathrm{leit} \approx D \cdot I^2 \cdot R_\mathrm{DS(on)}$ hängt nicht von der Frequenz ab.
+
+  - typ: zahl
+    stufe: standard
+    frage: >-
+      Ein MOSFET schaltet $U_\mathrm{DS} = 48\,\mathrm{V}$ und $I_\mathrm{D} = 5\,\mathrm{A}$ mit
+      $t_\mathrm{ein} = t_\mathrm{aus} = 50\,\mathrm{ns}$ bei $f_\mathrm{s} = 100\,\mathrm{kHz}$.
+      Schätze die Schaltverluste mit der Dreiecksnäherung ab.
+    loesung: 1.2
+    einheit: W
+    toleranz: 3
+    erklaerung: >-
+      $P_\mathrm{schalt} \approx \tfrac{1}{2} \cdot 48\,\mathrm{V} \cdot 5\,\mathrm{A} \cdot (50 + 50)\,\mathrm{ns} \cdot 100\,\mathrm{kHz}
+      = 120\,\mathrm{W} \cdot 10^{-7}\,\mathrm{s} \cdot 10^{5}\,\mathrm{s^{-1}} = 1{,}2\,\mathrm{W}$
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Schaltzustände einer Halbbrücke sind erlaubt?
+    optionen:
+      - text: Oben EIN, unten AUS
+        richtig: true
+      - text: Oben AUS, unten EIN
+        richtig: true
+      - text: Beide AUS (Totzeit)
+        richtig: true
+      - text: Beide EIN
+    erklaerung: >-
+      Sind beide MOSFETs gleichzeitig eingeschaltet, fließt ein **Querstrom**, der die Versorgung kurzschließt.
+      Deshalb fügt man beim Umschalten eine kurze **Totzeit** ein, in der beide aus sind – dann übernimmt die Body-Diode den Strom.
+
+  - typ: mc
+    stufe: standard
+    frage: Eine H-Brücke treibt einen Motor vorwärts mit S1 (oben links) und S4 (unten rechts). Welche Schalter müssen für den Rückwärtsbetrieb eingeschaltet werden?
+    optionen:
+      - text: S2 (unten links) und S3 (oben rechts)
+        richtig: true
+      - text: S1 und S2
+      - text: S3 und S4
+      - text: S2 und S4
+    erklaerung: >-
+      Für das Antreiben werden immer die **diagonalen** Schalter eingeschaltet. S1+S2 oder S3+S4 wären ein Kurzschluss,
+      S2+S4 schließt den Motor kurz (Bremsen).
+
+  - typ: mc
+    stufe: standard
+    frage: Was ist das Problem, wenn ein Motor generatorisch bremst und das Netzteil keine Energie aufnehmen kann?
+    optionen:
+      - text: Die Versorgungsspannung steigt an und kann Bauteile zerstören.
+        richtig: true
+      - text: Der Motor dreht sich plötzlich rückwärts.
+      - text: Die Versorgungsspannung bricht zusammen.
+      - text: Es passiert nichts, die Energie verschwindet.
+    erklaerung: >-
+      Die zurückgespeiste Energie lädt die Kondensatoren an der Versorgung auf – die Spannung steigt.
+      Abhilfe: Bremswiderstand, TVS-Diode oder eine rückspeisefähige Quelle (z. B. Akku).
+
+  - typ: mc
+    stufe: standard
+    frage: Warum funktioniert eine Bootstrap-Schaltung nicht bei 100 % Tastverhältnis?
+    optionen:
+      - text: Der Bootstrap-Kondensator wird nur nachgeladen, wenn der Low-Side-Schalter leitet.
+        richtig: true
+      - text: Weil die Bootstrap-Diode dann durchbrennt.
+      - text: Weil der High-Side-MOSFET dann zu heiß wird.
+      - text: Das stimmt nicht, Bootstrap funktioniert immer.
+    erklaerung: >-
+      Bei 100 % ist der Low-Side-Schalter nie eingeschaltet, der Schaltknoten nie bei 0 V – der Kondensator entlädt sich langsam
+      und kann nicht nachgeladen werden. Eine **Ladungspumpe** löst das Problem.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein MOSFET mit $Q_\mathrm{G} = 30\,\mathrm{nC}$ soll in $20\,\mathrm{ns}$ umgeschaltet werden. Welcher mittlere Gatestrom ist dafür nötig?'
+    loesung: 1.5
+    einheit: A
+    erklaerung: '$I_\mathrm{G} \approx Q_\mathrm{G} / t_\mathrm{s} = 30\,\mathrm{nC} / 20\,\mathrm{ns} = 1{,}5\,\mathrm{A}$ – viel mehr, als ein Mikrocontroller-Pin liefern kann.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Tiefsetzsteller wandelt $24\,\mathrm{V}$ in $5\,\mathrm{V}$. Wie groß ist das Tastverhältnis $D$ (als Dezimalzahl, ideal, CCM)?'
+    loesung: 0.2083
+    einheit: ''
+    toleranz: 0.005
+    toleranzArt: absolut
+    erklaerung: '$D = U_\mathrm{a} / U_\mathrm{e} = 5 / 24 \approx 0{,}208$ (also etwa 21 %).'
+
+  - typ: zahl
+    stufe: standard
+    frage: >-
+      Buck-Wandler: $U_\mathrm{e} = 12\,\mathrm{V}$, $U_\mathrm{a} = 3{,}3\,\mathrm{V}$, $L = 10\,\mu\mathrm{H}$, $f_\mathrm{s} = 500\,\mathrm{kHz}$.
+      Wie groß ist die Stromwelligkeit $\Delta I_\mathrm{L}$ (Spitze-Spitze)?
+    loesung: 0.4785
+    einheit: A
+    toleranz: 3
+    erklaerung: >-
+      $D = 3{,}3/12 = 0{,}275$. $\Delta I_\mathrm{L} = \dfrac{(U_\mathrm{e} - U_\mathrm{a}) \cdot D}{L \cdot f_\mathrm{s}}
+      = \dfrac{8{,}7\,\mathrm{V} \cdot 0{,}275}{10\,\mu\mathrm{H} \cdot 500\,\mathrm{kHz}} = \dfrac{2{,}39\,\mathrm{V}}{5\,\Omega} \approx 0{,}48\,\mathrm{A}$
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Hochsetzsteller erzeugt aus $5\,\mathrm{V}$ eine Spannung von $12\,\mathrm{V}$ bei $0{,}5\,\mathrm{A}$. Wie groß ist der mittlere Drosselstrom (ideal, verlustfrei)?'
+    loesung: 1.2
+    einheit: A
+    erklaerung: >-
+      $D = 1 - 5/12 = 0{,}583$. $\bar{I}_\mathrm{L} = I_\mathrm{a} / (1 - D) = 0{,}5\,\mathrm{A} / 0{,}417 = 1{,}2\,\mathrm{A}$.
+      Kontrolle über die Leistung: $P = 12\,\mathrm{V} \cdot 0{,}5\,\mathrm{A} = 6\,\mathrm{W} = 5\,\mathrm{V} \cdot 1{,}2\,\mathrm{A}$ ✔
+
+  - typ: mc
+    stufe: standard
+    frage: Warum ist der Ausgangsrippel beim Boost-Wandler meist größer als beim Buck-Wandler (gleiche Kapazität)?
+    optionen:
+      - text: Weil die Diode während der EIN-Phase sperrt und der Kondensator die Last allein versorgen muss.
+        richtig: true
+      - text: Weil der Boost-Wandler eine höhere Schaltfrequenz hat.
+      - text: Weil beim Boost keine Drossel vorhanden ist.
+      - text: Weil der Boost-Wandler im lückenden Betrieb arbeitet.
+    erklaerung: >-
+      Beim Buck fließt der Drosselstrom ständig zum Ausgang, nur sein kleiner Wechselanteil belastet den Kondensator.
+      Beim Boost (und Buck-Boost) fließt in der EIN-Phase **kein** Strom zum Ausgang – der Kondensator liefert den
+      ganzen Laststrom: $\Delta U \approx I_\mathrm{a} \cdot D / (f_\mathrm{s} \cdot C)$.
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein invertierender Buck-Boost-Wandler wird mit $U_\mathrm{e} = 15\,\mathrm{V}$ und $D = 0{,}6$ betrieben. Welche Ausgangsspannung ergibt sich (mit Vorzeichen)?'
+    loesung: -22.5
+    einheit: V
+    erklaerung: '$U_\mathrm{a} = -\dfrac{D}{1-D} \cdot U_\mathrm{e} = -\dfrac{0{,}6}{0{,}4} \cdot 15\,\mathrm{V} = -22{,}5\,\mathrm{V}$. Der Schalter muss $15 + 22{,}5 = 37{,}5\,\mathrm{V}$ sperren.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was bedeutet „galvanische Trennung“ beim Sperrwandler?
+    optionen:
+      - text: Ein- und Ausgang sind nicht leitend verbunden, die Energie wird magnetisch übertragen.
+        richtig: true
+      - text: Die Ausgangsspannung ist negativ.
+      - text: Die Schaltung ist gegen Korrosion geschützt.
+      - text: Primär- und Sekundärseite haben dieselbe Masse.
+    erklaerung: Die Energie geht über den Transformator (Magnetfeld), die Rückmeldung über einen Optokoppler (Licht). So kann man den Ausgang gefahrlos berühren, obwohl der Eingang am Netz hängt.
+
+  - typ: mc
+    stufe: standard
+    frage: Was passiert beim Sperrwandler, während der Transistor eingeschaltet ist?
+    optionen:
+      - text: Im Kern wird Energie im Magnetfeld gespeichert, die Sekundärdiode sperrt.
+        richtig: true
+      - text: Die Energie fließt direkt zur Last, wie bei einem normalen Transformator.
+      - text: Der Ausgangskondensator wird über die Diode geladen.
+      - text: Die Streuinduktivität erzeugt die Ausgangsspannung.
+    erklaerung: Daher der Name **Sperr**wandler – die Energieübertragung zum Ausgang passiert erst, wenn der Transistor ausschaltet.
+
+  - typ: mc
+    stufe: standard
+    frage: Ein Keramikkondensator wird oberhalb seiner Eigenresonanzfrequenz betrieben. Wie verhält er sich dort?
+    optionen:
+      - text: induktiv
+        richtig: true
+      - text: kapazitiv
+      - text: rein ohmsch
+      - text: wie ein Leerlauf
+    erklaerung: 'Oberhalb von $f_0 = 1/(2\pi\sqrt{\mathrm{ESL} \cdot C})$ überwiegt der induktive Anteil $\omega \cdot \mathrm{ESL}$.'
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Angaben musst du bei der Auswahl einer Speicherdrossel für einen Schaltwandler prüfen?
+    optionen:
+      - text: Sättigungsstrom $I_\mathrm{sat}$ größer als der Spitzenstrom
+        richtig: true
+      - text: thermischer Strom $I_\mathrm{rms}$ größer als der Effektivstrom
+        richtig: true
+      - text: 'Gleichstromwiderstand $R_\mathrm{DC}$ (Kupferverluste)'
+        richtig: true
+      - text: Je größer die Induktivität, desto besser – sonst nichts
+    erklaerung: >-
+      Eine Drossel muss zum Betriebspunkt passen: Sie darf nicht sättigen ($I_\mathrm{sat}$), nicht zu heiß werden ($I_\mathrm{rms}$)
+      und soll wenig Verluste haben ($R_\mathrm{DC}$). Eine zu große Induktivität hat oft kleinere Ströme und passt nicht zum Regler.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum darf ein X2-Kondensator nicht anstelle eines Y2-Kondensators eingesetzt werden?
+    optionen:
+      - text: Y-Kondensatoren liegen an der Schutz- bzw. Isolationsgrenze und dürfen auch im Fehlerfall nie kurzschließen.
+        richtig: true
+      - text: X-Kondensatoren haben eine zu kleine Kapazität.
+      - text: Das ist erlaubt, wenn die Spannungsfestigkeit gleich ist.
+      - text: X-Kondensatoren sind gepolt.
+    erklaerung: Ein Kurzschluss eines Y-Kondensators würde Netzspannung auf berührbare Teile legen. Deshalb gelten für Y-Kondensatoren strengere Prüfungen; die Klasse steht auf dem Bauteil.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Die Kommutierungsschleife hat $L_\mathrm{s} = 20\,\mathrm{nH}$. Ein Strom von $5\,\mathrm{A}$ wird in $10\,\mathrm{ns}$ abgeschaltet. Wie groß ist die induzierte Spannungsspitze?'
+    loesung: 10
+    einheit: V
+    erklaerung: '$\Delta U = L_\mathrm{s} \cdot \Delta i / \Delta t = 20\,\mathrm{nH} \cdot 5\,\mathrm{A} / 10\,\mathrm{ns} = 10\,\mathrm{V}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Bauteile bilden beim Tiefsetzsteller den heißen Pfad (Kommutierungszelle)?
+    optionen:
+      - text: Eingangskondensator, Schalter und Freilaufdiode
+        richtig: true
+      - text: Drossel, Ausgangskondensator und Last
+      - text: Eingangskondensator und Drossel
+      - text: Nur die Drossel
+    erklaerung: >-
+      In dieser Schleife springt der Strom bei jedem Schaltvorgang zwischen null und vollem Wert. Die Drossel führt einen fast
+      konstanten Strom und gehört **nicht** dazu. Darum muss der Eingangskondensator so nah wie möglich an Schalter und Diode.

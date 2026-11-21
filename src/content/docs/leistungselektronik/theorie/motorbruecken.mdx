@@ -1,0 +1,97 @@
+---
+title: Motorbrücken
+description: Halbbrücke und H-Brücke mit N-Kanal-MOSFETs, Schaltzustände, Totzeit, Bremsen, Ausrollen und Rückspeisung.
+sidebar:
+  label: 3 · Motorbrücken
+  order: 3
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Halbbruecke from '../../../../assets/leistungselektronik/halbbruecke.svg';
+import HBruecke from '../../../../assets/leistungselektronik/h-bruecke.svg';
+
+## Die Halbbrücke
+
+Eine **Halbbrücke** besteht aus zwei MOSFETs übereinander. Der Verbindungspunkt heißt **Schaltknoten SW**.
+Er wird abwechselnd mit der Versorgung $+U_\mathrm{B}$ (oberer MOSFET, *High-Side*) oder mit Masse
+(unterer MOSFET, *Low-Side*) verbunden.
+
+<Abbildung bild={Halbbruecke} unterschrift="Halbbrücke aus zwei N-Kanal-MOSFETs (mit Body-Dioden) und Gleichstrommotor" />
+
+Jeder Leistungs-MOSFET enthält eine **Body-Diode** (Inversdiode) zwischen Source und Drain. Sie entsteht
+durch den inneren Aufbau, weil Source und Substrat (*Bulk*) verbunden sind – man bekommt sie also „gratis“ dazu.
+
+### Schaltzustände
+
+| Q1 (oben) | Q2 (unten) | Schaltknoten SW | Bedeutung |
+| --- | --- | --- | --- |
+| EIN | AUS | $\approx +U_\mathrm{B}$ | Motor bekommt Versorgungsspannung |
+| AUS | EIN | $\approx 0\,\mathrm{V}$ | Freilauf über den unteren MOSFET |
+| AUS | AUS | abhängig vom Strom | **Totzeit**: die Body-Diode übernimmt den Motorstrom |
+| EIN | EIN | – | **verboten!** Querstrom schließt die Versorgung kurz |
+
+:::danger[Querstrom (shoot-through)]
+Die beiden MOSFETs einer Halbbrücke dürfen **niemals gleichzeitig** leiten. Deshalb wird beim Umschalten
+eine kurze **Totzeit** eingefügt, in der beide ausgeschaltet sind.
+:::
+
+### Mittlere Motorspannung mit PWM
+
+Wird Q1 mit dem Tastverhältnis $D$ eingeschaltet (und Q2 jeweils in der restlichen Zeit), liegt am
+Motor im Mittel die Spannung
+
+$$
+U_\mathrm{M} = D \cdot U_\mathrm{B}
+$$
+
+Die Induktivität der Motorwicklung glättet den Strom – der Motor „sieht“ praktisch den Mittelwert.
+
+:::note[High-Side braucht mehr Gate-Spannung]
+Ein N-Kanal-MOSFET leitet, wenn das Gate um einige Volt **über seiner Source** liegt. Beim High-Side-MOSFET
+liegt die Source im EIN-Zustand fast bei $+U_\mathrm{B}$ – das Gate muss also **über** die Versorgungsspannung
+gehoben werden. Wie das geht, steht bei den [Gate-Treibern](/leistungselektronik/theorie/gate-treiber/).
+:::
+
+## Die H-Brücke (Vollbrücke)
+
+Mit **zwei Halbbrücken** und dem Motor dazwischen kann man die Spannung am Motor **umpolen** –
+der Motor dreht dann in beide Richtungen.
+
+<Abbildung bild={HBruecke} unterschrift="H-Brücke: Bei S1 und S4 EIN fließt der Strom von links nach rechts durch den Motor" />
+
+| Betriebsart | S1 (o. l.) | S2 (u. l.) | S3 (o. r.) | S4 (u. r.) |
+| --- | --- | --- | --- | --- |
+| Vorwärts | EIN | AUS | AUS | EIN |
+| Rückwärts | AUS | EIN | EIN | AUS |
+| Bremsen (über Low-Side) | AUS | EIN | AUS | EIN |
+| Ausrollen (*coast*) | AUS | AUS | AUS | AUS |
+
+Merkregel: Für das Antreiben werden immer **diagonale** Schalterpaare eingeschaltet.
+S1 + S2 oder S3 + S4 gleichzeitig wäre ein Kurzschluss!
+
+## Betriebsarten einer H-Brücke
+
+**Antreiben** – Die Brücke führt dem Motor Energie zu. Die PWM bestimmt die mittlere Spannung,
+die Schalterstellung bestimmt die Stromrichtung.
+
+**Dynamisches Bremsen** – Beide Motoranschlüsse werden über MOSFETs kurzgeschlossen (z. B. S2 und S4).
+Der drehende Motor wirkt als Generator, die Bewegungsenergie wird im Wicklungswiderstand und in den MOSFETs zu Wärme.
+
+**Generatorisches Bremsen (Rückspeisen)** – Der Motor arbeitet als Generator, und die Energie fließt
+über die Brücke **zurück in die Versorgung**.
+
+**Ausrollen** – Alle MOSFETs sind aus. Solange noch Motorstrom fließt, leiten kurz die Body-Dioden;
+danach dreht der Motor frei aus.
+
+### Vier-Quadranten-Betrieb
+
+Eine Vollbrücke kann den Motor **vorwärts und rückwärts antreiben** und in **beiden Drehrichtungen bremsen**.
+Man spricht von vier Quadranten, weil Drehzahl und Drehmoment jeweils positiv oder negativ sein können.
+
+:::caution[Rückspeisung beachten]
+Kann die Versorgung beim generatorischen Bremsen keine Energie aufnehmen (z. B. ein Netzteil mit Diode
+am Ausgang), **steigt die Versorgungsspannung** an. Abhilfe: Bremswiderstand (*brake chopper*),
+Überspannungsschutz (z. B. TVS-Diode) oder eine rückspeisefähige Quelle wie ein Akku.
+:::
+
+➡ Ein Beispiel für eine integrierte H-Brücke: [DRV8212P bei den Praxisbeispielen](/leistungselektronik/praxisbeispiele/#integrierte-h-brücke-drv8212p)

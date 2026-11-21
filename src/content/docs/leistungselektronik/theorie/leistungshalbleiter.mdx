@@ -1,0 +1,106 @@
+---
+title: Leistungshalbleiter
+description: Überblick über Leistungshalbleiter, der MOSFET als Schalter und die Abschätzung von Durchlass- und Schaltverlusten.
+sidebar:
+  label: 2 · Leistungshalbleiter
+  order: 2
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Schaltverluste from '../../../../assets/leistungselektronik/schaltverluste.svg';
+
+## Überblick
+
+Leistungshalbleiter **schalten, gleichrichten und steuern** elektrische Energie.
+
+| Bauelement | Prinzip | Steuerbar? | Steuergröße | typischer Einsatz |
+| --- | --- | --- | --- | --- |
+| pn-Diode | bipolar | nein | – | Gleichrichter, Freilauf |
+| Schottky-Diode | unipolar | nein | – | schnelle Freilaufdiode bei kleinen Spannungen |
+| Thyristor / GTO | bipolar | nur zünden (GTO: auch löschen) | Strom | sehr große Leistungen, Netzanwendungen |
+| Bipolartransistor | bipolar | ja | Strom | heute in der Leistungselektronik selten |
+| **MOSFET** | unipolar | ja | **Spannung** | DC/DC-Wandler, Motorbrücken, bis einige 100 kHz … MHz |
+| IGBT | bipolar | ja | Spannung | hohe Spannungen (600 V … 6,5 kV), Antriebe, bis ca. 100 kHz |
+
+Bei Halbleitern aus **SiC** (Siliziumkarbid) und **GaN** (Galliumnitrid) verschieben sich die Grenzen:
+höhere Sperrspannungen, schnelleres Schalten, weniger Verluste.
+
+:::note[Warum vor allem MOSFETs?]
+Buck-, Boost- und Buck-Boost-Wandler, integrierte Motorbrücken und elektronische Schalter im Bereich bis
+einige 10 V arbeiten fast immer mit **N-Kanal-Leistungs-MOSFETs**: Sie werden über eine Spannung angesteuert,
+schalten schnell und haben einen kleinen Durchlasswiderstand $R_\mathrm{DS(on)}$.
+:::
+
+## Der MOSFET als Schalter
+
+Ein Leistungs-MOSFET ist ein **spannungsgesteuerter Schalter**. Entscheidend ist die Gate-Source-Spannung $U_\mathrm{GS}$:
+
+| Zustand | Bedingung | Verhalten |
+| --- | --- | --- |
+| **AUS** (sperrend) | $U_\mathrm{GS} \approx 0\,\mathrm{V}$ | $I_\mathrm{D} \approx 0$; der MOSFET blockiert $U_\mathrm{DS}$ (bis zu seiner Grenzspannung) |
+| **EIN** (leitend) | $U_\mathrm{GS}$ ausreichend groß (z. B. 10 V, Logik-Level: 4,5 V) | $U_\mathrm{DS} \approx I_\mathrm{D} \cdot R_\mathrm{DS(on)}$ |
+
+Drei Dinge musst du dir merken:
+
+1. Die **Einsatzspannung** $U_\mathrm{GS(th)}$ (*threshold*) ist die Spannung, bei der der MOSFET *gerade erst*
+   zu leiten beginnt. Für einen kleinen $R_\mathrm{DS(on)}$ braucht man eine deutlich höhere Spannung –
+   sie steht im Datenblatt bei der Angabe von $R_\mathrm{DS(on)}$.
+2. Das Gate ist isoliert: Im statischen Zustand fließt **fast kein Gatestrom**. Beim Umschalten muss aber
+   die **Gate-Ladung** $Q_\mathrm{G}$ zu- oder abgeführt werden – dafür braucht es kurzzeitig einen großen Strom.
+3. Beim Einschalten bleibt $U_\mathrm{GS}$ eine Zeit lang fast konstant (**Miller-Plateau**), während $U_\mathrm{DS}$
+   fällt. Wie schnell der MOSFET schaltet, bestimmen Gate-Ladung, Miller-Plateau und **Treiber**.
+
+## Verluste abschätzen
+
+Im Schaltwandler entstehen MOSFET-Verluste hauptsächlich beim **Leiten** sowie beim **Ein- und Ausschalten**.
+
+### 1 · Durchlassverluste
+
+$$
+P_\mathrm{leit} = I_\mathrm{D,eff}^2 \cdot R_\mathrm{DS(on)}
+$$
+
+Fließt während der Einschaltdauer ein annähernd konstanter Strom $I$ und ist der MOSFET den Anteil $D$
+(Tastverhältnis) der Periode eingeschaltet, gilt:
+
+$$
+P_\mathrm{leit} \approx D \cdot I^2 \cdot R_\mathrm{DS(on)}
+$$
+
+### 2 · Schaltverluste (Dreiecksnäherung)
+
+Während des Umschaltens liegen Spannung und Strom gleichzeitig am MOSFET. Vereinfacht nimmt man an,
+dass die Verlustleistung $p(t)$ dabei wie ein **Dreieck** verläuft (hartes Schalten):
+
+<Abbildung bild={Schaltverluste} unterschrift="Verlustleistung im MOSFET: zwei Dreiecke beim Schalten, kleiner Sockel während der Leitphase" />
+
+Die Fläche eines Dreiecks ist die Energie pro Schaltvorgang:
+
+$$
+E_\mathrm{ein} \approx \tfrac{1}{2} \cdot U_\mathrm{DS} \cdot I_\mathrm{D} \cdot t_\mathrm{ein}
+\qquad
+E_\mathrm{aus} \approx \tfrac{1}{2} \cdot U_\mathrm{DS} \cdot I_\mathrm{D} \cdot t_\mathrm{aus}
+$$
+
+Das passiert $f_\mathrm{s}$-mal pro Sekunde ($f_\mathrm{s}$: Schaltfrequenz):
+
+$$
+P_\mathrm{schalt} \approx f_\mathrm{s} \cdot (E_\mathrm{ein} + E_\mathrm{aus})
+= \tfrac{1}{2} \cdot U_\mathrm{DS} \cdot I_\mathrm{D} \cdot (t_\mathrm{ein} + t_\mathrm{aus}) \cdot f_\mathrm{s}
+$$
+
+### Gesamtverluste
+
+$$
+P_\mathrm{V} \approx P_\mathrm{leit} + P_\mathrm{schalt}
+$$
+
+:::caution[Nur eine Abschätzung]
+Die echten Schaltenergien hängen auch von der Gate-Ansteuerung, der Ausgangskapazität $C_\mathrm{oss}$,
+der Freilaufdiode und dem Layout ab. Für die echte Auslegung zählen Datenblattwerte, Temperaturreserven und Messungen.
+:::
+
+**Erkenntnis:** Durchlassverluste wachsen mit $I^2$, Schaltverluste wachsen mit $f_\mathrm{s}$.
+Darum ist die Wahl der Schaltfrequenz immer ein Kompromiss.
+
+➡ Ein vollständiges Zahlenbeispiel findest du bei den [Rechenbeispielen](/leistungselektronik/rechenbeispiele/#mosfet-verluste).

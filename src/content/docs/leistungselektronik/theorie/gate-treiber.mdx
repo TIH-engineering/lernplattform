@@ -1,0 +1,91 @@
+---
+title: Gate-Treiber
+description: Aufgaben eines Gate-Treibers, Gate-Strom, Bootstrap-Schaltung und Ladungspumpe für den High-Side-MOSFET.
+sidebar:
+  label: 4 · Gate-Treiber
+  order: 4
+---
+
+## Warum ein Treiber?
+
+Ein Mikrocontroller liefert ein Logiksignal (z. B. 3,3 V, wenige mA). Damit lässt sich die Gate-Ladung
+eines Leistungs-MOSFETs aber **nicht schnell genug** umladen – und für einen kleinen $R_\mathrm{DS(on)}$
+braucht man oft 10 V statt 3,3 V. Der **Gate-Treiber** sitzt deshalb zwischen Steuerung und MOSFET:
+
+**Controller** (PWM, Freigabe) → **Gate-Treiber** (Pegel, Strom, Schutz) → **MOSFET** (Leistungspfad)
+
+### Aufgaben
+
+| Grundfunktionen | Schutz und Diagnose |
+| --- | --- |
+| passende $U_\mathrm{GS}$ für EIN und AUS | Überstrom- und Kurzschlussschutz |
+| hoher Spitzen-Gatestrom für schnelle Flanken | Unterspannungsabschaltung (UVLO) |
+| definierte Schaltflanken | Übertemperaturmeldung |
+| Totzeit, kein Querstrom | sicherer AUS-Zustand bei Unterspannung |
+| bei Bedarf galvanische Trennung | Fehler- und Statussignale |
+
+## Wie groß muss der Gatestrom sein?
+
+Soll die Gate-Ladung $Q_\mathrm{G}$ innerhalb der Schaltzeit $t_\mathrm{s}$ umgeladen werden, braucht man
+im Mittel während der Flanke:
+
+$$
+I_\mathrm{G} \approx \frac{Q_\mathrm{G}}{t_\mathrm{s}}
+$$
+
+**Beispiel:** $Q_\mathrm{G} = 50\,\mathrm{nC}$ in $t_\mathrm{s} = 50\,\mathrm{ns}$ →
+$I_\mathrm{G} \approx 1\,\mathrm{A}$. Ein Mikrocontroller-Pin schafft vielleicht 20 mA!
+
+Der tatsächliche Stromverlauf hängt zusätzlich vom Gate-Widerstand, vom Miller-Plateau, von der Treiberspannung und vom Layout ab.
+
+Der **mittlere** Strom, den der Treiber aus seiner Versorgung zieht, ist dagegen klein:
+
+$$
+I_\mathrm{Treiber} \approx Q_\mathrm{G} \cdot f_\mathrm{s}
+$$
+
+Bei $50\,\mathrm{nC}$ und $100\,\mathrm{kHz}$ sind das nur $5\,\mathrm{mA}$.
+
+## Der High-Side-MOSFET: Bootstrap und Ladungspumpe
+
+Bei einem N-Kanal-MOSFET oben in der Halbbrücke steigt die **Source** beim Einschalten bis fast auf die
+Versorgungsspannung. Damit er eingeschaltet bleibt, muss das Gate z. B. 10 V **über dieser Source** liegen –
+also über der Versorgung. Dafür braucht es eine „schwebende“ Hilfsversorgung, die mit dem Schaltknoten mitwandert.
+
+### Bootstrap-Schaltung
+
+Ein **Bootstrap-Kondensator** $C_\mathrm{BS}$ liegt zwischen der Treiberversorgung des High-Side-Treibers und dem Schaltknoten SW.
+Eine **Bootstrap-Diode** führt von der Hilfsspannung (z. B. 12 V) zum Kondensator.
+
+1. **Low-Side EIN:** Der Schaltknoten liegt bei ≈ 0 V. Der Kondensator lädt sich über die Diode auf ≈ 12 V auf.
+2. **High-Side EIN:** Der Schaltknoten springt auf $+U_\mathrm{B}$. Der Kondensator „fährt mit“ und versorgt den
+   High-Side-Treiber – das Gate liegt nun ca. 12 V über der Source. Die Diode sperrt.
+
+Pro Einschaltvorgang entnimmt der Treiber die Ladung $Q_\mathrm{G}$; die Kondensatorspannung sinkt dabei um
+
+$$
+\Delta U_\mathrm{BS} \approx \frac{Q_\mathrm{G}}{C_\mathrm{BS}}
+$$
+
+Darum wählt man $C_\mathrm{BS}$ deutlich größer als die Gate-Kapazität (typisch einige 100 nF).
+
+:::caution[Grenze der Bootstrap-Schaltung]
+Der Bootstrap-Kondensator wird **nur nachgeladen, wenn der Low-Side-Schalter leitet**. Ein dauerhaft
+eingeschalteter High-Side-MOSFET (100 % Tastverhältnis) ist damit **nicht** möglich – irgendwann ist der
+Kondensator leer, und der MOSFET schaltet ungewollt ab oder wird heiß.
+:::
+
+### Ladungspumpe
+
+Eine **Ladungspumpe** erzeugt dauerhaft eine Hilfsspannung oberhalb der Versorgung. Damit ist auch
+**100 % Tastverhältnis** möglich. Integrierte Motortreiber wie der DRV8212P verwenden dieses Prinzip.
+
+## Warum nicht einfach P-Kanal-MOSFETs?
+
+Ein P-Kanal-MOSFET oben ist leichter anzusteuern: Er schaltet ein, wenn man sein Gate gegenüber der
+(positiven) Source **nach unten** zieht – keine Spannung über der Versorgung nötig.
+Aber: Bei gleicher Chipfläche und Sperrspannung hat ein **N-Kanal-MOSFET einen deutlich kleineren**
+$R_\mathrm{DS(on)}$ (Elektronen sind beweglicher als Löcher) und damit weniger Verluste.
+
+- **leistungsstarke Brücken:** fast immer N-Kanal mit Bootstrap oder Ladungspumpe
+- **kleine, einfache Schaltungen:** P-Kanal oben ist oft sinnvoll

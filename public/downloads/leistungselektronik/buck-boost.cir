@@ -1,0 +1,18 @@
+* Invertierender Buck-Boost - Lernplattform Elektronik lernen
+* Ue = 12 V, Ua = -9 V, |Ia| = 1 A, L = 100 uH, Ca = 47 uF, fs = 100 kHz, D = 9/21
+* Probiere: D groesser oder kleiner als 0,5 waehlen
+.param D=0.428571 fs=100k
+Ve e 0 12
+S1 e sw ctrl 0 SIDEAL
+L1 sw 0 100u
+D1 a sw DIDEAL
+Ca a 0 47u
+RL a 0 9
+Vctrl ctrl 0 PULSE(0 1 0 1n 1n {D/fs-2n} {1/fs})
+* Modelle: idealer Schalter und ideale Diode (fast verlustfrei)
+.model SIDEAL SW(Ron=10m Roff=10Meg Vt=0.5 Vh=0)
+.model DIDEAL D(Ron=10m Roff=10Meg Vfwd=0)
+.options plotwinsize=0
+.tran 0 10m 0 20n
+* Plotte: V(a), V(sw), I(L1)
+.end

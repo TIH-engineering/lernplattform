@@ -1,0 +1,232 @@
+---
+title: Praxisbeispiele
+description: Leistungselektronik in echten Bauteilen – integrierte H-Brücke, Buck- und Boost-ICs, Drosselauswahl, Flyback-Netzteil, Layout und Messen am Oszilloskop.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+
+Hier siehst du, wie die Theorie in **echten Bauteilen** steckt. Die Kennwerte stammen aus den
+Herstellerdatenblättern (Links unter [Literatur & Links](/leistungselektronik/literatur/)).
+Lies bei jedem Beispiel auch selbst im Datenblatt nach – das ist die wichtigste Fähigkeit in der Praxis.
+
+## Integrierte H-Brücke: DRV8212P
+
+Der **DRV8212P** von Texas Instruments ist eine komplette [H-Brücke](/leistungselektronik/theorie/motorbruecken/) in einem Chip –
+für kleine Gleichstrommotoren, z. B. in Spielzeug, Schlössern oder Ventilen.
+
+**Im Chip stecken:** vier N-Kanal-Leistungs-MOSFETs, zwei Gate-Treiber, eine **Ladungspumpe**,
+Steuerlogik und Schutzschaltungen.
+
+| Kennwert | Wert (laut Datenblatt) |
+| --- | --- |
+| Motorversorgung VM | 0 … 11 V |
+| Logikversorgung VCC | 1,65 … 5,5 V |
+| Durchlasswiderstand High-Side + Low-Side | typ. 280 mΩ |
+| Spitzenstrom | 4 A (Überstromgrenze, **kein** Dauerstrom) |
+| Schutz | Unterspannung (UVLO), Überstrom, Übertemperatur |
+
+**So liest du das Blockdiagramm:** Links kommen Versorgung (VM, VCC), Schlafmodus (nSLEEP) und die
+Steuereingänge IN1/IN2 hinein. Die Logik steuert die beiden Halbbrücken an OUT1/OUT2, an denen der Motor hängt.
+
+**Aufgaben**
+
+1. Warum kann der DRV8212P den Motor auch mit 100 % Tastverhältnis betreiben, eine Bootstrap-Schaltung aber nicht?
+2. Der Motor zieht dauerhaft 1 A. Wie groß sind die Verluste in den beiden leitenden MOSFETs?
+3. Was bedeutet „4 A Spitzenstrom (kein Dauerstrom)“ für die Auswahl eines Motors?
+
+<Loesung>
+
+1. Er hat eine **Ladungspumpe**, die dauerhaft eine Gate-Spannung oberhalb von VM erzeugt. Ein Bootstrap-Kondensator
+   wird dagegen nur nachgeladen, wenn der Low-Side-Schalter leitet.
+2. Es leiten immer ein High-Side- und ein Low-Side-MOSFET in Reihe: $P = I^2 \cdot R = (1\,\mathrm{A})^2 \cdot 0{,}28\,\Omega = 0{,}28\,\mathrm{W}$.
+3. Bei 4 A schaltet der Überstromschutz ab. Der **Anlaufstrom** des Motors (Motor steht, nur Wicklungswiderstand
+   begrenzt) muss darunter liegen – und der Dauerstrom wird durch die Erwärmung des Chips begrenzt, nicht durch die 4 A.
+
+</Loesung>
+
+## Buck-IC: AP61100
+
+Der **AP61100** (Diodes Incorporated) ist ein **synchroner Tiefsetzsteller** mit zwei integrierten MOSFETs.
+Eine Freilaufdiode ist nicht nötig – der Low-Side-MOSFET übernimmt den Freilauf.
+
+| Kennwert | Wert (laut Datenblatt) |
+| --- | --- |
+| Eingangsspannung | 2,3 … 5,5 V |
+| Ausgangsspannung | 0,6 … 3,6 V, bis 1 A Dauerstrom |
+| Schaltfrequenz | typ. 2,2 MHz |
+| interne MOSFETs | High-Side 110 mΩ, Low-Side 80 mΩ (typ.) |
+| Regelverfahren | Constant-On-Time (COT) |
+| Beispielbeschaltung 5 V → 1,8 V | $L = 1\,\mu\mathrm{H}$, $C_\mathrm{e} = C_\mathrm{a} = 10\,\mu\mathrm{F}$, $R_1 = 200\,\mathrm{k\Omega}$, $R_2 = 100\,\mathrm{k\Omega}$ |
+
+**Was steckt im IC?** Eine **0,6-V-Referenz**, mit der die heruntergeteilte Ausgangsspannung (Pin FB)
+verglichen wird, ein Timer für die Einschaltzeit, die beiden Leistungs-MOSFETs und Schutzfunktionen
+(Unter-/Überspannung, Überstrom, Übertemperatur).
+
+**Aufgaben**
+
+1. Die Ausgangsspannung wird über einen Spannungsteiler $R_1$ (oben) / $R_2$ (unten) eingestellt, sodass am
+   FB-Pin 0,6 V liegen. Berechne $U_\mathrm{a}$ für $R_1 = 200\,\mathrm{k\Omega}$ und $R_2 = 100\,\mathrm{k\Omega}$.
+2. Welche Widerstände würdest du für 3,3 V wählen ($R_2 = 100\,\mathrm{k\Omega}$ beibehalten)?
+3. Schätze die Durchlassverluste der beiden MOSFETs bei 1 A und $D = 0{,}36$ ab.
+
+<Loesung>
+
+1. $U_\mathrm{a} = U_\mathrm{FB} \cdot \left(1 + \dfrac{R_1}{R_2}\right) = 0{,}6\,\mathrm{V} \cdot (1 + 2) = 1{,}8\,\mathrm{V}$ ✔
+2. $\dfrac{R_1}{R_2} = \dfrac{3{,}3}{0{,}6} - 1 = 4{,}5$ → $R_1 = 450\,\mathrm{k\Omega}$ (Normwert E96: 453 kΩ → $U_\mathrm{a} \approx 3{,}32\,\mathrm{V}$).
+3. High-Side leitet den Anteil $D$, Low-Side den Anteil $1 - D$:
+   $P \approx (1\,\mathrm{A})^2 \cdot (0{,}36 \cdot 0{,}11\,\Omega + 0{,}64 \cdot 0{,}08\,\Omega) \approx 0{,}04\,\mathrm{W} + 0{,}051\,\mathrm{W} \approx 0{,}09\,\mathrm{W}$.
+
+</Loesung>
+
+➡ Die komplette Dimensionierung dieses Wandlers findest du bei den [Rechenbeispielen](/leistungselektronik/rechenbeispiele/#komplette-buck-auslegung).
+
+## Boost-IC: TPS61023
+
+Der **TPS61023** (Texas Instruments) ist ein **synchroner Hochsetzsteller** für batteriebetriebene Geräte –
+z. B. um aus einer Li-Ionen-Zelle 5 V für USB zu erzeugen. Ein zweiter MOSFET ersetzt die Ausgangsdiode
+(synchrone Gleichrichtung → weniger Verluste).
+
+| Kennwert | Wert (laut Datenblatt) |
+| --- | --- |
+| Eingangsspannung | 0,5 … 5,5 V im Betrieb, Anlauf ab 1,8 V |
+| Ausgangsspannung | 2,2 … 5,5 V einstellbar |
+| Schaltfrequenz | ca. 1 MHz |
+| Schalter-Stromgrenze | 3,7 A typ. (Grenze für den **Schalterstrom**, nicht für den Ausgangsstrom!) |
+| Wirkungsgrad | 94 % bei 3,6 V → 5 V, 1,5 A |
+| Besonderheiten | PFM-Betrieb bei kleiner Last, UVLO, Überstromschutz |
+
+**Aufgabe:** $U_\mathrm{e} = 3{,}6\,\mathrm{V}$, $U_\mathrm{a} = 5\,\mathrm{V}$, $I_\mathrm{a} = 1\,\mathrm{A}$, $L = 1\,\mu\mathrm{H}$, $f_\mathrm{s} = 1\,\mathrm{MHz}$.
+Berechne $D$, $\bar{I}_\mathrm{L}$, $\Delta I_\mathrm{L}$ und $I_\mathrm{L,max}$. Wie viel Reserve bleibt bis zur Stromgrenze?
+
+<Loesung>
+
+$$
+D = 1 - \frac{3{,}6}{5} = 0{,}28
+\qquad
+\bar{I}_\mathrm{L} = \frac{1\,\mathrm{A}}{0{,}72} \approx 1{,}39\,\mathrm{A}
+$$
+
+$$
+\Delta I_\mathrm{L} = \frac{3{,}6\,\mathrm{V} \cdot 0{,}28}{1\,\mu\mathrm{H} \cdot 1\,\mathrm{MHz}} \approx 1{,}01\,\mathrm{A}
+\qquad
+I_\mathrm{L,max} \approx 1{,}39\,\mathrm{A} + 0{,}50\,\mathrm{A} \approx 1{,}89\,\mathrm{A}
+$$
+
+Bis zur Stromgrenze von 3,7 A bleibt genug Reserve. **Aber:** Bei leerem Akku (z. B. 3,0 V) steigen $D$ und
+der Eingangsstrom – rechne immer auch den ungünstigsten Fall!
+
+</Loesung>
+
+## Die richtige Drossel auswählen
+
+Für den AP61100-Wandler (5 V → 1,8 V, 1 A, 2,2 MHz) empfiehlt der Hersteller **1,0 … 1,5 µH**. Der berechnete
+Spitzenstrom liegt bei **1,26 A**. Zwei Drosseln aus der Coilcraft-Serie LPS4018 stehen zur Auswahl:
+
+| Kennwert | LPS4018-102NRC | LPS4018-682MRC |
+| --- | --- | --- |
+| Nenninduktivität | 1,0 µH | 6,8 µH |
+| $R_\mathrm{DC,max}$ | 42 mΩ | 150 mΩ |
+| $I_\mathrm{sat}$ (10 % $L$-Abfall) | 3,8 A | 1,2 A |
+| $I_\mathrm{rms}$ (Erwärmung, bei 20 °C) | 1,8 A | 1,0 A |
+
+**Aufgabe:** Welche Drossel passt? Begründe mit mindestens drei Kennwerten.
+
+<Loesung>
+
+**LPS4018-102NRC (1 µH) – grundsätzlich passend:**
+- $L$ liegt im empfohlenen Bereich,
+- $I_\mathrm{sat} = 3{,}8\,\mathrm{A}$ liegt deutlich über 1,26 A (auch über der IC-Stromgrenze),
+- $I_\mathrm{rms} = 1{,}8\,\mathrm{A} > 1\,\mathrm{A}$, kleiner Wicklungswiderstand → $P_\mathrm{Cu} \approx (1\,\mathrm{A})^2 \cdot 42\,\mathrm{m\Omega} = 42\,\mathrm{mW}$.
+
+**LPS4018-682MRC (6,8 µH) – ungeeignet:**
+- $L$ liegt **nicht** im empfohlenen Bereich (der Regler ist darauf abgestimmt),
+- $I_\mathrm{sat} = 1{,}2\,\mathrm{A}$ < 1,26 A → die Drossel würde bereits im Normalbetrieb in die Sättigung gehen,
+- $I_\mathrm{rms} = 1{,}0\,\mathrm{A}$ ohne jede Reserve, $P_\mathrm{Cu} = 150\,\mathrm{mW}$.
+
+**Merke:** Größere Induktivität ist nicht automatisch besser! „Passend“ ist hier eine technische Vorauswahl –
+Temperatur, Toleranzen, Layout und EMV müssen trotzdem geprüft werden.
+
+</Loesung>
+
+## Flyback-Netzteil analysieren
+
+Die Application Note **AN2864** von STMicroelectronics zeigt ein netzbetriebenes Sperrwandler-Netzteil mit dem
+Baustein **VIPER17** und einem **5-V-/1-A-Ausgang**. Wir betrachten nur die **Funktion der Baugruppen** – keine Dimensionierung.
+
+| Baugruppe | Bauteile | Aufgabe |
+| --- | --- | --- |
+| Netzeingang | Sicherung F1, NTC1, Brückengleichrichter BR1, Siebkondensator C2 | Absichern, Einschaltstrom begrenzen, gleichrichten → ca. 325 V DC |
+| Leistungsstufe | VIPER17 (Controller + MOSFET), Transformator | Energie im Magnetfeld speichern (MOSFET EIN) |
+| Sekundärseite | Diode D4, Ausgangskondensatoren | Energie an den Ausgang abgeben (MOSFET AUS), glätten |
+| Rückkopplung | TL431, Optokoppler OPT1 | Ausgangsspannung messen und über die Isolationsgrenze melden |
+| Schutz | Klemmbeschaltung auf der Primärseite | Spannungsspitzen durch die Streuinduktivität begrenzen |
+
+**Aufgaben** (mit dem Schaltplan aus der Application Note)
+
+1. Markiere die **Isolationsgrenze** im Schaltplan. Welche Bauteile überbrücken sie?
+2. Warum wird ein **NTC** in Reihe zum Netzeingang geschaltet?
+3. Warum braucht man für die Rückmeldung einen **Optokoppler** und nicht einfach eine Leitung?
+
+<Loesung>
+
+1. Die Grenze verläuft durch den **Transformator** und den **Optokoppler** (eventuell auch ein Y-Kondensator für die EMV).
+   Alle anderen Bauteile gehören eindeutig zur Primär- oder Sekundärseite.
+2. Beim Einschalten ist der Siebkondensator leer und würde einen sehr hohen Ladestrom ziehen. Der kalte NTC ist
+   hochohmig und begrenzt diesen **Einschaltstrom**; im Betrieb erwärmt er sich und wird niederohmig.
+3. Eine Leitung würde die **galvanische Trennung** aufheben. Der Optokoppler überträgt das Signal mit Licht.
+
+</Loesung>
+
+:::danger[Nur analysieren!]
+Die Primärseite führt **Netzspannung**. Der Schaltplan dient zur Analyse im Unterricht und ist **keine Bauanleitung**.
+:::
+
+## Layout: heißen Pfad finden
+
+Im Datenblatt des AP61100 gibt es einen **Layoutvorschlag** (PCB-Layout-Beispiel). Drucke ihn aus oder öffne ihn am Bildschirm.
+
+**Aufgaben**
+
+1. Markiere mit einem roten Stift die **Kommutierungsschleife** (heißer Pfad).
+2. Begründe, warum $C_\mathrm{e}$ direkt an den Pins VIN und GND liegen muss.
+3. Warum wird die Feedback-Leitung nicht neben dem Schaltknoten SW geführt?
+4. Wozu dienen die vielen Vias unter dem IC?
+
+<Loesung>
+
+1. Die Schleife verläuft vom **Eingangskondensator** über VIN in den IC (High-Side-MOSFET), weiter über den
+   Low-Side-MOSFET zu GND und direkt zurück zum Eingangskondensator. Die Drossel gehört **nicht** dazu.
+2. Je kürzer der Weg, desto kleiner die Schleifeninduktivität und damit die Spannungsspitzen $L_\mathrm{s} \cdot \mathrm{d}i/\mathrm{d}t$.
+3. Der Schaltknoten springt in wenigen Nanosekunden zwischen 0 V und 5 V. Über die Kapazität zwischen benachbarten
+   Leiterbahnen würden diese Flanken in die empfindliche FB-Leitung einkoppeln → unruhige Regelung.
+4. Thermische Vias leiten die Wärme zur Massefläche auf der Unterseite (Kühlung).
+
+</Loesung>
+
+## Messen: Ausgangsrippel richtig messen
+
+<Stufe wert="standard" />
+
+Du willst am Laborplatz den Ausgangsrippel eines Buck-Wandlers mit dem Oszilloskop messen und siehst
+plötzlich 100 mV Spitzen statt der berechneten 10 mV. Meist liegt das **am Messaufbau**, nicht am Wandler.
+
+So misst du richtig:
+
+1. **AC-Kopplung** am Oszilloskop wählen, damit der kleine Rippel auf dem großen Gleichanteil sichtbar wird.
+2. **Bandbreitenbegrenzung** (z. B. 20 MHz) einschalten – sonst siehst du auch HF-Störungen.
+3. **Keine lange Masseleitung** (Krokodilklemme) verwenden! Sie bildet mit der Tastkopfspitze eine große
+   Schleife, die das Magnetfeld des Wandlers wie eine Antenne einfängt. Stattdessen die **Massefeder**
+   (kurzer Federkontakt) direkt am Ausgangskondensator verwenden.
+4. Direkt **am Ausgangskondensator** messen, nicht irgendwo auf der Leitung.
+
+**Aufgabe:** Erkläre mit dem Induktionsgesetz, warum eine 15 cm lange Masseleitung das Messergebnis verfälscht.
+
+<Loesung>
+
+Die Masseleitung und die Tastkopfspitze bilden eine **Leiterschleife** mit einigen cm² Fläche. Das schnell wechselnde
+Magnetfeld des Wandlers (heißer Pfad, Drossel) durchsetzt diese Schleife und **induziert** dort eine Spannung
+($u = \mathrm{d}\Phi/\mathrm{d}t$). Diese Spannung addiert sich zum Messsignal – du misst also Störungen, die in
+der Schaltung gar nicht vorhanden sind. Die Massefeder macht die Schleifenfläche fast null.
+
+</Loesung>

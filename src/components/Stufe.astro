@@ -1,0 +1,18 @@
+---
+// Schwierigkeits-Abzeichen: <Stufe wert="grundlagen" /> | "standard" | "vertiefung"
+import { Badge } from '@astrojs/starlight/components';
+
+interface Props {
+	wert: 'grundlagen' | 'standard' | 'vertiefung';
+}
+
+const stufen = {
+	grundlagen: { text: 'Grundlagen', variant: 'success' },
+	standard: { text: 'Standard', variant: 'caution' },
+	vertiefung: { text: 'Vertiefung', variant: 'danger' },
+} as const;
+
+const s = stufen[Astro.props.wert];
+---
+
+<Badge text={s.text} variant={s.variant} />

@@ -1,0 +1,13 @@
+---
+// Aufklappbare Lösung für Rechenbeispiele:
+// <Loesung> … Lösungsweg … </Loesung>
+interface Props {
+	titel?: string;
+}
+const { titel = 'Lösung anzeigen' } = Astro.props;
+---
+
+<details class="loesung">
+	<summary>{titel}</summary>
+	<slot />
+</details>

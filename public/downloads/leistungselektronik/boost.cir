@@ -1,0 +1,19 @@
+* Hochsetzsteller (Boost) - Lernplattform Elektronik lernen
+* Ue = 12 V, Ua = 24 V, Ia = 2 A, L = 100 uH, Ca = 100 uF, fs = 100 kHz, D = 0,5
+* Achtung: Der Boost braucht ca. 15 ms zum Einschwingen - Rippel erst danach ablesen!
+* Probiere: D auf 0,6 oder 0,75 setzen - welche Ausgangsspannung erwartest du?
+.param D=0.5 fs=100k
+Ve e 0 12
+L1 e sw 100u
+S1 sw 0 ctrl 0 SIDEAL
+D1 sw a DIDEAL
+Ca a 0 100u
+RL a 0 12
+Vctrl ctrl 0 PULSE(0 1 0 1n 1n {D/fs-2n} {1/fs})
+* Modelle: idealer Schalter und ideale Diode (fast verlustfrei)
+.model SIDEAL SW(Ron=10m Roff=10Meg Vt=0.5 Vh=0)
+.model DIDEAL D(Ron=10m Roff=10Meg Vfwd=0)
+.options plotwinsize=0
+.tran 0 30m 0 50n
+* Plotte: V(a), V(sw), I(L1)
+.end

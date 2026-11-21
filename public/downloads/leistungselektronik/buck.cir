@@ -1,0 +1,18 @@
+* Tiefsetzsteller (Buck) - Lernplattform Elektronik lernen
+* Ue = 24 V, Ua = 12 V, Ia = 3 A, L = 100 uH, Ca = 47 uF, fs = 100 kHz, D = 0,5
+* Probiere: D (Parameter) aendern, L oder Ca aendern, RL vergroessern (lueckender Betrieb!)
+.param D=0.5 fs=100k
+Ve e 0 24
+S1 e sw ctrl 0 SIDEAL
+D1 0 sw DIDEAL
+L1 sw a 100u
+Ca a 0 47u
+RL a 0 4
+Vctrl ctrl 0 PULSE(0 1 0 1n 1n {D/fs-2n} {1/fs})
+* Modelle: idealer Schalter und ideale Diode (fast verlustfrei)
+.model SIDEAL SW(Ron=10m Roff=10Meg Vt=0.5 Vh=0)
+.model DIDEAL D(Ron=10m Roff=10Meg Vfwd=0)
+.options plotwinsize=0
+.tran 0 5m 0 20n
+* Plotte: V(a), V(sw), I(L1)
+.end

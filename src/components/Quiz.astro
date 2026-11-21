@@ -1,0 +1,351 @@
+---
+// Interaktives Quiz. Verwendung in einer .mdx-Seite:
+//   import Quiz from '~/components/Quiz.astro';
+//   <Quiz id="leistungselektronik" />
+// Die Fragen stehen in src/content/quiz/<id>.yaml.
+// Es wird nichts gespeichert oder gesendet – alles passiert im Browser.
+import { getEntry } from 'astro:content';
+import { alsHtml, alsHtmlZeile, zahlDeutsch } from '../lib/text';
+
+interface Props {
+	id: string;
+}
+
+const eintrag = await getEntry('quiz', Astro.props.id);
+if (!eintrag) throw new Error(`Quiz "${Astro.props.id}" nicht gefunden (src/content/quiz/${Astro.props.id}.yaml)`);
+const { fragen } = eintrag.data;
+
+const stufenText = { grundlagen: 'Grundlagen', standard: 'Standard', vertiefung: 'Vertiefung' } as const;
+const quizId = `quiz-${Astro.props.id}`;
+---
+
+<div class="quiz not-content" id={quizId} data-anzahl={fragen.length}>
+	{
+		fragen.map((f, i) => {
+			const name = `${quizId}-f${i + 1}`;
+			const mehrfach = f.typ === 'mc' && f.optionen.filter((o) => o.richtig).length > 1;
+			return (
+				<section
+					class="quiz-frage"
+					data-typ={f.typ}
+					data-richtig={f.typ === 'mc' ? f.optionen.flatMap((o, j) => (o.richtig ? [j] : [])).join(',') : undefined}
+					data-loesung={f.typ === 'zahl' ? f.loesung : undefined}
+					data-toleranz={f.typ === 'zahl' ? f.toleranz : undefined}
+					data-toleranzart={f.typ === 'zahl' ? f.toleranzArt : undefined}
+				>
+					<header class="quiz-kopf">
+						<span class="quiz-nr">Frage {i + 1} von {fragen.length}</span>
+						<span class={`quiz-stufe stufe-${f.stufe}`}>{stufenText[f.stufe]}</span>
+					</header>
+					<div class="quiz-text" set:html={alsHtml(f.frage)} />
+
+					{f.typ === 'mc' && (
+						<fieldset class="quiz-optionen">
+							<legend class="sr-only">Antwortmöglichkeiten</legend>
+							{mehrfach && <p class="quiz-hinweis">Mehrere Antworten können richtig sein.</p>}
+							{f.optionen.map((o, j) => (
+								<label class="quiz-option">
+									<input type={mehrfach ? 'checkbox' : 'radio'} name={name} value={j} />
+									<span set:html={alsHtmlZeile(o.text)} />
+								</label>
+							))}
+						</fieldset>
+					)}
+
+					{f.typ === 'zahl' && (
+						<div class="quiz-zahl">
+							<label for={name} class="sr-only">Deine Antwort</label>
+							<input id={name} type="text" inputmode="decimal" autocomplete="off" placeholder="Zahl eingeben" />
+							{f.einheit && <span class="quiz-einheit">{f.einheit}</span>}
+						</div>
+					)}
+
+					<div class="quiz-knoepfe">
+						<button type="button" class="quiz-pruefen">Antwort prüfen</button>
+						<button type="button" class="quiz-nochmal" hidden>Nochmal versuchen</button>
+					</div>
+
+					<div class="quiz-rueckmeldung" aria-live="polite" hidden>
+						<p class="quiz-ergebnis" />
+						{f.typ === 'zahl' && (
+							<p class="quiz-musterloesung">
+								Richtige Lösung: <strong>{zahlDeutsch(f.loesung)} {f.einheit}</strong>
+								<span class="quiz-tol">
+									(akzeptiert: ±{zahlDeutsch(f.toleranz)}
+									{f.toleranzArt === 'prozent' ? ' %' : ` ${f.einheit}`})
+								</span>
+							</p>
+						)}
+						<div class="quiz-erklaerung" set:html={alsHtml(f.erklaerung)} />
+					</div>
+				</section>
+			);
+		})
+	}
+	<p class="quiz-stand" aria-live="polite">
+		Beim ersten Versuch richtig: <strong class="quiz-punkte">0</strong> von {fragen.length}
+	</p>
+</div>
+
+<script>
+	// Liest eine Zahl mit Komma oder Punkt, auch „4,7e-3“ oder „1 200“.
+	function leseZahl(text: string): number {
+		const t = text.trim().replace(/\s/g, '').replace(',', '.').replace('−', '-');
+		if (!/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(t)) return NaN;
+		return Number(t);
+	}
+
+	function pruefe(frage: HTMLElement): boolean | null {
+		if (frage.dataset.typ === 'mc') {
+			const gewaehlt = [...frage.querySelectorAll<HTMLInputElement>('input:checked')].map((e) => e.value);
+			if (gewaehlt.length === 0) return null;
+			const richtig = (frage.dataset.richtig ?? '').split(',');
+			return gewaehlt.length === richtig.length && gewaehlt.every((g) => richtig.includes(g));
+		}
+		const eingabe = frage.querySelector<HTMLInputElement>('.quiz-zahl input')!;
+		const wert = leseZahl(eingabe.value);
+		if (Number.isNaN(wert)) return null;
+		const loesung = Number(frage.dataset.loesung);
+		const tol = Number(frage.dataset.toleranz);
+		const erlaubt = frage.dataset.toleranzart === 'absolut' ? tol : (Math.abs(loesung) * tol) / 100;
+		return Math.abs(wert - loesung) <= erlaubt + 1e-12;
+	}
+
+	function aktualisierePunkte(quiz: HTMLElement) {
+		const punkte = quiz.querySelectorAll('.quiz-frage[data-erster="richtig"]').length;
+		quiz.querySelector('.quiz-punkte')!.textContent = String(punkte);
+	}
+
+	document.querySelectorAll<HTMLElement>('.quiz').forEach((quiz) => {
+		quiz.querySelectorAll<HTMLElement>('.quiz-frage').forEach((frage) => {
+			const pruefen = frage.querySelector<HTMLButtonElement>('.quiz-pruefen')!;
+			const nochmal = frage.querySelector<HTMLButtonElement>('.quiz-nochmal')!;
+			const rueck = frage.querySelector<HTMLElement>('.quiz-rueckmeldung')!;
+			const ergebnis = frage.querySelector<HTMLElement>('.quiz-ergebnis')!;
+			const eingaben = frage.querySelectorAll<HTMLInputElement>('input');
+
+			const auswerten = () => {
+				const ok = pruefe(frage);
+				if (ok === null) {
+					ergebnis.textContent =
+						frage.dataset.typ === 'mc' ? 'Bitte wähle zuerst eine Antwort.' : 'Bitte gib eine Zahl ein (z. B. 2,5).';
+					rueck.hidden = false;
+					rueck.dataset.status = 'leer';
+					return;
+				}
+				if (!frage.dataset.erster) {
+					frage.dataset.erster = ok ? 'richtig' : 'falsch';
+					aktualisierePunkte(quiz);
+				}
+				frage.dataset.status = ok ? 'richtig' : 'falsch';
+				rueck.dataset.status = ok ? 'richtig' : 'falsch';
+				ergebnis.textContent = ok ? '✔ Richtig!' : '✘ Leider falsch.';
+				rueck.hidden = false;
+				eingaben.forEach((e) => (e.disabled = true));
+				// Bei Multiple Choice die richtigen Antworten markieren
+				if (frage.dataset.typ === 'mc') {
+					const richtig = (frage.dataset.richtig ?? '').split(',');
+					frage.querySelectorAll<HTMLLabelElement>('.quiz-option').forEach((l) => {
+						const inp = l.querySelector('input')!;
+						if (richtig.includes(inp.value)) l.dataset.markierung = 'richtig';
+						else if (inp.checked) l.dataset.markierung = 'falsch';
+					});
+				}
+				pruefen.hidden = true;
+				nochmal.hidden = false;
+				nochmal.focus();
+			};
+
+			pruefen.addEventListener('click', auswerten);
+			frage.querySelector('.quiz-zahl input')?.addEventListener('keydown', (e) => {
+				if ((e as KeyboardEvent).key === 'Enter') auswerten();
+			});
+
+			nochmal.addEventListener('click', () => {
+				eingaben.forEach((e) => {
+					e.disabled = false;
+					if (e.type === 'text') e.value = '';
+					else e.checked = false;
+				});
+				frage.querySelectorAll<HTMLElement>('.quiz-option').forEach((l) => delete l.dataset.markierung);
+				delete frage.dataset.status;
+				rueck.hidden = true;
+				nochmal.hidden = true;
+				pruefen.hidden = false;
+				(eingaben[0] as HTMLElement | undefined)?.focus();
+			});
+		});
+	});
+</script>
+
+<style>
+	.quiz {
+		display: grid;
+		gap: 1.25rem;
+		margin-block: 1.5rem;
+	}
+	.quiz-frage {
+		border: 1px solid var(--sl-color-gray-5);
+		border-left: 4px solid var(--sl-color-gray-4);
+		border-radius: 0.5rem;
+		padding: 1rem 1.25rem;
+		background: var(--sl-color-bg-nav);
+	}
+	.quiz-frage[data-status='richtig'] {
+		border-left-color: var(--sl-color-green);
+	}
+	.quiz-frage[data-status='falsch'] {
+		border-left-color: var(--sl-color-red);
+	}
+	.quiz-kopf {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-3);
+		margin-bottom: 0.5rem;
+	}
+	.quiz-stufe {
+		font-size: var(--sl-text-xs);
+		font-weight: 600;
+		padding: 0.1rem 0.5rem;
+		border-radius: 0.25rem;
+		border: 1px solid;
+	}
+	.stufe-grundlagen {
+		color: var(--sl-color-green-high);
+		background: var(--sl-color-green-low);
+		border-color: var(--sl-color-green);
+	}
+	.stufe-standard {
+		color: var(--sl-color-orange-high);
+		background: var(--sl-color-orange-low);
+		border-color: var(--sl-color-orange);
+	}
+	.stufe-vertiefung {
+		color: var(--sl-color-red-high);
+		background: var(--sl-color-red-low);
+		border-color: var(--sl-color-red);
+	}
+	.quiz-text :global(p) {
+		margin: 0 0 0.75rem;
+		color: var(--sl-color-white);
+		font-weight: 500;
+	}
+	.quiz-optionen {
+		border: 0;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		gap: 0.4rem;
+	}
+	.quiz-hinweis {
+		margin: 0 0 0.25rem;
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-3);
+	}
+	.quiz-option {
+		display: flex;
+		gap: 0.6rem;
+		align-items: flex-start;
+		padding: 0.45rem 0.6rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.375rem;
+		cursor: pointer;
+		background: var(--sl-color-bg);
+	}
+	.quiz-option:hover {
+		border-color: var(--sl-color-accent);
+	}
+	.quiz-option input {
+		margin-top: 0.3rem;
+		accent-color: var(--sl-color-accent);
+	}
+	.quiz-option[data-markierung='richtig'] {
+		border-color: var(--sl-color-green);
+		background: var(--sl-color-green-low);
+	}
+	.quiz-option[data-markierung='falsch'] {
+		border-color: var(--sl-color-red);
+		background: var(--sl-color-red-low);
+	}
+	.quiz-zahl {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+	.quiz-zahl input {
+		width: 10rem;
+		max-width: 60%;
+		padding: 0.45rem 0.6rem;
+		font: inherit;
+		color: var(--sl-color-white);
+		background: var(--sl-color-bg);
+		border: 1px solid var(--sl-color-gray-4);
+		border-radius: 0.375rem;
+	}
+	.quiz-einheit {
+		font-weight: 600;
+	}
+	.quiz-knoepfe {
+		margin-top: 0.75rem;
+	}
+	.quiz-knoepfe button {
+		font: inherit;
+		font-weight: 600;
+		padding: 0.4rem 1rem;
+		border-radius: 999px;
+		cursor: pointer;
+		border: 1px solid var(--sl-color-accent);
+	}
+	.quiz-pruefen {
+		background: var(--sl-color-accent);
+		color: var(--sl-color-black);
+	}
+	.quiz-nochmal {
+		background: transparent;
+		color: var(--sl-color-accent-high);
+	}
+	.quiz-rueckmeldung {
+		margin-top: 0.75rem;
+		padding-top: 0.75rem;
+		border-top: 1px dashed var(--sl-color-gray-5);
+	}
+	.quiz-ergebnis {
+		font-weight: 700;
+		margin: 0 0 0.4rem;
+	}
+	.quiz-rueckmeldung[data-status='richtig'] .quiz-ergebnis {
+		color: var(--sl-color-green-high);
+	}
+	.quiz-rueckmeldung[data-status='falsch'] .quiz-ergebnis {
+		color: var(--sl-color-red-high);
+	}
+	.quiz-rueckmeldung[data-status='leer'] .quiz-musterloesung,
+	.quiz-rueckmeldung[data-status='leer'] .quiz-erklaerung {
+		display: none;
+	}
+	.quiz-musterloesung {
+		margin: 0 0 0.4rem;
+	}
+	.quiz-tol {
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-3);
+	}
+	.quiz-erklaerung :global(p) {
+		margin: 0.25rem 0;
+	}
+	.quiz-stand {
+		text-align: right;
+		color: var(--sl-color-gray-2);
+	}
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+	}
+</style>

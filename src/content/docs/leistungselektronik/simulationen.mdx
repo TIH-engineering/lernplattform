@@ -1,0 +1,96 @@
+---
+title: Simulationen
+description: LTspice-Simulationen zu Tiefsetzsteller, Hochsetzsteller und invertierendem Buck-Boost zum Herunterladen und Ausprobieren.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+
+Mit einer Simulation kannst du gefahrlos ausprobieren, was passiert, wenn du Bauteile oder das Tastverhältnis änderst.
+Wir verwenden **LTspice** – kostenlos von Analog Devices (siehe [Literatur & Links](/leistungselektronik/literatur/)).
+
+## Dateien
+
+Die Simulationen sind als **Netzliste** (`.cir`) gespeichert. So öffnest du sie: LTspice starten →
+*File → Open* → Dateityp „Netlists“ wählen → Datei öffnen → *Run* (▶).
+Schalter und Diode sind bewusst **ideal** modelliert, damit die Ergebnisse genau zu den Formeln passen.
+
+| Wandler | Datei | Werte |
+| --- | --- | --- |
+| Tiefsetzsteller | [buck.cir](/downloads/leistungselektronik/buck.cir) | 24 V → 12 V, 3 A, 100 µH, 47 µF, 100 kHz |
+| Hochsetzsteller | [boost.cir](/downloads/leistungselektronik/boost.cir) | 12 V → 24 V, 2 A, 100 µH, 100 µF, 100 kHz |
+| Invertierender Buck-Boost | [buck-boost.cir](/downloads/leistungselektronik/buck-boost.cir) | 12 V → −9 V, 1 A, 100 µH, 47 µF, 100 kHz |
+
+Plotte jeweils `V(a)` (Ausgangsspannung), `V(sw)` (Schaltknoten) und `I(L1)` (Drosselstrom).
+Das Tastverhältnis änderst du in der Zeile `.param D=…`.
+
+## Vergleich: Rechnung und Simulation
+
+Wir haben die drei Dateien simuliert und die Werte im eingeschwungenen Zustand mit den
+[Rechenbeispielen](/leistungselektronik/rechenbeispiele/) verglichen:
+
+| Größe | Buck: Rechnung | Buck: Simulation | Boost: Rechnung | Boost: Simulation | Buck-Boost: Rechnung | Buck-Boost: Simulation |
+| --- | --- | --- | --- | --- | --- | --- |
+| $U_\mathrm{a}$ | 12 V | 11,97 V | 24 V | 23,91 V | −9 V | −8,96 V |
+| $\bar{I}_\mathrm{L}$ | 3 A | 2,99 A | 4 A | 3,98 A | 1,75 A | 1,74 A |
+| $\Delta I_\mathrm{L}$ | 0,60 A | 0,60 A | 0,60 A | 0,60 A | 0,514 A | 0,513 A |
+| $I_\mathrm{L,max}$ | 3,30 A | 3,29 A | 4,30 A | 4,28 A | 2,01 A | 2,00 A |
+| $\Delta U_\mathrm{a}$ | 16 mV | 16,0 mV | 100 mV | 99,6 mV | 91 mV | 90,7 mV |
+
+Die kleinen Abweichungen kommen von den 10 mΩ Widerstand in Schalter und Diode.
+
+## Experimente
+
+### Experiment 1 – Tastverhältnis
+
+<Stufe wert="grundlagen" />
+
+Ändere in `buck.cir` das Tastverhältnis auf $D = 0{,}25$ und $D = 0{,}75$. Notiere jeweils $U_\mathrm{a}$ und $\Delta I_\mathrm{L}$.
+Bei welchem $D$ ist die Stromwelligkeit am größten?
+
+<Loesung>
+
+$U_\mathrm{a} \approx 6\,\mathrm{V}$ bzw. $18\,\mathrm{V}$. Die Stromwelligkeit $\Delta I_\mathrm{L} = U_\mathrm{e} \cdot D(1-D)/(L f_\mathrm{s})$
+ist bei beiden $0{,}45\,\mathrm{A}$ und bei $D = 0{,}5$ mit $0{,}6\,\mathrm{A}$ am größten.
+
+</Loesung>
+
+### Experiment 2 – Lückender Betrieb
+
+<Stufe wert="standard" />
+
+Vergrößere in `buck.cir` den Lastwiderstand `RL` von 4 Ω auf 100 Ω (Laststrom 0,12 A). Betrachte `I(L1)`.
+Was fällt auf, und stimmt $U_\mathrm{a} = D \cdot U_\mathrm{e}$ noch?
+
+<Loesung>
+
+Der Drosselstrom fällt in jeder Periode auf **null** und bleibt eine Zeit lang dort – der Wandler arbeitet **lückend** (DCM).
+Die Ausgangsspannung steigt über $D \cdot U_\mathrm{e} = 12\,\mathrm{V}$, weil die Formel nur im CCM gilt.
+Echte Regler stellen $D$ nach, damit die Spannung trotzdem stimmt.
+
+</Loesung>
+
+### Experiment 3 – Kleinerer Kondensator
+
+<Stufe wert="grundlagen" />
+
+Halbiere in `boost.cir` den Ausgangskondensator auf 50 µF. Wie ändert sich der Rippel? Warte das Einschwingen ab (ca. 15 ms).
+
+<Loesung>
+
+Der Rippel verdoppelt sich auf etwa 200 mV, denn $\Delta U_\mathrm{a,C} = I_\mathrm{a} D / (f_\mathrm{s} C_\mathrm{a})$ ist umgekehrt proportional zu $C_\mathrm{a}$.
+
+</Loesung>
+
+### Experiment 4 – Was macht die Diode beim Buck-Boost?
+
+<Stufe wert="standard" />
+
+Plotte in `buck-boost.cir` den Strom `I(D1)`. Wann leitet die Diode, und wie hängt ihr Strom mit `I(L1)` zusammen?
+
+<Loesung>
+
+Die Diode leitet nur, wenn der Schalter **aus** ist. Dann übernimmt sie den gesamten Drosselstrom (abfallendes Dreieck).
+Ihr Mittelwert entspricht dem Laststrom von 1 A – das ist die Energie, die in der AUS-Phase zum Ausgang fließt.
+
+</Loesung>

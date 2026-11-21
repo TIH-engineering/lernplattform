@@ -1,0 +1,141 @@
+---
+title: Passive Bauelemente
+description: Reale Kondensatoren (ESR, ESL, Eigenresonanz), X- und Y-Kondensatoren, reale Drosseln (Sättigung, Skin- und Proximity-Effekt) und Transformatoren.
+sidebar:
+  label: 7 · Passive Bauelemente
+  order: 7
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import KondensatorESB from '../../../../assets/leistungselektronik/kondensator-esb.svg';
+
+Passive Bauelemente **speichern Energie**, **glätten** Ströme und Spannungen und bestimmen das
+**Störverhalten** (EMV). In Schaltwandlern sind Strombelastbarkeit, Verluste, Temperatur und parasitäre
+Eigenschaften oft wichtiger als der aufgedruckte Nennwert.
+
+## Kondensatoren
+
+### Der reale Kondensator
+
+Ein echter Kondensator hat neben seiner Kapazität $C$ auch einen **Ersatz-Serienwiderstand** (ESR) und
+eine **Ersatz-Serieninduktivität** (ESL, Anschlüsse und innerer Aufbau):
+
+<Abbildung bild={KondensatorESB} unterschrift="Ersatzschaltbild eines realen Kondensators" />
+
+Seine Impedanz ist
+
+$$
+\underline{Z}(\omega) = \mathrm{ESR} + \mathrm{j}\left(\omega \cdot \mathrm{ESL} - \frac{1}{\omega C}\right)
+$$
+
+Bei der **Eigenresonanzfrequenz**
+
+$$
+f_0 = \frac{1}{2\pi\sqrt{\mathrm{ESL} \cdot C}}
+$$
+
+heben sich induktiver und kapazitiver Anteil auf, und $|\underline{Z}|$ ist minimal ($= \mathrm{ESR}$).
+
+- **unterhalb** von $f_0$: Der Kondensator verhält sich **kapazitiv** (wie gewünscht).
+- **oberhalb** von $f_0$: Er verhält sich **induktiv** – er wirkt wie eine Spule!
+
+Darum schaltet man oft einen großen und einen kleinen Kondensator parallel: Der kleine (mit kleiner ESL)
+übernimmt die hohen Frequenzen.
+
+### Technologien im Vergleich
+
+| Technologie | Stärken | Schwächen |
+| --- | --- | --- |
+| **Keramik** (MLCC) | klein, sehr kleine ESL und ESR, hohe Frequenzen | Kapazität sinkt unter Gleichspannung (X5R/X7R), begrenzte Kapazität |
+| **Folie** | impulsfest, stabil, selbstheilend | groß, teurer |
+| **Aluminium-Elektrolyt** (Elko) | große Kapazität, günstig | höherer ESR, begrenzte **Lebensdauer**, gepolt |
+
+:::caution[Elkos altern]
+Bei Elkos verdunstet mit der Zeit der flüssige Elektrolyt. **Hohe Temperatur** und **hoher Rippelstrom**
+(der den ESR erwärmt) verkürzen die Lebensdauer stark. Faustregel: **10 K weniger Temperatur ≈ doppelte Lebensdauer.**
+Defekte Elkos sind eine der häufigsten Ausfallursachen in Netzteilen.
+:::
+
+### X- und Y-Sicherheitskondensatoren
+
+An Netzspannung dürfen **keine beliebigen** Kondensatoren verwendet werden. Entstörkondensatoren der Klassen
+X und Y sind für Stoßspannungen und ein sicheres Verhalten im Fehlerfall geprüft.
+
+| Klasse | Einbauort | Aufgabe |
+| --- | --- | --- |
+| **X** (z. B. X2) | zwischen L und N | dämpft Gegentaktstörungen; ein Ausfall führt „nur“ zum Auslösen der Sicherung |
+| **Y** (z. B. Y2) | zwischen L/N und PE oder über die Isolationsgrenze | dämpft Gleichtaktstörungen; **darf niemals kurzschließen** (Berührungsgefahr!) |
+
+:::danger[X ist kein Y]
+Ein X-Kondensator darf **nie** als Ersatz für einen Y-Kondensator verwendet werden. Y-Kondensatoren bestimmen
+außerdem den **Ableitstrom** des Geräts. Die Sicherheitsklasse lässt sich nicht aus Kapazität oder
+Spannungsfestigkeit ablesen – nur aus der Kennzeichnung und Zulassung.
+:::
+
+## Drosseln (Spulen)
+
+Für eine einfache Spule gilt näherungsweise
+
+$$
+L \approx \frac{N^2 \cdot \mu \cdot A}{l}
+$$
+
+($N$: Windungszahl, $\mu$: Permeabilität, $A$: Kernquerschnitt, $l$: mittlere Feldlinienlänge).
+Bei ferromagnetischen Kernen ist $\mu$ **nicht konstant** – darum ändert sich auch $L$:
+
+**1 · Sättigung bei hohem Strom** – Je größer der Strom, desto größer die magnetische Feldstärke.
+Nahe der Sättigung bricht die Induktivität ein, die Stromwelligkeit wächst stark, im schlimmsten Fall wird der
+Schalter zerstört. Das Datenblatt gibt den **Sättigungsstrom** $I_\mathrm{sat}$ an (z. B. bei 10 % oder 30 % $L$-Abfall).
+
+**2 · Frequenzabhängigkeit** – Kernverluste, Wirbelströme und die Kapazität zwischen den Windungen
+verändern das Verhalten. Oberhalb der Eigenresonanz wirkt die Drossel kapazitiv.
+
+**3 · Temperaturabhängigkeit** – Temperatur verändert Kernmaterial, Sättigungsstrom und Wicklungswiderstand.
+
+:::tip[Datenblatt-Check für eine Drossel]
+- Induktivität $L$ (und wie stark sie beim Betriebsstrom abfällt)
+- **Sättigungsstrom** $I_\mathrm{sat}$ > Spitzenstrom $I_\mathrm{L,max}$ (mit Reserve)
+- **thermischer Strom** $I_\mathrm{rms}$ > Effektivstrom (Erwärmung, z. B. um 40 K)
+- **Gleichstromwiderstand** $R_\mathrm{DC}$ → Kupferverluste $P = I^2 \cdot R_\mathrm{DC}$
+- Prüfbedingungen beachten!
+:::
+
+### Skin- und Proximity-Effekt
+
+**Skin-Effekt:** Bei Wechselstrom wird der Strom an den **Rand** des Leiters gedrängt. Der genutzte
+Querschnitt sinkt, der Wechselstromwiderstand steigt. Die **Skintiefe** in Kupfer bei Raumtemperatur:
+
+| Frequenz | 50 Hz | 100 kHz | 1 MHz |
+| --- | --- | --- | --- |
+| Skintiefe $\delta$ | ≈ 9,3 mm | ≈ 0,21 mm | ≈ 0,066 mm |
+
+**Proximity-Effekt:** Das Magnetfeld **benachbarter** Windungen verdrängt den Strom zusätzlich.
+Daher können auch dünne Drähte bei hohen Frequenzen hohe Verluste haben.
+
+Abhilfe: **HF-Litze** (viele dünne, gegeneinander isolierte Einzeldrähte), Kupferfolie, optimierte Wicklungsanordnung.
+
+### Geschirmte Drosseln
+
+Bei einer **magnetisch geschirmten** Drossel bleibt der Fluss weitgehend im Bauteil. Das äußere Streufeld
+ist kleiner, die Einkopplung in benachbarte Leitungen sinkt → bessere EMV. „Geschirmt“ bedeutet aber
+**nicht automatisch** weniger Verluste.
+
+## Transformatoren
+
+Ein realer Transformator besteht nicht nur aus zwei ideal gekoppelten Wicklungen:
+
+| Größe | Bedeutung im Betrieb |
+| --- | --- |
+| Hauptinduktivität $L_\mathrm{M}$ | Magnetisierungsstrom, gespeicherte Energie (beim Sperrwandler gewollt!) |
+| Streuinduktivitäten $L_\mathrm{S1}$, $L_\mathrm{S2}$ | nicht gekoppelter Fluss → Spannungsspitzen beim Schalten |
+| Wicklungswiderstände $R_\mathrm{S1}$, $R_\mathrm{S2}$ | Kupferverluste, Erwärmung (steigen mit der Frequenz) |
+| Kernverlustwiderstand $R_\mathrm{M}$ | Kernverluste (abhängig von Frequenz, Flussdichte, Temperatur) |
+| Wicklungs- und Koppelkapazitäten | kapazitive Kopplung zwischen Primär und Sekundär → Gleichtaktstörungen (EMV) |
+| Übersetzungsverhältnis $\ddot{u} = N_1 / N_2$ | Spannungs- und Stromübersetzung |
+
+:::note[Transformatoren für Netzgeräte sind Expertensache]
+Bei Netzteil-Transformatoren entscheiden Luftspalt, Sättigung, Streuinduktivität, Verluste und vor allem die
+**Isolation** (Kriech- und Luftstrecken, Hochspannungsprüfung) über die Sicherheit. In der Praxis werden sie
+von spezialisierten Herstellern entwickelt, gefertigt und geprüft. Ein rechnerisch passendes Windungsverhältnis
+allein ist kein Sicherheitsnachweis.
+:::

@@ -1,0 +1,79 @@
+---
+title: Layout und EMV
+description: Heiße Pfade, Kommutierungszellen, Schaltüberspannungen und Layoutregeln für Schaltwandler.
+sidebar:
+  label: 8 · Layout und EMV
+  order: 8
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Kommutierungszelle from '../../../../assets/leistungselektronik/kommutierungszelle.svg';
+
+Bei Schaltwandlern ist die **Anordnung der Bauteile auf der Leiterplatte** genauso wichtig wie die Wahl der Bauteile.
+Ein schlechtes Layout kann eine perfekt berechnete Schaltung unbrauchbar machen.
+
+## Jede Leiterschleife ist eine Spule
+
+Jede Leiterbahn und jede Stromschleife hat eine kleine **parasitäre Induktivität** $L_\mathrm{s}$
+(grob: etwa 1 nH pro mm Leiterlänge). Ändert sich der Strom schnell, entsteht eine Spannung:
+
+$$
+u_\mathrm{L} = L_\mathrm{s} \cdot \frac{\mathrm{d}i}{\mathrm{d}t}
+$$
+
+**Beispiel:** $L_\mathrm{s} = 10\,\mathrm{nH}$, ein Strom von 4 A wird in 20 ns abgeschaltet:
+
+$$
+u_\mathrm{L} = 10\,\mathrm{nH} \cdot \frac{4\,\mathrm{A}}{20\,\mathrm{ns}} = 2\,\mathrm{V}
+$$
+
+Bei 20 A und 5 ns wären es schon 40 V – genug, um einen 30-V-MOSFET zu zerstören.
+Außerdem strahlen schnell wechselnde Ströme in großen Schleifen **elektromagnetische Störungen** ab.
+
+## Die Kommutierungszelle (heißer Pfad)
+
+Beim Umschalten wechselt der Strom von einem Pfad in einen anderen – er **kommutiert**. Beim Buck wechselt
+der Strom zwischen „über den Schalter“ und „über die Diode“. Die Drossel führt dabei einen fast konstanten
+Strom – dort ist $\mathrm{d}i/\mathrm{d}t$ klein. Aber in der Schleife aus
+
+**Eingangskondensator → Schalter → Diode (bzw. Low-Side-MOSFET) → zurück zum Kondensator**
+
+springt der Strom bei jedem Schaltvorgang zwischen null und dem vollen Wert. Diese Schleife heißt
+**Kommutierungszelle** oder **heißer Pfad** (*hot loop*).
+
+<Abbildung bild={Kommutierungszelle} unterschrift="Kommutierungszelle beim Tiefsetzsteller: Hier ändert sich der Strom am schnellsten" />
+
+:::tip[So findest du den heißen Pfad]
+Zeichne den Stromweg bei **geschlossenem** und bei **geöffnetem** Schalter ein.
+Die Teile, die **nur in einem der beiden Wege** vorkommen, bilden die Kommutierungszelle.
+:::
+
+:::note[Wichtigste Layout-Regel]
+Die Schleife aus **Eingangskondensator, Schalter und Freilaufpfad** so **kurz und flächenarm** wie
+möglich aufbauen. Leitungs-, Gehäuse- und Kondensatorinduktivitäten addieren sich!
+:::
+
+## Was passiert beim Schalten wirklich?
+
+Die Dreiecksnäherung für die Schaltverluste ist nur ein Überschlag. In Wirklichkeit kommen hinzu:
+
+1. **Einschalten:** Die Freilaufdiode braucht kurz, um zu sperren. In dieser Zeit fließt ein
+   **Rückwärtserholstrom** (*reverse recovery*) durch Diode und Schalter – eine Stromspitze beim Einschalten.
+   Schottky-Dioden und synchrone MOSFETs verringern das.
+2. **Ausschalten:** Die Induktivität der Kommutierungszelle erzeugt beim schnellen Abschalten eine
+   zusätzliche **Spannungsspitze** $\Delta U = L_\mathrm{s} \cdot \mathrm{d}i/\mathrm{d}t$ am MOSFET.
+3. **Nachschwingen:** Parasitäre Induktivitäten und Kapazitäten bilden Schwingkreise – man sieht auf
+   dem Oszilloskop hochfrequentes Klingeln (*ringing*).
+
+## Layoutregeln für Schaltwandler
+
+- **Eingangskondensator direkt an den IC** bzw. an Schalter und Diode (VIN und GND) – kleinster heißer Pfad.
+- **Schaltknoten (SW) klein halten:** Er hat sehr steile Spannungsflanken ($\mathrm{d}u/\mathrm{d}t$).
+  Große Kupferflächen wirken als Antenne und koppeln kapazitiv in andere Leitungen.
+- **Rückkopplung (FB) ruhig führen:** Die Leitung vom Spannungsteiler zum IC weg vom Schaltknoten und
+  von den Leistungsströmen verlegen.
+- **Durchgehende Massefläche** und kurze, breite Leiterbahnen für hohe Ströme.
+- **Wärme abführen:** Kupferflächen und thermische Vias unter dem IC.
+- **Herstellerempfehlung nutzen:** Fast jedes Datenblatt eines Schaltregler-ICs enthält einen Layoutvorschlag.
+
+➡ Übung dazu: [Heiße Pfade im echten Layout finden](/leistungselektronik/praxisbeispiele/#layout-heißen-pfad-finden)

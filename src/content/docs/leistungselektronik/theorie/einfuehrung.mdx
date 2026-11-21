@@ -1,0 +1,96 @@
+---
+title: Einführung
+description: Was ist Leistungselektronik? Energiewandlung, Anwendungen und der Vergleich Linearregler – Schaltwandler.
+sidebar:
+  label: 1 · Einführung
+  order: 1
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import LinearSchalt from '../../../../assets/leistungselektronik/linear-vs-schalt.svg';
+
+## Energie statt Information
+
+In der **Informationselektronik** (Mikrocontroller, Computer, Sensorik) geht es um Signale:
+Die Energie ist nur Mittel zum Zweck. In der **Leistungselektronik** ist es umgekehrt: Sie
+**wandelt und steuert elektrische Energie** – Spannung, Strom, Frequenz oder Energierichtung.
+
+Meist arbeiten beide zusammen: Ein Mikrocontroller berechnet, *wie lange* ein Schalter eingeschaltet sein
+soll (Information), und die Leistungsstufe setzt das in elektrische Leistung um.
+
+### Die vier Grundaufgaben
+
+| Eingang → Ausgang | Name | Beispiel |
+| --- | --- | --- |
+| DC → DC | Gleichspannungswandler (DC/DC converter) | 12 V Autobatterie → 5 V USB |
+| AC → DC | Gleichrichter (rectifier) | Netzteil, Ladegerät |
+| DC → AC | Wechselrichter (inverter) | Photovoltaik, Motorumrichter |
+| AC → AC | Umrichter (AC/AC converter) | Drehzahlregelung von Drehstrommotoren |
+
+## Wo begegnet uns Leistungselektronik?
+
+Von **wenigen Watt** (Smartphone, LED-Treiber) über **Kilowatt** (Wärmepumpe, Elektroauto-Antrieb)
+bis zu **Megawatt** (Windkraft, Bahn, Hochspannungs-Gleichstromübertragung). Die Grundideen sind
+überall gleich – nur Spannungen, Ströme und Schaltfrequenzen unterscheiden sich stark.
+
+Eine leistungselektronische Baugruppe besteht fast immer aus:
+
+- **Leistungshalbleitern** (Schalter, Dioden),
+- **Energiespeichern** (Kondensatoren, Drosseln, Transformatoren),
+- **Ansteuerung** (Treiber, Regelung),
+- **Kühlung** und einem passenden **Leiterplattenlayout**.
+
+## Entwicklungsziele
+
+- **hoher Wirkungsgrad** – Verluste werden zu Wärme, Wärme muss abgeführt werden
+- **kleine Baugröße** (hohe Leistungsdichte)
+- **geringe Kosten** und einfache Fertigung
+- **Robustheit** und lange Lebensdauer
+
+## Linearregler oder Schaltwandler?
+
+Angenommen, wir brauchen **3,3 V bei 1 A** aus einer **12-V**-Versorgung.
+
+<Abbildung bild={LinearSchalt} unterschrift="Zwei Wege zu einer kleineren Gleichspannung" />
+
+### Linearregler
+
+Ein Transistor arbeitet als veränderbarer Widerstand („Längsregler“). Die Spannungsdifferenz fällt an ihm
+ab, und derselbe Strom fließt durch ihn. Er verheizt also:
+
+$$
+P_\mathrm{V} = (U_\mathrm{e} - U_\mathrm{a}) \cdot I = (12\,\mathrm{V} - 3{,}3\,\mathrm{V}) \cdot 1\,\mathrm{A} = 8{,}7\,\mathrm{W}
+$$
+
+Die Last erhält nur $P_\mathrm{a} = 3{,}3\,\mathrm{V} \cdot 1\,\mathrm{A} = 3{,}3\,\mathrm{W}$. Der Wirkungsgrad:
+
+$$
+\eta = \frac{P_\mathrm{a}}{P_\mathrm{e}} = \frac{3{,}3\,\mathrm{W}}{12\,\mathrm{W}} = 27{,}5\,\%
+$$
+
+:::tip[Merke]
+Beim Linearregler gilt (bei vernachlässigbarem Eigenverbrauch) einfach $\eta \approx U_\mathrm{a} / U_\mathrm{e}$.
+Je größer die Spannungsdifferenz, desto schlechter.
+:::
+
+### Schaltwandler
+
+Statt den Transistor „halb aufzudrehen“, wird er **schnell ein- und ausgeschaltet**. Spule und Kondensator
+glätten die entstehenden Spannungsimpulse. Warum ist das verlustarm? Ein **idealer Schalter** hat
+in jedem Zustand keine Verlustleistung $p = u \cdot i$:
+
+| Zustand | Spannung am Schalter | Strom durch den Schalter | Verlustleistung |
+| --- | --- | --- | --- |
+| EIN | $u \approx 0$ | $i$ groß | $\approx 0$ |
+| AUS | $u$ groß | $i \approx 0$ | $\approx 0$ |
+
+Reale Schaltwandler erreichen typisch **85 … 95 %** Wirkungsgrad. Verluste entstehen trotzdem:
+
+- **Durchlassverluste** (der eingeschaltete Schalter hat einen kleinen Widerstand),
+- **Schaltverluste** (während des Umschaltens sind Spannung *und* Strom kurz gleichzeitig vorhanden),
+- Verluste in **Drosseln und Kondensatoren**.
+
+Die **Schaltfrequenz** ist ein wichtiger Kompromiss: Höhere Frequenz → kleinere Spulen und Kondensatoren,
+aber mehr Schaltverluste und mehr Aufwand für EMV.
+
+➡ Weiter mit [Leistungshalbleiter](/leistungselektronik/theorie/leistungshalbleiter/)

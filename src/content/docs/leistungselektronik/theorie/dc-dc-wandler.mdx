@@ -1,0 +1,220 @@
+---
+title: DC/DC-Wandler
+description: Tiefsetzsteller (Buck), Hochsetzsteller (Boost) und invertierender Buck-Boost – Übersetzung, Drosselstrom, Stromwelligkeit und Spannungsrippel.
+sidebar:
+  label: 5 · DC/DC-Wandler
+  order: 5
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Buck from '../../../../assets/leistungselektronik/buck.svg';
+import Boost from '../../../../assets/leistungselektronik/boost.svg';
+import BuckBoost from '../../../../assets/leistungselektronik/buck-boost.svg';
+import Verlaeufe from '../../../../assets/leistungselektronik/buck-verlaeufe.svg';
+
+Die drei Grundschaltungen bestehen jeweils aus **einem Schalter, einer Diode, einer Drossel** und
+einem Ausgangskondensator. Sie unterscheiden sich nur darin, **wie** diese Teile verbunden sind.
+
+## Tastverhältnis
+
+Der Schalter wird mit der Schaltfrequenz $f_\mathrm{s}$ (Periodendauer $T = 1/f_\mathrm{s}$) ein- und ausgeschaltet.
+Das **Tastverhältnis** $D$ (*duty cycle*) gibt an, welchen Anteil der Periode er eingeschaltet ist:
+
+$$
+D = \frac{t_\mathrm{ein}}{T} \qquad 0 \le D \le 1
+$$
+
+## Das wichtigste Werkzeug: die Spannungs-Zeit-Fläche
+
+An einer Spule gilt $u_\mathrm{L} = L \cdot \dfrac{\mathrm{d}i_\mathrm{L}}{\mathrm{d}t}$.
+Liegt eine konstante Spannung an, ändert sich der Strom **linear** (Dreieck).
+
+Im **eingeschwungenen Zustand** ist der Drosselstrom am Ende jeder Periode wieder gleich groß wie am Anfang.
+Daraus folgt: Die **mittlere Spannung an der Drossel ist null** – die Spannungs-Zeit-Fläche während
+„Schalter EIN“ ist genauso groß wie während „Schalter AUS“ (mit umgekehrtem Vorzeichen).
+
+Mit dieser einen Idee lassen sich alle Übersetzungsformeln herleiten.
+
+:::caution[Gültigkeit]
+Alle Formeln auf dieser Seite gelten für **ideale Bauteile** und den **nicht lückenden Betrieb** (CCM,
+*continuous conduction mode*): Der Drosselstrom wird nie null. Bei sehr kleiner Last fällt der Strom
+zeitweise auf null (DCM, *lückender Betrieb*), und die Formeln stimmen nicht mehr.
+:::
+
+## Tiefsetzsteller (Buck)
+
+**Aufgabe:** aus einer höheren Gleichspannung eine kleinere machen ($U_\mathrm{a} < U_\mathrm{e}$).
+
+<Abbildung bild={Buck} unterschrift="Tiefsetzsteller (Buck converter)" />
+
+- **Schalter EIN:** $U_\mathrm{e}$ treibt Strom durch die Drossel zur Last. An der Drossel liegt
+  $u_\mathrm{L} = U_\mathrm{e} - U_\mathrm{a}$ → der Strom **steigt**.
+- **Schalter AUS:** Die Drossel will ihren Strom beibehalten. Er fließt über die **Freilaufdiode** weiter.
+  An der Drossel liegt $u_\mathrm{L} = -U_\mathrm{a}$ → der Strom **sinkt**.
+
+<Abbildung bild={Verlaeufe} unterschrift="Spannung am Schaltknoten und Drosselstrom beim Tiefsetzsteller (hier D = 0,4)" />
+
+### Spannungsübersetzung
+
+Spannungs-Zeit-Flächen gleichsetzen:
+
+$$
+(U_\mathrm{e} - U_\mathrm{a}) \cdot D\,T = U_\mathrm{a} \cdot (1 - D)\,T
+\quad\Rightarrow\quad
+U_\mathrm{a} = D \cdot U_\mathrm{e}
+$$
+
+### Ströme
+
+Im Mittel fließt der gesamte Drosselstrom in die Last: $\bar{I}_\mathrm{L} = I_\mathrm{a}$.
+
+Die **Stromwelligkeit** (Spitze-Spitze) folgt aus der EIN-Phase ($\Delta i = u \cdot \Delta t / L$):
+
+$$
+\Delta I_\mathrm{L} = \frac{(U_\mathrm{e} - U_\mathrm{a}) \cdot D}{L \cdot f_\mathrm{s}}
+= \frac{U_\mathrm{a} \cdot (1 - D)}{L \cdot f_\mathrm{s}}
+$$
+
+Spitzenstrom in Drossel und Schalter:
+
+$$
+I_\mathrm{L,max} = I_\mathrm{a} + \frac{\Delta I_\mathrm{L}}{2}
+$$
+
+:::tip[Merke]
+Größere Induktivität oder höhere Schaltfrequenz → kleinere Stromwelligkeit.
+Die Stromwelligkeit ist beim Buck bei $D = 0{,}5$ am größten.
+:::
+
+### Ausgangsspannungsrippel
+
+Der dreieckförmige Wechselanteil des Drosselstroms fließt in den Ausgangskondensator. Für den rein
+**kapazitiven** Anteil gilt näherungsweise:
+
+$$
+\Delta U_\mathrm{a,C} \approx \frac{\Delta I_\mathrm{L}}{8 \cdot f_\mathrm{s} \cdot C_\mathrm{a}}
+$$
+
+Dazu kommt der Anteil am Ersatz-Serienwiderstand ESR des Kondensators:
+
+$$
+\Delta U_\mathrm{a,ESR} \approx \Delta I_\mathrm{L} \cdot \mathrm{ESR}
+$$
+
+### Synchroner Buck
+
+Statt der Diode kann ein zweiter MOSFET den Freilauf übernehmen (**synchrone Gleichrichtung**).
+Das ist genau eine **Halbbrücke** – wie bei der [Motorbrücke](/leistungselektronik/theorie/motorbruecken/)!
+Vorteil: Am MOSFET fällt weniger Spannung ab als an einer Diode → weniger Verluste.
+Nachteil: Ansteuerung mit Totzeit nötig.
+
+## Hochsetzsteller (Boost)
+
+**Aufgabe:** aus einer kleineren Gleichspannung eine größere machen ($U_\mathrm{a} > U_\mathrm{e}$).
+
+<Abbildung bild={Boost} unterschrift="Hochsetzsteller (Boost converter)" />
+
+- **Schalter EIN:** Die Drossel liegt direkt an $U_\mathrm{e}$, ihr Strom steigt. Die Diode sperrt;
+  der **Kondensator allein** versorgt die Last.
+- **Schalter AUS:** Die Drossel gibt ihre Energie **zusätzlich** zur Eingangsspannung an den Ausgang ab:
+  $u_\mathrm{L} = U_\mathrm{e} - U_\mathrm{a}$ (negativ).
+
+### Formeln (ideal, CCM)
+
+$$
+U_\mathrm{e} \cdot D = (U_\mathrm{a} - U_\mathrm{e}) \cdot (1 - D)
+\quad\Rightarrow\quad
+U_\mathrm{a} = \frac{U_\mathrm{e}}{1 - D}
+$$
+
+Der Eingangsstrom fließt **dauernd** durch die Drossel. Aus $P_\mathrm{e} = P_\mathrm{a}$ (verlustfrei) folgt:
+
+$$
+\bar{I}_\mathrm{L} = I_\mathrm{e} = \frac{I_\mathrm{a}}{1 - D}
+\qquad
+\Delta I_\mathrm{L} = \frac{U_\mathrm{e} \cdot D}{L \cdot f_\mathrm{s}}
+\qquad
+I_\mathrm{L,max} = \bar{I}_\mathrm{L} + \frac{\Delta I_\mathrm{L}}{2}
+$$
+
+Rippel am Ausgang: Während $D \cdot T$ liefert nur der Kondensator den Laststrom:
+
+$$
+\Delta U_\mathrm{a,C} \approx \frac{I_\mathrm{a} \cdot D}{f_\mathrm{s} \cdot C_\mathrm{a}}
+$$
+
+:::caution[Kein Schutz gegen Kurzschluss]
+Beim einfachen Boost ist der Ausgang über Drossel und Diode **immer** mit dem Eingang verbunden.
+Auch bei ausgeschaltetem Wandler liegt $U_\mathrm{a} \approx U_\mathrm{e}$ am Ausgang, und bei einem Kurzschluss
+am Ausgang kann der Schalter den Strom nicht begrenzen.
+:::
+
+## Invertierender Buck-Boost
+
+**Aufgabe:** aus einer positiven Spannung eine **negative** machen – betragsmäßig kleiner *oder* größer.
+
+<Abbildung bild={BuckBoost} unterschrift="Invertierender Buck-Boost-Wandler" />
+
+- **Schalter EIN:** Die Drossel liegt an $U_\mathrm{e}$ und nimmt Energie auf. Die Diode sperrt.
+- **Schalter AUS:** Die Drossel treibt ihren Strom über die Diode durch Kondensator und Last – von unten nach
+  oben. Dadurch wird der Ausgang **negativ** gegenüber Masse.
+
+### Formeln (ideal, CCM)
+
+$$
+U_\mathrm{a} = -\frac{D}{1 - D} \cdot U_\mathrm{e}
+$$
+
+- $D < 0{,}5$: $|U_\mathrm{a}| < U_\mathrm{e}$ (Tiefsetzen)
+- $D > 0{,}5$: $|U_\mathrm{a}| > U_\mathrm{e}$ (Hochsetzen)
+
+$$
+\bar{I}_\mathrm{L} = \frac{|I_\mathrm{a}|}{1 - D}
+\qquad
+\Delta I_\mathrm{L} = \frac{U_\mathrm{e} \cdot D}{L \cdot f_\mathrm{s}}
+\qquad
+\Delta U_\mathrm{a,C} \approx \frac{|I_\mathrm{a}| \cdot D}{f_\mathrm{s} \cdot C_\mathrm{a}}
+$$
+
+:::note[Sperrspannung am Schalter]
+Im AUS-Zustand muss der Schalter $U_\mathrm{e} + |U_\mathrm{a}|$ sperren – mehr als jede der beiden Spannungen allein!
+:::
+
+## Übersicht
+
+| Wandler | $U_\mathrm{a}$ (ideal, CCM) | Bereich | mittlerer Drosselstrom | kapazitiver Rippel |
+| --- | --- | --- | --- | --- |
+| Buck | $D \cdot U_\mathrm{e}$ | $0 \le U_\mathrm{a} \le U_\mathrm{e}$ | $I_\mathrm{a}$ | $\dfrac{\Delta I_\mathrm{L}}{8 f_\mathrm{s} C_\mathrm{a}}$ |
+| Boost | $\dfrac{U_\mathrm{e}}{1-D}$ | $U_\mathrm{a} \ge U_\mathrm{e}$ | $\dfrac{I_\mathrm{a}}{1-D}$ | $\dfrac{I_\mathrm{a} D}{f_\mathrm{s} C_\mathrm{a}}$ |
+| Buck-Boost | $-\dfrac{D}{1-D} \cdot U_\mathrm{e}$ | negativ | $\dfrac{\lvert I_\mathrm{a}\rvert}{1-D}$ | $\dfrac{\lvert I_\mathrm{a}\rvert D}{f_\mathrm{s} C_\mathrm{a}}$ |
+
+## Rippel, Lastsprung und Regelung
+
+Auf dem Oszilloskop sieht man an der Ausgangsspannung drei verschiedene Effekte:
+
+1. **Periodischer Rippel** mit der Schaltfrequenz – kommt vom Kondensator ($C$, ESR) und von sehr steilen
+   Flanken (ESL des Kondensators → kurze Nadeln).
+2. **Lastsprung:** Steigt der Laststrom plötzlich um $\Delta I$, kann der Drosselstrom nicht sofort folgen.
+   Der Kondensator liefert die Differenz, seine Spannung sinkt zunächst um etwa
+   $\Delta U \approx \Delta I \cdot \Delta t / C_\mathrm{a}$ (Δt: Reaktionszeit der Regelung).
+3. **Nachregelung:** Der Regler passt $D$ an und stellt den Sollwert wieder her.
+
+Der Regelkreis hält den **Mittelwert** konstant. Die Größe des Rippels hängt dagegen von Drossel,
+Kondensator, Schaltfrequenz, Betriebsart und vom Messaufbau ab.
+
+:::caution[Keramikkondensatoren verlieren Kapazität]
+Keramikkondensatoren (z. B. X5R, X7R) haben unter Gleichspannung oft **deutlich weniger** Kapazität als
+aufgedruckt (*DC-Bias-Effekt*). Rechne mit der **wirksamen** Kapazität aus dem Datenblatt!
+:::
+
+## Weitere nicht isolierende Wandler
+
+Es gibt weitere Topologien mit **zwei Drosseln und einem Koppelkondensator**. Hier genügt es, sie zu kennen:
+
+| Wandler | $U_\mathrm{a}$ (ideal, CCM) | Besonderheit |
+| --- | --- | --- |
+| Ćuk | $-\dfrac{D}{1-D} \cdot U_\mathrm{e}$ | invertierend, Ein- und Ausgangsstrom kontinuierlich |
+| SEPIC | $\dfrac{D}{1-D} \cdot U_\mathrm{e}$ | nicht invertierend, höher oder tiefer setzen |
+| Zeta | $\dfrac{D}{1-D} \cdot U_\mathrm{e}$ | nicht invertierend, kontinuierlicher Ausgangsstrom |
+
+➡ Übe das Gelernte bei den [Rechenbeispielen](/leistungselektronik/rechenbeispiele/).
