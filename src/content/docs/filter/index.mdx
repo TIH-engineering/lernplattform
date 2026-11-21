@@ -1,12 +1,37 @@
 ---
 title: Filter
-description: "Passive und aktive Tief-, Hoch- und Bandpässe, Bode-Diagramm."
+description: "Pegel und Bode-Diagramm, passive Filter 1. und 2. Ordnung, Güte und Butterworth-Verhalten, aktive Filter mit OPV (Sallen-Key), Filterauslegung und Schaltungsanalyse."
+sidebar:
+  label: Übersicht
 ---
 
-:::note[In Arbeit]
-Dieser Themenbereich wird gerade erstellt. Schau bald wieder vorbei!
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Filter lassen gewünschte Frequenzen durch und unterdrücken unerwünschte: Rauschen vor dem ADC, Netzbrummen im Audiosignal,
+Störungen von Schaltnetzteilen. Sie bestehen aus Widerständen, Kondensatoren, Spulen – und bei **aktiven Filtern** aus
+Operationsverstärkern.
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- Pegel in dB berechnen und ein Bode-Diagramm interpretieren und skizzieren,
+- Tief-, Hoch-, Bandpass und Bandsperre unterscheiden,
+- passive RC- und RL-Filter 1. Ordnung berechnen und auslegen,
+- passive Filter 2. Ordnung (RLC) mit Güte und Butterworth-Verhalten berechnen und das Problem der Belastung erklären,
+- aktive Filter 1. und 2. Ordnung (Sallen-Key, Butterworth) dimensionieren,
+- mehrstufige Filter-/Verstärkerschaltungen analysieren (Grenzfrequenzen, Bode-Diagramm, Ausgangssignal).
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="dB, Bode-Diagramm, passive und aktive Filter 1. und 2. Ordnung, Butterworth" href="/filter/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="Grenzfrequenz, Auslegung, RLC, Sallen-Key, Schaltungsanalyse" href="/filter/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Anti-Aliasing, Mikrofon-Bandpass, Netzfilter, Messung mit dem Network Analyzer" href="/filter/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen über Filter" href="/filter/quiz/" />
+</CardGrid>
+
+:::tip[Voraussetzungen]
+[Wechselgrößen und Blindwiderstände](/grundlagen/wechselstrom/), [komplexe Rechnung](/grundlagen/komplexe-rechnung/),
+[Resonanz und Filter (Grundlagen)](/grundlagen/resonanz-filter/) und [Operationsverstärker](/operationsverstaerker/).
 :::
-
-**Geplante Inhalte:** Passive und aktive Tief-, Hoch- und Bandpässe, Bode-Diagramm.
-
-Wie bei allen Themenbereichen wird es **Theorie**, **Rechenbeispiele**, **Praxisbeispiele** und ein **Quiz** geben.

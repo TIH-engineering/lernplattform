@@ -1,0 +1,99 @@
+---
+title: Praxisbeispiele – Filter
+description: Anti-Aliasing-Filter vor dem ADC, Sensorsignal einer Industrieanlage, Sprachfilter für ein Mikrofon, Messung des Frequenzgangs mit dem Network Analyzer und Simulation in LTspice.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Anti-Aliasing-Filter vor dem ADC
+
+Ein Mikrocontroller tastet ein Sensorsignal mit 1 kHz ab (1000 Messwerte pro Sekunde). Das Signal enthält Nutzanteile bis 50 Hz, aber auch
+Störungen um 950 Hz von einem Lüfter.
+
+1. Was „sieht“ der ADC von der 950-Hz-Störung? (Tipp: Abtasttheorem)
+2. Welche Grenzfrequenz sollte ein Tiefpass vor dem ADC haben? Reicht 1. Ordnung?
+
+<Loesung>
+
+1. Nach dem **Abtasttheorem** darf das Signal nur Frequenzen bis zur halben Abtastfrequenz (500 Hz) enthalten. Höhere Frequenzen werden
+   „gespiegelt“: 950 Hz erscheinen als $1000 - 950 = 50\,\mathrm{Hz}$ – genau im Nutzband! Man nennt das **Aliasing**. Danach kann man die
+   Störung nicht mehr vom Nutzsignal trennen.
+2. Der Tiefpass muss **vor** dem ADC sitzen, z. B. $f_\mathrm{g} \approx 100\,\mathrm{Hz}$. Bei 950 Hz dämpft ein Filter 1. Ordnung nur um ca. 20 dB
+   (Faktor 10), ein Butterworth 2. Ordnung um ca. 39 dB (Faktor 90). Je nach Störstärke braucht man 2. Ordnung oder eine höhere Abtastrate.
+
+</Loesung>
+
+## Sensorsignal einer Förderanlage
+
+Ein Temperatursensor liefert ein langsames Signal (120 mV). Darauf liegen Störungen von 50 Hz (20 mV) und 2 kHz (80 mV). Die Aufbereitung:
+passiver RC-Tiefpass ($3{,}3\,\mathrm{k\Omega}$, $4{,}7\,\mu\mathrm{F}$) → Sallen-Key-Tiefpass ($10\,\mathrm{k\Omega}$, $100\,\mathrm{nF}$, $K = 1$) → nichtinvertierender
+Verstärker mit $V = 20$.
+
+1. Berechne die Grenzfrequenzen der beiden Filter.
+2. Wie groß sind Nutz- und Störsignale am Ausgang ungefähr? Reicht das für einen ADC mit 0 … 5 V?
+3. Was würdest du verbessern?
+
+<Loesung>
+
+1. RC: $f_\mathrm{g} \approx 10{,}3\,\mathrm{Hz}$ · Sallen-Key: $f_0 \approx 159\,\mathrm{Hz}$ (mit $K = 1$ ist $Q = 0{,}5$).
+2. Nutzsignal: $120\,\mathrm{mV} \cdot 20 = 2{,}4\,\mathrm{V}$.
+   50 Hz: RC dämpft auf $1/\sqrt{1 + (50/10{,}3)^2} \approx 0{,}20$, der Sallen-Key auf ≈ 0,91 → $20\,\mathrm{mV} \cdot 0{,}20 \cdot 0{,}91 \cdot 20 \approx 73\,\mathrm{mV}$.
+   2 kHz: RC ≈ 0,005, Sallen-Key ($Q = 0{,}5$, also $1/(1 + (f/f_0)^2)$) ≈ 0,006 → praktisch 0.
+   Gesamt etwa 2,4 V ± 0,07 V – passt in 0 … 5 V.
+3. Die 50-Hz-Störung ist am hartnäckigsten. Eine niedrigere Grenzfrequenz (das Temperatursignal ist sehr langsam) oder Mittelwertbildung
+   über 20 ms in der Software (genau eine Netzperiode) beseitigt sie fast vollständig.
+
+</Loesung>
+
+## Sprachfilter für ein Mikrofon
+
+Für eine Sprechanlage soll nur der Bereich 300 Hz … 3,4 kHz übertragen werden (wie beim Telefon).
+
+1. Welche Filterkombination brauchst du?
+2. Dimensioniere einen RC-Hochpass ($C = 100\,\mathrm{nF}$) und einen RC-Tiefpass ($R = 10\,\mathrm{k\Omega}$) mit E12-Werten.
+3. Warum schaltet man zwischen die beiden einen Spannungsfolger?
+
+<Loesung>
+
+1. Einen **Bandpass**: Hochpass mit 300 Hz und Tiefpass mit 3,4 kHz hintereinander.
+2. Hochpass: $R = \dfrac{1}{2\pi \cdot 300 \cdot 100\,\mathrm{nF}} \approx 5{,}3\,\mathrm{k\Omega}$ → 5,6 kΩ (284 Hz).
+   Tiefpass: $C = \dfrac{1}{2\pi \cdot 3400 \cdot 10\,\mathrm{k\Omega}} \approx 4{,}7\,\mathrm{nF}$ → 4,7 nF (3,39 kHz).
+3. Ohne Entkopplung belastet der Tiefpass den Hochpass – die Grenzfrequenzen verschieben sich. Der Folger trennt die Stufen.
+
+</Loesung>
+
+## Frequenzgang messen mit dem Network Analyzer
+
+Im Labor wird der Frequenzgang eines Filters mit einem Network Analyzer (oder Oszilloskop mit Bode-Funktion) gemessen:
+Ein Generator „wobbelt“ die Frequenz, das Gerät misst Betrag und Phase von $U_\mathrm{a}/U_\mathrm{e}$.
+
+1. Woran erkennst du im gemessenen Bode-Diagramm die Grenzfrequenz und die Ordnung eines Tiefpasses?
+2. Die Messung zeigt bei einem passiven LC-Filter eine Spitze von +8 dB kurz vor der Grenzfrequenz. Was ist die Ursache?
+3. Warum ist es wichtig, das Filter mit dem **gleichen Lastwiderstand** zu messen, mit dem es später betrieben wird?
+
+<Loesung>
+
+1. Grenzfrequenz: Pegel 3 dB unter dem Durchlasspegel, Phase −45° (1. Ordnung) bzw. −90° (2. Ordnung). Ordnung: Steigung im Sperrbereich
+   (−20 dB/Dekade je Ordnung) bzw. Endwert der Phase (−90° je Ordnung).
+2. Eine **Resonanzüberhöhung**: Die Güte ist zu hoch ($Q > 0{,}707$), die Dämpfung (Widerstand) zu klein.
+3. Bei passiven Filtern ist der Lastwiderstand Teil der Schaltung – er bestimmt Dämpfung und Güte. Ohne Last kann ein LC-Filter stark
+   überschwingen, mit Last ist er brav.
+
+</Loesung>
+
+## Simulieren statt raten
+
+Baue den [Sallen-Key-Tiefpass aus den Rechenbeispielen](/filter/rechenbeispiele/#sallen-key-tiefpass-auslegen) in LTspice mit einem idealen OPV auf
+(AC-Quelle mit Amplitude 1, `.ac dec 100 10 100k`).
+
+1. Lies $f_\mathrm{g}$ und den Durchlasspegel ab.
+2. Ändere $R_\mathrm{f}$ auf 10 kΩ und auf 15 kΩ. Was passiert?
+
+<Loesung>
+
+1. Durchlasspegel ≈ +4 dB ($K = 1{,}586$), die −3-dB-Grenze liegt etwa bei 1,94 kHz (−3 dB **unter** dem Durchlasspegel, also bei ≈ +1 dB).
+2. $R_\mathrm{f} = 10\,\mathrm{k\Omega}$: $K = 2$, $Q = 1$ → sichtbare Überhöhung (+1,2 dB über dem Durchlasspegel).
+   $R_\mathrm{f} = 15\,\mathrm{k\Omega}$: $K = 2{,}5$, $Q = 2$ → deutliche Spitze. Bei $K \geq 3$ wird die Schaltung instabil und schwingt – sie ist dann
+   ein Oszillator!
+
+</Loesung>

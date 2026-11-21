@@ -1,0 +1,395 @@
+---
+title: Theorie – Oszillatoren
+description: "Was ist ein Oszillator, Mit- und Gegenkopplung, Barkhausen-Kriterium, Anschwingen und Amplitudenbegrenzung, RC-Phasenschieber-Oszillator mit Übertragungsfunktion, Wien-Brücken-Oszillator mit Amplitudenregelung, LC-Oszillatoren, Relaxationsoszillator mit OPV, Quarz mit Ersatzschaltbild, Lastkapazität, ppm, Pierce-Oszillator am Mikrocontroller."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Schleife from '../../../assets/elektronik/osz-rueckkopplung.svg';
+import Phasenschieber from '../../../assets/elektronik/rc-phasenschieber.svg';
+import Wien from '../../../assets/elektronik/wien-oszillator.svg';
+import Relax from '../../../assets/elektronik/relaxationsoszillator.svg';
+import RelaxSignale from '../../../assets/elektronik/relaxation-signale.svg';
+import QuarzESB from '../../../assets/elektronik/quarz-ersatzschaltbild.svg';
+import Pierce from '../../../assets/elektronik/pierce-oszillator.svg';
+
+## 1 · Was ist ein Oszillator?
+
+Ein **Oszillator** ist eine elektronische Schaltung, die **ohne äußeres periodisches Eingangssignal** selbstständig ein periodisches
+Ausgangssignal erzeugt. Sie braucht nur eine Versorgungsspannung.
+
+Typische Anwendungen:
+
+- **Systemtakt** eines Mikrocontrollers oder Prozessors (z. B. 8 MHz, 16 MHz),
+- **Echtzeituhr** (RTC) und Quarzuhr mit 32,768 kHz,
+- **Trägerfrequenz** in Funk- und Radioschaltungen,
+- **Signal- und Messgeneratoren** (Audio-Sinus, Rechteck für PWM, Takt für Schaltregler).
+
+Man unterscheidet zwei Familien:
+
+| | harmonische Oszillatoren | Relaxationsoszillatoren (Kippschaltungen) |
+| --- | --- | --- |
+| Signal | (fast) reiner **Sinus** | **Rechteck**, Dreieck, Sägezahn |
+| Prinzip | Verstärker + frequenzselektive Rückkopplung | Kondensator wird bis zu einer Schaltschwelle geladen, dann kippt die Schaltung |
+| Beispiele | RC-Phasenschieber, Wien-Brücke, LC-Oszillator, Quarzoszillator | OPV-Relaxationsoszillator, Timer-IC, Schmitt-Trigger-Inverter |
+
+## 2 · Rückkopplung: Mit- und Gegenkopplung
+
+<Abbildung bild={Schleife} unterschrift="Grundprinzip: Der Verstärker A und das Rückkopplungsnetzwerk β bilden eine geschlossene Schleife" />
+
+Ein Teil des Ausgangssignals wird über ein **Rückkopplungsnetzwerk** $\beta$ an den Eingang des Verstärkers $A$ zurückgeführt.
+
+- **Gegenkopplung (negative Rückkopplung):** Das zurückgeführte Signal wirkt der Änderung **entgegen**. Der Verstärker wird stabil
+  und unempfindlich gegen Bauteilstreuung – so arbeiten alle [OPV-Verstärkerschaltungen](/operationsverstaerker/theorie/).
+- **Mitkopplung (positive Rückkopplung):** Das Signal kommt **phasengleich** zurück und **unterstützt** sich selbst. Das nutzt man beim
+  [Schmitt-Trigger](/operationsverstaerker/theorie/#schmitt-trigger-komparator-mit-hysterese) – und bei jedem Oszillator.
+
+Ein Oszillator braucht **Mitkopplung bei genau einer Frequenz**: Nur dort soll das Signal nach einem Umlauf in der Schleife wieder
+gleichphasig und gleich groß ankommen. Dafür sorgt das **frequenzbestimmende Netzwerk** (RC-Glieder, Schwingkreis oder Quarz).
+
+## 3 · Das Barkhausen-Kriterium
+
+Die **Schleifenverstärkung** $\underline{A} \cdot \underline{\beta}$ beschreibt, was mit einem Signal nach einem Umlauf durch Verstärker und
+Rückkopplung passiert. Für eine **dauerhafte, gleichbleibende Schwingung** müssen bei der Oszillatorfrequenz $f_0$ zwei Bedingungen gelten:
+
+$$
+\text{Amplitudenbedingung:}\quad \lvert \underline{A} \cdot \underline{\beta} \rvert = 1
+\qquad\qquad
+\text{Phasenbedingung:}\quad \varphi_A + \varphi_\beta = 0° \;\; (\text{bzw. } n \cdot 360°)
+$$
+
+| Schleifenverstärkung | Was passiert mit der Schwingung? |
+| --- | --- |
+| $\lvert A\beta \rvert < 1$ (z. B. 0,85) | Sie **klingt ab** – nach jedem Umlauf bleiben nur 85 % übrig. |
+| $\lvert A\beta \rvert = 1$ | Sie bleibt **konstant** (stationärer Betrieb). |
+| $\lvert A\beta \rvert > 1$ (z. B. 1,15) | Sie **wächst** – nach jedem Umlauf um 15 %, bis der Verstärker begrenzt. |
+
+### Wie fängt ein Oszillator an zu schwingen?
+
+Es gibt kein Eingangssignal – aber in jeder realen Schaltung gibt es winzige Störungen: **thermisches Rauschen**, den Einschaltsprung der
+Versorgung, Offsetspannungen. Dieses Rauschen enthält alle Frequenzen, also auch $f_0$. Ist dort $\lvert A\beta \rvert > 1$ und stimmt die
+Phase, wird dieser Anteil bei jedem Umlauf verstärkt – aus einer Störung von Mikrovolt wird in Millisekunden eine sichtbare Schwingung.
+Alle anderen Frequenzen haben die falsche Phase und werden nicht aufgebaut.
+
+### Anschwingen und Begrenzen
+
+- Zum **sicheren Anschwingen** wählt man $\lvert A\beta \rvert$ etwas **größer als 1** (Bauteiltoleranzen, Temperatur!).
+- Bleibt $\lvert A\beta \rvert > 1$, wächst die Amplitude, bis der Verstärker an die **Versorgungsgrenze** stößt. Dann wird der Sinus
+  **abgeschnitten (Clipping)** – das Signal ist verzerrt. Die Begrenzung senkt die *wirksame* Verstärkung so weit, dass im Mittel wieder
+  $\lvert A\beta \rvert = 1$ gilt.
+- Für einen **sauberen Sinus** braucht man deshalb eine **Amplitudenregelung**, die die Verstärkung sanft zurücknimmt (siehe Wien-Brücke).
+
+:::note[Merksatz]
+Die **Phasenbedingung bestimmt die Frequenz**, die **Amplitudenbedingung bestimmt, ob** (und wie sauber) die Schaltung schwingt.
+:::
+
+## 4 · RC-Phasenschieber-Oszillator
+
+<Abbildung bild={Phasenschieber} unterschrift="RC-Phasenschieber-Oszillator: drei CR-Glieder in der Rückkopplung eines invertierenden Verstärkers" />
+
+### Funktionsprinzip
+
+- Der **invertierende Verstärker** dreht die Phase um **180°**.
+- Das dreistufige **RC-Netzwerk** muss bei $f_0$ die restlichen **180°** liefern – bei gleichen Bauteilen grob **60° pro Stufe**.
+- Zusammen: $180° + 180° = 360°$ → Phasenbedingung erfüllt.
+
+**Warum drei Stufen?** Ein einzelnes RC-Glied dreht die Phase höchstens um 90° – und das erst bei unendlich hoher (bzw. niedriger)
+Frequenz, wo das Signal fast vollständig gedämpft ist. Zwei Stufen erreichen 180° ebenfalls erst im Grenzfall. Erst mit **drei Stufen**
+werden 180° bei einer endlichen Frequenz mit brauchbarer Dämpfung erreicht.
+
+Der letzte Widerstand $R$ führt in der Schaltung oben direkt an den invertierenden Eingang. Weil dieser Eingang **virtuelle Masse** ist,
+wirkt $R$ wie ein Widerstand nach Masse – gleichzeitig ist er der Eingangswiderstand des invertierenden Verstärkers mit $V = -R_\mathrm{f}/R$.
+
+### Übertragungsfunktion des RC-Netzwerks
+
+Die drei RC-Stufen sind **nicht entkoppelt** – jede Stufe belastet die vorherige. Man darf die Übertragungsfunktion deshalb **nicht**
+als Produkt dreier einzelner Hochpässe ansetzen. Mit der Knotenpotenzialanalyse (Admittanz des Kondensators $sC$) und der Abkürzung
+$x = sRC$ ergibt sich:
+
+$$
+\underline{H}(s) = \frac{\underline{U}_\mathrm{aus}}{\underline{U}_\mathrm{ein}} = \frac{(sRC)^3}{(sRC)^3 + 6\,(sRC)^2 + 5\,sRC + 1}
+$$
+
+Mit $s = \mathrm{j}\omega$ und $x = \omega R C$ wird daraus
+
+$$
+\underline{H}(\mathrm{j}\omega) = \frac{-\mathrm{j}x^3}{(1 - 6x^2) + \mathrm{j}\,(5x - x^3)}
+$$
+
+Für **180°** muss $\underline{H}$ rein reell und negativ sein. Der Bruch ist reell, wenn der Realteil des Nenners verschwindet:
+$1 - 6x^2 = 0$ → $x = 1/\sqrt{6}$. Daraus folgen Frequenz und Dämpfung:
+
+$$
+f_0 = \frac{1}{2\pi \sqrt{6}\, R C}
+\qquad\qquad
+\underline{H}(\mathrm{j}\omega_0) = -\frac{1}{29}
+$$
+
+Das Netzwerk schwächt das Signal also auf $1/29 \approx 3{,}4\,\%$ ab. Damit $\lvert A\beta \rvert = 1$ gilt, braucht der Verstärker
+
+$$
+\lvert A \rvert \geq 29 \qquad\Rightarrow\qquad R_\mathrm{f} \geq 29 \cdot R
+$$
+
+:::caution[Keine Resonanz]
+$f_0$ ist **nicht** die Grenzfrequenz einer einzelnen RC-Stufe ($1/(2\pi RC)$, bei 10 kΩ und 1 nF wären das 15,9 kHz), sondern entsteht
+durch das Zusammenspiel der drei belasteten Stufen (6,50 kHz). Weil es keine Spule gibt, spricht man von der **Schwingfrequenz** und
+nicht von einer Resonanzfrequenz.
+:::
+
+**Eigenschaften:** einfacher Aufbau, Frequenz schlecht durchstimmbar (drei Bauteile gleichzeitig ändern), Sinusqualität hängt stark
+von der Amplitudenbegrenzung ab. Typisch für feste Frequenzen von einigen Hz bis ca. 100 kHz.
+
+## 5 · Wien-Brücken-Oszillator
+
+<Abbildung bild={Wien} unterschrift="Wien-Brücken-Oszillator: Das RC-Netzwerk koppelt auf den Plus-Eingang zurück, R1 und R2 stellen die Verstärkung ein" />
+
+### Die Wien-Brücke als Rückkopplung
+
+Das frequenzbestimmende Netzwerk besteht aus einer **RC-Reihenschaltung** (wirkt wie ein Hochpass) und einer **RC-Parallelschaltung**
+nach Masse (wirkt wie ein Tiefpass). Zusammen bilden sie einen **Bandpass** mit der Übertragungsfunktion (gleiche $R$ und $C$):
+
+$$
+\underline{\beta} = \frac{1}{3 + \mathrm{j}\left(\omega R C - \dfrac{1}{\omega R C}\right)}
+$$
+
+Bei der Frequenz, bei der der Imaginärteil verschwindet ($\omega R C = 1$), ist die **Phase 0°** und $\beta$ maximal:
+
+$$
+f_0 = \frac{1}{2\pi R C}
+\qquad\qquad
+\beta(f_0) = \frac{1}{3}
+$$
+
+Weil das Netzwerk bei $f_0$ **keine** Phasendrehung macht, braucht man einen **nichtinvertierenden** Verstärker (0°) mit
+
+$$
+A = 1 + \frac{R_1}{R_2} = 3 \qquad\Rightarrow\qquad R_1 = 2\,R_2
+$$
+
+(z. B. $R_2 = 10\,\mathrm{k\Omega}$, $R_1 = 20\,\mathrm{k\Omega}$). Die Bezeichnungen $R_1$/$R_2$ variieren je nach Unterlage – entscheidend ist:
+der Widerstand vom Ausgang zum Minus-Eingang ist **doppelt so groß** wie der Widerstand vom Minus-Eingang nach Masse.
+
+### Warum eine Amplitudenregelung?
+
+Genau $A = 3$ lässt sich mit festen Widerständen nie exakt treffen:
+
+- $A$ etwas **zu klein** (z. B. 2,95) → $\lvert A\beta \rvert < 1$ → die Schwingung **klingt ab** oder startet gar nicht.
+- $A$ etwas **zu groß** (z. B. 3,2) → die Amplitude wächst, bis der OPV an die Versorgung stößt → **abgeflachte Spitzen** (Clipping).
+
+Eine **Amplitudenregelung** macht die Verstärkung von der Ausgangsamplitude abhängig: Beim Einschalten ist $A$ etwas größer als 3
+(sicheres Anschwingen), bei wachsender Amplitude sinkt $A$ auf 3.
+
+| Verfahren | Wie es wirkt | Sinusqualität |
+| --- | --- | --- |
+| **Glühlampe** statt $R_2$ | Mehr Strom → Glühfaden wärmer → Widerstand steigt → $A$ sinkt. Klassiker aus den 1930er-Jahren (Hewlett-Packard). | sehr gut (träge, keine Verzerrung pro Periode) |
+| **Dioden** antiparallel zu einem Teil von $R_1$ | Ab ca. 0,6 V leiten sie und verkleinern $R_1$ → $A$ sinkt. | einfach, aber leichte Verzerrung |
+| **JFET** als spannungsgesteuerter Widerstand | Die gleichgerichtete Ausgangsamplitude steuert den Kanalwiderstand im Gegenkopplungszweig. | sehr gut, aufwendiger |
+| **NTC** statt $R_1$ | Erwärmung senkt den Widerstand → $A$ sinkt. | gut, träge |
+
+**Eigenschaften:** sehr guter Sinus, leicht durchstimmbar (Doppelpotentiometer für beide $R$ oder Doppel-Drehkondensator) – der
+Klassiker für **NF-Sinusgeneratoren** (ca. 1 Hz … 1 MHz).
+
+## 6 · LC-Oszillatoren (Überblick)
+
+Für höhere Frequenzen (ca. 100 kHz … einige 100 MHz) verwendet man statt RC-Gliedern einen **LC-Schwingkreis**. Die Frequenz ist die
+Resonanzfrequenz des Kreises:
+
+$$
+f_0 = \frac{1}{2\pi \sqrt{L C}}
+$$
+
+Bekannte Schaltungen sind der **Colpitts-Oszillator** (kapazitiver Spannungsteiler aus zwei Kondensatoren im Schwingkreis) und der
+**Hartley-Oszillator** (Spule mit Anzapfung). Als Verstärker dient meist ein einzelner Transistor. Der LC-Kreis hat eine höhere Güte als
+RC-Netzwerke, die Frequenz ist also stabiler – an einen Quarz kommt er aber bei Weitem nicht heran.
+
+## 7 · Relaxationsoszillator mit OPV
+
+<Abbildung bild={Relax} unterschrift="Relaxationsoszillator: Der OPV arbeitet als Schmitt-Trigger, R1 und C bestimmen die Frequenz" />
+
+Hier entsteht **keine Sinusschwingung**, sondern ein ständiges Laden und Umladen eines Kondensators.
+
+### Ablauf
+
+1. Der OPV arbeitet als [Schmitt-Trigger](/operationsverstaerker/theorie/#schmitt-trigger-komparator-mit-hysterese) mit Mitkopplung über
+   $R_2$ und $R_3$. Sein Ausgang liegt immer in einer Sättigung: $+U_\mathrm{sat}$ oder $-U_\mathrm{sat}$.
+2. Am Plus-Eingang liegt dadurch die **Schaltschwelle** $\pm k \cdot U_\mathrm{sat}$ mit dem Rückkopplungsfaktor
+
+   $$
+   k = \frac{R_3}{R_2 + R_3}
+   $$
+
+3. Ist der Ausgang positiv, **lädt** sich $C$ über $R_1$ in Richtung $+U_\mathrm{sat}$ auf.
+4. Erreicht $u_\mathrm{C}$ die **obere Schwelle** $+k U_\mathrm{sat}$, wird der Minus-Eingang größer als der Plus-Eingang – der OPV
+   **kippt** in die negative Sättigung. Die Schwelle springt auf $-k U_\mathrm{sat}$.
+5. Jetzt lädt sich $C$ in Richtung $-U_\mathrm{sat}$ **um**, bis die **untere Schwelle** erreicht ist – der Ausgang kippt wieder.
+
+<Abbildung bild={RelaxSignale} unterschrift="Rechteck am OPV-Ausgang (schwarz) und Lade-/Entladekurve am Kondensator (blau) für k = 0,5" />
+
+**Signalformen:** Am Ausgang liegt ein **Rechteck** (der OPV springt zwischen den Sättigungen). Am Kondensator entsteht eine Folge von
+**e-Funktions-Abschnitten** – weil nur ein Teil der Ladekurve genutzt wird, sieht sie annähernd **dreieckförmig** aus.
+
+### Frequenz
+
+Der Kondensator lädt von $-kU_\mathrm{sat}$ in Richtung $+U_\mathrm{sat}$ (Zeitkonstante $\tau = R_1 C$):
+
+$$
+u_\mathrm{C}(t) = U_\mathrm{sat} - (1 + k)\,U_\mathrm{sat} \cdot \mathrm{e}^{-t/\tau}
+$$
+
+Die obere Schwelle $+kU_\mathrm{sat}$ ist erreicht nach $t_1 = \tau \ln\dfrac{1 + k}{1 - k}$. Die zweite Halbperiode ist gleich lang, also
+
+$$
+T = 2 R_1 C \cdot \ln\frac{1 + k}{1 - k}
+\qquad\qquad
+\text{für } R_2 = R_3 \;(k = 0{,}5):\quad
+f = \frac{1}{2 R_1 C \ln 3} \approx \frac{1}{2{,}2\, R_1 C}
+$$
+
+Die Formel setzt voraus: symmetrische Sättigungsspannungen, ideal schnelles Umschalten (Slew-Rate!), keine Eingangsströme. Bei hohen
+Frequenzen und realen OPVs (z. B. LM358 mit 0,3 V/µs) weicht die gemessene Frequenz deshalb deutlich ab.
+
+**Eigenschaften:** sehr robust, schwingt immer an, Frequenz einfach über $R_1$ oder $C$ einstellbar (größeres $R_1$ oder $C$ → **kleinere**
+Frequenz) – aber **ungenau**, weil $R$, $C$, Sättigungsspannungen und Temperatur eingehen (Abweichungen von mehreren Prozent sind normal).
+Einsatz: Taktgeneratoren, PWM, Blinker, einfache Steuerungen. Dieselbe Idee steckt in Timer-ICs (555) und in Schmitt-Trigger-Invertern
+(74HC14) mit RC-Glied.
+
+### Timer-IC 555 als astabile Kippstufe
+
+Der Klassiker unter den Kippschaltungen: Im **555** stecken zwei Komparatoren mit den Schwellen $\tfrac{1}{3} U_\mathrm{B}$ und $\tfrac{2}{3} U_\mathrm{B}$,
+ein Flipflop und ein Entladetransistor. Außen liegen zwei Widerstände $R_\mathrm{A}$, $R_\mathrm{B}$ und ein Kondensator $C$:
+$C$ lädt über $R_\mathrm{A} + R_\mathrm{B}$ von $\tfrac{1}{3}$ auf $\tfrac{2}{3}$ der Versorgungsspannung (Ausgang High) und entlädt über $R_\mathrm{B}$
+in den Entladeanschluss (Ausgang Low).
+
+$$
+t_\mathrm{H} = \ln 2 \cdot (R_\mathrm{A} + R_\mathrm{B})\, C \approx 0{,}693\,(R_\mathrm{A} + R_\mathrm{B})\, C
+\qquad
+t_\mathrm{L} \approx 0{,}693\, R_\mathrm{B}\, C
+\qquad
+f = \frac{1}{t_\mathrm{H} + t_\mathrm{L}} \approx \frac{1{,}44}{(R_\mathrm{A} + 2 R_\mathrm{B})\, C}
+$$
+
+Die Frequenz hängt **nicht** von der Versorgungsspannung ab (beide Schwellen sind Bruchteile von $U_\mathrm{B}$). Das Tastverhältnis ist immer
+größer als 50 % – für 50 % macht man $R_\mathrm{B} \gg R_\mathrm{A}$ oder überbrückt $R_\mathrm{B}$ beim Laden mit einer Diode.
+Details stehen im Datenblatt des Herstellers (z. B. NE555 von Texas Instruments).
+
+## 8 · Quarz und Quarzoszillator
+
+### Piezoelektrischer Effekt und Güte
+
+Ein **Schwingquarz** ist ein dünnes Plättchen aus Quarzkristall mit aufgedampften Elektroden. Quarz ist **piezoelektrisch**:
+
+- eine elektrische Spannung **verformt** den Kristall,
+- eine mechanische Verformung erzeugt eine **elektrische Spannung**.
+
+Das Plättchen hat eine sehr ausgeprägte **mechanische Eigenresonanz**, deren Frequenz durch Schnitt und Dicke festgelegt ist.
+Seine **Güte** liegt bei $Q \approx 10^4 \ldots 10^6$ (LC-Kreis: etwa 100). Dadurch ist der Bereich, in dem die Phasenbedingung erfüllt
+wird, **extrem schmal**: Änderungen von Versorgung, Verstärkung oder Temperatur verschieben die Frequenz nur um wenige Millionstel.
+
+### Ersatzschaltbild
+
+<Abbildung bild={QuarzESB} unterschrift="Quarz: Schaltzeichen und Ersatzschaltbild mit Serienkreis (mechanische Schwingung) und Parallelkapazität C0" />
+
+- $L_1$, $C_1$, $R_1$ (**Serienzweig**): bilden die mechanische Schwingung elektrisch nach. $L_1$ ist riesig (mH … H), $C_1$ winzig (fF),
+  $R_1$ ist der Verlustwiderstand (im Datenblatt **ESR**, einige 10 Ω).
+- $C_0$ (**Parallelkapazität**, einige pF): Kapazität der Elektroden und des Gehäuses.
+
+Daraus ergeben sich zwei Resonanzfrequenzen, die sehr nahe beieinander liegen:
+
+$$
+f_\mathrm{s} = \frac{1}{2\pi \sqrt{L_1 C_1}} \;\;(\text{Serienresonanz, Quarz niederohmig})
+\qquad
+f_\mathrm{p} = f_\mathrm{s} \sqrt{1 + \frac{C_1}{C_0}} \;\;(\text{Parallelresonanz, hochohmig})
+$$
+
+Zwischen $f_\mathrm{s}$ und $f_\mathrm{p}$ verhält sich der Quarz **induktiv**. In diesem schmalen Bereich arbeitet er im Pierce-Oszillator.
+
+### Lastkapazität
+
+Der Hersteller gleicht den Quarz für eine bestimmte **Lastkapazität** $C_\mathrm{L}$ ab (z. B. 8 pF, 12,5 pF, 18 pF). Nur wenn die
+Schaltung genau diese Kapazität „anbietet“, schwingt der Quarz auf seiner Nennfrequenz. Im Pierce-Oszillator liegen die beiden
+Lastkondensatoren aus Sicht des Quarzes **in Reihe**, dazu kommen die **parasitären Kapazitäten** $C_\mathrm{stray}$ (Pins, Leiterbahnen,
+Eingangskapazität des Inverters, typisch 2 … 5 pF):
+
+$$
+C_\mathrm{L} = \frac{C_1 \cdot C_2}{C_1 + C_2} + C_\mathrm{stray}
+\qquad\qquad
+\text{für } C_1 = C_2 = C:\quad C_\mathrm{L} = \frac{C}{2} + C_\mathrm{stray}
+\;\Rightarrow\; C = 2\,(C_\mathrm{L} - C_\mathrm{stray})
+$$
+
+**„Ziehen“ des Quarzes:** Eine **größere** Lastkapazität senkt die Frequenz, eine **kleinere** erhöht sie – allerdings nur um einige
+10 ppm pro pF. Schwingt ein Quarzoszillator zu langsam, verkleinert man die Lastkondensatoren (und umgekehrt).
+
+### Frequenzabweichung in ppm
+
+Bei Quarzen gibt man Abweichungen in **ppm** (parts per million, $10^{-6}$) an:
+
+$$
+\Delta f_\mathrm{ppm} = \frac{f_\mathrm{ist} - f_\mathrm{soll}}{f_\mathrm{soll}} \cdot 10^{6}
+$$
+
+Ein negatives Ergebnis heißt: der Oszillator ist **zu langsam**. Typische Datenblattangaben: Toleranz ±10 … ±30 ppm bei 25 °C,
+dazu eine Temperaturdrift und Alterung von wenigen ppm pro Jahr. Zum Vergleich: ein RC-Oszillator liegt bei ±1 … 5 % – das sind
+10 000 … 50 000 ppm.
+
+:::tip[Gefühl für ppm]
+20 ppm klingt winzig – bei einer Uhr sind das $20 \cdot 10^{-6} \cdot 86\,400\,\mathrm{s} \approx 1{,}7\,\mathrm{s}$ pro Tag oder fast eine Minute
+pro Monat.
+:::
+
+### Pierce-Oszillator am Mikrocontroller
+
+<Abbildung bild={Pierce} unterschrift="Pierce-Oszillator: Inverter und R_F sitzen im Mikrocontroller, außen liegen Quarz, C1, C2 und bei Bedarf R_D" />
+
+Fast jeder Mikrocontroller-Takt wird so erzeugt. Im Baustein sitzen ein **invertierender Verstärker** (180°) und ein
+**Rückkopplungswiderstand** $R_\mathrm{F}$. Außen werden nur Quarz und zwei Kondensatoren angeschlossen. Quarz, $C_1$ und $C_2$ bilden
+ein π-Netzwerk, das bei der Schwingfrequenz die zweiten **180°** liefert.
+
+| Bauteil | Aufgabe | typischer Wert |
+| --- | --- | --- |
+| $R_\mathrm{F}$ | stellt den Arbeitspunkt des Inverters in die Mitte seines **linearen Bereichs** (Eingang = Ausgang), damit er als Verstärker arbeitet | ca. 200 kΩ … 1 MΩ, oft schon im µC |
+| $C_1$, $C_2$ | stellen zusammen mit $C_\mathrm{stray}$ die geforderte **Lastkapazität** ein | 2 · ($C_\mathrm{L}$ − $C_\mathrm{stray}$), z. B. 10 … 33 pF |
+| $R_\mathrm{D}$ ($R_\mathrm{ext}$) | **begrenzt den Quarzstrom** (Drive Level), damit der Quarz nicht übersteuert wird oder altert; bildet mit $C_2$ ein zusätzliches Tiefpassglied gegen Oberschwingungen | 0 Ω (nur bei Bedarf), Startwert ≈ $X_{C_2}$ |
+
+**Schwingt er sicher an?** Die Verluste im Quarznetzwerk muss der Inverter mit seiner Steilheit $g_\mathrm{m}$ ausgleichen. Hersteller wie
+ST geben dazu einen **kritischen Wert** an. Er wächst mit dem ESR, der Frequenz und den Kapazitäten:
+
+$$
+g_\mathrm{m,crit} = 4 \cdot \mathrm{ESR} \cdot (2\pi f)^2 \cdot (C_0 + C_\mathrm{L})^2
+$$
+
+Der berechnete Wert muss **kleiner** sein als der im µC-Datenblatt angegebene Höchstwert (z. B. $G_\mathrm{m,crit,max} = 1\,\mathrm{mA/V}$ beim
+STM32F401). Ein großer $R_\mathrm{D}$ erhöht die Verluste – nach dem Einfügen muss man die Anschwingbedingung **erneut prüfen**.
+
+**Drive Level:** die im Quarz umgesetzte Leistung (µW). Sie wird mit einem sehr kapazitätsarmen Tastkopf gemessen
+($U_\mathrm{pp}$ am Quarzanschluss) und mit dem Quarzdatenblatt verglichen:
+
+$$
+DL = \frac{\mathrm{ESR}}{2} \cdot \left(\pi f\, U_\mathrm{pp}\, C_\mathrm{tot}\right)^2
+\qquad C_\mathrm{tot} = C_1 + \tfrac{1}{2}\,C_\mathrm{stray} + C_\mathrm{Tastkopf}
+$$
+
+**Entwurfsablauf:**
+
+1. Quarz auswählen, aus seinem Datenblatt $f$, $C_\mathrm{L}$, $C_0$, ESR und maximales Drive Level entnehmen.
+2. µC-Datenblatt prüfen: Frequenzbereich, $R_\mathrm{F}$, $G_\mathrm{m,crit,max}$.
+3. $C_1 = C_2$ aus $C_\mathrm{L}$ und geschätztem $C_\mathrm{stray}$ berechnen, Normwert wählen.
+4. Anschwingbedingung mit $g_\mathrm{m,crit}$ prüfen.
+5. **Layout:** Quarz und Kondensatoren ganz nah an die Pins, kurze Leiterbahnen, Massefläche darunter, keine Signalleitungen in der Nähe.
+6. Drive Level messen, nur bei Bedarf $R_\mathrm{D}$ einsetzen und Schritt 4 wiederholen.
+7. Frequenz am Prototyp messen (z. B. Takt-Ausgang MCO) und $C_1$/$C_2$ bei Bedarf anpassen.
+
+:::note[Fertige Quarzoszillatoren]
+Für höchste Anforderungen gibt es komplette **Quarzoszillator-Bausteine** (XO), temperaturkompensiert (**TCXO**, ±0,5 … 2 ppm) oder im
+beheizten Gehäuse (**OCXO**, < 0,01 ppm). Sie liefern direkt ein Rechtecksignal.
+:::
+
+## 9 · Vergleich
+
+| Oszillator | Signal | Frequenz bestimmt durch | Frequenzbereich | Genauigkeit |
+| --- | --- | --- | --- | --- |
+| RC-Phasenschieber | Sinus | $f_0 = 1/(2\pi\sqrt{6}RC)$, $A \geq 29$ | Hz … 100 kHz | %-Bereich |
+| Wien-Brücke | Sinus (sehr sauber) | $f_0 = 1/(2\pi RC)$, $A = 3$ | Hz … 1 MHz | %-Bereich |
+| LC (Colpitts, Hartley) | Sinus | $f_0 = 1/(2\pi\sqrt{LC})$ | 100 kHz … GHz | 0,1 … 1 % |
+| Relaxation (OPV, 555) | Rechteck / Dreieck | $T = 2RC\ln\frac{1+k}{1-k}$ | mHz … MHz | einige % |
+| Quarz | Sinus am Quarz, Rechteck nach dem Inverter | Quarzschnitt, $C_\mathrm{L}$ | 32 kHz … 100 MHz | 10 … 50 ppm |

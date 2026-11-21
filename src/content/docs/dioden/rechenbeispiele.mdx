@@ -1,0 +1,218 @@
+---
+title: Rechenbeispiele – Dioden
+description: Rechenbeispiele zu Diodenstrom, LED-Vorwiderstand, Einweg- und Brückengleichrichter, Ladekondensator, Z-Dioden-Stabilisierung, Spannungsverdoppler und Schottky-Diode.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import Einweg from '../../../assets/elektronik/einweggleichrichter.svg';
+import Bruecke from '../../../assets/elektronik/brueckengleichrichter.svg';
+import ZStab from '../../../assets/elektronik/z-stabilisierung.svg';
+
+Wenn nichts anderes angegeben ist: Si-Diode mit $U_\mathrm{F} = 0{,}7\,\mathrm{V}$ (Schwellspannungsmodell), Netzfrequenz $50\,\mathrm{Hz}$.
+
+## Diode mit Vorwiderstand
+
+<Stufe wert="grundlagen" />
+
+Eine Si-Diode liegt in Durchlassrichtung über einen Widerstand von $220\,\Omega$ an $5\,\mathrm{V}$.
+Berechne den Strom und die Verlustleistung in der Diode.
+
+<Loesung>
+
+$$
+I = \frac{U - U_\mathrm{F}}{R} = \frac{5\,\mathrm{V} - 0{,}7\,\mathrm{V}}{220\,\Omega} \approx 19{,}5\,\mathrm{mA}
+\qquad
+P_\mathrm{D} = U_\mathrm{F} \cdot I \approx 0{,}7\,\mathrm{V} \cdot 19{,}5\,\mathrm{mA} \approx 13{,}7\,\mathrm{mW}
+$$
+
+</Loesung>
+
+## LED-Vorwiderstand
+
+<Stufe wert="grundlagen" />
+
+a) Eine blaue LED ($U_\mathrm{F} = 3{,}0\,\mathrm{V}$) soll mit $10\,\mathrm{mA}$ an $5\,\mathrm{V}$ leuchten.
+b) Zwei rote LEDs ($U_\mathrm{F} = 2{,}0\,\mathrm{V}$) in Reihe sollen an $12\,\mathrm{V}$ höchstens $20\,\mathrm{mA}$ bekommen.
+
+Berechne jeweils den Vorwiderstand, wähle einen E12-Wert (… 180, 220 … 330, 390, 470 …) und gib den tatsächlichen Strom an.
+
+<Loesung>
+
+a) $R_\mathrm{V} = \dfrac{5\,\mathrm{V} - 3{,}0\,\mathrm{V}}{10\,\mathrm{mA}} = 200\,\Omega$ → gewählt $220\,\Omega$ → $I = \dfrac{2\,\mathrm{V}}{220\,\Omega} \approx 9{,}1\,\mathrm{mA}$
+
+b) $R_\mathrm{V} = \dfrac{12\,\mathrm{V} - 2 \cdot 2{,}0\,\mathrm{V}}{20\,\mathrm{mA}} = 400\,\Omega$.
+390 Ω wäre zu klein ($I \approx 20{,}5\,\mathrm{mA}$ – über dem Maximum!), also **470 Ω** → $I = \dfrac{8\,\mathrm{V}}{470\,\Omega} \approx 17\,\mathrm{mA}$
+
+**Merke:** Bei einem Höchststrom immer den nächst**größeren** Normwert wählen.
+
+</Loesung>
+
+## Einweggleichrichter mit Ladekondensator
+
+<Stufe wert="standard" />
+
+<Abbildung bild={Einweg} unterschrift="Einweggleichrichter" />
+
+Ein Trafo liefert $U_\sim = 12\,\mathrm{V}$ (Effektivwert). Ladekondensator $C_\mathrm{L} = 470\,\mu\mathrm{F}$, Last $R_\mathrm{L} = 1\,\mathrm{k\Omega}$.
+Berechne den Spitzenwert der Ausgangsspannung, den Laststrom, die Brummspannung und den Mittelwert der Ausgangsspannung.
+
+<Loesung>
+
+$$
+\hat{u}_\mathrm{a} = \sqrt{2} \cdot 12\,\mathrm{V} - 0{,}7\,\mathrm{V} \approx 16{,}97\,\mathrm{V} - 0{,}7\,\mathrm{V} \approx 16{,}27\,\mathrm{V}
+\qquad
+I_\mathrm{L} \approx \frac{16{,}27\,\mathrm{V}}{1\,\mathrm{k\Omega}} \approx 16{,}3\,\mathrm{mA}
+$$
+
+$$
+\Delta U \approx \frac{I_\mathrm{L}}{f \cdot C_\mathrm{L}} = \frac{16{,}3\,\mathrm{mA}}{50\,\mathrm{Hz} \cdot 470\,\mu\mathrm{F}} \approx 0{,}69\,\mathrm{V}
+\qquad
+\bar{U}_\mathrm{a} \approx 16{,}27\,\mathrm{V} - \frac{0{,}69\,\mathrm{V}}{2} \approx 15{,}9\,\mathrm{V}
+$$
+
+**Typischer Fehler:** mit 12 V statt mit dem **Scheitelwert** rechnen. Der Kondensator lädt sich auf die Spitze der Wechselspannung auf!
+
+</Loesung>
+
+## Brückengleichrichter
+
+<Stufe wert="standard" />
+
+<Abbildung bild={Bruecke} unterschrift="Brückengleichrichter" />
+
+$U_\sim = 15\,\mathrm{V}$, $C_\mathrm{L} = 1000\,\mu\mathrm{F}$, $R_\mathrm{L} = 500\,\Omega$.
+Berechne $\hat{u}_\mathrm{a}$, $I_\mathrm{L}$, die Brummspannung und die Sperrspannung, die jede Diode aushalten muss.
+
+<Loesung>
+
+Im Brückengleichrichter liegen immer **zwei** Dioden im Strompfad:
+
+$$
+\hat{u}_\mathrm{a} = \sqrt{2} \cdot 15\,\mathrm{V} - 2 \cdot 0{,}7\,\mathrm{V} \approx 21{,}21\,\mathrm{V} - 1{,}4\,\mathrm{V} \approx 19{,}8\,\mathrm{V}
+\qquad
+I_\mathrm{L} \approx \frac{19{,}8\,\mathrm{V}}{500\,\Omega} \approx 39{,}6\,\mathrm{mA}
+$$
+
+Der Kondensator wird zweimal pro Periode nachgeladen (100 Hz):
+
+$$
+\Delta U \approx \frac{I_\mathrm{L}}{2 f \cdot C_\mathrm{L}} = \frac{39{,}6\,\mathrm{mA}}{100\,\mathrm{Hz} \cdot 1000\,\mu\mathrm{F}} \approx 0{,}40\,\mathrm{V}
+$$
+
+Sperrspannung je Diode: etwa der Scheitelwert, $\approx 21\,\mathrm{V}$ → eine Diode mit z. B. 50 V oder mehr wählen.
+
+</Loesung>
+
+## Ladekondensator dimensionieren
+
+<Stufe wert="standard" />
+
+Ein Netzteil mit Brückengleichrichter soll $1\,\mathrm{A}$ liefern. Die Brummspannung darf höchstens $2\,\mathrm{V}$ betragen.
+Wie groß muss der Ladekondensator mindestens sein?
+
+<Loesung>
+
+$$
+C_\mathrm{L} \geq \frac{I_\mathrm{L}}{2 f \cdot \Delta U} = \frac{1\,\mathrm{A}}{2 \cdot 50\,\mathrm{Hz} \cdot 2\,\mathrm{V}} = 5\,\mathrm{mF} = 5000\,\mu\mathrm{F}
+$$
+
+Gewählt wird der nächstgrößere Normwert mit Reserve (Elkos haben oft −20 % Toleranz): z. B. **6800 µF**.
+Die Spannungsfestigkeit muss über dem Scheitelwert liegen.
+
+</Loesung>
+
+## Z-Dioden-Stabilisierung
+
+<Stufe wert="standard" />
+
+<Abbildung bild={ZStab} unterschrift="Stabilisierung mit Z-Diode" />
+
+Aus $U_\mathrm{e} = 12\,\mathrm{V}$ sollen mit einer Z-Diode ($U_\mathrm{Z} = 5{,}1\,\mathrm{V}$) stabile $5{,}1\,\mathrm{V}$ für eine Last mit
+$I_\mathrm{L} = 10\,\mathrm{mA}$ erzeugt werden. Der Z-Strom soll mindestens $5\,\mathrm{mA}$ betragen.
+
+a) Berechne den Vorwiderstand und wähle einen E12-Wert (… 330, 390, 470 …).
+b) Welche Leistung muss die Z-Diode aushalten, wenn die Last abgeklemmt wird?
+
+<Loesung>
+
+**a)** $R_\mathrm{V} = \dfrac{U_\mathrm{e} - U_\mathrm{Z}}{I_\mathrm{L} + I_\mathrm{Z,min}} = \dfrac{6{,}9\,\mathrm{V}}{15\,\mathrm{mA}} = 460\,\Omega$
+
+Hier muss man **abrunden**: Mit 470 Ω flössen nur 14,7 mA, der Z-Strom wäre 4,7 mA – zu wenig. Also **390 Ω**:
+
+$$
+I_\mathrm{ges} = \frac{6{,}9\,\mathrm{V}}{390\,\Omega} \approx 17{,}7\,\mathrm{mA}
+\qquad
+I_\mathrm{Z} = 17{,}7\,\mathrm{mA} - 10\,\mathrm{mA} = 7{,}7\,\mathrm{mA} \;\checkmark
+$$
+
+**b)** Ohne Last fließt der ganze Strom durch die Z-Diode:
+$P_\mathrm{Z} = U_\mathrm{Z} \cdot I_\mathrm{ges} = 5{,}1\,\mathrm{V} \cdot 17{,}7\,\mathrm{mA} \approx 90\,\mathrm{mW}$ – eine 0,5-W-Z-Diode reicht.
+
+</Loesung>
+
+## Z-Diode bei schwankender Eingangsspannung
+
+<Stufe wert="vertiefung" />
+
+Die Eingangsspannung schwankt zwischen $10\,\mathrm{V}$ und $14\,\mathrm{V}$, der Laststrom zwischen $0$ und $20\,\mathrm{mA}$.
+Z-Diode: $U_\mathrm{Z} = 6{,}8\,\mathrm{V}$, $I_\mathrm{Z,min} = 5\,\mathrm{mA}$, $P_\mathrm{Z,max} = 0{,}5\,\mathrm{W}$.
+Dimensioniere $R_\mathrm{V}$ und prüfe, ob die Z-Diode in allen Fällen überlebt.
+
+<Loesung>
+
+**Ungünstigster Fall für die Stabilisierung:** kleinste Eingangsspannung, größter Laststrom:
+
+$$
+R_\mathrm{V,max} = \frac{10\,\mathrm{V} - 6{,}8\,\mathrm{V}}{20\,\mathrm{mA} + 5\,\mathrm{mA}} = 128\,\Omega \;\rightarrow\; \text{gewählt } 120\,\Omega
+$$
+
+**Ungünstigster Fall für die Z-Diode:** größte Eingangsspannung, keine Last:
+
+$$
+I_\mathrm{Z,max} = \frac{14\,\mathrm{V} - 6{,}8\,\mathrm{V}}{120\,\Omega} = 60\,\mathrm{mA}
+\qquad
+P_\mathrm{Z} = 6{,}8\,\mathrm{V} \cdot 60\,\mathrm{mA} \approx 0{,}41\,\mathrm{W} < 0{,}5\,\mathrm{W} \;\checkmark
+$$
+
+Die Schaltung funktioniert – aber auch ohne Last werden über 0,4 W verheizt. Für größere Ströme ist ein
+[Längsregler mit Transistor](/transistoren/rechenbeispiele/) besser.
+
+</Loesung>
+
+## Spannungsverdoppler
+
+<Stufe wert="vertiefung" />
+
+Ein Spannungsverdoppler (Delon-Schaltung) wird an $12\,\mathrm{V}$ Wechselspannung betrieben. Welche Leerlaufspannung ist zu erwarten?
+Warum sinkt sie unter Last deutlich?
+
+<Loesung>
+
+Jeder der beiden Kondensatoren lädt sich auf $\hat{u} - U_\mathrm{F}$ auf, beide liegen in Reihe:
+
+$$
+U_\mathrm{a} \approx 2 \cdot (\sqrt{2} \cdot 12\,\mathrm{V} - 0{,}7\,\mathrm{V}) \approx 32{,}5\,\mathrm{V}
+$$
+
+Unter Last entladen sich die Kondensatoren zwischen den Nachladezeitpunkten; jeder wird nur einmal pro Periode nachgeladen.
+Die Spannung sinkt und der Brumm steigt – Vervielfacher eignen sich nur für kleine Ströme.
+
+</Loesung>
+
+## Schottky- oder Si-Diode?
+
+<Stufe wert="grundlagen" />
+
+Durch eine Diode im Verpolungsschutz fließen dauernd $2\,\mathrm{A}$. Vergleiche die Verlustleistung einer Si-Diode
+($U_\mathrm{F} = 0{,}8\,\mathrm{V}$ bei 2 A) mit einer Schottky-Diode ($U_\mathrm{F} = 0{,}4\,\mathrm{V}$).
+
+<Loesung>
+
+$P_\mathrm{Si} = 0{,}8\,\mathrm{V} \cdot 2\,\mathrm{A} = 1{,}6\,\mathrm{W}$ · $P_\mathrm{Schottky} = 0{,}4\,\mathrm{V} \cdot 2\,\mathrm{A} = 0{,}8\,\mathrm{W}$
+
+Die Schottky-Diode halbiert die Verluste (und den Spannungsverlust). Noch besser ist ein MOSFET als „ideale Diode“ –
+siehe [Praxisbeispiele](/dioden/praxisbeispiele/#verpolungsschutz).
+
+</Loesung>

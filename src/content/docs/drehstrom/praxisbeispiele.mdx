@@ -1,0 +1,122 @@
+---
+title: Praxisbeispiele – Drehstrom
+description: Leistung eines Hausanschlusses, Durchlauferhitzer, Wallbox ein- oder dreiphasig, Neutralleiterbruch im Haus, Motor richtig anschließen und Drehrichtung ändern, Ausfall eines Außenleiters, Drehfeld messen.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Wie viel Leistung hat ein Hausanschluss?
+
+Ein Einfamilienhaus ist mit $3 \times 35\,\mathrm{A}$ abgesichert (Hausanschlusssicherungen in L1, L2, L3).
+
+1. Welche Scheinleistung kann der Anschluss höchstens liefern?
+2. Im Haus sind ein Durchlauferhitzer (21 kW, dreiphasig), eine Wallbox (11 kW) und eine Wärmepumpe (4 kW) installiert. Was passiert, wenn alles gleichzeitig läuft?
+
+<Loesung>
+
+1. $S = \sqrt{3} \cdot 400\,\mathrm{V} \cdot 35\,\mathrm{A} \approx 24{,}2\,\mathrm{kVA}$
+2. $21 + 11 + 4 = 36\,\mathrm{kW}$ – deutlich mehr als 24 kW, die Hausanschlusssicherungen würden auslösen. Abhilfe: **Lastmanagement**
+   (die Wallbox reduziert ihre Ladeleistung, solange der Durchlauferhitzer läuft) oder ein stärkerer Anschluss beim Netzbetreiber.
+
+</Loesung>
+
+## Durchlauferhitzer
+
+Ein Durchlauferhitzer hat $21\,\mathrm{kW}$ (ohmsch, symmetrisch, 400 V).
+
+1. Wie groß ist der Leiterstrom?
+2. Warum wäre ein einphasiger Anschluss an 230 V unmöglich?
+
+<Loesung>
+
+1. $I = \dfrac{P}{\sqrt{3} \cdot U} = \dfrac{21\,000\,\mathrm{W}}{\sqrt{3} \cdot 400\,\mathrm{V}} \approx 30{,}3\,\mathrm{A}$
+2. Einphasig wären es $21\,000\,\mathrm{W} / 230\,\mathrm{V} \approx 91\,\mathrm{A}$ – viel zu viel für einen Hausstromkreis (Leitungsquerschnitt, Sicherung).
+   Drehstrom verteilt die Leistung auf drei Leiter.
+
+</Loesung>
+
+## Wallbox: ein- oder dreiphasig laden?
+
+Eine Wallbox kann mit 16 A oder 32 A pro Außenleiter laden, ein- oder dreiphasig.
+
+1. Berechne die Ladeleistung für 1 × 16 A, 3 × 16 A und 3 × 32 A.
+2. Ein Elektroauto mit 60 kWh Akku soll von 20 % auf 80 % geladen werden. Wie lange dauert das mit 3 × 16 A (Verluste vernachlässigt)?
+
+<Loesung>
+
+1. 1 × 16 A: $230\,\mathrm{V} \cdot 16\,\mathrm{A} \approx 3{,}7\,\mathrm{kW}$ · 3 × 16 A: $\sqrt{3} \cdot 400\,\mathrm{V} \cdot 16\,\mathrm{A} \approx 11\,\mathrm{kW}$ ·
+   3 × 32 A: ca. 22 kW
+2. $0{,}6 \cdot 60\,\mathrm{kWh} = 36\,\mathrm{kWh}$ → $36\,\mathrm{kWh} / 11\,\mathrm{kW} \approx 3{,}3\,\mathrm{h}$ (in Wirklichkeit etwas länger wegen der Ladeverluste).
+
+Das **Bordladegerät** im Auto richtet den Drehstrom mit Leistungselektronik gleich – ein einphasig ladendes Auto nutzt nur ein Drittel der
+möglichen Leistung.
+
+</Loesung>
+
+## Neutralleiterbruch im Haus
+
+Im Haus fällt durch eine lose Klemme der Neutralleiter aus. Zu diesem Zeitpunkt läuft an L1 ein Heizlüfter ($2300\,\mathrm{W}$), an L2 eine
+Kaffeemaschine ($1150\,\mathrm{W}$), an L3 ist nichts eingeschaltet.
+
+1. Welche Spannungen liegen jetzt an den beiden Geräten? (Geräte als ohmsche Widerstände betrachten.)
+2. Was passiert mit den Geräten?
+
+<Loesung>
+
+1. Widerstände: $R_1 = (230\,\mathrm{V})^2 / 2300\,\mathrm{W} = 23\,\Omega$, $R_2 = (230\,\mathrm{V})^2 / 1150\,\mathrm{W} = 46\,\Omega$. Ohne Neutralleiter liegen beide
+   **in Reihe an 400 V** (zwischen L1 und L2):
+   $I = 400\,\mathrm{V} / 69\,\Omega \approx 5{,}8\,\mathrm{A}$ → $U_1 = 5{,}8\,\mathrm{A} \cdot 23\,\Omega \approx 133\,\mathrm{V}$, $U_2 \approx 267\,\mathrm{V}$.
+2. Der Heizlüfter bekommt zu wenig Spannung, die **Kaffeemaschine 267 V statt 230 V** – empfindlichere Geräte (Netzteile, Fernseher) können
+   dabei zerstört werden oder brennen. Genau deshalb wird der Neutralleiter nie einzeln abgesichert, und Klemmen müssen fest angezogen sein.
+
+</Loesung>
+
+## Motor richtig anschließen
+
+Auf dem Typenschild eines Asynchronmotors steht: **230/400 V Δ/Y, 3 kW, 1430 min⁻¹**.
+
+1. Wie wird der Motor am 400-V-Netz geschaltet?
+2. Der Motor dreht falsch herum. Was tust du?
+3. Wie viele Polpaare hat der Motor?
+
+<Loesung>
+
+1. Jeder Strang ist für **230 V** gebaut. Am 400-V-Netz liegt im **Stern** an jedem Strang 230 V → **Sternschaltung (Y)**. Im Klemmenkasten werden
+   dazu die Brücken entsprechend gesetzt. (Im Dreieck lägen 400 V am Strang – der Motor würde überlastet.)
+2. **Zwei Außenleiter vertauschen** (z. B. L1 und L2). Dadurch kehrt sich der Drehsinn des Drehfelds um.
+3. 1430 min⁻¹ liegt knapp unter 1500 min⁻¹ → $p = 2$ (vierpolig), Schlupf ca. 4,7 %.
+
+</Loesung>
+
+## Ausfall eines Außenleiters
+
+Bei einem laufenden Drehstrommotor brennt die Sicherung in L3 durch.
+
+1. Was passiert, wenn der Motor gerade läuft? Was, wenn er neu eingeschaltet wird?
+2. Warum braucht ein Motor einen **Motorschutzschalter** statt nur Sicherungen?
+
+<Loesung>
+
+1. Läuft der Motor, dreht er im **Einphasenlauf** brummend weiter, zieht aber in den verbleibenden Leitern deutlich mehr Strom und wird heiß.
+   Aus dem Stillstand läuft er **nicht an** – ein Wechselfeld aus einer Phase allein erzeugt kein Drehfeld – und brummt nur.
+2. Der Motorschutzschalter überwacht den Strom in allen drei Leitern (thermisch, mit Phasenausfallerkennung) und schaltet **alle drei** Leiter ab.
+   Eine einzelne Schmelzsicherung trennt nur einen Leiter und lässt den Motor im gefährlichen Einphasenlauf.
+
+</Loesung>
+
+## Drehfeld messen
+
+Vor dem Anschluss einer Maschine wird mit einem **Drehfeldmessgerät** (Drehfeldrichtungsanzeiger) die Phasenfolge an der CEE-Steckdose geprüft.
+
+1. Warum ist das wichtig, obwohl die Spannungen an allen Steckdosen gleich sind?
+2. Wie könnte man die Phasenfolge mit einem Oszilloskop prüfen – und welche Sicherheitsvorkehrung ist dabei unbedingt nötig?
+
+<Loesung>
+
+1. Die Spannungsbeträge verraten nichts über die **Reihenfolge** L1 → L2 → L3. Bei falscher Phasenfolge laufen Pumpen, Förderbänder oder
+   Kompressoren rückwärts – das kann Maschinen beschädigen und Personen gefährden. Rechtsdrehfeld ist an Drehstromsteckdosen vorgeschrieben.
+2. Zwei Spannungen gegen N gleichzeitig darstellen und den zeitlichen Abstand der Nulldurchgänge prüfen ($U_\mathrm{2N}$ folgt $U_\mathrm{1N}$ um
+   ein Drittel der Periode = 6,67 ms). **Nur mit differenziellen Hochvolttastköpfen** (oder einem isolierten Messgerät) – ein normaler
+   Tastkopf verbindet seine Masse mit dem Schutzleiter des Oszilloskops und erzeugt einen Kurzschluss.
+
+</Loesung>

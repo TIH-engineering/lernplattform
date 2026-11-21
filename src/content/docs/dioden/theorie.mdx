@@ -1,0 +1,225 @@
+---
+title: Theorie – Dioden
+description: "Halbleiter und Dotierung, pn-Übergang, Diodenkennlinie und Ersatzmodelle, Datenblattwerte, Gleichrichter und Glättung, Spannungsvervielfacher, Z-Diode, LED, Schottky-, Foto-, Kapazitäts- und Schutzdioden."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Kennlinie from '../../../assets/elektronik/diodenkennlinie.svg';
+import Einweg from '../../../assets/elektronik/einweggleichrichter.svg';
+import Bruecke from '../../../assets/elektronik/brueckengleichrichter.svg';
+import ZStab from '../../../assets/elektronik/z-stabilisierung.svg';
+
+## 1 · Halbleiter
+
+### Leiter, Halbleiter, Isolatoren
+
+| Stoffgruppe | Beispiele | spezifischer Widerstand | freie Ladungsträger |
+| --- | --- | --- | --- |
+| Leiter | Kupfer, Silber, Aluminium | sehr klein ($\approx 10^{-8}\,\Omega\,\mathrm{m}$) | sehr viele freie Elektronen |
+| **Halbleiter** | Silizium, Germanium, Galliumarsenid | dazwischen – stark von Temperatur, Licht und **Dotierung** abhängig | wenige, aber **steuerbar** |
+| Isolatoren | Glas, Keramik, Kunststoffe | sehr groß ($> 10^{10}\,\Omega\,\mathrm{m}$) | praktisch keine |
+
+Das Besondere an Halbleitern: Man kann ihre Leitfähigkeit **gezielt einstellen**. Darauf beruhen Dioden, Transistoren und alle
+integrierten Schaltungen.
+
+### Eigenleitung
+
+Silizium hat vier Außenelektronen (vierwertig). Im Kristall bindet jedes Atom über diese Elektronen an vier Nachbarn.
+Bei sehr tiefer Temperatur sind alle Elektronen gebunden – reines Silizium isoliert. Durch Wärme brechen einzelne Bindungen auf:
+Es entstehen ein **freies Elektron** und eine Lücke, das **Loch** (Defektelektron). Löcher verhalten sich wie positive Ladungen.
+
+→ Die Leitfähigkeit reiner Halbleiter **steigt mit der Temperatur** (Heißleiter-Verhalten, siehe NTC).
+
+### Dotierung
+
+Beim Dotieren baut man gezielt wenige Fremdatome ein (etwa 1 auf $10^{6}$ … $10^{8}$ Siliziumatome):
+
+| | n-Dotierung | p-Dotierung |
+| --- | --- | --- |
+| Fremdatome | fünfwertig (z. B. Phosphor, Arsen) – **Donatoren** | dreiwertig (z. B. Bor, Gallium) – **Akzeptoren** |
+| Wirkung | ein Elektron „zu viel“ → frei beweglich | ein Elektron „zu wenig“ → Loch |
+| Majoritätsträger | Elektronen (negativ → **n**) | Löcher (positiv → **p**) |
+| Minoritätsträger | Löcher | Elektronen |
+
+Der dotierte Kristall ist nach außen trotzdem **elektrisch neutral** – die Fremdatome bleiben als ortsfeste Ionen zurück.
+
+## 2 · Der pn-Übergang
+
+Bringt man p- und n-Gebiet zusammen, **diffundieren** Elektronen ins p-Gebiet und Löcher ins n-Gebiet und rekombinieren.
+Zurück bleiben die ortsfesten Ionen: Es entsteht eine **Raumladungszone** (Sperrschicht) ohne freie Ladungsträger, und darin
+ein elektrisches Feld. Die zugehörige **Diffusionsspannung** beträgt bei Silizium etwa 0,7 V. Sie bremst die weitere Diffusion –
+es stellt sich ein Gleichgewicht ein.
+
+| Polung | Wirkung auf die Sperrschicht | Ergebnis |
+| --- | --- | --- |
+| **Durchlassrichtung:** + an p (Anode), − an n (Kathode) | wird abgebaut, sobald $U > \approx 0{,}7\,\mathrm{V}$ | großer Strom |
+| **Sperrrichtung:** + an n, − an p | wird breiter | nur ein winziger **Sperrstrom** (nA … µA) |
+
+**Schaltzeichen:** Das Dreieck zeigt in **Stromrichtung** (technisch) – von der **Anode** zur **Kathode**. Der Strich ist die
+Kathode; auf dem Bauteil ist sie durch einen **Ring** gekennzeichnet.
+
+## 3 · Kennlinie und Ersatzmodelle
+
+<Abbildung bild={Kennlinie} unterschrift="Kennlinie einer Siliziumdiode (blau) und Durchbruch einer Z-Diode (gestrichelt)" />
+
+- **Durchlassbereich:** Unterhalb der **Schleusenspannung** (Si ≈ 0,6 … 0,7 V) fließt fast kein Strom, danach steigt er
+  **exponentiell** stark an. Die Spannung an einer leitenden Si-Diode bleibt deshalb fast konstant bei ≈ 0,7 V.
+- **Sperrbereich:** Es fließt nur der kleine Sperrstrom $I_\mathrm{R}$.
+- **Durchbruchbereich:** Bei großer Sperrspannung steigt der Strom plötzlich stark an. Bei normalen Dioden zerstört das das
+  Bauteil, bei **Z-Dioden** ist es der gewollte Arbeitsbereich.
+
+Typische Durchlassspannungen $U_\mathrm{F}$:
+
+| Diode | $U_\mathrm{F}$ |
+| --- | --- |
+| Germanium | 0,2 … 0,3 V |
+| Schottky | 0,2 … 0,5 V |
+| Silizium | 0,6 … 0,8 V (bei großen Strömen bis über 1 V) |
+| LED | 1,6 V (IR/rot) … 3,5 V (blau/weiß) |
+
+**Temperaturabhängigkeit:** Bei konstantem Strom sinkt $U_\mathrm{F}$ um etwa **2 mV pro Kelvin**. Der Sperrstrom
+verdoppelt sich ungefähr alle 10 K.
+
+### Ersatzmodelle für die Rechnung
+
+| Modell | Durchlassrichtung | wofür? |
+| --- | --- | --- |
+| ideale Diode | Kurzschluss ($U_\mathrm{F} = 0$) | grobe Überlegungen, große Spannungen |
+| **Schwellspannungsmodell** | konstante Spannung $U_\mathrm{F} \approx 0{,}7\,\mathrm{V}$ | **Standard** für Schulrechnungen |
+| mit Bahnwiderstand | $U = U_\mathrm{F0} + r_\mathrm{F} \cdot I$ | große Ströme, genauere Rechnung |
+
+In Sperrrichtung gilt in allen Modellen: $I \approx 0$ (offener Schalter).
+
+## 4 · Datenblattwerte
+
+| Kenngröße | Bedeutung | 1N4148 (Signaldiode) | 1N4007 (Gleichrichter) |
+| --- | --- | --- | --- |
+| $U_\mathrm{RRM}$ | höchste periodische Sperrspannung | 100 V | 1000 V |
+| $I_\mathrm{F(AV)}$ | zulässiger mittlerer Durchlassstrom | ca. 150 … 200 mA | 1 A |
+| $I_\mathrm{FSM}$ | kurzzeitiger Stoßstrom (z. B. Einschalten) | ca. 1 … 2 A | 30 A |
+| $U_\mathrm{F}$ | Durchlassspannung (beim angegebenen Strom) | ≈ 1 V bei 10 mA | ≈ 1,1 V bei 1 A |
+| $t_\mathrm{rr}$ | Sperrverzögerungszeit | ≈ 4 ns (schnell) | einige µs (langsam) |
+
+(Die genauen Werte unterscheiden sich je nach Hersteller – immer im Datenblatt nachsehen.)
+
+:::caution
+Die 1N4148 ist schnell, aber **nicht** für große Ströme. Für einen Netzgleichrichter nimmt man z. B. eine 1N4007,
+für schnelle Schaltwandler eine Schottky- oder „Ultrafast“-Diode.
+:::
+
+## 5 · Gleichrichter
+
+### Einweggleichrichter
+
+<Abbildung bild={Einweg} unterschrift="Einweggleichrichter mit Ladekondensator" />
+
+Die Diode lässt nur die **positiven Halbwellen** durch. Ohne Kondensator entsteht eine pulsierende Gleichspannung mit Lücken.
+Der **Ladekondensator** $C_\mathrm{L}$ lädt sich in den Spitzen auf (fast auf $\hat{u} - U_\mathrm{F}$) und liefert dazwischen den
+Laststrom. Dabei sinkt seine Spannung etwas – es entsteht die **Brummspannung** $\Delta U$.
+
+### Brückengleichrichter (Graetz-Schaltung)
+
+<Abbildung bild={Bruecke} unterschrift="Brückengleichrichter: Bei jeder Halbwelle leiten zwei diagonal liegende Dioden" />
+
+- Ist der linke Anschluss der Wechselspannung positiv, leiten D1 und D4; in der anderen Halbwelle leiten D2 und D3.
+  Der Strom fließt durch die Last **immer in dieselbe Richtung**.
+- Beide Halbwellen werden genutzt → der Kondensator wird **zweimal pro Periode** nachgeladen (100 Hz bei 50-Hz-Netz).
+- Es liegen immer **zwei** Dioden im Strompfad → Verlust $2\,U_\mathrm{F}$ (≈ 1,4 V).
+
+### Formeln (Näherung)
+
+| Größe | Einweg | Brücke |
+| --- | --- | --- |
+| Spitzenwert der Ausgangsspannung | $\hat{u}_\mathrm{a} \approx \sqrt{2}\,U_\sim - U_\mathrm{F}$ | $\hat{u}_\mathrm{a} \approx \sqrt{2}\,U_\sim - 2\,U_\mathrm{F}$ |
+| Brummspannung (Spitze–Spitze) | $\Delta U \approx \dfrac{I_\mathrm{L}}{f \cdot C_\mathrm{L}}$ | $\Delta U \approx \dfrac{I_\mathrm{L}}{2 f \cdot C_\mathrm{L}}$ |
+| Mittelwert der Ausgangsspannung | $\bar{U}_\mathrm{a} \approx \hat{u}_\mathrm{a} - \dfrac{\Delta U}{2}$ | ebenso |
+| Sperrspannung je Diode | $\approx 2\,\hat{u}$ (mit Ladekondensator) | $\approx \hat{u}$ |
+
+Die Brummspannungs-Formel nimmt an, dass sich der Kondensator die ganze Periode (bzw. Halbperiode) lang mit dem konstanten
+Laststrom entlädt – das liegt auf der sicheren Seite.
+
+:::caution[Achtung beim Ladekondensator]
+Großer Kondensator → kleiner Brumm, aber **sehr hohe Stromspitzen** beim Nachladen (nur kurz in den Spannungsspitzen) und
+ein großer Einschaltstrom. Dioden und Trafo müssen das aushalten. Ein Netzgerät mit Gleichrichter und Elko hat deshalb
+einen schlechten Leistungsfaktor (siehe [Leistung bei Wechselstrom](/grundlagen/wechselstromleistung/praxisbeispiele/)).
+:::
+
+### Spannungsvervielfacher
+
+Mit Dioden und Kondensatoren kann man aus einer Wechselspannung eine **höhere** Gleichspannung erzeugen, z. B. mit der
+**Delon-Schaltung** (Spannungsverdoppler): Ein Kondensator wird in der positiven, der andere in der negativen Halbwelle geladen;
+beide liegen in Reihe → $U_\mathrm{a} \approx 2\,\hat{u} - 2\,U_\mathrm{F}$. Mit der **Villard-** bzw. **Greinacher-Kaskade**
+lassen sich mehrere Stufen hintereinanderschalten (Hochspannung für Röhren, Elektrozaun, Ionisatoren).
+Nachteil: Die Spannung bricht unter Last stark ein – nur für kleine Ströme geeignet.
+
+## 6 · Z-Diode
+
+Z-Dioden (Zener-Dioden) sind so gebaut, dass sie in **Sperrrichtung** bei einer genau festgelegten Spannung $U_\mathrm{Z}$
+durchbrechen – ohne Schaden, solange die Verlustleistung $P_\mathrm{Z} = U_\mathrm{Z} \cdot I_\mathrm{Z}$ nicht überschritten wird.
+Im Durchbruch ist die Kennlinie sehr steil: Der Strom kann sich stark ändern, die Spannung bleibt fast gleich.
+
+### Stabilisierung mit Vorwiderstand
+
+<Abbildung bild={ZStab} unterschrift="Spannungsstabilisierung mit Z-Diode" />
+
+Der Vorwiderstand $R_\mathrm{V}$ nimmt die Differenz zwischen Eingangs- und Z-Spannung auf. Der Strom durch $R_\mathrm{V}$
+teilt sich auf Z-Diode und Last auf:
+
+$$
+I_\mathrm{ges} = \frac{U_\mathrm{e} - U_\mathrm{Z}}{R_\mathrm{V}} = I_\mathrm{Z} + I_\mathrm{L}
+$$
+
+**Dimensionierung:** Auch im ungünstigsten Fall (kleinste Eingangsspannung, größter Laststrom) muss noch ein Mindest-Z-Strom
+$I_\mathrm{Z,min}$ fließen (typ. einige mA), sonst verlässt die Diode den Durchbruch:
+
+$$
+R_\mathrm{V,max} = \frac{U_\mathrm{e,min} - U_\mathrm{Z}}{I_\mathrm{L,max} + I_\mathrm{Z,min}}
+$$
+
+**Kontrolle:** Im anderen Extremfall (größte Eingangsspannung, **keine Last**) fließt der ganze Strom durch die Z-Diode –
+ihre Verlustleistung darf nicht überschritten werden:
+
+$$
+P_\mathrm{Z,max} = U_\mathrm{Z} \cdot \frac{U_\mathrm{e,max} - U_\mathrm{Z}}{R_\mathrm{V}}
+$$
+
+**Grenzen:** Der Wirkungsgrad ist schlecht (der Strom fließt dauernd, auch ohne Last), und für größere Ströme wird die
+Z-Diode zu stark belastet. Dann verwendet man einen [Längsregler mit Transistor](/transistoren/theorie/#spannungsstabilisierung-längsregler)
+oder einen Spannungsregler-IC (z. B. 78xx). Z-Dioden dienen außerdem als **Spannungsreferenz** und als **Überspannungsschutz**.
+
+## 7 · Spezialdioden
+
+### Leuchtdiode (LED)
+
+In der LED geben Elektronen beim Rekombinieren ihre Energie als **Licht** ab. Die Farbe hängt vom Halbleitermaterial ab –
+und damit auch die Durchlassspannung (blaues Licht ist energiereicher als rotes). Weiße LEDs sind meist blaue LEDs mit
+Leuchtstoff.
+
+- LEDs werden mit **Strom** betrieben, nicht mit Spannung: Wegen der steilen Kennlinie braucht jede LED einen
+  **Vorwiderstand** oder eine Konstantstromquelle.
+- $R_\mathrm{V} = \dfrac{U_\mathrm{B} - n \cdot U_\mathrm{F}}{I_\mathrm{F}}$ (bei $n$ LEDs in Reihe) – Normwert **aufrunden**.
+- Die Sperrspannung von LEDs ist klein (oft nur 5 V)!
+
+### Schottky-Diode
+
+Statt eines pn-Übergangs nutzt sie einen **Metall-Halbleiter-Übergang**. Vorteile: kleine Durchlassspannung (0,2 … 0,5 V)
+→ weniger Verluste, und sie schaltet **sehr schnell** (keine Sperrverzögerung). Nachteile: größerer Sperrstrom (steigt stark
+mit der Temperatur) und meist kleinere Sperrspannung. Einsatz: Schaltnetzteile, Verpolungsschutz, Solarmodule (Bypassdioden).
+
+### Fotodiode und Solarzelle
+
+Licht erzeugt in der Sperrschicht Elektron-Loch-Paare. In **Sperrrichtung** betrieben, ist der Sperrstrom proportional zur
+Beleuchtungsstärke (**Fotodiode** – schnell, z. B. Lichtschranke, Fernbedienungsempfänger, Lichtwellenleiter).
+Ohne äußere Spannung liefert die beleuchtete Diode selbst Strom und Spannung (ca. 0,5 … 0,6 V je Si-Zelle) – das ist die **Solarzelle**.
+
+### Kapazitätsdiode (Varaktor)
+
+Die Sperrschicht wirkt wie ein Kondensator. Je größer die Sperrspannung, desto breiter die Sperrschicht und desto
+**kleiner die Kapazität**. So kann man Schwingkreise elektronisch abstimmen (Radio, VCO).
+
+### Schutzdioden
+
+- **Freilaufdiode** parallel zu Spulen (Relais, Motoren): leitet den Spulenstrom beim Abschalten weiter und begrenzt die
+  Induktionsspannung (siehe [Induktion](/grundlagen/induktion/praxisbeispiele/)).
+- **TVS-Diode** (Suppressordiode): sehr schnell, schluckt kurze Überspannungsimpulse (ESD, Schaltspitzen).
+- **Verpolungsschutz:** Eine Diode in Reihe verhindert Strom bei falsch gepolter Versorgung (kostet aber $U_\mathrm{F}$).

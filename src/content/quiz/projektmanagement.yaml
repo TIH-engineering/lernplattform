@@ -1,0 +1,175 @@
+titel: Projektmanagement
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Merkmale sind typisch für ein Projekt?
+    optionen:
+      - text: zeitlich begrenzt
+        richtig: true
+      - text: klar definiertes Ziel
+        richtig: true
+      - text: einmalig bzw. neuartig
+        richtig: true
+      - text: läuft regelmäßig nach immer gleichem Ablauf
+    erklaerung: Regelmäßig wiederkehrende Abläufe sind Routineaufgaben. Typisch für Projekte sind außerdem begrenzte Ressourcen, mehrere Beteiligte und Risiken.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche drei Größen bilden das magische Dreieck?
+    optionen:
+      - text: Zeit, Kosten, Leistung/Qualität
+        richtig: true
+      - text: Planung, Durchführung, Abschluss
+      - text: Auftraggeber, Projektleitung, Team
+      - text: Risiko, Problem, Änderung
+    erklaerung: Ändert sich eine der drei Größen, wirkt sich das meist auf mindestens eine andere aus.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welches Projektziel ist SMART formuliert?
+    optionen:
+      - text: Die Baugruppe nimmt bei 24 V höchstens 1,5 W auf und ist bis 30. 4. freigegeben.
+        richtig: true
+      - text: Die Baugruppe soll möglichst wenig Strom brauchen.
+      - text: Die Baugruppe soll robust und günstig sein.
+      - text: Wir versuchen, bald fertig zu werden.
+    erklaerung: Spezifisch, messbar (1,5 W bei 24 V) und terminiert. Adjektive wie „wenig“, „robust“ oder „bald“ sind nicht prüfbar.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was ist ein Stakeholder?
+    optionen:
+      - text: Jede Person oder Gruppe, die das Projekt beeinflusst oder von ihm betroffen ist
+        richtig: true
+      - text: Nur der Geldgeber des Projekts
+      - text: Nur die Mitglieder des Projektteams
+      - text: Ein Werkzeug zur Terminplanung
+    erklaerung: Dazu gehören z. B. Auftraggeber, Kunde, Team, Fertigung, Einkauf, Lieferanten und Nutzer.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welcher Meilenstein ist gut formuliert?
+    optionen:
+      - text: „PCB-Design freigegeben“
+        richtig: true
+      - text: „PCB entwickeln“
+      - text: „Testen“
+      - text: „An der Firmware arbeiten“
+    erklaerung: Ein Meilenstein ist ein überprüfbarer Zustand, keine Tätigkeit mit Dauer.
+
+  - typ: mc
+    stufe: standard
+    frage: Was ist der Unterschied zwischen klassischem und iterativem Vorgehen?
+    optionen:
+      - text: Klassisch werden Phasen nacheinander geplant und abgearbeitet, iterativ werden Zwischenergebnisse wiederholt geprüft und verbessert.
+        richtig: true
+      - text: Klassisch ist nur für Software, iterativ nur für Hardware.
+      - text: Iterativ bedeutet, dass man gar nicht plant.
+      - text: Es gibt keinen Unterschied, nur andere Namen.
+    erklaerung: In der Hardwareentwicklung ist oft ein hybrides Vorgehen üblich – Hardware mit klaren Gates, Firmware iterativ.
+
+  - typ: mc
+    stufe: standard
+    frage: Was zeigt der Projektstrukturplan (PSP)?
+    optionen:
+      - text: Die vollständige Zerlegung des Projekts in Teilaufgaben und Arbeitspakete – noch ohne Termine
+        richtig: true
+      - text: Die Termine aller Arbeitspakete als Balken
+      - text: Die Organisationsform des Unternehmens
+      - text: Die Kosten jedes Bauteils
+    erklaerung: Termine kommen erst danach, z. B. im Gantt-Diagramm.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Arbeitspaket braucht 40 Stunden Aufwand. Die Entwicklerin kann wegen anderer Aufgaben nur 10 Stunden pro Woche daran arbeiten. Wie viele Wochen dauert es mindestens?'
+    loesung: 4
+    einheit: Wochen
+    toleranz: 0
+    toleranzArt: absolut
+    erklaerung: Aufwand ist nicht Dauer – 40 h / 10 h pro Woche = 4 Wochen Kalenderdauer.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Abhängigkeiten: A (2 Wo) → B (3 Wo) → D (2 Wo); A → C (1 Wo) → D. Wie lange dauert das Projekt mindestens (in Wochen)?'
+    loesung: 7
+    einheit: Wochen
+    toleranz: 0
+    toleranzArt: absolut
+    erklaerung: 'Kritischer Pfad A → B → D = 2 + 3 + 2 = 7 Wochen. C hat 2 Wochen Puffer (A → C → D = 5 Wochen).'
+
+  - typ: mc
+    stufe: standard
+    frage: Was gilt für Aufgaben auf dem kritischen Pfad?
+    optionen:
+      - text: Sie haben keinen Puffer – jede Verzögerung verschiebt den Endtermin.
+        richtig: true
+      - text: Sie sind besonders schwierig, aber zeitlich unkritisch.
+      - text: Sie können beliebig verschoben werden.
+      - text: Sie haben immer den größten Aufwand.
+    erklaerung: Der kritische Pfad ist die längste Kette abhängiger Vorgänge und bestimmt den frühestmöglichen Endtermin.
+
+  - typ: mc
+    stufe: standard
+    frage: '„Der Lieferant hat bestätigt, dass der Steckverbinder sechs Wochen später kommt.“ Was ist das?'
+    optionen:
+      - text: Ein Problem (Issue)
+        richtig: true
+      - text: Ein Risiko
+      - text: Ein Änderungswunsch
+      - text: Ein Meilenstein
+    erklaerung: Das Ereignis ist bereits eingetreten. „Der Lieferant könnte zu spät liefern“ wäre ein Risiko.
+
+  - typ: mc
+    stufe: standard
+    frage: Wonach bewertet man ein Risiko in der Risikomatrix?
+    optionen:
+      - text: Eintrittswahrscheinlichkeit und Auswirkung
+        richtig: true
+      - text: Kosten und Anzahl der Beteiligten
+      - text: Dauer und Aufwand
+      - text: Wer das Risiko gemeldet hat
+    erklaerung: Hohe Wahrscheinlichkeit × hohe Auswirkung = kritisch → sofort Maßnahme und Verantwortliche festlegen.
+
+  - typ: mc
+    stufe: standard
+    frage: Was unterscheidet Qualitätssicherung von Qualitätsprüfung?
+    optionen:
+      - text: Qualitätssicherung gestaltet Prozesse so, dass Fehler gar nicht entstehen; Qualitätsprüfung stellt fest, ob Anforderungen erfüllt sind.
+        richtig: true
+      - text: Das ist dasselbe.
+      - text: Qualitätssicherung findet nur am Ende statt.
+      - text: Qualitätsprüfung ist Aufgabe des Kunden.
+    erklaerung: Beispiele für Sicherung sind Reviews, Checklisten und Bibliotheksfreigaben; Prüfung sind Messungen und Funktionstests.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: '„Haben wir das richtige Produkt gebaut?“ – welcher Begriff passt?'
+    optionen:
+      - text: Validierung
+        richtig: true
+      - text: Verifikation
+      - text: Eskalation
+      - text: Spezifikation
+    erklaerung: Verifikation fragt „Haben wir das Produkt richtig gebaut?“ (gegen die Spezifikation), Validierung prüft den tatsächlichen Einsatzzweck.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Welche Aussage passt in ein Lastenheft?
+    optionen:
+      - text: Das Gerät muss an einem 24-V-Bordnetz im Bereich 18 … 30 V betrieben werden können.
+        richtig: true
+      - text: Als Eingangsstufe wird ein Weitbereichs-Schaltregler mit Verpolschutzdiode eingesetzt.
+      - text: Der Mikrocontroller wird mit 16 MHz getaktet.
+      - text: Die Firmware wird in C geschrieben.
+    erklaerung: Das Lastenheft beschreibt aus Sicht des Auftraggebers, WAS gebraucht wird. Wie es umgesetzt wird, steht im Pflichtenheft.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Der Kunde wünscht kurz vor Projektende eine zusätzliche Schnittstelle. Was ist richtig?
+    optionen:
+      - text: Auswirkungen auf Zeit, Kosten und Qualität analysieren und den Auftraggeber entscheiden lassen
+        richtig: true
+      - text: Schnell einbauen – der Kunde hat immer recht.
+      - text: Ablehnen, ohne darüber zu sprechen.
+      - text: Das Team entscheidet allein und passt den Termin still an.
+    erklaerung: Änderungen sind nicht schlecht, aber sie brauchen eine Auswirkungsanalyse, eine bewusste Entscheidung und aktualisierte Unterlagen.

@@ -1,0 +1,130 @@
+titel: Filter
+fragen:
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist die Grenzfrequenz eines RC-Tiefpasses mit $R = 10\,\mathrm{k\Omega}$ und $C = 100\,\mathrm{nF}$?'
+    loesung: 159.2
+    einheit: Hz
+    erklaerung: '$f_\mathrm{g} = 1/(2\pi R C) = 1/(2\pi \cdot 10^{4} \cdot 10^{-7})\,\mathrm{Hz} \approx 159\,\mathrm{Hz}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was gilt bei der Grenzfrequenz eines Filters 1. Ordnung?
+    optionen:
+      - text: Der Betrag ist auf 70,7 % (−3 dB) gefallen.
+        richtig: true
+      - text: Der Betrag ist auf 50 % (−6 dB) gefallen.
+      - text: Der Betrag ist null.
+      - text: Der Betrag ist auf 10 % (−20 dB) gefallen.
+    erklaerung: 'Bei $f_\mathrm{g}$ ist $X_\mathrm{C} = R$ → $|H| = 1/\sqrt{2}$, die Phase beträgt ±45°.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie steil fällt der Betragsgang eines Tiefpasses 2. Ordnung weit oberhalb der Grenzfrequenz?
+    optionen:
+      - text: −40 dB pro Dekade
+        richtig: true
+      - text: −20 dB pro Dekade
+      - text: −3 dB pro Dekade
+      - text: −6 dB pro Dekade
+    erklaerung: Jede Ordnung bringt −20 dB/Dekade (−6 dB/Oktave).
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Die Spannung sinkt von $10\,\mathrm{V}$ auf $2\,\mathrm{V}$. Wie groß ist die Dämpfung in dB (mit Vorzeichen)?'
+    loesung: -13.98
+    einheit: dB
+    toleranz: 0.1
+    toleranzArt: absolut
+    erklaerung: '$20 \log_{10}(2/10) = 20 \cdot (-0{,}699) \approx -14\,\mathrm{dB}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum wird bei Spannungen mit 20·log und bei Leistungen mit 10·log gerechnet?
+    optionen:
+      - text: Weil die Leistung proportional zum Quadrat der Spannung ist
+        richtig: true
+      - text: Weil Spannungen immer doppelt so groß wie Leistungen sind
+      - text: Weil das nur eine Vereinbarung ohne Grund ist
+      - text: Weil Leistungen nur positiv sein können
+    erklaerung: '$P \sim U^2$ → $10 \log(U_2^2/U_1^2) = 20 \log(U_2/U_1)$. So ergibt dieselbe Änderung denselben dB-Wert.'
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Güte hat ein Filter 2. Ordnung mit Butterworth-Verhalten?
+    optionen:
+      - text: 'Q ≈ 0,707'
+        richtig: true
+      - text: 'Q = 0,5'
+      - text: 'Q = 1'
+      - text: 'Q = 10'
+    erklaerung: Butterworth bedeutet maximal flachen Durchlassbereich ohne Überhöhung, dabei gilt fg = f0. Q = 0,5 ist kritisch gedämpft.
+
+  - typ: mc
+    stufe: standard
+    frage: Was muss man bei passiven Filtern 2. Ordnung beachten, damit es keine Überhöhung im Frequenzgang gibt?
+    optionen:
+      - text: Die Dämpfung (der Widerstand) muss groß genug sein, sodass Q ≤ 0,707 ist.
+        richtig: true
+      - text: Der Widerstand muss möglichst klein sein.
+      - text: Die Spule muss möglichst groß sein.
+      - text: Man darf nur Elektrolytkondensatoren verwenden.
+    erklaerung: 'Q = (1/R)·√(L/C). Ein zu kleiner Widerstand ergibt eine hohe Güte und damit eine Resonanzspitze. Auch die Belastung durch die nächste Stufe muss berücksichtigt werden.'
+
+  - typ: mc
+    stufe: standard
+    frage: Zwei gleiche RC-Tiefpässe werden ohne Pufferstufe hintereinandergeschaltet. Was passiert?
+    optionen:
+      - text: Die zweite Stufe belastet die erste – die Grenzfrequenz verschiebt sich nach unten.
+        richtig: true
+      - text: Es entsteht ein Hochpass.
+      - text: Die Grenzfrequenz bleibt exakt gleich, nur die Steilheit verdoppelt sich.
+      - text: Es entsteht eine Resonanzüberhöhung.
+    erklaerung: Ohne Entkopplung darf man die Einzelfunktionen nicht einfach multiplizieren. Ein Spannungsfolger dazwischen löst das Problem.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Sallen-Key-Tiefpass mit gleichen Bauteilen soll $f_\mathrm{g} = 1\,\mathrm{kHz}$ haben, $C = 100\,\mathrm{nF}$. Wie groß ist $R$?'
+    loesung: 1592
+    einheit: Ω
+    erklaerung: '$R = 1/(2\pi f_\mathrm{g} C) = 1/(2\pi \cdot 1000 \cdot 10^{-7})\,\Omega \approx 1592\,\Omega$ → Normwert 1,6 kΩ'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Welche Verstärkung $K$ braucht ein Sallen-Key-Filter mit gleichen Bauteilen für Butterworth-Verhalten (3 Nachkommastellen)?'
+    loesung: 1.586
+    einheit: ''
+    toleranz: 0.005
+    toleranzArt: absolut
+    erklaerung: '$Q = 1/(3 - K) = 1/\sqrt{2}$ → $K = 3 - \sqrt{2} \approx 1{,}586$ → $R_\mathrm{f} \approx 0{,}586\,R_\mathrm{g}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Vorteile haben aktive Filter gegenüber passiven?
+    optionen:
+      - text: Keine Spulen nötig
+        richtig: true
+      - text: Stufen sind durch den niederohmigen OPV-Ausgang entkoppelt
+        richtig: true
+      - text: Verstärkung im Durchlassbereich möglich
+        richtig: true
+      - text: Sie brauchen keine Versorgungsspannung
+    erklaerung: Aktive Filter brauchen eine Versorgung, und ihr Aussteuerbereich und ihre Bandbreite sind begrenzt.
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein RLC-Tiefpass hat $L = 10\,\mathrm{mH}$ und $C = 1\,\mu\mathrm{F}$. Welcher Widerstand ergibt Butterworth-Verhalten?'
+    loesung: 141.4
+    einheit: Ω
+    erklaerung: '$R = \dfrac{1}{Q}\sqrt{\dfrac{L}{C}} = \dfrac{100\,\Omega}{0{,}707} \approx 141\,\Omega$'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: 'Ein Bandpass besteht aus Hochpass (fg = 50 Hz), Tiefpass (fg = 5 kHz) und einem Verstärker mit 20 dB. Wie groß ist der Pegel im Durchlassbereich?'
+    optionen:
+      - text: Etwa +20 dB
+        richtig: true
+      - text: Etwa 0 dB
+      - text: Etwa −3 dB
+      - text: Etwa +40 dB
+    erklaerung: Im Durchlassbereich dämpfen die Filter praktisch nicht, es wirkt nur die Verstärkung (+20 dB = Faktor 10).

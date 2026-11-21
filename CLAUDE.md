@@ -65,10 +65,23 @@ und eine Platzhalterseite.
 Schema: **Angabe** (sichtbar) → **Gegeben / Gesucht** → **Lösung** Schritt für Schritt
 in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeits-Badge im Titel.
 
+### Gliederung der Seitenleiste (Stand 21.11.2026)
+
+- **Grundlagen der Elektrotechnik** – Schulbuchthemen ohne eigene Theorie (siehe unten).
+- **Elektronik** – kein Lehrbuch, daher mit ausführlicher Theorieseite: Dioden, Transistoren, Operationsverstärker,
+  Filter, Oszillatoren, Thermische Auslegung.
+- **Energietechnik** – Drehstrom, Leistungselektronik (Theorie in Unterordner `theorie/`).
+- **Projektmanagement** – Sonderaufbau: Übersicht, Theorie, **Fallbeispiele**, **Diplomarbeit planen**, Quiz
+  (keine Rechenbeispiele; eigener Eintrag in `astro.config.mjs`).
+- **Weitere Themen** (in Arbeit): Sensoren, Aktuatoren, Messtechnik, Regelungstechnik.
+- Grenzfall Grundlagen/Elektronik: Was im Schulbuch GET1/GET2 steht → Grundlagen; Bauteile, Schaltungen und
+  Auslegung (Halbleiter, OPV, aktive Filter, Oszillatoren, Wärme) → Elektronik. Wechselstrom-Praxisaufgaben aus
+  `Quellen/HWE/Wechselstromtechnik` stehen bei den passenden Grundlagen-Themen.
+- Testfragen und Fragenkataloge aus `Quellen/HWE/Aufbaulehrgang` sind die Orientierung für Umfang und Niveau der Theorie.
+
 ### Grundlagen der Elektrotechnik (1./2. Jahrgang)
 
-- Schulbücher: **Grundlagen der Elektrotechnik 1 und 2** (GET1, GET2), H. Deimel u. a. (digital über digi4school).
-  Zweiter Autor: Schreibweise noch vom Lehrer zu bestätigen – bis dahin „H. Deimel u. a.“ schreiben.
+- Schulbücher: **Grundlagen der Elektrotechnik 1 und 2** (GET1, GET2), Hans Deimel und Andreas Hasenzagl (digital über digi4school).
   Zusätzlich Übungsbuch **Lindner, Elektro-Aufgaben Bd. 1/2** (nur Aufgabennummern nennen).
 - **Keine eigene Theorie** – pro Thema: Übersicht (Schulbuchkapitel, testrelevante Beispiel-/Aufgabennummern,
   „Das solltest du können“, kurze Formeltabelle), **Rechenbeispiele**, **Praxisbeispiele**, **Quiz**.
@@ -116,6 +129,8 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
 | Deutsche Suchtexte | `src/content/i18n/de.json` |
 
 - YAML-Quiz: Zahlen in `loesung` mit **Punkt** schreiben; Texte mit Formeln in `'…'` oder als `>-`-Block.
+- In Markdown-Tabellen nie `|` in Formeln verwenden (bricht die Tabelle) → `\vert` bzw. `\lvert … \rvert`.
+- Prüfskript nach dem Bauen: `node werkzeuge/pruefen.mjs` (KaTeX-Fehler, Links/Anker, Verteilung der Quiz-Antworten).
 - Rechenergebnisse nachrechnen; LTspice-Netzlisten vor der Veröffentlichung simulieren
   (LTspice: `C:\Tools\LTspice_24_HTL_250909\LTspice.exe -b datei.cir`).
 - Nach Änderungen an `src/content.config.ts` den Entwicklungsserver neu starten.

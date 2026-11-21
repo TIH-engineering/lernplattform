@@ -1,0 +1,347 @@
+---
+title: Rechenbeispiele – Oszillatoren
+description: Rechenbeispiele zu Barkhausen-Kriterium, RC-Phasenschieber, Wien-Brücke, Relaxationsoszillator, Lastkapazität eines Quarzes, Frequenzabweichung in ppm und Auslegung eines Pierce-Oszillators.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import Phasenschieber from '../../../assets/elektronik/rc-phasenschieber.svg';
+import Wien from '../../../assets/elektronik/wien-oszillator.svg';
+import Relax from '../../../assets/elektronik/relaxationsoszillator.svg';
+
+## Schleifenverstärkung prüfen
+
+<Stufe wert="grundlagen" />
+
+Ein RC-Netzwerk dämpft bei der Oszillatorfrequenz auf $\beta = 1/29$. Der Verstärker hat $\lvert A \rvert = 25$.
+
+1. Wie groß ist die Schleifenverstärkung? Schwingt die Schaltung?
+2. Welche Verstärkung ist mindestens nötig?
+
+<Loesung>
+
+**Gegeben:** $\beta = 1/29$, $\lvert A \rvert = 25$ · **Gesucht:** $\lvert A\beta \rvert$, $A_\mathrm{min}$
+
+1. $\lvert A\beta \rvert = 25/29 \approx 0{,}86 < 1$ → eine Schwingung **klingt ab**, jeder Umlauf verliert 14 %. Die Schaltung schwingt nicht an.
+2. $\lvert A\beta \rvert = 1$ → $A_\mathrm{min} = 1/\beta = 29$. Zum sicheren Anschwingen wählt man etwas mehr, z. B. 30 … 35.
+
+</Loesung>
+
+## RC-Phasenschieber: Frequenz und Verstärkung
+
+<Stufe wert="grundlagen" />
+
+<Abbildung bild={Phasenschieber} unterschrift="RC-Phasenschieber-Oszillator" />
+
+Ein RC-Phasenschieber-Oszillator hat $R = 4{,}7\,\mathrm{k\Omega}$ und $C = 10\,\mathrm{nF}$ (alle drei Stufen gleich).
+Berechne die Schwingfrequenz und den Mindestwert von $R_\mathrm{f}$. Wähle einen E12-Wert.
+
+<Loesung>
+
+**Gegeben:** $R = 4{,}7\,\mathrm{k\Omega}$, $C = 10\,\mathrm{nF}$ · **Gesucht:** $f_0$, $R_\mathrm{f}$
+
+$$
+f_0 = \frac{1}{2\pi \sqrt{6}\, R C} = \frac{1}{2\pi \cdot \sqrt{6} \cdot 4{,}7 \cdot 10^{3}\,\Omega \cdot 10 \cdot 10^{-9}\,\mathrm{F}} \approx 1{,}38\,\mathrm{kHz}
+$$
+
+$$
+\lvert A \rvert = \frac{R_\mathrm{f}}{R} \geq 29
+\;\Rightarrow\;
+R_\mathrm{f} \geq 29 \cdot 4{,}7\,\mathrm{k\Omega} = 136{,}3\,\mathrm{k\Omega}
+\;\rightarrow\; 150\,\mathrm{k\Omega}\;(A \approx 32)
+$$
+
+</Loesung>
+
+## RC-Phasenschieber auslegen
+
+<Stufe wert="standard" />
+
+Ein RC-Phasenschieber-Oszillator soll mit etwa $1\,\mathrm{kHz}$ schwingen. Es werden Kondensatoren mit $C = 10\,\mathrm{nF}$ verwendet.
+
+1. Berechne $R$ und wähle einen E12-Wert.
+2. Mit welcher Frequenz schwingt die Schaltung dann?
+3. Dimensioniere $R_\mathrm{f}$.
+
+<Loesung>
+
+**Gegeben:** $f_0 = 1\,\mathrm{kHz}$, $C = 10\,\mathrm{nF}$ · **Gesucht:** $R$, $f_0$ mit Normwert, $R_\mathrm{f}$
+
+1. $R = \dfrac{1}{2\pi \sqrt{6}\, f_0 C} = \dfrac{1}{2\pi \cdot \sqrt{6} \cdot 1000\,\mathrm{Hz} \cdot 10\,\mathrm{nF}} \approx 6{,}50\,\mathrm{k\Omega}$ → E12: $6{,}8\,\mathrm{k\Omega}$
+2. $f_0 = \dfrac{1}{2\pi \sqrt{6} \cdot 6{,}8\,\mathrm{k\Omega} \cdot 10\,\mathrm{nF}} \approx 956\,\mathrm{Hz}$ (größeres $R$ → kleinere Frequenz)
+3. $R_\mathrm{f} \geq 29 \cdot 6{,}8\,\mathrm{k\Omega} = 197\,\mathrm{k\Omega}$ → $220\,\mathrm{k\Omega}$
+
+</Loesung>
+
+## Wien-Brücke: Frequenz und Verstärkung
+
+<Stufe wert="grundlagen" />
+
+<Abbildung bild={Wien} unterschrift="Wien-Brücken-Oszillator" />
+
+Ein Wien-Brücken-Oszillator hat $R = 22\,\mathrm{k\Omega}$ und $C = 4{,}7\,\mathrm{nF}$. Für die Verstärkung steht $R_1 = 33\,\mathrm{k\Omega}$ zur Verfügung.
+Berechne die Oszillatorfrequenz und $R_2$.
+
+<Loesung>
+
+**Gegeben:** $R = 22\,\mathrm{k\Omega}$, $C = 4{,}7\,\mathrm{nF}$, $R_1 = 33\,\mathrm{k\Omega}$ · **Gesucht:** $f_0$, $R_2$
+
+$$
+f_0 = \frac{1}{2\pi R C} = \frac{1}{2\pi \cdot 22 \cdot 10^{3}\,\Omega \cdot 4{,}7 \cdot 10^{-9}\,\mathrm{F}} \approx 1{,}54\,\mathrm{kHz}
+$$
+
+$$
+A = 1 + \frac{R_1}{R_2} = 3
+\;\Rightarrow\;
+R_2 = \frac{R_1}{2} = 16{,}5\,\mathrm{k\Omega}
+$$
+
+Mit einem Normwert in der Nähe (16 kΩ) wird $A = 3{,}06$ – die Schaltung schwingt sicher an, braucht aber eine Amplitudenbegrenzung.
+
+</Loesung>
+
+## Wien-Brücke für den Kammerton
+
+<Stufe wert="standard" />
+
+Ein Stimmgerät soll den Kammerton $a' = 440\,\mathrm{Hz}$ als Sinus erzeugen. Es werden Folienkondensatoren mit $C = 22\,\mathrm{nF}$ verwendet.
+
+1. Berechne $R$ und wähle einen Wert aus der E24-Reihe.
+2. Wie groß ist die Frequenz dann, und wie viel Prozent weicht sie ab?
+3. Wie könnte man die Frequenz genau einstellen?
+
+<Loesung>
+
+**Gegeben:** $f_0 = 440\,\mathrm{Hz}$, $C = 22\,\mathrm{nF}$ · **Gesucht:** $R$, $f_0$ mit Normwert, Abweichung
+
+1. $R = \dfrac{1}{2\pi f_0 C} = \dfrac{1}{2\pi \cdot 440\,\mathrm{Hz} \cdot 22\,\mathrm{nF}} \approx 16{,}4\,\mathrm{k\Omega}$ → E24: $16\,\mathrm{k\Omega}$
+2. $f_0 = \dfrac{1}{2\pi \cdot 16\,\mathrm{k\Omega} \cdot 22\,\mathrm{nF}} \approx 452\,\mathrm{Hz}$ → $\dfrac{452 - 440}{440} \approx +2{,}8\,\%$ – für ein Stimmgerät viel zu ungenau
+   (ein halber Ton sind 6 %).
+3. Beide $R$ als Reihenschaltung aus Festwiderstand (15 kΩ) und **Doppel-Trimmpotentiometer** (2 × 2,2 kΩ) aufbauen und abgleichen.
+   Auch die Toleranz der Kondensatoren (z. B. ±5 %) geht direkt in die Frequenz ein.
+
+</Loesung>
+
+## Wien-Brücke mit falscher Verstärkung
+
+<Stufe wert="standard" />
+
+In einem Wien-Brücken-Oszillator mit $R_2 = 10\,\mathrm{k\Omega}$ wird für $R_1$ versehentlich (a) $22\,\mathrm{k\Omega}$ und (b) $18\,\mathrm{k\Omega}$
+bestückt. Was zeigt das Oszilloskop jeweils?
+
+<Loesung>
+
+(a) $A = 1 + 22/10 = 3{,}2$ → $\lvert A\beta \rvert = 3{,}2/3 \approx 1{,}07 > 1$. Die Amplitude wächst, bis der OPV an die Versorgung stößt –
+der Sinus hat **abgeflachte Spitzen** (Clipping).
+
+(b) $A = 1 + 18/10 = 2{,}8$ → $\lvert A\beta \rvert \approx 0{,}93 < 1$. Die Schaltung **schwingt nicht** (oder ein kurzes Einschwingen klingt ab) –
+am Ausgang ist nur eine Gleichspannung nahe 0 V zu sehen.
+
+Abhilfe: $R_1$ etwas größer als $2 R_2$ wählen und eine Amplitudenregelung (Dioden, Glühlampe, JFET) einbauen.
+
+</Loesung>
+
+## Relaxationsoszillator: Frequenz
+
+<Stufe wert="grundlagen" />
+
+<Abbildung bild={Relax} unterschrift="Relaxationsoszillator mit OPV" />
+
+Ein Relaxationsoszillator hat $R_1 = 22\,\mathrm{k\Omega}$, $C = 47\,\mathrm{nF}$ und $R_2 = R_3$. Berechne Frequenz und Periodendauer.
+
+<Loesung>
+
+**Gegeben:** $R_1 = 22\,\mathrm{k\Omega}$, $C = 47\,\mathrm{nF}$, $k = 0{,}5$ · **Gesucht:** $f$, $T$
+
+$$
+T = 2 R_1 C \ln 3 = 2 \cdot 22 \cdot 10^{3}\,\Omega \cdot 47 \cdot 10^{-9}\,\mathrm{F} \cdot 1{,}099 \approx 2{,}27\,\mathrm{ms}
+\qquad
+f = \frac{1}{T} \approx 440\,\mathrm{Hz}
+$$
+
+</Loesung>
+
+## Relaxationsoszillator auslegen
+
+<Stufe wert="standard" />
+
+Ein Taktgenerator soll ein Rechteck mit etwa $1\,\mathrm{kHz}$ liefern. Gewählt werden $C = 10\,\mathrm{nF}$ und $R_2 = R_3 = 10\,\mathrm{k\Omega}$.
+Berechne $R_1$, wähle einen E12-Wert und gib die tatsächliche Frequenz an.
+
+<Loesung>
+
+**Gegeben:** $f = 1\,\mathrm{kHz}$, $C = 10\,\mathrm{nF}$, $k = 0{,}5$ · **Gesucht:** $R_1$, $f$
+
+$$
+R_1 = \frac{1}{2 f C \ln 3} = \frac{1}{2 \cdot 1000\,\mathrm{Hz} \cdot 10\,\mathrm{nF} \cdot 1{,}099} \approx 45{,}5\,\mathrm{k\Omega} \;\rightarrow\; 47\,\mathrm{k\Omega}
+$$
+
+$$
+f = \frac{1}{2 \cdot 47\,\mathrm{k\Omega} \cdot 10\,\mathrm{nF} \cdot \ln 3} \approx 968\,\mathrm{Hz}
+$$
+
+</Loesung>
+
+## Relaxationsoszillator mit anderer Hysterese
+
+<Stufe wert="vertiefung" />
+
+Im Oszillator von oben ($R_1 = 47\,\mathrm{k\Omega}$, $C = 10\,\mathrm{nF}$) wird $R_3$ auf $22\,\mathrm{k\Omega}$ geändert ($R_2 = 10\,\mathrm{k\Omega}$).
+Der OPV sättigt bei $\pm 12\,\mathrm{V}$.
+
+1. Berechne $k$ und die Schaltschwellen.
+2. Berechne die neue Frequenz. Warum wird sie kleiner?
+
+<Loesung>
+
+1. $k = \dfrac{R_3}{R_2 + R_3} = \dfrac{22}{32} = 0{,}6875$ → Schaltschwellen $\pm k U_\mathrm{sat} = \pm 8{,}25\,\mathrm{V}$
+2. $f = \dfrac{1}{2 R_1 C \ln\dfrac{1 + k}{1 - k}} = \dfrac{1}{2 \cdot 47\,\mathrm{k\Omega} \cdot 10\,\mathrm{nF} \cdot \ln 5{,}4} \approx 631\,\mathrm{Hz}$
+
+Der Kondensator muss jetzt zwischen ±8,25 V statt ±6 V umladen – ein größerer Spannungshub, und dazu im flacheren Teil der
+e-Funktion. Das dauert länger. Am Kondensator ist die Kurve nun deutlich „gebogener“ (weniger dreieckförmig).
+
+</Loesung>
+
+## Timer 555 als Taktgeber
+
+<Stufe wert="standard" />
+
+Ein 555 arbeitet als astabile Kippstufe mit $R_\mathrm{A} = 1\,\mathrm{k\Omega}$, $R_\mathrm{B} = 10\,\mathrm{k\Omega}$ und $C = 100\,\mathrm{nF}$.
+Berechne High-Zeit, Low-Zeit, Frequenz und Tastverhältnis.
+
+<Loesung>
+
+$$
+t_\mathrm{H} = 0{,}693 \cdot (1 + 10)\,\mathrm{k\Omega} \cdot 100\,\mathrm{nF} \approx 0{,}762\,\mathrm{ms}
+\qquad
+t_\mathrm{L} = 0{,}693 \cdot 10\,\mathrm{k\Omega} \cdot 100\,\mathrm{nF} \approx 0{,}693\,\mathrm{ms}
+$$
+
+$$
+f = \frac{1}{t_\mathrm{H} + t_\mathrm{L}} = \frac{1}{1{,}455\,\mathrm{ms}} \approx 687\,\mathrm{Hz}
+\qquad
+D = \frac{t_\mathrm{H}}{T} \approx 52\,\%
+$$
+
+Weil $R_\mathrm{B} \gg R_\mathrm{A}$ ist, liegt das Tastverhältnis nahe bei 50 %.
+
+</Loesung>
+
+## Lastkapazität eines Quarzes
+
+<Stufe wert="grundlagen" />
+
+An einem Quarz sind $C_1 = C_2 = 15\,\mathrm{pF}$ angeschlossen, die parasitäre Kapazität wird auf $C_\mathrm{stray} = 4\,\mathrm{pF}$ geschätzt.
+Welche Lastkapazität sieht der Quarz?
+
+<Loesung>
+
+$$
+C_\mathrm{L} = \frac{C_1 C_2}{C_1 + C_2} + C_\mathrm{stray} = \frac{15 \cdot 15}{30}\,\mathrm{pF} + 4\,\mathrm{pF} = 7{,}5\,\mathrm{pF} + 4\,\mathrm{pF} = 11{,}5\,\mathrm{pF}
+$$
+
+Zwei gleiche Kondensatoren in Reihe ergeben die halbe Kapazität.
+
+</Loesung>
+
+## Lastkondensatoren dimensionieren
+
+<Stufe wert="standard" />
+
+Ein Quarz ist für $C_\mathrm{L} = 12{,}5\,\mathrm{pF}$ spezifiziert. Die parasitäre Kapazität wird mit $C_\mathrm{stray} = 3\,\mathrm{pF}$ angenommen.
+
+1. Berechne gleiche Lastkondensatoren $C_1 = C_2 = C$.
+2. Welche Lastkapazität ergibt sich mit dem E12-Wert 18 pF bzw. dem E24-Wert 20 pF?
+3. In welche Richtung verschiebt sich jeweils die Frequenz?
+
+<Loesung>
+
+1. $C = 2\,(C_\mathrm{L} - C_\mathrm{stray}) = 2 \cdot (12{,}5 - 3)\,\mathrm{pF} = 19\,\mathrm{pF}$
+2. 18 pF: $C_\mathrm{L} = 9 + 3 = 12\,\mathrm{pF}$ · 20 pF: $C_\mathrm{L} = 10 + 3 = 13\,\mathrm{pF}$
+3. 12 pF ist **kleiner** als gefordert → Frequenz etwas **zu hoch**. 13 pF ist **größer** → Frequenz etwas **zu niedrig**.
+   Die Abweichung beträgt nur wenige ppm; wichtiger ist, $C_\mathrm{stray}$ am Prototyp zu überprüfen.
+
+</Loesung>
+
+## Ungleiche Lastkondensatoren
+
+<Stufe wert="vertiefung" />
+
+Ein Uhrenquarz braucht $C_\mathrm{L} = 9\,\mathrm{pF}$, $C_\mathrm{stray} = 3\,\mathrm{pF}$. Ein Kondensator ist mit $C_1 = 10\,\mathrm{pF}$ schon festgelegt.
+Berechne $C_2$.
+
+<Loesung>
+
+Der Serienanteil muss $C_\mathrm{S} = C_\mathrm{L} - C_\mathrm{stray} = 6\,\mathrm{pF}$ betragen:
+
+$$
+6 = \frac{10 \cdot C_2}{10 + C_2}
+\;\Rightarrow\;
+60 + 6\,C_2 = 10\,C_2
+\;\Rightarrow\;
+C_2 = 15\,\mathrm{pF}
+$$
+
+</Loesung>
+
+## Frequenzabweichung in ppm
+
+<Stufe wert="grundlagen" />
+
+Ein 16-MHz-Quarzoszillator wird mit $16\,000\,480\,\mathrm{Hz}$ gemessen. Berechne die Abweichung in Hz und ppm. Ist er zu schnell
+oder zu langsam? Was kannst du tun?
+
+<Loesung>
+
+$$
+\Delta f = 16\,000\,480\,\mathrm{Hz} - 16\,000\,000\,\mathrm{Hz} = +480\,\mathrm{Hz}
+\qquad
+\Delta f_\mathrm{ppm} = \frac{480}{16 \cdot 10^{6}} \cdot 10^{6} = +30\,\mathrm{ppm}
+$$
+
+Der Oszillator ist **zu schnell**. Größere Lastkondensatoren erhöhen $C_\mathrm{L}$ und ziehen die Frequenz nach unten. Liegt die
+Abweichung innerhalb der Quarztoleranz, kann man auch in der Software kalibrieren.
+
+</Loesung>
+
+## Gangabweichung einer Echtzeituhr
+
+<Stufe wert="standard" />
+
+Der 32,768-kHz-Quarz einer RTC schwingt um $-25\,\mathrm{ppm}$ zu langsam.
+
+1. Mit welcher Frequenz schwingt er?
+2. Wie viele Sekunden geht die Uhr pro Tag und pro Jahr nach?
+
+<Loesung>
+
+1. $f = 32\,768\,\mathrm{Hz} \cdot (1 - 25 \cdot 10^{-6}) \approx 32\,767{,}18\,\mathrm{Hz}$
+2. Pro Tag: $25 \cdot 10^{-6} \cdot 86\,400\,\mathrm{s} = 2{,}16\,\mathrm{s}$ · pro Jahr: $2{,}16\,\mathrm{s} \cdot 365 \approx 788\,\mathrm{s} \approx 13\,\mathrm{min}$
+
+Deshalb haben Funkuhren, Smartphones und PCs eine automatische Zeitsynchronisation (DCF77, GPS, NTP).
+
+</Loesung>
+
+## Pierce-Oszillator am Mikrocontroller prüfen
+
+<Stufe wert="vertiefung" />
+
+Ein Mikrocontroller soll mit einem 16-MHz-Quarz laufen. Quarzdatenblatt: $C_\mathrm{L} = 12\,\mathrm{pF}$, $C_0 = 5\,\mathrm{pF}$,
+$\mathrm{ESR} = 60\,\Omega$, max. Drive Level $100\,\mathrm{\mu W}$. Das µC-Datenblatt fordert $g_\mathrm{m,crit} < 1\,\mathrm{mA/V}$.
+Die parasitäre Kapazität wird mit $C_\mathrm{stray} = 5\,\mathrm{pF}$ geschätzt.
+
+1. Dimensioniere $C_1 = C_2$ (E12).
+2. Prüfe die Anschwingbedingung.
+3. Am Quarz werden $U_\mathrm{pp} = 0{,}8\,\mathrm{V}$ gemessen (Tastkopf 1 pF). Ist ein Vorwiderstand $R_\mathrm{D}$ nötig?
+
+<Loesung>
+
+1. $C = 2\,(C_\mathrm{L} - C_\mathrm{stray}) = 2 \cdot (12 - 5)\,\mathrm{pF} = 14\,\mathrm{pF}$ → E12: $15\,\mathrm{pF}$
+2. $g_\mathrm{m,crit} = 4 \cdot \mathrm{ESR} \cdot (2\pi f)^2 \cdot (C_0 + C_\mathrm{L})^2 = 4 \cdot 60\,\Omega \cdot (2\pi \cdot 16\,\mathrm{MHz})^2 \cdot (17\,\mathrm{pF})^2 \approx 0{,}70\,\mathrm{mA/V}$
+   → kleiner als 1 mA/V, die Schaltung schwingt sicher an (aber mit wenig Reserve – ein Quarz mit kleinerem ESR oder $C_\mathrm{L}$ wäre besser).
+3. $C_\mathrm{tot} = 15 + 2{,}5 + 1 = 18{,}5\,\mathrm{pF}$ →
+   $DL = \dfrac{60\,\Omega}{2} \cdot (\pi \cdot 16\,\mathrm{MHz} \cdot 0{,}8\,\mathrm{V} \cdot 18{,}5\,\mathrm{pF})^2 \approx 17\,\mathrm{\mu W}$
+   → deutlich unter 100 µW, also $R_\mathrm{D} = 0\,\Omega$. Ein $R_\mathrm{D}$ würde die Anschwingreserve nur weiter verkleinern.
+
+</Loesung>

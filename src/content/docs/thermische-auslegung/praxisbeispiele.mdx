@@ -1,0 +1,146 @@
+---
+title: Praxisbeispiele – Thermische Auslegung
+description: Linearregler in vier thermischen Varianten vergleichen, Last und Eingangsspannung für einen Versuch berechnen, Temperatur mit einem Sensor-IC messen, Wärmebildkamera richtig verwenden, thermisches Modell in LTspice und Linearregler oder Schaltregler.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Vier Varianten eines Linearreglers
+
+Auf einer Versuchsplatine sitzt viermal dieselbe Reglerschaltung (einstellbarer Linearregler), aber thermisch unterschiedlich angebunden:
+
+1. SOT-223 **ohne** zusätzliche Kupferfläche
+2. SOT-223 **mit** Kupferfläche (ca. 16 mm × 37 mm auf Ober- und Unterseite)
+3. TO-220 **ohne** Kühlkörper
+4. TO-220 **mit** Strangkühlkörper (ca. 5 K/W)
+
+Reihe die Varianten nach ihrer thermischen Eignung und schätze ab, wie viel Leistung jede bei 25 °C Umgebung und höchstens 125 °C
+Chiptemperatur verträgt. Verwende als Annahme: SOT-223 ohne Kupfer $R_\mathrm{th,ja} \approx 120\,\mathrm{K/W}$, mit Kupfer $\approx 55\,\mathrm{K/W}$,
+TO-220 frei $\approx 50\,\mathrm{K/W}$, TO-220 $R_\mathrm{th,jc} \approx 3\,\mathrm{K/W}$, Paste $0{,}5\,\mathrm{K/W}$.
+
+<Loesung>
+
+Zulässiger Temperaturanstieg: $125 - 25 = 100\,\mathrm{K}$ → $P_\mathrm{max} = 100\,\mathrm{K} / R_\mathrm{th,ges}$
+
+| Variante | $R_\mathrm{th,ges}$ | $P_\mathrm{max}$ |
+| --- | --- | --- |
+| 4 · TO-220 mit Kühlkörper | $3 + 0{,}5 + 5 = 8{,}5\,\mathrm{K/W}$ | ≈ 12 W |
+| 3 · TO-220 frei | ≈ 50 K/W | ≈ 2 W |
+| 2 · SOT-223 mit Kupfer | ≈ 55 K/W | ≈ 1,8 W |
+| 1 · SOT-223 ohne Kupfer | ≈ 120 K/W | ≈ 0,8 W |
+
+Die Werte für SMD und „frei stehend“ sind nur grobe Schätzungen – genau deshalb misst man sie im Labor und passt das Modell an.
+Die Rangfolge zeigt: Ein Kühlkörper bringt am meisten; beim SMD-Gehäuse macht die Kupferfläche den Unterschied zwischen
+„geht gerade noch“ und „wird zu heiß“.
+
+</Loesung>
+
+## Versuch vorbereiten: Last und Eingangsspannung
+
+Der einstellbare Regler ist so bestückt, dass er nur seine Referenzspannung von $U_\mathrm{A} = 1{,}25\,\mathrm{V}$ ausgibt. Er braucht
+mindestens ca. 3 V Spannungsdifferenz. Die Eingangsspannung darf 20 V nicht überschreiten.
+
+1. Variante 2 (SOT-223 mit Kupfer) soll mit etwa $1\,\mathrm{W}$ belastet werden. Wähle eine Eingangsspannung und berechne den Lastwiderstand (E12).
+2. Variante 4 (mit Kühlkörper) soll etwa $5\,\mathrm{W}$ umsetzen. Wähle $U_\mathrm{E}$ und $R_\mathrm{L}$.
+3. Welche Leistung muss der Lastwiderstand jeweils aushalten?
+
+<Loesung>
+
+1. Gewählt $U_\mathrm{E} = 6\,\mathrm{V}$ → $\Delta U = 4{,}75\,\mathrm{V}$ → $I = 1\,\mathrm{W} / 4{,}75\,\mathrm{V} \approx 0{,}21\,\mathrm{A}$ →
+   $R_\mathrm{L} = 1{,}25\,\mathrm{V} / 0{,}21\,\mathrm{A} \approx 5{,}9\,\Omega$ → **5,6 Ω**: $I \approx 0{,}22\,\mathrm{A}$, $P_\mathrm{V} \approx 1{,}06\,\mathrm{W}$.
+2. Gewählt $U_\mathrm{E} = 15\,\mathrm{V}$ → $\Delta U = 13{,}75\,\mathrm{V}$ → $I = 5\,\mathrm{W} / 13{,}75\,\mathrm{V} \approx 0{,}36\,\mathrm{A}$ →
+   $R_\mathrm{L} \approx 3{,}4\,\Omega$ → **3,3 Ω**: $I \approx 0{,}38\,\mathrm{A}$, $P_\mathrm{V} \approx 5{,}2\,\mathrm{W}$.
+3. $P_\mathrm{R} = U_\mathrm{A}^2 / R_\mathrm{L}$: 1. $0{,}28\,\mathrm{W}$ · 2. $0{,}47\,\mathrm{W}$ → Widerstände mit mindestens 1 W verwenden.
+
+Bei so kleiner Ausgangsspannung landet fast die gesamte Leistung im Regler – ideal für einen Wärmeversuch.
+
+</Loesung>
+
+## Temperatur mit einem Sensor-IC messen
+
+Für die Messung werden zwei analoge Temperatursensoren (MCP9700: $U = 500\,\mathrm{mV} + 10\,\mathrm{mV/K} \cdot \vartheta$) verwendet und mit
+einem USB-Oszilloskop/Datenlogger über 15 Minuten aufgezeichnet. Ein Sensor sitzt auf dem Reglergehäuse, einer auf der Kupferfläche.
+
+1. Der Sensor auf dem Gehäuse zeigt $1{,}21\,\mathrm{V}$. Welche Temperatur ist das?
+2. Der Regler setzt 1 W um, $R_\mathrm{th,jc} = 15\,\mathrm{K/W}$ (SOT-223). Wie heiß ist der Chip ungefähr?
+3. Warum steigt die Kurve des Gehäusesensors schneller als die des Sensors auf der Kupferfläche?
+
+<Loesung>
+
+1. $\vartheta = \dfrac{1210\,\mathrm{mV} - 500\,\mathrm{mV}}{10\,\mathrm{mV/K}} = 71\,°\mathrm{C}$
+2. $\vartheta_\mathrm{j} \approx \vartheta_\mathrm{c} + P_\mathrm{V} \cdot R_\mathrm{th,jc} = 71\,°\mathrm{C} + 15\,\mathrm{K} = 86\,°\mathrm{C}$
+   (der Sensor misst an der Oberfläche – die Anschlussfahne kann noch etwas wärmer sein).
+3. Die Wärme entsteht im Chip und muss erst durch das Gehäuse in die Kupferfläche fließen. Die Kupferfläche hat eine größere
+   Wärmekapazität und liegt „weiter hinten“ im thermischen Pfad – im RC-Modell lädt sich ihr Kondensator langsamer.
+
+</Loesung>
+
+## Wärmebildkamera richtig verwenden
+
+Mit der Wärmebildkamera wird der Regler mit Kühlkörper bei 5 W betrachtet. Der schwarz eloxierte Kühlkörper zeigt 62 °C, die blanke
+Metallfahne des Reglers nur 35 °C.
+
+1. Kann das stimmen?
+2. Wie misst du richtig?
+
+<Loesung>
+
+1. Nein – die Fahne ist mit dem Chip verbunden und muss **wärmer** sein als der Kühlkörper. Blanke Metalloberflächen haben einen sehr
+   kleinen **Emissionsgrad**: Sie strahlen wenig ab und spiegeln die Umgebung. Die Kamera zeigt deshalb zu niedrige Werte.
+2. Ein Stück mattes schwarzes Klebeband (oder etwas matter Lack) auf die Messstelle kleben und den Emissionsgrad in der Kamera passend
+   einstellen (≈ 0,95). Zur Kontrolle mit einem Kontaktsensor vergleichen.
+
+</Loesung>
+
+## Thermisches Modell in LTspice
+
+Das dynamische Modell des TO-220-Reglers mit Kühlkörper lässt sich als Netzliste simulieren (1 A ≙ 1 W, 1 V ≙ 1 °C, 1 Ω ≙ 1 K/W, 1 F ≙ 1 J/K):
+
+```
+* Thermisches Modell: TO-220 mit Kuehlkoerper, 2 W, 20 Grad C
+I1 0 j 2
+Rjc j c 3
+Rch c h 0.5
+Rha h a 5.3
+Cj j 0 0.01
+Cc c 0 1
+Ch h 0 27
+Va a 0 20
+.ic V(j)=20 V(c)=20 V(h)=20
+.tran 0 1200 0 0.5 uic
+.end
+```
+
+1. Welche Endtemperatur des Chips erwartest du? Kontrolliere mit der Simulation.
+2. Die Simulation zeigt, dass der Chip schon nach 1 s fast 7 K wärmer ist, der Kühlkörper aber kaum. Erkläre.
+3. Welche Werte stammen aus Datenblättern, welche muss man schätzen?
+
+<Loesung>
+
+1. $\vartheta_\mathrm{j} = 20\,°\mathrm{C} + 2\,\mathrm{W} \cdot (3 + 0{,}5 + 5{,}3)\,\mathrm{K/W} = 37{,}6\,°\mathrm{C}$. Die Simulation erreicht nach 1200 s
+   (≈ 8 Zeitkonstanten des Kühlkörpers) 37,6 °C.
+2. Chip und Gehäuse haben kleine Wärmekapazitäten – sie sind nach Sekunden eingeschwungen. Über $R_\mathrm{th,jc} + R_\mathrm{th,ch}$ entsteht
+   sofort der Temperatursprung $2\,\mathrm{W} \cdot 3{,}5\,\mathrm{K/W} = 7\,\mathrm{K}$. Der große Kühlkörper ($\tau \approx 143\,\mathrm{s}$)
+   erwärmt sich dagegen langsam.
+3. **Datenblatt:** $R_\mathrm{th,jc}$ (Regler), $R_\mathrm{th,ha}$ (Kühlkörper). **Geschätzt:** $R_\mathrm{th,ch}$ (abhängig von Paste und
+   Anpressdruck), alle Wärmekapazitäten (aus Masse × spezifischer Wärmekapazität) und – bei SMD – der Wärmewiderstand der Kupferfläche.
+   Diese Werte passt man nach der Messung an.
+
+</Loesung>
+
+## Linearregler oder Schaltregler?
+
+Ein Sensorknoten braucht 3,3 V bei 400 mA aus einem 24-V-Industrienetz.
+
+1. Wie groß ist die Verlustleistung eines Linearreglers? Welcher Kühlkörper wäre nötig (Umgebung 50 °C, Chip max. 125 °C, $R_\mathrm{th,jc} + R_\mathrm{th,ch} = 4\,\mathrm{K/W}$)?
+2. Ein Schaltregler hat 85 % Wirkungsgrad. Wie groß ist seine Verlustleistung?
+
+<Loesung>
+
+1. $P_\mathrm{V} = (24 - 3{,}3)\,\mathrm{V} \cdot 0{,}4\,\mathrm{A} \approx 8{,}3\,\mathrm{W}$ →
+   $R_\mathrm{th,ha} \leq \dfrac{125 - 50}{8{,}3}\,\mathrm{K/W} - 4\,\mathrm{K/W} \approx 5\,\mathrm{K/W}$ – ein Kühlkörper von der Größe einer Streichholzschachtel,
+   für 1,3 W Nutzleistung!
+2. $P_\mathrm{ab} = 3{,}3\,\mathrm{V} \cdot 0{,}4\,\mathrm{A} = 1{,}32\,\mathrm{W}$ → $P_\mathrm{auf} = 1{,}32\,\mathrm{W} / 0{,}85 \approx 1{,}55\,\mathrm{W}$ →
+   $P_\mathrm{V} \approx 0{,}23\,\mathrm{W}$ – kein Kühlkörper nötig. Siehe [Leistungselektronik](/leistungselektronik/).
+
+</Loesung>

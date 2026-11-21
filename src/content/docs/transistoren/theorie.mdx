@@ -1,0 +1,224 @@
+---
+title: Theorie – Transistoren
+description: "Bipolartransistor: Aufbau, Funktion, Kennlinien, Arbeitsbereiche, Schalterbetrieb, NPN und PNP, Längsregler, Konstantstromquelle; Feldeffekttransistoren: JFET, MOSFET-Typen, Kennwerte, Verluste und Ansteuerung."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import NpnSchalter from '../../../assets/elektronik/npn-schalter.svg';
+import Laengsregler from '../../../assets/elektronik/laengsregler.svg';
+import Stromquelle from '../../../assets/elektronik/stromquelle.svg';
+import MosfetRelais from '../../../assets/elektronik/mosfet-relais.svg';
+
+## 1 · Überblick
+
+| | Bipolartransistor (BJT) | Feldeffekttransistor (FET, z. B. MOSFET) |
+| --- | --- | --- |
+| Anschlüsse | Basis (B), Kollektor (C), Emitter (E) | Gate (G), Drain (D), Source (S) |
+| Steuerung | **Strom** (Basisstrom $I_\mathrm{B}$) | **Spannung** (Gate-Source-Spannung $U_\mathrm{GS}$) |
+| Ladungsträger | Elektronen **und** Löcher (bipolar) | nur eine Sorte (unipolar) |
+| Steuerleistung | dauernd nötig ($I_\mathrm{B}$ fließt immer) | statisch fast null, nur beim Umschalten (Gate-Ladung) |
+| Durchlassverhalten | Restspannung $U_\mathrm{CE,sat} \approx 0{,}1 \ldots 0{,}3\,\mathrm{V}$ | Widerstand $R_\mathrm{DS(on)}$ (mΩ … Ω) |
+| typische Anwendung | kleine Signale, Verstärker, einfache Schalter | Schalter für große Ströme, Digitaltechnik, Schaltwandler |
+
+## 2 · Der Bipolartransistor
+
+### Aufbau
+
+Ein Bipolartransistor besteht aus **drei** abwechselnd dotierten Schichten: **NPN** oder **PNP**. Die mittlere Schicht ist die
+sehr dünne, schwach dotierte **Basis**. Man kann ihn sich als zwei Dioden vorstellen (Basis-Emitter- und Basis-Kollektor-Diode) –
+die eigentliche Transistorwirkung entsteht aber erst durch die dünne Basis.
+
+**Schaltzeichen:** Der Pfeil sitzt am **Emitter** und zeigt die technische Stromrichtung: beim NPN **heraus**
+(„**N**icht **P**feil **N**ach innen“), beim PNP **hinein**.
+
+### Funktion (NPN)
+
+1. Die Basis-Emitter-Diode wird in Durchlassrichtung betrieben: $U_\mathrm{BE} \approx 0{,}6 \ldots 0{,}7\,\mathrm{V}$.
+2. Elektronen strömen vom Emitter in die dünne Basis. Nur wenige rekombinieren dort (kleiner Basisstrom).
+3. Der allergrößte Teil wird vom Feld der gesperrten Basis-Kollektor-Diode zum **Kollektor** gezogen.
+
+Ergebnis: Ein kleiner Basisstrom steuert einen großen Kollektorstrom:
+
+$$
+I_\mathrm{C} = B \cdot I_\mathrm{B}
+\qquad
+I_\mathrm{E} = I_\mathrm{C} + I_\mathrm{B}
+$$
+
+Die **Stromverstärkung** $B$ (auch $h_\mathrm{FE}$ oder $\beta$) liegt typisch zwischen 50 und 500 – sie streut stark von Exemplar
+zu Exemplar und hängt von Temperatur und Strom ab. Gute Schaltungen funktionieren deshalb **unabhängig** vom genauen Wert von $B$.
+
+### Kennlinien und Arbeitsbereiche
+
+- **Eingangskennlinie** $I_\mathrm{B}(U_\mathrm{BE})$: wie eine Diodenkennlinie – ab ca. 0,6 V steigt der Basisstrom stark an.
+- **Ausgangskennlinienfeld** $I_\mathrm{C}(U_\mathrm{CE})$ für verschiedene $I_\mathrm{B}$: Kurvenschar, die nach einem steilen Anstieg
+  fast **waagrecht** verläuft – der Kollektorstrom hängt kaum von $U_\mathrm{CE}$ ab, nur von $I_\mathrm{B}$.
+
+| Bereich | Bedingung | Verhalten | Anwendung |
+| --- | --- | --- | --- |
+| **Sperrbereich** | $U_\mathrm{BE} < 0{,}5\,\mathrm{V}$, $I_\mathrm{B} \approx 0$ | $I_\mathrm{C} \approx 0$ – Schalter offen | Schalter AUS |
+| **aktiver (linearer) Bereich** | $U_\mathrm{BE} \approx 0{,}7\,\mathrm{V}$, $U_\mathrm{CE} > U_\mathrm{CE,sat}$ | $I_\mathrm{C} = B \cdot I_\mathrm{B}$ | Verstärker, Regler, Stromquelle |
+| **Sättigung** | Basisstrom größer als nötig | $U_\mathrm{CE} \approx 0{,}1 \ldots 0{,}3\,\mathrm{V}$ – Schalter geschlossen | Schalter EIN |
+
+**Grenzwerte** (Datenblatt): maximaler Kollektorstrom $I_\mathrm{C,max}$, maximale Sperrspannung $U_\mathrm{CE0}$,
+maximale Verlustleistung $P_\mathrm{tot}$ (siehe [Thermische Auslegung](/thermische-auslegung/)).
+
+## 3 · Der Transistor als Schalter
+
+<Abbildung bild={NpnSchalter} unterschrift="NPN-Transistor als Low-Side-Schalter: Die Last liegt zwischen Versorgung und Kollektor" />
+
+Ein Schalter soll **möglichst wenig Verlustleistung** haben: entweder kein Strom (gesperrt) oder kaum Spannung (gesättigt).
+Den linearen Bereich durchläuft er nur kurz beim Umschalten.
+
+### Dimensionierung des Basiswiderstands
+
+1. Kollektorstrom aus der Last bestimmen (z. B. LED: $I_\mathrm{C} = \dfrac{U_\mathrm{B} - U_\mathrm{F} - U_\mathrm{CE,sat}}{R_\mathrm{C}}$).
+2. Mindest-Basisstrom: $I_\mathrm{B,min} = \dfrac{I_\mathrm{C}}{B_\mathrm{min}}$
+3. Mit **Übersteuerungsfaktor** $\ddot{u}$ (typ. 2 … 5) sicher in die Sättigung: $I_\mathrm{B} = \ddot{u} \cdot I_\mathrm{B,min}$
+4. Basiswiderstand: $R_\mathrm{B} = \dfrac{U_\mathrm{Steuer} - U_\mathrm{BE}}{I_\mathrm{B}}$ → nächstkleineren Normwert wählen.
+
+:::caution[Warum „satt“ schalten?]
+Ist der Basisstrom zu klein, bleibt der Transistor im linearen Bereich: $U_\mathrm{CE}$ ist dann groß, und die Verlustleistung
+$P = U_\mathrm{CE} \cdot I_\mathrm{C}$ erhitzt den Transistor. Im gesättigten Zustand ist $P \approx 0{,}2\,\mathrm{V} \cdot I_\mathrm{C}$ – sehr klein.
+:::
+
+**Induktive Lasten** (Relais, Motoren) brauchen eine **Freilaufdiode** parallel zur Spule, sonst zerstört die
+Induktionsspannung beim Abschalten den Transistor.
+
+### NPN oder PNP? Low-Side oder High-Side?
+
+| | NPN als **Low-Side**-Schalter | PNP als **High-Side**-Schalter |
+| --- | --- | --- |
+| Lage | zwischen Last und Masse (Emitter an Masse) | zwischen Versorgung und Last (Emitter an +) |
+| leitet, wenn … | Basis ≈ 0,7 V **über** Masse (Steuersignal HIGH) | Basis ≈ 0,7 V **unter** der Versorgung (Steuersignal LOW) |
+| Vorteil | einfach mit µC anzusteuern | Last liegt an Masse |
+| Achtung | Last hängt nicht an Masse | ist die Versorgung höher als der µC-Pegel, braucht man eine Hilfsstufe (z. B. NPN davor) |
+
+Ein PNP-Schalter **leitet bei 0 V** am Eingang: Die Basis liegt dann viel tiefer als der Emitter (+), die BE-Diode ist in
+Durchlassrichtung gepolt.
+
+## 4 · Linearbetrieb
+
+### Grundschaltungen (Überblick)
+
+| Schaltung | gemeinsamer Anschluss | Spannungsverstärkung | Besonderheit |
+| --- | --- | --- | --- |
+| Emitterschaltung | Emitter | groß, **invertierend** | klassischer Verstärker |
+| Kollektorschaltung (**Emitterfolger**) | Kollektor | ≈ 1 | großer Eingangs-, kleiner Ausgangswiderstand → **Impedanzwandler** |
+| Basisschaltung | Basis | groß | für hohe Frequenzen |
+
+Für einen stabilen **Arbeitspunkt** muss die Basis über einen Spannungsteiler oder eine Referenz vorgespannt werden.
+Heute werden Verstärker meist mit [Operationsverstärkern](/operationsverstaerker/) gebaut; die folgenden zwei Schaltungen
+nutzen das Prinzip aber nach wie vor.
+
+### Spannungsstabilisierung (Längsregler)
+
+<Abbildung bild={Laengsregler} unterschrift="Längsregler: Die Z-Diode gibt die Spannung vor, der Transistor liefert den Strom" />
+
+Die reine [Z-Dioden-Stabilisierung](/dioden/theorie/#6--z-diode) taugt nur für kleine Ströme. Beim **Längsregler** gibt die
+Z-Diode nur die **Referenzspannung** an der Basis vor; der Transistor arbeitet als **Emitterfolger** und liefert den Laststrom:
+
+$$
+U_\mathrm{a} = U_\mathrm{Z} - U_\mathrm{BE} \approx U_\mathrm{Z} - 0{,}7\,\mathrm{V}
+$$
+
+- Steigt der Laststrom, sinkt $U_\mathrm{a}$ kurz; damit steigt $U_\mathrm{BE}$, der Transistor leitet stärker – die Spannung wird
+  ausgeregelt.
+- Die Z-Diode muss nur noch den kleinen **Basisstrom** $I_\mathrm{B} = I_\mathrm{L} / B$ zusätzlich liefern:
+  $R_\mathrm{V} = \dfrac{U_\mathrm{bb} - U_\mathrm{Z}}{I_\mathrm{Z} + I_\mathrm{B}}$ (oft wird $I_\mathrm{B}$ vernachlässigt).
+- Der Transistor nimmt die Spannungsdifferenz auf: $P_\mathrm{T} = (U_\mathrm{bb} - U_\mathrm{a}) \cdot I_\mathrm{L}$ → oft ist ein
+  **Kühlkörper** nötig.
+- Steigt die Temperatur, sinkt $U_\mathrm{BE}$ (≈ −2 mV/K) → $U_\mathrm{a}$ steigt leicht.
+
+Integrierte Spannungsregler (z. B. 7805) arbeiten nach demselben Prinzip, nur mit Regelverstärker, Referenz und Schutzschaltungen.
+
+### Konstantstromquelle
+
+<Abbildung bild={Stromquelle} unterschrift="Konstantstromquelle: Die Spannung am Emitterwiderstand ist fest – also auch der Strom" />
+
+Die Basis liegt auf einer festen Spannung (Z-Diode oder zwei Dioden in Reihe). Damit ist auch die Spannung am Emitterwiderstand fest:
+
+$$
+U_\mathrm{RE} = U_\mathrm{Ref} - U_\mathrm{BE}
+\qquad
+I_\mathrm{L} \approx I_\mathrm{E} = \frac{U_\mathrm{RE}}{R_\mathrm{E}}
+$$
+
+Der Strom hängt **nicht** vom Lastwiderstand $R_\mathrm{L}$ im Kollektorkreis ab – solange der Transistor im aktiven Bereich bleibt.
+Dafür muss eine Mindestspannung $U_\mathrm{CE}$ übrig bleiben (Faustregel: Basis-Kollektor-Diode darf nicht leiten,
+$U_\mathrm{C} \geq U_\mathrm{B}$). Daraus folgt der **größte zulässige Lastwiderstand**:
+
+$$
+R_\mathrm{L,max} \approx \frac{U_\mathrm{bb} - U_\mathrm{Ref}}{I_\mathrm{L}}
+$$
+
+Anwendungen: LED-Konstantstrom, Laden von Akkus, Sensorversorgung (4–20 mA), Stromspiegel in integrierten Schaltungen.
+
+## 5 · Feldeffekttransistoren
+
+Beim FET steuert ein **elektrisches Feld** die Leitfähigkeit eines Kanals zwischen Drain und Source. Das Gate ist
+(beim MOSFET) durch eine hauchdünne Oxidschicht **isoliert** – es fließt im statischen Zustand **kein Gatestrom**.
+
+### FET-Typen
+
+| Typ | Funktion | typischer Einsatz |
+| --- | --- | --- |
+| **JFET** (Sperrschicht-FET) | Kanal ist ohne Gatespannung leitend; eine Sperrspannung am Gate schnürt ihn ab (**selbstleitend**) | rauscharme Vorverstärker, Sensorverstärker, spannungsgesteuerter Widerstand |
+| **MOSFET, Anreicherungstyp** | ohne Gatespannung **kein** Kanal (**selbstsperrend**); ab $U_\mathrm{GS(th)}$ bildet sich der Kanal | **Standard**: Schalter, Leistungsstufen, Digitaltechnik (CMOS) |
+| **MOSFET, Verarmungstyp** | ohne Gatespannung leitend (**selbstleitend**) | Spezialanwendungen (Anlaufschaltungen, Stromquellen) |
+
+Jeder Typ existiert als **N-Kanal** (Elektronen leiten) und **P-Kanal** (Löcher leiten). N-Kanal-Typen haben bei gleicher
+Größe einen kleineren $R_\mathrm{DS(on)}$ und werden bevorzugt.
+
+**Schaltzeichen MOSFET:** Gate als Platte neben dem Kanal (isoliert!). Beim selbstsperrenden Typ ist der Kanal als
+**unterbrochene** Linie gezeichnet, beim selbstleitenden als durchgehende. Der Pfeil am Substrat zeigt beim N-Kanal **zum Kanal hin**,
+beim P-Kanal **weg**. Leistungs-MOSFETs enthalten eine **Body-Diode** zwischen Source und Drain.
+
+### Kennwerte eines MOSFETs
+
+| Kennwert | Bedeutung |
+| --- | --- |
+| $U_\mathrm{GS(th)}$ | **Schwellspannung**: ab hier beginnt der MOSFET zu leiten (typ. 1 … 4 V). Ab dieser Spannung ist er aber noch **nicht** voll durchgeschaltet! |
+| $R_\mathrm{DS(on)}$ | Widerstand im eingeschalteten Zustand – angegeben bei einer bestimmten $U_\mathrm{GS}$ (z. B. 10 V oder 4,5 V) |
+| $U_\mathrm{DS,max}$, $I_\mathrm{D,max}$ | Grenzwerte für Spannung und Strom |
+| $U_\mathrm{GS,max}$ | maximale Gate-Spannung (oft ±20 V) – sonst schlägt das Gateoxid durch |
+| $Q_\mathrm{G}$ | Gate-Ladung, die zum Umschalten zu- bzw. abgeführt werden muss |
+
+**Logic-Level-MOSFETs** sind so gebaut, dass ihr $R_\mathrm{DS(on)}$ schon bei $U_\mathrm{GS} = 4{,}5\,\mathrm{V}$ (oder 2,5 V) spezifiziert ist.
+Nur sie lassen sich direkt von einem 3,3-V- oder 5-V-Mikrocontroller sicher durchschalten.
+
+### Verluste im Schaltbetrieb
+
+- **Durchlassverluste:** $P_\mathrm{leit} = I_\mathrm{D}^2 \cdot R_\mathrm{DS(on)}$ (bei PWM mal Tastverhältnis)
+- **Schaltverluste:** Beim Umschalten liegen kurz Spannung und Strom gleichzeitig an. Sie steigen mit der **Schaltfrequenz** und
+  mit langsamen Flanken – und die Flankensteilheit hängt davon ab, wie schnell die **Gate-Ladung** umgeladen wird:
+  $t \approx Q_\mathrm{G} / I_\mathrm{G}$.
+
+(Ausführlich in der [Leistungselektronik](/leistungselektronik/theorie/leistungshalbleiter/).)
+
+### MOSFET als Schalter: Gate-Beschaltung
+
+<Abbildung bild={MosfetRelais} unterschrift="N-Kanal-MOSFET als Relaistreiber mit Gate-Widerständen und Freilaufdiode" />
+
+- **Gate-Vorwiderstand** $R_\mathrm{G}$ (z. B. 100 Ω): begrenzt den Umladestrom (schont den µC-Pin) und dämpft Schwingungen.
+- **Pull-down-Widerstand** $R_\mathrm{GS}$ (z. B. 10 … 100 kΩ): hält das Gate sicher auf 0 V, solange der µC-Pin noch nicht
+  initialisiert ist (beim Einschalten ist ein Pin oft hochohmig). Ein offenes Gate kann sich aufladen und den MOSFET
+  ungewollt halb einschalten!
+- **Freilaufdiode** bei induktiver Last.
+
+## 6 · Bipolar oder MOSFET?
+
+| Kriterium | eher Bipolar | eher MOSFET |
+| --- | --- | --- |
+| große Ströme (> 1 A) | | ✔ (sehr kleiner $R_\mathrm{DS(on)}$) |
+| Ansteuerung direkt vom µC ohne Dauerstrom | | ✔ (Logic-Level) |
+| hohe Schaltfrequenzen | | ✔ |
+| kleine Signale, Verstärker, Stromquellen, Spannungsreferenzen | ✔ | |
+| sehr kleine Steuerspannung (< 1,5 V) | ✔ (nur 0,7 V nötig) | |
+| Empfindlichkeit gegen elektrostatische Entladung | robuster | Gateoxid ist ESD-empfindlich |
+
+:::note[Weitere Halbleiterschalter]
+Für Netzspannung gibt es **Thyristoren** (schalten nach einem Zündimpuls ein und bleiben leitend, bis der Strom null wird) und
+**Triacs** (zwei antiparallele Thyristoren – für Wechselstrom, z. B. Dimmer, Bohrmaschinen-Drehzahlsteller).
+Für hohe Spannungen und Leistungen werden **IGBTs** eingesetzt.
+:::

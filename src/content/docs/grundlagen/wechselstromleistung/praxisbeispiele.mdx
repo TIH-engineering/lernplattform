@@ -66,3 +66,22 @@ Auf dem Typenschild eines PC-Netzteils steht „Active PFC“.
    Eine aktive PFC-Schaltung (meist ein Hochsetzsteller) formt den Strom sinusförmig.
 
 </Loesung>
+
+## LED-Netzteil mit kapazitivem Leistungsfaktor
+
+Ein kleines LED-Netzteil ohne PFC nimmt an 230 V einen Strom von 0,32 A auf. Das Messgerät zeigt $\cos\varphi = 0{,}60$ (kapazitiv).
+
+1. Berechne Schein-, Wirk- und Blindleistung.
+2. Warum ist die Blindleistung hier **negativ** (kapazitiv), bei einem Motor aber positiv?
+3. In einem Bürogebäude hängen 200 solcher Netzteile an einem Außenleiter. Was bedeutet das für Leitung und Netz?
+
+<Loesung>
+
+1. $S = U \cdot I = 230\,\mathrm{V} \cdot 0{,}32\,\mathrm{A} \approx 73{,}6\,\mathrm{VA}$ · $P = S \cdot \cos\varphi \approx 44{,}2\,\mathrm{W}$ ·
+   $Q = -\sqrt{S^2 - P^2} \approx -58{,}9\,\mathrm{var}$
+2. Am Eingang sitzen ein Entstörkondensator und ein Elko hinter dem Gleichrichter – der Strom eilt der Spannung voraus (kapazitiv). Bei einem
+   Motor ist die Wicklung induktiv, der Strom eilt nach. Nach Vereinbarung zählt induktive Blindleistung positiv, kapazitive negativ.
+3. 200 × 0,32 A = 64 A Strom (bei nur 8,8 kW Wirkleistung) – Leitungen und Sicherungen müssen für den **Scheinstrom** ausgelegt werden. Deshalb
+   verlangen Normen für größere Netzteile eine Leistungsfaktorkorrektur.
+
+</Loesung>

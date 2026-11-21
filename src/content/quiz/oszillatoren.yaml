@@ -1,0 +1,198 @@
+titel: Oszillatoren
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Art der Rückkopplung braucht ein Oszillator?
+    optionen:
+      - text: Mitkopplung (positive Rückkopplung) bei der Oszillatorfrequenz
+        richtig: true
+      - text: Gegenkopplung bei allen Frequenzen
+      - text: Gar keine Rückkopplung
+      - text: Gegenkopplung bei der Oszillatorfrequenz
+    erklaerung: Das zurückgeführte Signal muss phasengleich ankommen und sich selbst unterstützen. Gegenkopplung würde jede Schwingung dämpfen.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: 'Für eine Schaltung gilt bei der Oszillatorfrequenz $\lvert A\beta \rvert = 0{,}85$. Was passiert mit einer vorhandenen Schwingung?'
+    optionen:
+      - text: Sie klingt ab.
+        richtig: true
+      - text: Sie bleibt konstant.
+      - text: Sie wächst bis zur Begrenzung.
+      - text: Die Frequenz verdoppelt sich.
+    erklaerung: Nach jedem Umlauf bleiben nur 85 % der Amplitude übrig – die Verluste werden nicht ausgeglichen.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche zwei Bedingungen umfasst das Barkhausen-Kriterium?
+    optionen:
+      - text: 'Betrag der Schleifenverstärkung = 1'
+        richtig: true
+      - text: 'Phase der Schleifenverstärkung = 0° (bzw. n · 360°)'
+        richtig: true
+      - text: 'Phase der Schleifenverstärkung = 90°'
+      - text: 'Verstärkung A = 1'
+    erklaerung: 'Amplitudenbedingung $\lvert A\beta \rvert = 1$ und Phasenbedingung $\varphi_A + \varphi_\beta = 0°$. Nicht $A$ allein, sondern das Produkt $A\beta$ muss 1 sein.'
+
+  - typ: mc
+    stufe: standard
+    frage: Wie beginnt ein Oszillator ohne Eingangssignal zu schwingen?
+    optionen:
+      - text: Rauschen und Einschaltvorgänge enthalten auch die Oszillatorfrequenz – dieser Anteil wird bei |Aβ| > 1 immer weiter verstärkt.
+        richtig: true
+      - text: Er braucht beim Einschalten immer ein externes Startsignal.
+      - text: Der Kondensator ist ab Werk geladen.
+      - text: Das Netzwerk erzeugt die Schwingung selbst, der Verstärker ist nur ein Puffer.
+    erklaerung: Aus Mikrovolt Rauschen wird durch die Mitkopplung in kurzer Zeit eine sichtbare Schwingung. Andere Frequenzen haben die falsche Phase.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein RC-Phasenschieber-Oszillator hat $R = 10\,\mathrm{k\Omega}$ und $C = 1\,\mathrm{nF}$. Mit welcher Frequenz schwingt er (in kHz)?'
+    loesung: 6.497
+    einheit: kHz
+    erklaerung: '$f_0 = 1/(2\pi\sqrt{6}\,RC) = 1/(2\pi \cdot 2{,}449 \cdot 10^{-5}\,\mathrm{s}) \approx 6{,}50\,\mathrm{kHz}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum verwendet der RC-Phasenschieber-Oszillator drei RC-Glieder?
+    optionen:
+      - text: Ein bzw. zwei RC-Glieder erreichen 180° erst im Grenzfall bei vollständiger Dämpfung – drei schaffen es bei endlicher Frequenz.
+        richtig: true
+      - text: Damit die Verstärkung genau 3 beträgt.
+      - text: Damit der Oszillator ein Rechteck liefert.
+      - text: Drei sind nur üblich, eines würde genauso funktionieren.
+    erklaerung: Der invertierende Verstärker liefert 180°, die RC-Kette muss weitere 180° liefern – grob 60° pro Stufe.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Das RC-Netzwerk eines Phasenschieber-Oszillators dämpft bei $f_0$ auf $1/29$. Wie groß muss $R_\mathrm{f}$ mindestens sein, wenn $R = 6{,}8\,\mathrm{k\Omega}$? (in kΩ)'
+    loesung: 197.2
+    einheit: kΩ
+    erklaerung: '$\lvert A \rvert = R_\mathrm{f}/R \geq 29$ → $R_\mathrm{f} \geq 29 \cdot 6{,}8\,\mathrm{k\Omega} = 197{,}2\,\mathrm{k\Omega}$, gewählt z. B. 220 kΩ.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Wien-Brücken-Oszillator hat $R = 10\,\mathrm{k\Omega}$ und $C = 10\,\mathrm{nF}$. Wie groß ist die Oszillatorfrequenz?'
+    loesung: 1591.5
+    einheit: Hz
+    erklaerung: '$f_0 = 1/(2\pi R C) = 1/(2\pi \cdot 10^{-4}\,\mathrm{s}) \approx 1592\,\mathrm{Hz}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Verstärkung braucht der nichtinvertierende Verstärker eines Wien-Brücken-Oszillators?
+    optionen:
+      - text: 'A = 3'
+        richtig: true
+      - text: 'A = 29'
+      - text: 'A = 1'
+      - text: 'A = 1/3'
+    erklaerung: 'Die Wien-Brücke hat bei $f_0$ die Phase 0° und $\beta = 1/3$ → $A = 3$, also $R_1 = 2 R_2$.'
+
+  - typ: mc
+    stufe: standard
+    frage: Ein Wien-Brücken-Oszillator liefert einen Sinus mit abgeflachten Spitzen. Was ist die wahrscheinliche Ursache?
+    optionen:
+      - text: Die Verstärkung ist zu groß, der OPV begrenzt an der Versorgung.
+        richtig: true
+      - text: Die Verstärkung ist zu klein.
+      - text: Der Kondensator ist zu groß.
+      - text: Der OPV ist zu schnell.
+    erklaerung: Bei |Aβ| > 1 wächst die Amplitude bis zur Aussteuergrenze (Clipping). Abhilfe ist eine sanfte Amplitudenregelung.
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Bauteile bzw. Verfahren eignen sich zur Amplitudenregelung eines Wien-Brücken-Oszillators?
+    optionen:
+      - text: Glühlampe als temperaturabhängiger Widerstand
+        richtig: true
+      - text: Antiparallele Dioden im Gegenkopplungszweig
+        richtig: true
+      - text: JFET als spannungsgesteuerter Widerstand
+        richtig: true
+      - text: Ein größerer Elektrolytkondensator am Ausgang
+    erklaerung: Alle drei senken die Verstärkung bei steigender Amplitude. Ein Kondensator am Ausgang regelt nichts.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Relaxationsoszillator mit $R_2 = R_3$ hat $R_1 = 47\,\mathrm{k\Omega}$ und $C = 100\,\mathrm{nF}$. Wie groß ist die Frequenz?'
+    loesung: 96.83
+    einheit: Hz
+    erklaerung: '$f = 1/(2 R_1 C \ln 3) = 1/(2 \cdot 4{,}7 \cdot 10^{-3}\,\mathrm{s} \cdot 1{,}099) \approx 96{,}8\,\mathrm{Hz}$, $T \approx 10{,}3\,\mathrm{ms}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Signalformen liegen beim OPV-Relaxationsoszillator vor?
+    optionen:
+      - text: Ausgang Rechteck, Kondensator annähernd Dreieck (Abschnitte von e-Funktionen)
+        richtig: true
+      - text: Ausgang Sinus, Kondensator Rechteck
+      - text: Ausgang und Kondensator Sinus
+      - text: Ausgang Dreieck, Kondensator Rechteck
+    erklaerung: Der OPV springt zwischen den Sättigungen, der Kondensator lädt und entlädt sich zwischen den Schaltschwellen.
+
+  - typ: mc
+    stufe: standard
+    frage: Beim Relaxationsoszillator wird R1 verdoppelt. Was passiert mit der Frequenz?
+    optionen:
+      - text: Sie halbiert sich.
+        richtig: true
+      - text: Sie verdoppelt sich.
+      - text: Sie bleibt gleich, nur die Amplitude ändert sich.
+      - text: Sie sinkt auf 1/4.
+    erklaerung: '$T \sim R_1 C$ – doppelte Zeitkonstante, doppelte Periodendauer, halbe Frequenz.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Warum sind Quarzoszillatoren viel frequenzstabiler als RC-Oszillatoren?
+    optionen:
+      - text: Der Quarz hat eine mechanische Resonanz mit sehr hoher Güte – die Phasenbedingung gilt nur in einem extrem schmalen Bereich.
+        richtig: true
+      - text: Quarze sind größer als Kondensatoren.
+      - text: Quarzoszillatoren brauchen keinen Verstärker.
+      - text: Quarze sind temperaturunabhängige Widerstände.
+    erklaerung: 'Piezoelektrischer Effekt + Güte $Q \approx 10^4 \ldots 10^6$: Änderungen von Versorgung oder Verstärkung verschieben die Frequenz nur um ppm.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein 8-MHz-Quarzoszillator schwingt mit $7\,999\,850\,\mathrm{Hz}$. Wie groß ist die Abweichung in ppm (mit Vorzeichen)?'
+    loesung: -18.75
+    einheit: ppm
+    toleranz: 0.1
+    toleranzArt: absolut
+    erklaerung: '$\Delta f = -150\,\mathrm{Hz}$ → $-150/(8 \cdot 10^{6}) \cdot 10^{6} = -18{,}75\,\mathrm{ppm}$. Der Oszillator ist zu langsam.'
+
+  - typ: mc
+    stufe: standard
+    frage: Ein Quarzoszillator schwingt etwas zu langsam. Wie kannst du die Frequenz anheben?
+    optionen:
+      - text: Kleinere Lastkondensatoren verwenden (C_L sinkt).
+        richtig: true
+      - text: Größere Lastkondensatoren verwenden (C_L steigt).
+      - text: Einen größeren Rückkopplungswiderstand R_F einsetzen.
+      - text: Die Versorgungsspannung verdoppeln.
+    erklaerung: Eine kleinere Lastkapazität „zieht“ den Quarz zu höheren Frequenzen (einige ppm pro pF).
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Quarz braucht $C_\mathrm{L} = 12\,\mathrm{pF}$, die parasitäre Kapazität beträgt $2\,\mathrm{pF}$. Wie groß müssen $C_1 = C_2$ sein?'
+    loesung: 20
+    einheit: pF
+    erklaerung: '$C_\mathrm{L} = C/2 + C_\mathrm{stray}$ → $C = 2\,(12 - 2)\,\mathrm{pF} = 20\,\mathrm{pF}$'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Welche Aufgaben haben die Widerstände R_F und R_D im Pierce-Oszillator?
+    optionen:
+      - text: 'R_F (ca. 1 MΩ) stellt den Inverter in seinen linearen Arbeitsbereich, R_D begrenzt den Quarzstrom (Drive Level).'
+        richtig: true
+      - text: 'R_F begrenzt den Quarzstrom, R_D stellt den Arbeitspunkt ein.'
+      - text: 'Beide bestimmen gemeinsam die Frequenz.'
+      - text: 'R_F entlädt die Lastkondensatoren beim Ausschalten, R_D ist ein Pull-up.'
+    erklaerung: 'R_D wird nur bei Bedarf eingesetzt – danach muss die Anschwingbedingung (g_m,crit) erneut geprüft werden.'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein 8-MHz-Quarz hat $\mathrm{ESR} = 80\,\Omega$, $C_0 = 7\,\mathrm{pF}$, $C_\mathrm{L} = 10\,\mathrm{pF}$. Berechne $g_\mathrm{m,crit}$ in mA/V.'
+    loesung: 0.2337
+    einheit: mA/V
+    erklaerung: '$g_\mathrm{m,crit} = 4 \cdot \mathrm{ESR} \cdot (2\pi f)^2 (C_0 + C_\mathrm{L})^2 = 4 \cdot 80 \cdot (5{,}03 \cdot 10^{7})^2 \cdot (17 \cdot 10^{-12})^2\,\mathrm{A/V} \approx 0{,}23\,\mathrm{mA/V}$ – deutlich unter 1 mA/V, der Oszillator schwingt sicher an.'

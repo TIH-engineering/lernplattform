@@ -1,0 +1,259 @@
+---
+title: Theorie – Operationsverstärker
+description: "Aufbau und Funktion, idealer und realer OPV, goldene Regeln, Gegen- und Mitkopplung, invertierender und nichtinvertierender Verstärker, Spannungsfolger, Verstärkung in dB, Rechenschaltungen, Komparator, Schmitt-Trigger, reale Grenzen."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Inv from '../../../assets/elektronik/opv-invertierend.svg';
+import NichtInv from '../../../assets/elektronik/opv-nichtinvertierend.svg';
+import Folger from '../../../assets/elektronik/opv-folger.svg';
+import Addierer from '../../../assets/elektronik/opv-addierer.svg';
+import Differenz from '../../../assets/elektronik/opv-differenz.svg';
+import Integrator from '../../../assets/elektronik/opv-integrator.svg';
+import Transimpedanz from '../../../assets/elektronik/opv-transimpedanz.svg';
+import Schmitt from '../../../assets/elektronik/opv-schmitt-trigger.svg';
+
+## 1 · Was ist ein Operationsverstärker?
+
+Ein OPV ist ein mehrstufiger, **gleichspannungsgekoppelter Differenzverstärker** mit
+
+- einem **nichtinvertierenden Eingang** (+) und einem **invertierenden Eingang** (−),
+- einem Ausgang,
+- meist zwei Versorgungsanschlüssen (z. B. ±15 V, oder einfach 0 V und +5 V).
+
+Er verstärkt die **Differenz** der beiden Eingangsspannungen mit einer riesigen Leerlaufverstärkung $V_0$:
+
+$$
+U_\mathrm{a} = V_0 \cdot U_\mathrm{d} = V_0 \cdot (U_+ - U_-)
+\qquad V_0 \approx 10^{5} \ldots 10^{6}
+$$
+
+Schon $0{,}1\,\mathrm{mV}$ Differenz würde ohne Beschaltung den Ausgang bis an die Versorgungsgrenze treiben (**Sättigung**).
+Die Ausgangsspannung kann die Versorgungsspannung nicht überschreiten – meist bleibt sie 1 … 2 V darunter;
+**Rail-to-Rail**-OPVs kommen fast bis an die Versorgung heran.
+
+## 2 · Idealer und realer OPV
+
+| Eigenschaft | idealer OPV | realer OPV (typisch) |
+| --- | --- | --- |
+| Leerlaufverstärkung $V_0$ | ∞ | $10^{4} \ldots 10^{6}$ (80 … 120 dB) |
+| Eingangswiderstand | ∞ (kein Eingangsstrom) | MΩ … TΩ (Eingangsströme pA … nA) |
+| Ausgangswiderstand | 0 | einige Ω … 200 Ω (ohne Gegenkopplung) |
+| Bandbreite | ∞ | begrenzt (Verstärkungs-Bandbreite-Produkt) |
+| Anstiegsgeschwindigkeit (Slew-Rate) | ∞ | 0,3 V/µs … einige 1000 V/µs |
+| Offsetspannung | 0 | µV … mV |
+
+Für die Schulrechnung nimmt man den **idealen OPV** an – die Ergebnisse stimmen in den meisten Fällen sehr gut.
+
+## 3 · Die goldenen Regeln (mit Gegenkopplung)
+
+1. **In die Eingänge fließt kein Strom:** $I_+ = I_- = 0$.
+2. **Der OPV regelt seinen Ausgang so, dass die Eingangsdifferenz null wird:** $U_+ = U_-$
+   („virtueller Kurzschluss“ zwischen den Eingängen).
+
+Regel 2 gilt nur, solange **Gegenkopplung** vorhanden ist und der Ausgang nicht in Sättigung ist.
+
+## 4 · Betriebsarten
+
+| Betriebsart | Rückführung | Verhalten | Beispiele |
+| --- | --- | --- | --- |
+| ohne Rückkopplung | keine | Ausgang springt zwischen den Sättigungsgrenzen | **Komparator** |
+| **Gegenkopplung** (negative Rückkopplung) | vom Ausgang auf den **−**-Eingang | stabil, linear, Verstärkung nur durch Beschaltung bestimmt | Verstärker, Rechenschaltungen, aktive Filter |
+| **Mitkopplung** (positive Rückkopplung) | vom Ausgang auf den **+**-Eingang | Ausgang kippt in eine Sättigungsgrenze und bleibt dort | **Schmitt-Trigger**, Oszillatoren |
+
+**Warum fast immer Gegenkopplung?** Die Leerlaufverstärkung ist riesig, streut stark und hängt von Temperatur und Frequenz ab.
+Mit Gegenkopplung hängt die Verstärkung nur noch von (genauen, stabilen) **Widerständen** ab. Außerdem werden Verzerrungen
+kleiner, der Ausgangswiderstand sinkt und die Bandbreite steigt. Der Preis: Die Gesamtverstärkung ist kleiner als $V_0$.
+
+## 5 · Grundschaltungen
+
+### Invertierender Verstärker
+
+<Abbildung bild={Inv} unterschrift="Invertierender Verstärker" />
+
+Der +-Eingang liegt an Masse, also liegt wegen $U_+ = U_-$ auch der −-Eingang auf 0 V (**virtuelle Masse**).
+Durch $R_1$ fließt $I = U_\mathrm{e} / R_1$. Dieser Strom kann nicht in den OPV fließen – er fließt weiter durch $R_\mathrm{f}$:
+
+$$
+U_\mathrm{a} = -I \cdot R_\mathrm{f} = -\frac{R_\mathrm{f}}{R_1} \cdot U_\mathrm{e}
+\qquad
+V = \frac{U_\mathrm{a}}{U_\mathrm{e}} = -\frac{R_\mathrm{f}}{R_1}
+$$
+
+- Das Signal wird **invertiert** (180° Phasenverschiebung).
+- Die Verstärkung kann auch **kleiner als 1** sein (Abschwächer).
+- Eingangswiderstand der Schaltung: $R_\mathrm{e} = R_1$ (nicht unendlich!).
+
+### Nichtinvertierender Verstärker
+
+<Abbildung bild={NichtInv} unterschrift="Nichtinvertierender Verstärker" />
+
+Das Signal liegt direkt am +-Eingang. Der Spannungsteiler aus $R_\mathrm{f}$ und $R_\mathrm{g}$ führt einen Teil von $U_\mathrm{a}$
+auf den −-Eingang zurück; der OPV regelt, bis dieser Teil gleich $U_\mathrm{e}$ ist:
+
+$$
+U_\mathrm{e} = U_\mathrm{a} \cdot \frac{R_\mathrm{g}}{R_\mathrm{g} + R_\mathrm{f}}
+\quad\Rightarrow\quad
+V = \frac{U_\mathrm{a}}{U_\mathrm{e}} = 1 + \frac{R_\mathrm{f}}{R_\mathrm{g}}
+$$
+
+- Ausgang **gleichphasig** zum Eingang, Verstärkung **immer ≥ 1**.
+- **Sehr hoher Eingangswiderstand** (der des OPV) – die Signalquelle wird kaum belastet.
+
+### Spannungsfolger (Impedanzwandler)
+
+<Abbildung bild={Folger} unterschrift="Spannungsfolger: Ausgang direkt auf den Minus-Eingang zurückgeführt" />
+
+Sonderfall des nichtinvertierenden Verstärkers mit $R_\mathrm{f} = 0$ und $R_\mathrm{g} \to \infty$: $V = 1$, also $U_\mathrm{a} = U_\mathrm{e}$.
+Wozu, wenn er nicht verstärkt? Er hat einen **sehr hohen Eingangs-** und einen **sehr kleinen Ausgangswiderstand**: Eine
+hochohmige Quelle (Sensor, Spannungsteiler, RC-Filter) wird **entkoppelt** und kann trotzdem eine Last treiben.
+
+### Verstärkung in Dezibel
+
+Verstärkungen werden oft logarithmisch angegeben (**Pegel**):
+
+$$
+V_\mathrm{dB} = 20 \cdot \log_{10} \left| \frac{U_\mathrm{a}}{U_\mathrm{e}} \right|
+\qquad
+\left| \frac{U_\mathrm{a}}{U_\mathrm{e}} \right| = 10^{V_\mathrm{dB}/20}
+$$
+
+Für **Leistungen** gilt dagegen $10 \cdot \log_{10}(P_2/P_1)$ – weil $P \sim U^2$ ist, ergibt sich derselbe dB-Wert.
+
+| Faktor | 0,1 | 0,5 | 0,707 | 1 | 1,41 | 2 | 10 | 20 | 100 | 1000 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| dB | −20 | −6 | −3 | 0 | +3 | +6 | +20 | +26 | +40 | +60 |
+
+Vorteil: Bei hintereinandergeschalteten Stufen werden die Faktoren **multipliziert**, die dB-Werte einfach **addiert**.
+
+## 6 · Rechenschaltungen
+
+### Umkehraddierer
+
+<Abbildung bild={Addierer} unterschrift="Umkehraddierer" />
+
+Alle Eingangsströme fließen in die virtuelle Masse und gemeinsam durch $R_\mathrm{f}$:
+
+$$
+U_\mathrm{a} = -R_\mathrm{f} \left( \frac{U_1}{R_1} + \frac{U_2}{R_2} + \frac{U_3}{R_3} \right)
+$$
+
+Mit gleichen Widerständen $R_1 = R_2 = R_3 = R_\mathrm{f}$: $U_\mathrm{a} = -(U_1 + U_2 + U_3)$. Anwendung: Audiomischpult,
+Offset addieren, einfacher D/A-Wandler (gewichtete Widerstände).
+
+### Differenzverstärker (Subtrahierer)
+
+<Abbildung bild={Differenz} unterschrift="Differenzverstärker" />
+
+Mit $R_1 = R_3$ und $R_2 = R_4$ gilt:
+
+$$
+U_\mathrm{a} = \frac{R_2}{R_1} \cdot (U_2 - U_1)
+$$
+
+Nur die **Differenz** wird verstärkt, eine gemeinsame Spannung beider Eingänge (Gleichtaktspannung, z. B. eingekoppelte Störung)
+wird unterdrückt – vorausgesetzt, die Widerstandsverhältnisse stimmen genau. Der **Instrumentenverstärker** (drei OPVs) verbessert
+das und hat sehr hohe Eingangswiderstände: $V = 1 + \dfrac{2R}{R_\mathrm{G}}$ (Messbrücken, Dehnungsmessstreifen, EKG).
+
+### Integrierer und Differenzierer
+
+<Abbildung bild={Integrator} unterschrift="Integrierer: Kondensator im Rückkopplungszweig" />
+
+**Integrierer:** Der Strom $U_\mathrm{e}/R$ lädt den Kondensator:
+
+$$
+U_\mathrm{a}(t) = -\frac{1}{R C} \int_0^t U_\mathrm{e}\,\mathrm{d}t + U_\mathrm{a}(0)
+\qquad
+\text{bei konstantem } U_\mathrm{e}: \; U_\mathrm{a}(t) = U_\mathrm{a}(0) - \frac{U_\mathrm{e}}{RC} \cdot t
+$$
+
+Eine konstante Eingangsspannung erzeugt eine **Rampe** (Rechteck → Dreieck). Im Frequenzbereich ist er ein Tiefpass
+($|V| = 1/(\omega R C)$). In der Praxis legt man einen großen Widerstand parallel zu C, sonst läuft der Ausgang durch die Offsetspannung
+langsam in die Sättigung.
+
+**Differenzierer** (R und C vertauscht): $U_\mathrm{a}(t) = -RC \cdot \dfrac{\mathrm{d}U_\mathrm{e}}{\mathrm{d}t}$ – eine Rampe wird zu einer
+konstanten Spannung, die Verstärkung steigt mit der Frequenz ($|V| = \omega R C$). Er ist rauschempfindlich und wird praktisch
+mit Begrenzungswiderständen gebaut.
+
+### Transimpedanzverstärker (Strom-Spannungs-Wandler)
+
+<Abbildung bild={Transimpedanz} unterschrift="Transimpedanzverstärker mit Fotodiode" />
+
+Der Strom einer Fotodiode (oder eines anderen Sensors mit Stromausgang) fließt in die virtuelle Masse und durch $R_\mathrm{f}$:
+
+$$
+U_\mathrm{a} = -I_\mathrm{P} \cdot R_\mathrm{f}
+$$
+
+Die Fotodiode „sieht“ 0 V Spannung – sie arbeitet sehr linear und schnell. Einsatz: Lichtschranken, optische Empfänger, Strommessung.
+
+## 7 · Komparator und Schmitt-Trigger
+
+### Komparator
+
+Ohne Rückkopplung vergleicht der OPV zwei Spannungen: Ist $U_+ > U_-$, geht der Ausgang an die positive, sonst an die negative
+Sättigungsgrenze. Das Ergebnis ist ein **digitales** Signal. Problem: Bei verrauschten oder langsamen Signalen nahe der Schwelle
+schaltet der Ausgang mehrmals hin und her („Flattern“). Für Komparatoraufgaben gibt es eigene, schnellere ICs (z. B. LM393).
+
+### Schmitt-Trigger (Komparator mit Hysterese)
+
+<Abbildung bild={Schmitt} unterschrift="Invertierender Schmitt-Trigger" />
+
+Durch **Mitkopplung** über $R_1$ und $R_2$ hängt die Schaltschwelle vom aktuellen Ausgangszustand ab. Es gibt eine obere und eine
+untere Schwelle; dazwischen liegt die **Hysterese**:
+
+$$
+\beta = \frac{R_2}{R_1 + R_2}
+\qquad
+U_\mathrm{T\pm} = \pm \beta \cdot U_\mathrm{sat}
+\qquad
+\text{Hysterese } U_\mathrm{H} = U_\mathrm{T+} - U_\mathrm{T-} = 2\beta\,U_\mathrm{sat}
+$$
+
+Beim **invertierenden** Schmitt-Trigger kippt der Ausgang nach LOW, wenn $U_\mathrm{e}$ die obere Schwelle überschreitet, und nach HIGH,
+wenn $U_\mathrm{e}$ die untere Schwelle unterschreitet. Störungen, die kleiner als die Hysterese sind, lösen kein Umschalten aus.
+Anwendungen: Sinus-Rechteck-Wandler, Entprellen, Signalaufbereitung, [Relaxationsoszillator](/oszillatoren/theorie/).
+
+## 8 · Reale Grenzen
+
+### Aussteuerbereich
+
+Die Ausgangsspannung bleibt innerhalb der Versorgung (bei vielen Standard-OPVs 1 … 2 V darunter). Der größte zulässige Eingangsspannungsbetrag
+folgt aus $U_\mathrm{e,max} = U_\mathrm{a,max} / |V|$. Auch die Eingänge dürfen nur in einem bestimmten Bereich liegen
+(**Gleichtakteingangsbereich**).
+
+### Verstärkungs-Bandbreite-Produkt (GBW)
+
+Die Leerlaufverstärkung sinkt oberhalb einer niedrigen Eckfrequenz mit 20 dB/Dekade. Mit Gegenkopplung gilt näherungsweise:
+
+$$
+V \cdot f_\mathrm{g} \approx \mathrm{GBW} \quad (\text{konstant, z. B. } 1\,\mathrm{MHz} \text{ beim LM358})
+$$
+
+Eine Stufe mit $V = 100$ hat dann nur noch eine Bandbreite von ca. 10 kHz. Für große Verstärkung bei hoher Frequenz verteilt man die
+Verstärkung auf **mehrere Stufen**.
+
+### Slew-Rate
+
+Die **Slew-Rate** $SR = \Delta U_\mathrm{a} / \Delta t$ (in V/µs) gibt an, wie schnell sich die Ausgangsspannung **höchstens** ändern kann.
+Ein Sinus mit Amplitude $\hat{u}$ und Frequenz $f$ hat die größte Steigung $2\pi f \hat{u}$. Ist diese größer als die Slew-Rate,
+wird der Sinus zu einem **Dreieck verzerrt**:
+
+$$
+2\pi f \hat{u} \leq SR
+\quad\Rightarrow\quad
+f_\mathrm{max} = \frac{SR}{2\pi \hat{u}}
+$$
+
+### Offset und Eingangsströme
+
+Wegen kleiner Unsymmetrien liefert ein realer OPV auch bei $U_\mathrm{d} = 0$ eine kleine Ausgangsspannung – sie entspricht einer
+**Offsetspannung** am Eingang (µV … mV), die mit der Verstärkung mitverstärkt wird. Präzisionsschaltungen verwenden Offset-arme OPVs
+oder einen Abgleich.
+
+### Versorgung
+
+- **Symmetrische Versorgung** (±15 V): Signale können um 0 V schwingen.
+- **Einfache Versorgung** (z. B. 0/5 V): Das Signal muss auf eine **Mittenspannung** (z. B. 2,5 V) angehoben werden, und
+  man braucht einen OPV, dessen Ein- und Ausgänge bis an 0 V heranreichen (z. B. LM358 an den Eingängen, Rail-to-Rail-Typen am Ausgang).
+- Jeder OPV braucht einen **Abblockkondensator** (100 nF) direkt an den Versorgungspins.

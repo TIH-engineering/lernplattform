@@ -1,0 +1,189 @@
+---
+title: Rechenbeispiele – Filter
+description: Rechenbeispiele zu Grenzfrequenz, Filterauslegung, Betrag und Phase, Pegelrechnung, RLC-Butterworth-Tiefpass, Resonanzüberhöhung, Sallen-Key-Auslegung und Schaltungsanalyse eines Bandpasses.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import RLC from '../../../assets/elektronik/rlc-tiefpass.svg';
+import SallenKey from '../../../assets/elektronik/sallen-key-tiefpass.svg';
+
+## Grenzfrequenz eines RC-Tiefpasses
+
+<Stufe wert="grundlagen" />
+
+Ein RC-Tiefpass hat $R = 4{,}7\,\mathrm{k\Omega}$ und $C = 10\,\mathrm{nF}$. Berechne die Grenzfrequenz.
+
+<Loesung>
+
+$$
+f_\mathrm{g} = \frac{1}{2\pi R C} = \frac{1}{2\pi \cdot 4{,}7 \cdot 10^{3}\,\Omega \cdot 10 \cdot 10^{-9}\,\mathrm{F}} \approx 3{,}39\,\mathrm{kHz}
+$$
+
+</Loesung>
+
+## Hochpass auslegen
+
+<Stufe wert="grundlagen" />
+
+Zeichne einen passiven RC-Hochpass 1. Ordnung und dimensioniere ihn für $f_\mathrm{g} = 5\,\mathrm{kHz}$. Gewählt wird $C = 22\,\mathrm{nF}$.
+Wähle einen E12-Widerstand und gib die tatsächliche Grenzfrequenz an.
+
+<Loesung>
+
+Kondensator in Reihe, Widerstand nach Masse, Ausgang am Widerstand.
+
+$$
+R = \frac{1}{2\pi f_\mathrm{g} C} = \frac{1}{2\pi \cdot 5000\,\mathrm{Hz} \cdot 22\,\mathrm{nF}} \approx 1447\,\Omega \;\rightarrow\; 1{,}5\,\mathrm{k\Omega}
+\qquad
+f_\mathrm{g} = \frac{1}{2\pi \cdot 1{,}5\,\mathrm{k\Omega} \cdot 22\,\mathrm{nF}} \approx 4{,}82\,\mathrm{kHz}
+$$
+
+</Loesung>
+
+## Betrag und Phase
+
+<Stufe wert="standard" />
+
+Ein RC-Tiefpass hat $f_\mathrm{g} = 1\,\mathrm{kHz}$. Berechne $|H|$ (auch in dB) und die Phase bei $500\,\mathrm{Hz}$, $1\,\mathrm{kHz}$ und $10\,\mathrm{kHz}$.
+
+<Loesung>
+
+$|H| = \dfrac{1}{\sqrt{1 + (f/f_\mathrm{g})^2}}$, $\varphi = -\arctan(f/f_\mathrm{g})$
+
+| $f$ | $f/f_\mathrm{g}$ | $\vert H\vert$ | in dB | $\varphi$ |
+| --- | --- | --- | --- | --- |
+| 500 Hz | 0,5 | 0,894 | −0,97 dB | −26,6° |
+| 1 kHz | 1 | 0,707 | −3,0 dB | −45° |
+| 10 kHz | 10 | 0,0995 | −20,0 dB | −84,3° |
+
+Eine Dekade über der Grenzfrequenz ist das Signal auf ein Zehntel gedämpft (−20 dB).
+
+</Loesung>
+
+## Pegelrechnung
+
+<Stufe wert="grundlagen" />
+
+Ein Signal durchläuft drei Stufen: +10 dB, +5 dB und −3 dB. Wie groß ist die Gesamtverstärkung in dB und als Spannungsfaktor?
+Um welchen Faktor ändert sich die Leistung?
+
+<Loesung>
+
+$$
+a_\mathrm{ges} = 10 + 5 - 3 = 12\,\mathrm{dB}
+\qquad
+\frac{U_2}{U_1} = 10^{12/20} \approx 3{,}98
+\qquad
+\frac{P_2}{P_1} = 10^{12/10} \approx 15{,}8
+$$
+
+</Loesung>
+
+## RLC-Tiefpass nach Butterworth
+
+<Stufe wert="standard" />
+
+<Abbildung bild={RLC} unterschrift="Passiver RLC-Tiefpass 2. Ordnung" />
+
+Ein passiver RLC-Tiefpass soll $f_\mathrm{g} = 5\,\mathrm{kHz}$ haben, Butterworth-Verhalten ($Q = 0{,}707$). Die Spule hat $L = 4{,}7\,\mathrm{mH}$.
+Berechne $C$ und $R$.
+
+<Loesung>
+
+Beim Butterworth-Filter ist $f_\mathrm{g} = f_0$: $\omega_0 = 2\pi \cdot 5\,\mathrm{kHz} \approx 31\,416\,\mathrm{s^{-1}}$
+
+$$
+C = \frac{1}{\omega_0^2 L} = \frac{1}{(31\,416\,\mathrm{s^{-1}})^2 \cdot 4{,}7\,\mathrm{mH}} \approx 216\,\mathrm{nF}
+\qquad
+R = \frac{\omega_0 L}{Q} = \frac{31\,416 \cdot 4{,}7 \cdot 10^{-3}}{0{,}707}\,\Omega \approx 209\,\Omega
+$$
+
+Normwerte z. B. 220 nF und 210 Ω (E96) – Grenzfrequenz und Güte verschieben sich dadurch leicht.
+
+</Loesung>
+
+## Resonanzüberhöhung vermeiden
+
+<Stufe wert="vertiefung" />
+
+Ein RLC-Tiefpass hat $R = 50\,\Omega$, $L = 10\,\mathrm{mH}$, $C = 1\,\mu\mathrm{F}$.
+
+a) Berechne $f_0$ und die Güte. Gibt es eine Überhöhung? Wenn ja: bei welcher Frequenz und wie stark?
+b) Wie groß muss $R$ sein, damit der Filter Butterworth-Verhalten hat?
+
+<Loesung>
+
+a)
+$$
+f_0 = \frac{1}{2\pi\sqrt{LC}} \approx 1592\,\mathrm{Hz}
+\qquad
+Q = \frac{1}{R}\sqrt{\frac{L}{C}} = \frac{100\,\Omega}{50\,\Omega} = 2
+$$
+
+$Q > 0{,}707$ → **Überhöhung** bei $f_\mathrm{r} = f_0\sqrt{1 - \dfrac{1}{2Q^2}} = 1592 \cdot \sqrt{0{,}875}\,\mathrm{Hz} \approx 1489\,\mathrm{Hz}$.
+Dort ist $|H| = \dfrac{Q}{\sqrt{1 - 1/(4Q^2)}} \approx 2{,}07$ → **+6,3 dB**: Das Filter **verstärkt** Signale in der Nähe von 1,5 kHz!
+
+b) $R = \dfrac{1}{Q}\sqrt{\dfrac{L}{C}} = \dfrac{100\,\Omega}{0{,}707} \approx 141\,\Omega$ – der Widerstand muss die Schaltung ausreichend **dämpfen**.
+
+</Loesung>
+
+## Sallen-Key-Tiefpass auslegen
+
+<Stufe wert="standard" />
+
+<Abbildung bild={SallenKey} unterschrift="Sallen-Key-Tiefpass" />
+
+Ein aktiver Sallen-Key-Tiefpass 2. Ordnung soll Butterworth-Verhalten mit $f_\mathrm{g} = 2\,\mathrm{kHz}$ haben. Gleiche Bauteile, $C = 10\,\mathrm{nF}$, $R_\mathrm{g} = 10\,\mathrm{k\Omega}$.
+
+a) Berechne $R$ (E12) und die tatsächliche Grenzfrequenz.
+b) Berechne $R_\mathrm{f}$. Welche Güte ergibt sich mit dem E12-Wert 5,6 kΩ?
+
+<Loesung>
+
+a) $R = \dfrac{1}{2\pi \cdot 2\,\mathrm{kHz} \cdot 10\,\mathrm{nF}} \approx 7{,}96\,\mathrm{k\Omega}$ → **8,2 kΩ** → $f_\mathrm{g} \approx 1{,}94\,\mathrm{kHz}$
+
+b) $K = 3 - \sqrt{2} \approx 1{,}586$ → $R_\mathrm{f} = 0{,}586 \cdot 10\,\mathrm{k\Omega} \approx 5{,}86\,\mathrm{k\Omega}$ (E96: 5,90 kΩ).
+
+Mit 5,6 kΩ: $K = 1{,}56$ → $Q = \dfrac{1}{3 - 1{,}56} \approx 0{,}69$ – sehr nahe an Butterworth. Die Güte reagiert empfindlich auf $K$:
+Bei $K = 3$ würde $Q \to \infty$ – die Schaltung schwingt!
+
+</Loesung>
+
+## Schaltungsanalyse: aktiver Bandpass
+
+<Stufe wert="vertiefung" />
+
+Eine Schaltung besteht aus vier Stufen:
+
+1. passiver Hochpass: $C_1 = 470\,\mathrm{nF}$, $R_1 = 10\,\mathrm{k\Omega}$
+2. Spannungsfolger
+3. Sallen-Key-Tiefpass (Butterworth, $K = 1{,}586$): $R = 10\,\mathrm{k\Omega}$, $C = 4{,}7\,\mathrm{nF}$
+4. invertierender Verstärker: $R_1 = 4{,}7\,\mathrm{k\Omega}$, $R_\mathrm{f} = 47\,\mathrm{k\Omega}$
+
+a) Beschreibe die Funktion. b) Berechne die Grenzfrequenzen und die Verstärkung im Durchlassbereich (Faktor und dB).
+c) Skizziere das Bode-Diagramm. d) Wie groß ist die Ausgangsamplitude bei einem 1-kHz-Signal mit 50 mVp? Und bei 20 kHz?
+
+<Loesung>
+
+**a)** Ein **aktiver Bandpass** mit Verstärker: Der Hochpass entfernt tiefe Frequenzen und Gleichspannung, der Folger entkoppelt ihn,
+der Tiefpass 2. Ordnung entfernt hohe Frequenzen, die letzte Stufe verstärkt (und invertiert).
+
+**b)**
+$$
+f_\mathrm{g,HP} = \frac{1}{2\pi \cdot 10\,\mathrm{k\Omega} \cdot 470\,\mathrm{nF}} \approx 33{,}9\,\mathrm{Hz}
+\qquad
+f_\mathrm{g,TP} = \frac{1}{2\pi \cdot 10\,\mathrm{k\Omega} \cdot 4{,}7\,\mathrm{nF}} \approx 3{,}39\,\mathrm{kHz}
+$$
+
+Verstärkung: $K \cdot |V_4| = 1{,}586 \cdot 10 \approx 15{,}9$ → $20\log_{10} 15{,}9 \approx 24\,\mathrm{dB}$ (4 dB vom Sallen-Key + 20 dB vom Verstärker).
+
+**c)** Unterhalb 33,9 Hz steigt die Kurve mit +20 dB/Dekade an, dazwischen liegt der flache Durchlassbereich bei ca. +24 dB, oberhalb 3,39 kHz
+fällt sie mit −40 dB/Dekade.
+
+**d)** 1 kHz liegt im Durchlassbereich (Dämpfungen: Hochpass 0,9994, Tiefpass ≈ 0,996):
+$\hat{u}_\mathrm{a} \approx 50\,\mathrm{mV} \cdot 15{,}8 \approx 0{,}79\,\mathrm{V}$ (invertiert).
+Bei 20 kHz: $|H_\mathrm{TP}| = \dfrac{1{,}586}{\sqrt{1 + (20/3{,}39)^4}} \approx 0{,}045$ → $\hat{u}_\mathrm{a} \approx 50\,\mathrm{mV} \cdot 0{,}045 \cdot 10 \approx 23\,\mathrm{mV}$.
+
+</Loesung>

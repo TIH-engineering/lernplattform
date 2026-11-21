@@ -1,0 +1,219 @@
+---
+title: Rechenbeispiele – Transistoren
+description: Rechenbeispiele zu Basisstrom und Basiswiderstand, Relaistreiber, LED-Schalter, Längsregler, Konstantstromquelle, MOSFET-Verluste und Gate-Ansteuerung.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import NpnSchalter from '../../../assets/elektronik/npn-schalter.svg';
+import Laengsregler from '../../../assets/elektronik/laengsregler.svg';
+import Stromquelle from '../../../assets/elektronik/stromquelle.svg';
+
+Wenn nichts anderes angegeben ist: $U_\mathrm{BE} = 0{,}7\,\mathrm{V}$, $U_\mathrm{CE,sat} = 0{,}2\,\mathrm{V}$.
+
+## Basiswiderstand für eine LED
+
+<Stufe wert="grundlagen" />
+
+<Abbildung bild={NpnSchalter} unterschrift="NPN-Transistor schaltet eine LED" />
+
+Ein NPN-Transistor ($B = 200$) soll eine LED mit $20\,\mathrm{mA}$ schalten. Angesteuert wird mit einem 5-V-Mikrocontroller.
+Berechne den Mindest-Basisstrom und den Basiswiderstand für einen Übersteuerungsfaktor von 3 (E12: … 10 k, 12 k, 15 k …).
+
+<Loesung>
+
+$$
+I_\mathrm{B,min} = \frac{I_\mathrm{C}}{B} = \frac{20\,\mathrm{mA}}{200} = 100\,\mu\mathrm{A}
+\qquad
+I_\mathrm{B} = 3 \cdot 100\,\mu\mathrm{A} = 300\,\mu\mathrm{A}
+$$
+
+$$
+R_\mathrm{B} = \frac{5\,\mathrm{V} - 0{,}7\,\mathrm{V}}{300\,\mu\mathrm{A}} \approx 14{,}3\,\mathrm{k\Omega} \;\rightarrow\; 12\,\mathrm{k\Omega}
+$$
+
+Hier wird **abgerundet** (kleinerer Widerstand → mehr Basisstrom → sicher gesättigt). Kontrolle: $I_\mathrm{B} \approx 0{,}36\,\mathrm{mA}$
+würde bis $72\,\mathrm{mA}$ Kollektorstrom erlauben – die LED braucht nur 20 mA ✔
+
+</Loesung>
+
+## LED am Transistor
+
+<Stufe wert="grundlagen" />
+
+Eine LED ($U_\mathrm{F} = 2{,}0\,\mathrm{V}$) und ein Vorwiderstand $R_\mathrm{C} = 150\,\Omega$ liegen zwischen $5\,\mathrm{V}$ und dem Kollektor
+eines gesättigten NPN-Transistors. Welcher Strom fließt? Welche Spannung misst du am Kollektor (gegen Masse)?
+
+<Loesung>
+
+$$
+I_\mathrm{C} = \frac{5\,\mathrm{V} - 2{,}0\,\mathrm{V} - 0{,}2\,\mathrm{V}}{150\,\Omega} \approx 18{,}7\,\mathrm{mA}
+$$
+
+Am Kollektor misst man $U_\mathrm{CE,sat} \approx 0{,}2\,\mathrm{V}$. Ist der Transistor gesperrt, fließt kein Strom – dann misst man am Kollektor
+fast die volle Versorgung minus $U_\mathrm{F}$ (die LED ist nicht ganz stromlos, wenn das Messgerät einen kleinen Strom zieht).
+
+</Loesung>
+
+## Relaistreiber mit Bipolartransistor
+
+<Stufe wert="standard" />
+
+Ein 12-V-Relais mit $100\,\mathrm{mA}$ Spulenstrom soll von einem 5-V-Mikrocontroller über einen NPN-Transistor ($B_\mathrm{min} = 100$)
+geschaltet werden. Übersteuerungsfaktor 3. Berechne $R_\mathrm{B}$ und die Verlustleistung im eingeschalteten Transistor.
+Was darf in der Schaltung nicht fehlen?
+
+<Loesung>
+
+$$
+I_\mathrm{B} = 3 \cdot \frac{100\,\mathrm{mA}}{100} = 3\,\mathrm{mA}
+\qquad
+R_\mathrm{B} = \frac{4{,}3\,\mathrm{V}}{3\,\mathrm{mA}} \approx 1{,}43\,\mathrm{k\Omega} \;\rightarrow\; 1{,}2\,\mathrm{k\Omega}
+$$
+
+(Der µC-Pin liefert dann ca. 3,6 mA – erlaubt sind meist 10 … 20 mA ✔.)
+
+$$
+P_\mathrm{T} = U_\mathrm{CE,sat} \cdot I_\mathrm{C} = 0{,}2\,\mathrm{V} \cdot 100\,\mathrm{mA} = 20\,\mathrm{mW}
+$$
+
+Unbedingt nötig: eine **Freilaufdiode** antiparallel zur Relaisspule (Kathode an +12 V).
+
+</Loesung>
+
+## Längsregler
+
+<Stufe wert="standard" />
+
+<Abbildung bild={Laengsregler} unterschrift="Spannungsstabilisierung mit Transistor und Z-Diode" />
+
+$U_\mathrm{bb} = 15\,\mathrm{V}$, Z-Diode $U_\mathrm{Z} = 6{,}8\,\mathrm{V}$, Si-NPN-Transistor. Der Z-Strom soll ca. $5\,\mathrm{mA}$ betragen.
+
+a) Wie groß ist die Ausgangsspannung?
+b) Berechne $R_\mathrm{V}$ (Basisstrom vernachlässigt).
+c) Welche Leistung setzen Transistor und Last bei $I_\mathrm{L} = 100\,\mathrm{mA}$ um?
+d) Wie ändert sich die Ausgangsspannung, wenn der Transistor warm wird?
+
+<Loesung>
+
+a) $U_\mathrm{a} = U_\mathrm{Z} - U_\mathrm{BE} = 6{,}8\,\mathrm{V} - 0{,}7\,\mathrm{V} = 6{,}1\,\mathrm{V}$
+
+b) $R_\mathrm{V} = \dfrac{U_\mathrm{bb} - U_\mathrm{Z}}{I_\mathrm{Z}} = \dfrac{8{,}2\,\mathrm{V}}{5\,\mathrm{mA}} = 1{,}64\,\mathrm{k\Omega}$
+
+c) $P_\mathrm{T} = (U_\mathrm{bb} - U_\mathrm{a}) \cdot I_\mathrm{L} = 8{,}9\,\mathrm{V} \cdot 0{,}1\,\mathrm{A} = 0{,}89\,\mathrm{W}$ ·
+$P_\mathrm{L} = 6{,}1\,\mathrm{V} \cdot 0{,}1\,\mathrm{A} = 0{,}61\,\mathrm{W}$ – der Transistor verheizt mehr als die Last bekommt ($\eta \approx 41\,\%$)!
+
+d) $U_\mathrm{BE}$ sinkt mit der Temperatur (≈ −2 mV/K) → $U_\mathrm{a} = U_\mathrm{Z} - U_\mathrm{BE}$ wird etwas **größer**.
+
+</Loesung>
+
+## Längsregler genauer: mit Basisstrom
+
+<Stufe wert="vertiefung" />
+
+Wie im vorigen Beispiel, aber der Transistor hat $B = 100$ und es fließen $100\,\mathrm{mA}$ Laststrom.
+Welcher Vorwiderstand ist nötig, damit trotzdem $5\,\mathrm{mA}$ durch die Z-Diode fließen?
+
+<Loesung>
+
+Der Basisstrom fließt zusätzlich durch $R_\mathrm{V}$: $I_\mathrm{B} = \dfrac{100\,\mathrm{mA}}{100} = 1\,\mathrm{mA}$
+
+$$
+R_\mathrm{V} = \frac{8{,}2\,\mathrm{V}}{5\,\mathrm{mA} + 1\,\mathrm{mA}} \approx 1{,}37\,\mathrm{k\Omega} \;\rightarrow\; 1{,}2\,\mathrm{k\Omega}
+$$
+
+Wird der Laststrom null, fällt der Basisstrom weg und der Z-Strom steigt auf $8{,}2\,\mathrm{V} / 1{,}2\,\mathrm{k\Omega} \approx 6{,}8\,\mathrm{mA}$ – unkritisch.
+
+</Loesung>
+
+## Konstantstromquelle
+
+<Stufe wert="standard" />
+
+<Abbildung bild={Stromquelle} unterschrift="Konstantstromquelle" />
+
+$U_\mathrm{bb} = 10\,\mathrm{V}$, $U_\mathrm{Z} = 3{,}3\,\mathrm{V}$, $R_\mathrm{E} = 100\,\Omega$.
+
+a) Berechne $R_\mathrm{V}$ für einen Z-Strom von ca. $5\,\mathrm{mA}$.
+b) Welcher Strom fließt durch $R_\mathrm{L}$?
+c) Bis zu welchem Lastwiderstand arbeitet die Stromquelle korrekt?
+
+<Loesung>
+
+a) $R_\mathrm{V} = \dfrac{10\,\mathrm{V} - 3{,}3\,\mathrm{V}}{5\,\mathrm{mA}} = 1{,}34\,\mathrm{k\Omega}$
+
+b) $I_\mathrm{L} \approx \dfrac{U_\mathrm{Z} - U_\mathrm{BE}}{R_\mathrm{E}} = \dfrac{2{,}6\,\mathrm{V}}{100\,\Omega} = 26\,\mathrm{mA}$
+
+c) Der Kollektor darf nicht unter die Basisspannung (3,3 V) sinken: $U_\mathrm{RL,max} = 10\,\mathrm{V} - 3{,}3\,\mathrm{V} = 6{,}7\,\mathrm{V}$
+
+$$
+R_\mathrm{L,max} = \frac{6{,}7\,\mathrm{V}}{26\,\mathrm{mA}} \approx 258\,\Omega
+$$
+
+Für jeden Lastwiderstand zwischen 0 und 258 Ω fließen 26 mA.
+
+</Loesung>
+
+## Stromquelle mit Diodenreferenz
+
+<Stufe wert="vertiefung" />
+
+Statt der Z-Diode liegen zwei Si-Dioden ($U_\mathrm{D} = 0{,}7\,\mathrm{V}$) in Reihe als Referenz an der Basis. Es sollen $30\,\mathrm{mA}$ fließen,
+$U_\mathrm{bb} = 15\,\mathrm{V}$. Berechne $R_\mathrm{E}$ und den größten zulässigen Lastwiderstand. Welchen Vorteil hat die Diodenreferenz?
+
+<Loesung>
+
+$U_\mathrm{RE} = 2 \cdot 0{,}7\,\mathrm{V} - 0{,}7\,\mathrm{V} = 0{,}7\,\mathrm{V}$ →
+$R_\mathrm{E} = \dfrac{0{,}7\,\mathrm{V}}{30\,\mathrm{mA}} \approx 23{,}3\,\Omega$
+
+$$
+R_\mathrm{L,max} = \frac{U_\mathrm{bb} - 2\,U_\mathrm{D}}{I_\mathrm{L}} = \frac{15\,\mathrm{V} - 1{,}4\,\mathrm{V}}{30\,\mathrm{mA}} \approx 453\,\Omega
+$$
+
+**Vorteil:** Die Temperaturdrift der Dioden und der BE-Strecke heben sich teilweise auf (alle etwa −2 mV/K) – der Strom bleibt
+stabiler. Außerdem braucht die Schaltung weniger Spannung als mit einer Z-Diode.
+
+</Loesung>
+
+## MOSFET oder Bipolartransistor?
+
+<Stufe wert="standard" />
+
+Ein Motor mit $5\,\mathrm{A}$ soll geschaltet werden. Vergleiche die Verluste eines MOSFETs ($R_\mathrm{DS(on)} = 25\,\mathrm{m\Omega}$ bei
+$U_\mathrm{GS} = 4{,}5\,\mathrm{V}$) mit einem Leistungs-Bipolartransistor ($U_\mathrm{CE,sat} = 0{,}3\,\mathrm{V}$, $B = 20$).
+
+<Loesung>
+
+$$
+P_\mathrm{MOSFET} = I^2 \cdot R_\mathrm{DS(on)} = (5\,\mathrm{A})^2 \cdot 0{,}025\,\Omega \approx 0{,}63\,\mathrm{W}
+\qquad
+P_\mathrm{BJT} = U_\mathrm{CE,sat} \cdot I = 0{,}3\,\mathrm{V} \cdot 5\,\mathrm{A} = 1{,}5\,\mathrm{W}
+$$
+
+Dazu braucht der Bipolartransistor dauernd einen Basisstrom von mindestens $5\,\mathrm{A} / 20 = 250\,\mathrm{mA}$ – den kein Mikrocontroller liefern kann.
+Der MOSFET braucht statisch **keinen** Gatestrom. → Für große Ströme ist der MOSFET klar im Vorteil.
+
+</Loesung>
+
+## Wie schnell schaltet der MOSFET?
+
+<Stufe wert="vertiefung" />
+
+Ein MOSFET hat die Gate-Ladung $Q_\mathrm{G} = 20\,\mathrm{nC}$. Wie lange dauert das Umschalten ungefähr, wenn
+a) ein µC-Pin mit ca. $20\,\mathrm{mA}$ direkt das Gate lädt, b) ein Gate-Treiber mit $1\,\mathrm{A}$?
+
+<Loesung>
+
+$$
+t \approx \frac{Q_\mathrm{G}}{I_\mathrm{G}}
+\qquad
+\text{a) } t \approx \frac{20\,\mathrm{nC}}{20\,\mathrm{mA}} = 1\,\mu\mathrm{s}
+\qquad
+\text{b) } t \approx \frac{20\,\mathrm{nC}}{1\,\mathrm{A}} = 20\,\mathrm{ns}
+$$
+
+Für ein Relais oder eine Lampe sind 1 µs völlig ausreichend. Bei PWM mit hoher Frequenz (z. B. 100 kHz, Periode 10 µs) wären
+1 µs lange Flanken viel zu langsam – die Schaltverluste würden groß. Dann braucht man einen [Gate-Treiber](/leistungselektronik/theorie/gate-treiber/).
+
+</Loesung>

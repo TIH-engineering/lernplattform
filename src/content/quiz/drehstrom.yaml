@@ -1,0 +1,131 @@
+titel: Drehstrom
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Um wie viel Grad sind die drei Strangspannungen gegeneinander verschoben?
+    optionen:
+      - text: 120°
+        richtig: true
+      - text: 90°
+      - text: 180°
+      - text: 60°
+    erklaerung: Drei gleiche Spannungen, jeweils um ein Drittel der Periode (360°/3) versetzt.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Die Strangspannung beträgt $230\,\mathrm{V}$. Wie groß ist die Außenleiterspannung?'
+    loesung: 398.4
+    einheit: V
+    erklaerung: '$U = \sqrt{3} \cdot U_\mathrm{Str} = 1{,}732 \cdot 230\,\mathrm{V} \approx 398\,\mathrm{V}$ – im Alltag sagt man 400 V.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was gilt in der Sternschaltung?
+    optionen:
+      - text: 'Leiterstrom = Strangstrom, Außenleiterspannung = √3 · Strangspannung'
+        richtig: true
+      - text: 'Leiterspannung = Strangspannung, Leiterstrom = √3 · Strangstrom'
+      - text: 'Leiterstrom = 3 · Strangstrom'
+      - text: 'Strangspannung = 400 V'
+    erklaerung: Im Stern liegt jeder Strang zwischen Außenleiter und Sternpunkt (230 V). Im Dreieck ist es umgekehrt.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welcher Strom fließt bei symmetrischer Last im Neutralleiter?
+    optionen:
+      - text: Kein Strom
+        richtig: true
+      - text: Die Summe der drei Leiterströme
+      - text: Das √3-Fache eines Leiterstroms
+      - text: Ein Drittel eines Leiterstroms
+    erklaerung: Drei gleich große, um 120° versetzte Ströme ergeben als Zeigersumme null.
+
+  - typ: mc
+    stufe: standard
+    frage: Drei gleiche Heizwiderstände werden von Stern auf Dreieck umgeklemmt. Wie ändert sich die Leistung?
+    optionen:
+      - text: Sie wird dreimal so groß.
+        richtig: true
+      - text: Sie wird √3-mal so groß.
+      - text: Sie bleibt gleich.
+      - text: Sie sinkt auf ein Drittel.
+    erklaerung: 'Die Strangspannung steigt um √3, die Leistung je Widerstand mit $U^2$ – also Faktor 3.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein symmetrischer Verbraucher nimmt bei $400\,\mathrm{V}$ einen Leiterstrom von $10\,\mathrm{A}$ bei $\cos\varphi = 0{,}8$ auf. Wie groß ist die Wirkleistung in kW?'
+    loesung: 5.543
+    einheit: kW
+    erklaerung: '$P = \sqrt{3} \cdot U \cdot I \cdot \cos\varphi = 1{,}732 \cdot 400\,\mathrm{V} \cdot 10\,\mathrm{A} \cdot 0{,}8 \approx 5{,}54\,\mathrm{kW}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Durchlauferhitzer mit $18\,\mathrm{kW}$ (ohmsch, symmetrisch) hängt am 400-V-Netz. Wie groß ist der Leiterstrom?'
+    loesung: 25.98
+    einheit: A
+    erklaerung: '$I = P/(\sqrt{3} \cdot U) = 18\,000\,\mathrm{W}/(1{,}732 \cdot 400\,\mathrm{V}) \approx 26\,\mathrm{A}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Im Vierleiternetz fließen ohmsch $I_1 = 10\,\mathrm{A}$, $I_2 = 10\,\mathrm{A}$, $I_3 = 0$. Wie groß ist der Neutralleiterstrom?'
+    loesung: 10
+    einheit: A
+    erklaerung: 'Zwei gleich große Zeiger im Winkel von 120° ergeben eine Summe mit demselben Betrag: $10 + 10 \cdot (-0{,}5 - \mathrm{j}\,0{,}866) = 5 - \mathrm{j}\,8{,}66$ → $10\,\mathrm{A}$.'
+
+  - typ: mc
+    stufe: standard
+    frage: Was passiert bei einem Neutralleiterbruch und unsymmetrischer Last?
+    optionen:
+      - text: Der Sternpunkt verschiebt sich, manche Geräte bekommen deutlich mehr als 230 V.
+        richtig: true
+      - text: Alle Geräte schalten sicher ab.
+      - text: Nichts – der Neutralleiter führt nie Strom.
+      - text: Alle Geräte bekommen genau 400 V.
+    erklaerung: Geräte an verschiedenen Außenleitern liegen in Reihe an 400 V. Das Gerät mit der kleineren Leistung bekommt die größere Spannung.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Welche synchrone Drehzahl hat ein Drehfeld mit 3 Polpaaren bei $50\,\mathrm{Hz}$ (in 1/min)?'
+    loesung: 1000
+    einheit: 1/min
+    erklaerung: '$n_\mathrm{s} = 60 \cdot f / p = 60 \cdot 50 / 3 = 1000\,\mathrm{min^{-1}}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie kehrt man die Drehrichtung eines Drehstrommotors um?
+    optionen:
+      - text: Zwei Außenleiter vertauschen
+        richtig: true
+      - text: Neutralleiter und Schutzleiter vertauschen
+      - text: Alle drei Außenleiter zyklisch weiterdrehen (L1→L2→L3→L1)
+      - text: Die Spannung verdoppeln
+    erklaerung: Das Vertauschen zweier Leiter kehrt die Phasenfolge und damit den Drehsinn des Drehfelds um. Zyklisches Weiterdrehen ändert nichts.
+
+  - typ: mc
+    stufe: standard
+    frage: 'Ein Motor hat auf dem Typenschild „400/690 V Δ/Y“. Wie wird er am 400-V-Netz angeschlossen?'
+    optionen:
+      - text: Im Dreieck
+        richtig: true
+      - text: Im Stern
+      - text: Egal, beides ist richtig
+      - text: Nur mit Neutralleiter
+    erklaerung: Jeder Strang verträgt 400 V. Im Dreieck liegt jeder Strang an 400 V – genau richtig. Diese Motoren eignen sich für den Stern-Dreieck-Anlauf.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum schaltet man Kompensationskondensatoren meist im Dreieck?
+    optionen:
+      - text: Bei 400 V statt 230 V braucht man nur ein Drittel der Kapazität.
+        richtig: true
+      - text: Weil Kondensatoren im Stern nicht funktionieren.
+      - text: Weil dann kein Blindstrom fließt.
+      - text: Weil der Neutralleiter sonst überlastet wird.
+    erklaerung: '$Q = U^2 \omega C$ – mit $\sqrt{3}$-facher Spannung genügt ein Drittel der Kapazität für dieselbe Blindleistung.'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Wie groß ist der arithmetische Mittelwert der Ausgangsspannung eines ungesteuerten B6-Gleichrichters am 400-V-Netz?'
+    loesung: 540.2
+    einheit: V
+    erklaerung: '$U_\mathrm{d,AV} = \dfrac{3\sqrt{2}}{\pi} \cdot U \approx 1{,}35 \cdot 400\,\mathrm{V} \approx 540\,\mathrm{V}$'

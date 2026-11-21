@@ -1,0 +1,143 @@
+titel: Thermische Auslegung
+fragen:
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Linearregler erzeugt $5\,\mathrm{V}$ aus $9\,\mathrm{V}$ bei $0{,}8\,\mathrm{A}$. Wie groß ist die Verlustleistung (Eigenverbrauch vernachlässigt)?'
+    loesung: 3.2
+    einheit: W
+    erklaerung: '$P_\mathrm{V} = (U_\mathrm{E} - U_\mathrm{A}) \cdot I_\mathrm{A} = 4\,\mathrm{V} \cdot 0{,}8\,\mathrm{A} = 3{,}2\,\mathrm{W}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche elektrische Größe entspricht im thermischen Ersatzschaltbild der Verlustleistung?
+    optionen:
+      - text: Der Strom
+        richtig: true
+      - text: Die Spannung
+      - text: Der Widerstand
+      - text: Die Kapazität
+    erklaerung: Wärmestrom ≙ Strom, Temperatur ≙ Spannung (Potenzial), Wärmewiderstand ≙ Widerstand, Wärmekapazität ≙ Kapazität.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche drei Mechanismen transportieren Wärme?
+    optionen:
+      - text: Wärmeleitung (Konduktion)
+        richtig: true
+      - text: Konvektion
+        richtig: true
+      - text: Wärmestrahlung
+        richtig: true
+      - text: Induktion
+    erklaerung: Im Bauteil und zum Kühlkörper wirkt vor allem Leitung, an der Oberfläche Konvektion und Strahlung.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Warum sind viele Kühlkörper schwarz eloxiert?
+    optionen:
+      - text: Dunkle, matte Oberflächen strahlen Wärme besser ab.
+        richtig: true
+      - text: Schwarz leitet Wärme im Inneren besser.
+      - text: Damit man Fingerabdrücke nicht sieht – thermisch spielt es keine Rolle.
+      - text: Schwarze Oberflächen verbessern die Konvektion.
+    erklaerung: Der Emissionsgrad einer schwarzen, matten Oberfläche ist viel größer als der von blankem Aluminium.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Bauteil setzt $1{,}5\,\mathrm{W}$ um, $R_\mathrm{th,ja} = 60\,\mathrm{K/W}$, Umgebung $30\,°\mathrm{C}$. Wie heiß wird der Chip?'
+    loesung: 120
+    einheit: °C
+    erklaerung: '$\vartheta_\mathrm{j} = 30\,°\mathrm{C} + 1{,}5\,\mathrm{W} \cdot 60\,\mathrm{K/W} = 120\,°\mathrm{C}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum vernachlässigt man bei einer ersten Abschätzung oft die Wärmestrahlung?
+    optionen:
+      - text: Die Rechnung wird einfacher und liefert eher zu hohe Temperaturen – ein sicherer Worst Case.
+        richtig: true
+      - text: Weil es in elektronischen Geräten keine Wärmestrahlung gibt.
+      - text: Weil Strahlung die Temperatur erhöht und man das nicht sehen will.
+      - text: Weil Strahlung nur im Vakuum auftritt.
+    erklaerung: Weggelassene Wärmeabfuhr macht das Modell konservativ – die echten Temperaturen sind eher etwas niedriger.
+
+  - typ: mc
+    stufe: standard
+    frage: 'Ein Transistor hat „200 W bei TC = 25 °C“ im Datenblatt. Was bedeutet das?'
+    optionen:
+      - text: Diese Leistung gilt nur, wenn das Gehäuse auf 25 °C gehalten wird – praktisch nie erreichbar.
+        richtig: true
+      - text: Er darf bei 25 °C Raumtemperatur ohne Kühlkörper 200 W umsetzen.
+      - text: Er gibt 200 W Wärme ab, egal wie er betrieben wird.
+      - text: Bei 25 °C Chiptemperatur sind 200 W erlaubt.
+    erklaerung: 'TC ist die Gehäusetemperatur. $(\vartheta_\mathrm{j,max} - 25\,°\mathrm{C})/R_\mathrm{th,jc}$ ergibt die 200 W – das setzt einen unendlich guten Kühlkörper voraus.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Bauteil setzt $6\,\mathrm{W}$ um. $\vartheta_\mathrm{j,max} = 125\,°\mathrm{C}$, $\vartheta_\mathrm{a} = 45\,°\mathrm{C}$, $R_\mathrm{th,jc} = 2\,\mathrm{K/W}$, $R_\mathrm{th,ch} = 0{,}5\,\mathrm{K/W}$. Welchen Wärmewiderstand darf der Kühlkörper höchstens haben?'
+    loesung: 10.83
+    einheit: K/W
+    erklaerung: '$R_\mathrm{th,ha} \leq (125 - 45)\,\mathrm{K}/6\,\mathrm{W} - 2{,}5\,\mathrm{K/W} = 13{,}33 - 2{,}5 \approx 10{,}8\,\mathrm{K/W}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Wozu dient Wärmeleitpaste zwischen Gehäuse und Kühlkörper?
+    optionen:
+      - text: Sie verdrängt die schlecht leitende Luft aus den Unebenheiten der Kontaktflächen.
+        richtig: true
+      - text: Sie isoliert elektrisch.
+      - text: Je dicker die Schicht, desto besser die Kühlung.
+      - text: Sie ersetzt den Kühlkörper bei kleinen Leistungen.
+    erklaerung: Paste nur dünn auftragen. Elektrisch isolieren muss eine Isolierscheibe oder ein Wärmeleitpad.
+
+  - typ: mc
+    stufe: standard
+    frage: Wie kannst du bei einem SMD-Regler (SOT-223) die Wärmeabfuhr verbessern?
+    optionen:
+      - text: Größere Kupferfläche am Kühlpad
+        richtig: true
+      - text: Thermische Vias zur Unterseite
+        richtig: true
+      - text: Dickeres Kupfer (z. B. 70 µm)
+        richtig: true
+      - text: Das Bauteil mit Lötstopplack vollständig abdecken
+    erklaerung: 'Die Leiterplatte ist der Kühlkörper des SMD-Bauteils. FR4 leitet Wärme schlecht (λ ≈ 0,3 W/(m·K)), Kupfer sehr gut.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Kühlkörper hat $R_\mathrm{th} = 4\,\mathrm{K/W}$ und $C_\mathrm{th} = 50\,\mathrm{J/K}$. Wie groß ist die thermische Zeitkonstante?'
+    loesung: 200
+    einheit: s
+    erklaerung: '$\tau = R_\mathrm{th} \cdot C_\mathrm{th} = 4\,\mathrm{K/W} \cdot 50\,\mathrm{J/K} = 200\,\mathrm{s}$ – nach ca. $5\tau \approx 17\,\mathrm{min}$ ist er eingeschwungen.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Zwei Transistoren mit je 20 W sitzen auf einem gemeinsamen Kühlkörper. Welcher Wärmestrom fließt durch R_th,ha?
+    optionen:
+      - text: 40 W
+        richtig: true
+      - text: 20 W
+      - text: 10 W
+      - text: 0 W, weil sich die Wärmeströme aufheben
+    erklaerung: 'Beide Wärmeströme vereinigen sich im Kühlkörper: $\vartheta_\mathrm{h} = \vartheta_\mathrm{a} + (P_1 + P_2)\,R_\mathrm{th,ha}$.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum darf ein Leistungshalbleiter für sehr kurze Pulse eine viel höhere Leistung umsetzen als im Dauerbetrieb?
+    optionen:
+      - text: Die Wärmekapazitäten von Chip und Gehäuse puffern die kurze Energie, die Wärme erreicht den Kühlkörper kaum.
+        richtig: true
+      - text: Bei kurzen Pulsen entsteht keine Wärme.
+      - text: Der Wärmewiderstand steigt bei kurzen Pulsen.
+      - text: Weil die Umgebungstemperatur während des Pulses sinkt.
+    erklaerung: 'Datenblätter zeigen das mit der transienten Wärmeimpedanz $Z_\mathrm{th}(t)$, die für kurze Zeiten viel kleiner ist als $R_\mathrm{th}$.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Die Wärmebildkamera zeigt auf einer blanken Metallfahne eine viel zu niedrige Temperatur. Warum?
+    optionen:
+      - text: Blankes Metall hat einen kleinen Emissionsgrad und spiegelt die Umgebung.
+        richtig: true
+      - text: Metall ist immer kälter als Kunststoff.
+      - text: Die Kamera misst nur die Lufttemperatur.
+      - text: Das Bauteil ist tatsächlich kalt, der Chip erzeugt keine Wärme.
+    erklaerung: Mattes schwarzes Klebeband auf die Messstelle kleben und den Emissionsgrad passend einstellen.

@@ -1,0 +1,95 @@
+---
+title: Praxisbeispiele – Operationsverstärker
+description: Mikrofonverstärker mit einfacher Versorgung, Temperatursensor für den ADC, Lichtsensor mit Transimpedanzverstärker, Entprellen mit Schmitt-Trigger und Datenblatt eines LM358.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Mikrofonverstärker an 5 V
+
+Ein Elektretmikrofon liefert Sprachsignale mit etwa $10\,\mathrm{mV}$ Amplitude. Ein Mikrocontroller-ADC (0 … 5 V) soll sie erfassen.
+Verwendet wird ein OPV an **einfacher** Versorgung (0 V / 5 V).
+
+1. Warum kann man das Signal nicht einfach mit einem invertierenden Verstärker gegen Masse verstärken?
+2. Wie hebt man das Signal auf eine Mittenspannung an?
+3. Welche Verstärkung ist sinnvoll, wenn das Ausgangssignal ±2 V nicht überschreiten soll?
+
+<Loesung>
+
+1. Das Mikrofonsignal schwingt um 0 V. Ohne negative Versorgung kann der OPV keine negativen Spannungen ausgeben – die negativen
+   Halbwellen würden abgeschnitten.
+2. Der +-Eingang wird über einen Spannungsteiler (2 × 10 kΩ + Kondensator) auf **2,5 V** gelegt. Das Signal wird über einen
+   Koppelkondensator eingespeist (trennt die Gleichspannung). Der Ausgang schwingt dann um 2,5 V.
+3. $V = 2\,\mathrm{V} / 10\,\mathrm{mV} = 200$ (46 dB). Wegen des GBW besser auf zwei Stufen verteilen (z. B. 20 × 10).
+
+</Loesung>
+
+## Temperatursensor für den ADC
+
+Ein Temperatursensor liefert $10\,\mathrm{mV/°C}$ (bei 0 °C: 0 V). Der Messbereich soll 0 … 100 °C sein, der ADC hat 0 … 3,3 V.
+
+1. Welche Verstärkung ist nötig, damit 100 °C knapp unter 3,3 V ergeben? Welche Schaltung wählst du?
+2. Dimensioniere die Widerstände mit E12-Werten.
+3. Warum schaltet man vor den ADC oft noch einen RC-Tiefpass?
+
+<Loesung>
+
+1. Bei 100 °C liefert der Sensor 1 V → $V = 3{,}3$ (genau). Mit etwas Reserve z. B. $V = 3{,}2$. Der Sensor soll nicht belastet werden
+   und das Signal nicht invertiert → **nichtinvertierender Verstärker**.
+2. $V = 1 + R_\mathrm{f}/R_\mathrm{g} = 3{,}2$ → $R_\mathrm{f}/R_\mathrm{g} = 2{,}2$ → z. B. $R_\mathrm{g} = 10\,\mathrm{k\Omega}$, $R_\mathrm{f} = 22\,\mathrm{k\Omega}$
+   → 100 °C ergeben 3,2 V.
+3. Als **Anti-Aliasing-Filter**: Er entfernt hochfrequente Störungen, die der ADC sonst als falsche, langsame Schwankungen messen würde
+   (siehe [Filter](/filter/)).
+
+</Loesung>
+
+## Lichtsensor mit Fotodiode
+
+Für eine Lichtschranke soll der Strom einer Fotodiode (0 … 20 µA) in eine Spannung von 0 … 2 V umgewandelt werden.
+
+1. Welche Schaltung verwendest du und wie groß wird $R_\mathrm{f}$?
+2. Mit einem OPV an einfacher Versorgung (0/5 V) kommt am Ausgang nichts heraus. Warum, und wie hilft man sich?
+
+<Loesung>
+
+1. **Transimpedanzverstärker**: $|U_\mathrm{a}| = I_\mathrm{P} \cdot R_\mathrm{f}$ → $R_\mathrm{f} = 2\,\mathrm{V} / 20\,\mu\mathrm{A} = 100\,\mathrm{k\Omega}$.
+2. Mit der Formel $U_\mathrm{a} = -I_\mathrm{P} R_\mathrm{f}$ wäre der Ausgang **negativ** – das geht ohne negative Versorgung nicht.
+   Lösung: die Fotodiode **umdrehen** (dann fließt der Strom aus der virtuellen Masse heraus und $U_\mathrm{a}$ wird positiv) oder den
+   +-Eingang auf eine kleine positive Referenz legen.
+
+</Loesung>
+
+## Taster entprellen mit Schmitt-Trigger
+
+Ein mechanischer Taster prellt: Beim Drücken öffnet und schließt der Kontakt einige Millisekunden lang mehrfach. Ein Zähler würde
+mehrere Tastendrücke zählen. Eine typische Lösung ist ein RC-Glied (10 kΩ, 1 µF) mit nachgeschaltetem Schmitt-Trigger.
+
+1. Was macht das RC-Glied aus dem prellenden Signal?
+2. Warum reicht ein normaler Komparator danach nicht aus?
+
+<Loesung>
+
+1. Es glättet die kurzen Pulse: Die Kondensatorspannung steigt bzw. fällt langsam (τ = 10 ms) statt hin- und herzuspringen.
+2. Die langsame Flanke würde die Schwelle eines Komparators „langsam durchlaufen“ – Rauschen und Restwelligkeit lassen ihn dann
+   mehrfach umschalten. Der **Schmitt-Trigger** hat zwei getrennte Schwellen (Hysterese) und schaltet genau einmal sauber um.
+   (Viele Mikrocontroller-Eingänge haben bereits Schmitt-Trigger eingebaut; oft entprellt man auch per Software.)
+
+</Loesung>
+
+## Datenblatt lesen: LM358
+
+Der LM358 ist ein günstiger Doppel-OPV. Typische Datenblattwerte: Versorgung 3 … 32 V (oder ±1,5 … ±16 V), GBW ≈ 0,7 … 1 MHz,
+Slew-Rate ≈ 0,3 V/µs, Eingangsbereich bis 0 V, Ausgang bis ca. $U_\mathrm{B} - 1{,}5\,\mathrm{V}$.
+
+1. Kann man mit dem LM358 an 5 V ein Signal von 0 … 4,5 V ausgeben?
+2. Eignet er sich für einen Audioverstärker mit 20 kHz und 1 V Amplitude?
+3. Warum ist er trotzdem so beliebt?
+
+<Loesung>
+
+1. Nur bis ca. **3,5 V** – darüber ist der Ausgang gesättigt. Für den vollen Bereich braucht man einen **Rail-to-Rail-Ausgang**.
+2. Slew-Rate prüfen: $2\pi \cdot 20\,\mathrm{kHz} \cdot 1\,\mathrm{V} \approx 0{,}13\,\mathrm{V}/\mu\mathrm{s} < 0{,}3\,\mathrm{V}/\mu\mathrm{s}$ ✔. Mit GBW 1 MHz geht eine Verstärkung bis
+   etwa 50 bei 20 kHz. Für einfache Anwendungen reicht es, für HiFi gibt es rauschärmere OPVs.
+3. Sehr billig, einfache (unsymmetrische) Versorgung möglich, Eingänge bis 0 V – ideal für Sensorsignale an Mikrocontrollern.
+
+</Loesung>

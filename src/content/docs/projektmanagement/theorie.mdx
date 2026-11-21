@@ -1,0 +1,357 @@
+---
+title: Theorie – Projektmanagement
+description: "Projektmerkmale, magisches Dreieck, SMART-Ziele, Stakeholder und Rollen, Projektphasen und Gates, klassisches, iteratives, agiles und hybrides Vorgehen, Organisationsformen, Projektstrukturplan, Arbeitspakete, Aufwand und Dauer, Meilensteine, Gantt-Diagramm, kritischer Pfad, Projekt- und Produktkosten, Steuerung, Risiko, Issue und Änderung, Risikomatrix, Qualitätssicherung, Verifikation und Validierung, Dokumentation, Anforderungen, Lasten- und Pflichtenheft."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Dreieck from '../../../assets/projektmanagement/magisches-dreieck.svg';
+import Gantt from '../../../assets/projektmanagement/gantt.svg';
+
+## 1 · Was ist ein Projekt?
+
+Kein einzelnes Merkmal macht eine Aufgabe zum Projekt – typisch ist die **Kombination**:
+
+| Merkmal | Bedeutung |
+| --- | --- |
+| **zielorientiert** | Ein konkretes Ergebnis ist festgelegt. |
+| **zeitlich begrenzt** | Es gibt einen Start und ein (geplantes) Ende. |
+| **einmalig / neuartig** | Kein vollständig standardisierter Ablauf, der sich regelmäßig wiederholt. |
+| **begrenzte Ressourcen** | Personal, Geld, Material und Zeit sind beschränkt. |
+| **komplex und vernetzt** | Mehrere Fachbereiche, Lieferanten und Entscheidungen hängen zusammen. |
+| **mit Unsicherheit** | Technische, terminliche oder organisatorische Risiken gehören dazu. |
+
+**Projekt oder Routine?** Die jährliche Kalibrierung aller Messmittel, der Tausch eines defekten Netzteils oder ein Firmware-Update nach
+Checkliste sind **Routineaufgaben** – sie laufen wiederholt nach bekanntem Ablauf. Die Entwicklung eines neuen Prüfadapters, die Umstellung
+einer Fertigungslinie auf ein neues Produkt oder das Redesign einer Platine, weil ein Bauteil abgekündigt wurde, sind **Projekte**.
+
+### Wozu Projektmanagement?
+
+- **Orientierung:** Was ist das Ziel – und was gehört ausdrücklich **nicht** dazu?
+- **Koordination:** Wer macht was bis wann, und was hängt wovon ab?
+- **Entscheidungen:** Welche Abweichungen sind in Ordnung, wo muss man gegensteuern?
+- **Kommunikation:** Wer braucht wann welche Information?
+- **Lernen:** Was lief gut, was machen wir beim nächsten Projekt anders?
+
+## 2 · Das magische Dreieck
+
+<Abbildung bild={Dreieck} unterschrift="Die drei Zielgrößen eines Projekts beeinflussen sich gegenseitig" />
+
+Jedes Projekt hat drei Zielgrößen: **Zeit** (Termin), **Kosten** (Budget, Ressourcen) und **Leistung/Qualität** (Umfang und Güte des
+Ergebnisses). Sie hängen zusammen – ändert sich eine, ändert sich meist mindestens eine andere:
+
+- Der Kunde will das Gerät **4 Wochen früher** → mehr Personal oder Expressfertigung (**Kosten** ↑) oder weniger Funktionen (**Leistung** ↓)
+  oder mehr Risiko (**Qualität** ↓).
+- Das Budget wird **gekürzt** → längere Lieferzeiten akzeptieren (**Zeit** ↑) oder Umfang reduzieren.
+
+Wichtig: Welche Zielgröße nachgeben darf, entscheidet der **Auftraggeber** – nicht stillschweigend das Entwicklungsteam.
+
+## 3 · Ziele richtig formulieren
+
+Gute Ziele machen Entscheidungen und die spätere **Abnahme** möglich. Ein bewährter Prüfstein ist **SMART**:
+
+| | Bedeutung |
+| --- | --- |
+| **S**pezifisch | eindeutig, nicht allgemein |
+| **M**essbar | mit Zahl, Einheit oder klarem Prüfkriterium |
+| **A**kzeptiert | von Auftraggeber und Team getragen |
+| **R**ealistisch | technisch und wirtschaftlich erreichbar |
+| **T**erminiert | mit Zeitpunkt |
+
+| unbrauchbar | SMART |
+| --- | --- |
+| „Die neue Platine soll günstig sein und wenig Strom brauchen.“ | „Die Baugruppe nimmt bei 24 V im Normalbetrieb höchstens 1,5 W auf; die Materialkosten liegen unter 35 € pro Stück.“ |
+| „Der Prüfadapter soll schnell fertig sein.“ | „Der Prüfadapter ist spätestens sechs Wochen nach Projektfreigabe für die Produktion freigegeben.“ |
+
+Genauso wichtig sind **Nicht-Ziele** (Abgrenzung): Was gehört ausdrücklich **nicht** zum Projekt? Ohne sie werden Zusatzwünsche
+stillschweigend Teil des Projekts (*Scope Creep*).
+
+## 4 · Stakeholder und Rollen
+
+Ein **Stakeholder** ist jede Person oder Gruppe, die das Projekt beeinflusst oder von ihm betroffen ist – nicht nur das Projektteam.
+
+| Rolle | Aufgabe |
+| --- | --- |
+| **Auftraggeber** | setzt Ziele, Prioritäten und Budget, entscheidet bei Zielkonflikten |
+| **Projektleitung** | plant, koordiniert, macht Abweichungen sichtbar, organisiert Entscheidungen |
+| **Projektteam** | liefert die fachlichen Ergebnisse, meldet Risiken und Abweichungen |
+| **Fachbereiche** (Einkauf, Fertigung, Qualität, Service) | bringen Know-how, Ressourcen, Vorgaben und Freigaben ein |
+| **Lieferanten / Partner** | beeinflussen Termine, Qualität, Verfügbarkeit und Kosten |
+| **Nutzer / Kunde** | bewertet den Nutzen – oft anders als die Technik |
+| **Lenkungskreis / Management** | priorisiert Ressourcen, trifft Eskalationsentscheidungen |
+
+### Stakeholder-Analyse
+
+Nicht alle Stakeholder brauchen dieselbe Aufmerksamkeit. Man ordnet sie nach **Einfluss** und **Interesse**:
+
+| | geringes Interesse | hohes Interesse |
+| --- | --- | --- |
+| **hoher Einfluss** | zufriedenstellen | **eng einbinden** |
+| **geringer Einfluss** | beobachten | informieren |
+
+Klassischer Fehler: Fertigung, Einkauf oder Prüffeld werden erst eingebunden, wenn Änderungen schon teuer sind.
+
+## 5 · Projektphasen und Meilensteine
+
+### Projektlebenszyklus
+
+| Phase | Leitfrage |
+| --- | --- |
+| **Initiierung** | Warum? Auftrag, Nutzen, grober Rahmen |
+| **Planung** | Was? Wer? Wann? Womit? Welche Risiken? |
+| **Durchführung** | Arbeitspakete umsetzen, Ergebnisse erzeugen |
+| **Steuerung** | Soll-Ist vergleichen, Änderungen und Risiken behandeln (läuft parallel zur Durchführung) |
+| **Abschluss** | abnehmen, dokumentieren, übergeben, Lessons Learned |
+
+In der **Hardwareentwicklung** sieht das konkret so aus: Anforderungen → Konzept → Detailentwicklung (Schaltung, Layout, Mechanik, Firmware)
+→ Prototyp → Verifikation → Freigabe. **Rücksprünge sind normal** – ein Phasenmodell heißt nicht, dass man nicht dazulernen darf.
+
+### Meilensteine und Gates
+
+Ein **Meilenstein** ist ein klar **überprüfbarer Zustand** – keine Tätigkeit:
+
+| schlecht (Tätigkeit) | gut (Zustand) |
+| --- | --- |
+| „PCB entwickeln“ | „PCB-Design freigegeben“ |
+| „Testen“ | „Funktionsprüfung bestanden“ |
+| „Prototyp“ | „Erster Prototyp elektrisch in Betrieb: Versorgung stabil, µC programmierbar, CAN funktioniert“ |
+
+An einem **Gate** (Entscheidungspunkt) wird bewusst gefragt: *Ist das Ergebnis dieser Phase gut genug, um mit vertretbarem Risiko weiterzugehen?*
+Typische Gates: Anforderungen freigegeben – Konzept entschieden – Design freigegeben (*Design Freeze*) – Prototyp funktionsfähig – Test
+bestanden – Übergabe.
+
+## 6 · Vorgehensmodelle
+
+| Modell | Prinzip | passt gut, wenn … |
+| --- | --- | --- |
+| **klassisch** (Wasserfall) | Phasen werden weitgehend nacheinander geplant und abgearbeitet. | Anforderungen stabil sind und Änderungen teuer (Leiterplatten, Werkzeuge). |
+| **iterativ** | Die Lösung wird in Schleifen verbessert: bauen, testen, lernen. | man früh lernen und Annahmen mit Prototypen prüfen will. |
+| **agil** (z. B. Scrum) | kurze Zyklen (Sprints), priorisierte Aufgabenliste (*Backlog*), häufiges Feedback | Software und unsichere Anforderungen. |
+| **hybrid** | Hardware mit klaren Gates, Firmware und Details iterativ | in technischen Firmen sehr häufig. |
+
+## 7 · Projektorganisation
+
+| Form | Beschreibung | Vorteil | Nachteil |
+| --- | --- | --- | --- |
+| **Linienprojekt** | Projekt bleibt in der Fachabteilung | kaum zusätzlicher Aufwand | Projektleitung hat wenig Entscheidungsmacht |
+| **Matrixorganisation** | Mitarbeitende bleiben in ihren Abteilungen und arbeiten zusätzlich im Projekt | flexibel, Fachwissen bleibt verbunden | Prioritätskonflikte zwischen Linie und Projekt |
+| **reine Projektorganisation** | Team wird dem Projekt fest zugeordnet | klare Verantwortung, schnelle Entscheidungen | hoher Ressourcenbedarf, Rückkehr ins Team nach Projektende |
+
+Welche Form passt, hängt von **Dauer, Priorität, Komplexität** und benötigten **Ressourcen** ab: Eine kleine PCB-Änderung (2 Personen,
+3 Wochen) bleibt in der Linie, eine neue Maschinenplattform (18 Monate, viele Abteilungen) bekommt ein eigenes Projektteam.
+
+## 8 · Projektplanung
+
+### Planungslogik
+
+Nicht mit Kalenderdaten beginnen! Die Reihenfolge ist:
+
+**Ziel und Umfang** → **Struktur (PSP)** → **Arbeitspakete** → **Aufwand und Ressourcen** → **Abhängigkeiten** → **Termine und Meilensteine**
+
+Eine To-do-Liste wie „Schaltplan – Layout – Software – Test – Doku“ ist noch kein Plan: Es fehlen Verantwortliche, Aufwand, Dauer,
+Abhängigkeiten und Entscheidungspunkte.
+
+### Projektstrukturplan (PSP)
+
+Der **PSP** zerlegt das Projekt **vollständig** in Teilprojekte und **Arbeitspakete** – noch ohne Termine. Beispiel Prüfadapter:
+
+| Elektronik | Mechanik | Software | Test & Doku |
+| --- | --- | --- | --- |
+| Anforderungen klären | Gehäuse | Testskript | Prüfplan |
+| Schaltung | Stecksystem / Adapter | Protokollierung (Logging) | Abnahme |
+| Layout | | | Unterlagen |
+
+Ein gutes **Arbeitspaket** beschreibt ein **Ergebnis**, nicht nur eine Tätigkeit, und hat: Verantwortliche:n, geschätzten Aufwand,
+Dauer, Voraussetzungen und ein **Fertig-Kriterium** („Layout ist reviewt, DRC ohne Fehler, Fertigungsdaten erzeugt“).
+
+### Aufwand ist nicht Dauer
+
+- **Aufwand:** Arbeitsstunden (z. B. 40 h)
+- **Kapazität:** Wie viel Zeit steht pro Woche wirklich zur Verfügung? (z. B. 50 % neben dem Tagesgeschäft)
+- **Dauer:** Kalenderzeit – hier etwa **2 Wochen** statt 1
+- **Wartezeit:** läuft ohne aktive Arbeit (Leiterplattenfertigung, Lieferzeit, Prüftermin im EMV-Labor)
+
+### Gantt-Diagramm und kritischer Pfad
+
+<Abbildung bild={Gantt} unterschrift="Gantt-Diagramm eines Leiterplattenprojekts: Der kritische Pfad A–B–D–E–G bestimmt den Endtermin" />
+
+Das **Gantt-Diagramm** zeigt Arbeitspakete als Balken über der Zeit – mit Dauer, Lage, Überschneidungen und Meilensteinen (Raute).
+Es ersetzt aber nicht die logische Planung der **Abhängigkeiten**.
+
+Der **kritische Pfad** ist die längste Kette voneinander abhängiger Arbeitspakete. Sie hat **keinen Puffer**: Jede Verzögerung darauf
+verschiebt direkt den Endtermin. Im Beispiel:
+
+| Pfad | Dauer | Puffer |
+| --- | --- | --- |
+| A → B → D → E → G (Anforderungen, Schaltplan, Layout, Fertigung, Inbetriebnahme) | 1 + 2 + 1 + 3 + 1 = **8 Wochen** | **0** (kritisch) |
+| A → B → F → G (Firmware) | 1 + 2 + 3 + 1 = 7 Wochen | 1 Woche |
+| A → C → G (Gehäuse) | 1 + 2 + 1 = 4 Wochen | 4 Wochen |
+
+Die Fertigung (3 Wochen) lässt sich kaum verkürzen – deshalb wirkt jede Verzögerung **davor** direkt auf den Termin. Gegenmaßnahmen:
+Bauteilverfügbarkeit vor dem Design Freeze prüfen, Firmware parallel auf einem Entwicklungsboard beginnen, Reviews vor der Fertigung.
+
+### Werkzeuge
+
+Das einfachste passende Werkzeug gewinnt: Whiteboard und Karten (Strukturieren im Team), Tabellen (einfache Termin- und Kostenpläne),
+Gantt-Programme (größere Pläne mit Abhängigkeiten), **Kanban-Board** (Status laufender Aufgaben: offen – in Arbeit – erledigt),
+**Issue-Tracker** (Aufgaben und Fehler mit Verantwortlichen), **Versionsverwaltung** (z. B. Git für Firmware und Hardware-Daten).
+
+### Kosten
+
+- **Projektkosten:** entstehen einmalig für die Entwicklung – Arbeitszeit, Prototypen, Leiterplatten, Messgeräte, externe Prüfungen (EMV).
+- **Produktkosten:** Kosten **eines** späteren Geräts – Bauteile, Leiterplatte, Bestückung, Gehäuse, Prüfung. Sie sinken mit der Stückzahl.
+
+Bei Unsicherheit gibt man eine Bandbreite oder eine **Reserve** an.
+
+## 9 · Projektsteuerung
+
+Steuern heißt, **Plan und Wirklichkeit** zusammenzubringen – ein Regelkreis:
+
+**Plan (Soll)** → **Messen (Ist)** → **Vergleichen** → **Entscheiden** → **Nachverfolgen** → …
+
+Ein guter Statusbericht beruht auf Fakten statt Bauchgefühl: Welche **Ergebnisse** sind fertig? Welche **Meilensteine** erreicht? Wie viel
+**Aufwand/Budget** ist verbraucht, wie viel realistisch noch nötig? Welche **Fehler** gibt es? Welche **Risiken** sind neu? Welche
+**Entscheidung** blockiert das Team?
+
+### Risiko, Problem oder Änderung?
+
+| Begriff | Bedeutung | Beispiel |
+| --- | --- | --- |
+| **Risiko** | mögliches **zukünftiges** Ereignis | „Der Lieferant **könnte** zu spät liefern.“ |
+| **Problem (Issue)** | ist **bereits eingetreten** und muss gelöst werden | „Die Lieferung ist **bestätigt** sechs Wochen verspätet.“ |
+| **Änderung (Change)** | bewusste Abweichung vom vereinbarten Umfang, Termin, Budget oder Lösungsweg | „Der Kunde will **zusätzlich** CAN-FD.“ |
+
+Ein Problem wird gelöst, damit der **vereinbarte** Umfang erreicht wird. Eine Änderung verändert den Umfang und braucht eine **bewusste
+Entscheidung** über die Folgen.
+
+### Änderungen kontrolliert behandeln
+
+Änderung beschreiben → Auswirkungen auf Zeit, Kosten, Qualität analysieren → Optionen bewerten → **Entscheidung** (durch den Auftraggeber)
+→ Plan und Dokumente aktualisieren → kommunizieren.
+
+Eine Änderung ist nicht automatisch schlecht. Gefährlich ist eine Änderung, die „nur schnell“ eingebaut wird: Der Umfang wächst schleichend,
+Termin- und Kostenplan stimmen nicht mehr, Tests und Dokumentation passen nicht zum Produktstand – und später weiß niemand, warum.
+
+### Risikomanagement
+
+Ein Kreislauf: **Identifizieren** → **Bewerten** (Wahrscheinlichkeit × Auswirkung) → **Maßnahme planen** → **Verantwortliche:n festlegen** →
+**Überwachen**. Das **Risikoregister** ist ein lebendes Arbeitsmittel, keine Ablage.
+
+| Wahrscheinlichkeit → / Auswirkung ↓ | niedrig | mittel | hoch |
+| --- | --- | --- | --- |
+| **hoch** | mittel | hoch | **kritisch** |
+| **mittel** | gering | mittel | hoch |
+| **niedrig** | gering | gering | mittel |
+
+Vier Strategien:
+
+| Strategie | Beispiel |
+| --- | --- |
+| **vermeiden** | Bauteil mit Lieferproblem gar nicht erst einsetzen |
+| **vermindern** | Zweitquelle qualifizieren, früh bestellen, kritische Schaltungsteile vorab testen, Zeitpuffer |
+| **übertragen** | Vertrag mit Liefergarantie, externer Dienstleister trägt einen Teil |
+| **akzeptieren** | bewusst tragen – mit Reserve, Beobachtung und Notfallplan |
+
+### Eskalation
+
+Früh eskalieren heißt nicht Panik machen, sondern rechtzeitig die **Entscheidungskompetenz** holen:
+
+- **im Team lösen**, wenn die Auswirkung lokal und im vereinbarten Spielraum bleibt,
+- **Projektleitung** einbinden, wenn mehrere Arbeitspakete, Termine oder Ressourcen betroffen sind,
+- **Auftraggeber / Lenkungskreis**, wenn Ziel, Budget oder Endtermin geändert werden müssen.
+
+Eine gute Eskalation enthält: **Fakten + Auswirkung + Optionen + Empfehlung + benötigte Entscheidung**.
+
+## 10 · Qualitätssicherung und Dokumentation
+
+### Drei Begriffe
+
+| Begriff | Frage | Beispiel |
+| --- | --- | --- |
+| **Qualitätsplanung** | Welche Ziele, Kriterien, Prüfungen und Verantwortlichen brauchen wir? | Prüfplan, Review-Termine festlegen |
+| **Qualitätssicherung** | Welche Prozesse **verhindern**, dass Fehler entstehen? | Bibliotheksfreigabe, Vier-Augen-Review, Checklisten |
+| **Qualitätsprüfung** | Erfüllt das Ergebnis die Anforderungen? | Messung, Funktionstest, Sichtprüfung |
+
+Prüfen **findet** Fehler, Qualitätssicherung **verhindert** sie. Fehler werden umso teurer, je später sie entdeckt werden: ein Missverständnis
+in der Anforderung kostet beim Lesen Minuten, in der Serie einen Rückruf (oft genannte Faustregel: Faktor 10 pro Phase).
+
+### Typische QS-Maßnahmen in der Hardwareentwicklung
+
+- **Schaltplanreview:** Versorgung, Pegel, Schutzbeschaltung, Dimensionierung, Datenblattannahmen
+- **Layoutreview:** Footprints, Rückstrompfade, Abstände, Thermik, Testpunkte, Mechanik
+- **Stücklistenreview:** Herstellerteilenummern, Varianten, Lieferbarkeit
+- **Freigabecheckliste:** richtige Revision, offene Punkte bewertet, Prüfer:in dokumentiert, Fertigungsdaten vollständig
+- **Vier-Augen-Prinzip** bei kritischen Bauteilen (Steckverbinder, Leistungsteil)
+- **ERC/DRC** (elektrische und Design-Regelprüfung im CAD-Programm)
+
+### Verifikation und Validierung
+
+- **Verifikation:** *Haben wir das Produkt **richtig** gebaut?* – Nachweis gegen die spezifizierten Anforderungen (Versorgung 18 … 30 V?
+  Messfehler < 1 %? kurzschlussfest?).
+- **Validierung:** *Haben wir das **richtige** Produkt gebaut?* – Erfüllt es den tatsächlichen Einsatzzweck? (Anwendungstest, Kundenfeedback)
+
+Ein **Prüfplan** nennt für jede Prüfung: Prüfobjekt (Revision, Seriennummer), Anforderung, Methode und Randbedingungen,
+Bestanden-Kriterium, Ergebnis (Messwert) und was bei Abweichung passiert.
+
+### Versionsmanagement
+
+Ein Testergebnis ist wertlos, wenn später niemand weiß, **was** getestet wurde. Schaltplan-, Layout- und Stücklistenrevision, Firmwareversion,
+Prüfplanrevision und Seriennummer müssen eindeutig zusammenpassen.
+
+### Projektdokumente und Abschluss
+
+Projektauftrag (Ziele, Umfang) · Planung (PSP, Terminplan, Rollen) · Entscheidungsprotokolle und Freigaben · Änderungsliste · Risikoregister ·
+technische Unterlagen (Anforderungen, Schaltplan, Layout, Stückliste, Firmware) · Prüfberichte · Abnahmeprotokoll.
+
+Ein Projekt ist erst sauber **abgeschlossen**, wenn das Ergebnis **abgenommen**, die **Restpunkte** mit Verantwortlichen übergeben, die
+Dokumentation vollständig und die **Lessons Learned** festgehalten sind: Was behalten wir bei? Was ändern wir? Eine gute Lesson Learned
+verbessert einen **Prozess** – „nächstes Mal besser aufpassen“ ist keine.
+
+## 11 · Anforderungen, Lastenheft und Pflichtenheft
+
+### Was ist eine gute Anforderung?
+
+Eine Anforderung beschreibt ein benötigtes Ergebnis oder eine einzuhaltende Eigenschaft – **ohne Interpretationsspielraum**.
+Bedarf und Lösung trennen: „Techniker sollen einen Fehler vor Ort eindeutig erkennen“ ist eine Anforderung, „7-Zoll-Touchdisplay“ ist bereits
+eine Lösungsidee.
+
+| Prüffrage | |
+| --- | --- |
+| **eindeutig** | Verstehen zwei Personen dasselbe? |
+| **prüfbar** | Gibt es ein objektives Prüfkriterium? |
+| **vollständig** | Sind Betriebszustand, Einheit und Grenzen angegeben? |
+| **realistisch** | technisch und wirtschaftlich erreichbar? |
+| **widerspruchsfrei** | passt sie zu allen anderen Anforderungen? |
+| **notwendig** | braucht das Produkt das wirklich? |
+| **rückverfolgbar** | Woher kommt sie, wo wird sie umgesetzt und geprüft? |
+
+„Das Gerät soll schnell starten.“ → „Nach Anlegen der Versorgung muss die Statusanzeige innerhalb von 2,0 s aktiv sein.“
+Vorsicht bei **Adjektiven ohne Maß**: robust, klein, schnell, intuitiv.
+
+### Arten und Prioritäten
+
+- **funktional:** Was soll das System tun? (vier Digitaleingänge erfassen, Fehler anzeigen)
+- **nicht-funktional:** Wie gut, unter welchen Bedingungen? (Startzeit ≤ 2 s, Betrieb 0 … 45 °C)
+- **Randbedingung:** Was ist vorgegeben? (24-V-Bordnetz, Montage auf Hutschiene)
+- Priorität: **MUSS** (ohne Erfüllung keine Freigabe) – **SOLL** (wichtig, begründet abweichbar) – **KANN** (Mehrwert, wenn der Aufwand passt)
+
+### Lastenheft und Pflichtenheft
+
+| | Lastenheft | Pflichtenheft |
+| --- | --- | --- |
+| Wer schreibt es? | **Auftraggeber** | **Auftragnehmer** / Entwicklungsteam |
+| Leitfrage | **Was** und **wozu**? | **Wie** und **womit**? |
+| Inhalt | Ausgangslage, Ziel, Einsatz und Nutzer, Anforderungen, Randbedingungen, Abnahmekriterien | Lösungskonzept, Komponenten, Schnittstellen, abgeleitete Anforderungen |
+| Prüfung | Abnahmekriterien | Verifikationsmethoden und Nachweise |
+
+Typischer Fehler im Lastenheft: „Es muss Mikrocontroller X eingesetzt werden“, obwohl eigentlich nur eine Rechenleistung oder Schnittstelle
+gefordert ist – die Lösung wird zu früh festgelegt.
+
+**Rückverfolgbarkeit** mit IDs, z. B. in einer einfachen Anforderungsmatrix:
+
+| Anforderung | Priorität | Quelle | Umsetzung | Prüfung |
+| --- | --- | --- | --- | --- |
+| LH-04: Betrieb an 18 … 30 V DC | MUSS | Kunde | PH-04.1: Weitbereichsregler, Verpolschutz, Bauteile ≥ 30 V | T-04: Eingangsspannung durchfahren |
+| LH-07: Fehler vor Ort erkennbar | MUSS | Service | PH-07.1: vier zweifarbige LEDs, beschriftet | T-07: Fehlersignale einspeisen |
+
+Faustregel: **Keine stillen Änderungen.** Jede relevante Änderung einer Anforderung braucht eine dokumentierte Entscheidung, und die
+betroffenen Tests werden angepasst.

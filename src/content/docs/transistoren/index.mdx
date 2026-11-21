@@ -1,12 +1,37 @@
 ---
 title: Transistoren
-description: "Bipolar- und Feldeffekttransistoren: Kennlinien, Arbeitspunkt, Verstärker- und Schalterbetrieb."
+description: "Bipolartransistor und MOSFET: Aufbau, Kennlinien, Schalterbetrieb, Spannungsstabilisierung, Stromquelle, Motor- und Relaistreiber – Theorie, Rechenbeispiele, Praxis und Quiz."
+sidebar:
+  label: Übersicht
 ---
 
-:::note[In Arbeit]
-Dieser Themenbereich wird gerade erstellt. Schau bald wieder vorbei!
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Transistoren sind die wichtigsten aktiven Bauelemente der Elektronik: Mit einem **kleinen** Steuerstrom (Bipolartransistor)
+oder einer **Steuerspannung** (MOSFET) steuern sie einen **großen** Laststrom. Sie arbeiten entweder als **Schalter**
+(ein/aus – Relais, Motoren, LEDs, Schaltnetzteile) oder im **Linearbetrieb** (Verstärker, Spannungsregler, Stromquellen).
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- Aufbau, Schaltzeichen und Anschlüsse von NPN-, PNP-Transistoren und MOSFETs angeben,
+- den Unterschied zwischen strom- und spannungsgesteuerten Transistoren erklären,
+- einen Transistor als Schalter dimensionieren (Basiswiderstand, Übersteuerung, Gate-Beschaltung),
+- eine Spannungsstabilisierung mit Transistor und Z-Diode sowie eine Konstantstromquelle berechnen,
+- MOSFET-Typen und -Kennwerte ($U_\mathrm{GS(th)}$, $R_\mathrm{DS(on)}$, Gate-Ladung) erklären und Verluste abschätzen,
+- typische Anwendungen wie Relais- und Motortreiber aufbauen.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="Bipolartransistor, Schalterbetrieb, Linearbetrieb, Längsregler, Stromquelle, FET und MOSFET" href="/transistoren/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="Basiswiderstand, Längsregler, Stromquelle, MOSFET-Verluste" href="/transistoren/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Relais- und Motortreiber, Logic-Level-MOSFET, Pegelwandler" href="/transistoren/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen über Transistoren" href="/transistoren/quiz/" />
+</CardGrid>
+
+:::tip[Voraussetzungen]
+[Dioden](/dioden/) (pn-Übergang, Z-Diode) und [Reihen- und Parallelschaltung](/grundlagen/schaltungen/).
+Wie MOSFETs in großen Leistungen eingesetzt werden, zeigt die [Leistungselektronik](/leistungselektronik/theorie/leistungshalbleiter/).
 :::
-
-**Geplante Inhalte:** Bipolar- und Feldeffekttransistoren: Kennlinien, Arbeitspunkt, Verstärker- und Schalterbetrieb.
-
-Wie bei allen Themenbereichen wird es **Theorie**, **Rechenbeispiele**, **Praxisbeispiele** und ein **Quiz** geben.

@@ -1,0 +1,121 @@
+---
+title: Praxisbeispiele – Oszillatoren
+description: Quarz oder interner RC-Oszillator am Mikrocontroller, warum Uhrenquarze 32,768 kHz haben, Sinusgenerator mit Wien-Brücke, Taktgeber für eine Blinkschaltung, Frequenzstabilität messen und Oszillatoren in LTspice simulieren.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Quarz oder interner Oszillator?
+
+Viele Mikrocontroller haben einen **internen RC-Oszillator** (z. B. 16 MHz, Toleranz ±1 % bei 25 °C, über Temperatur bis ±3 %). Ein externer
+Quarz kostet Platz, zwei Kondensatoren und zwei Pins.
+
+1. Eine UART-Verbindung (115 200 Baud) verträgt eine Taktabweichung von etwa ±2 % zwischen Sender und Empfänger. Reicht der interne Oszillator?
+2. USB (Full Speed) verlangt ±0,25 % (2500 ppm). Was nun?
+3. Ein Datenlogger soll die Uhrzeit über ein Jahr auf ±1 Minute genau halten. Welche Genauigkeit in ppm ist nötig?
+
+<Loesung>
+
+1. Bei Raumtemperatur meist ja – aber im Auto oder Schaltschrank (−20 … +70 °C) kann der interne Oszillator 3 % daneben liegen. Haben
+   **beide** Seiten einen ungenauen Takt, addieren sich die Fehler. Für zuverlässige Kommunikation nimmt man einen Quarz.
+2. Mit ±3 % ist das unmöglich – USB braucht einen **Quarz** (oder einen speziellen internen Oszillator, der sich auf den USB-Datenstrom synchronisiert).
+3. $\dfrac{60\,\mathrm{s}}{365 \cdot 86\,400\,\mathrm{s}} \approx 1{,}9 \cdot 10^{-6}$ → etwa **2 ppm**. Das schafft nicht einmal ein normaler Quarz (±20 ppm) –
+   dafür braucht man einen temperaturkompensierten RTC-Baustein (TCXO) oder eine Zeitsynchronisation.
+
+</Loesung>
+
+## Warum 32,768 kHz?
+
+Fast jede Uhr und jede Echtzeituhr (RTC) verwendet einen Quarz mit genau $32\,768\,\mathrm{Hz}$.
+
+1. Rechne $32\,768$ als Zweierpotenz. Warum ist das praktisch?
+2. Warum nimmt man nicht gleich einen 8-MHz-Quarz und teilt herunter?
+
+<Loesung>
+
+1. $32\,768 = 2^{15}$. Ein einfacher **Binärzähler** mit 15 Flipflops (jedes halbiert die Frequenz) liefert daraus genau **1 Hz** – den Sekundentakt.
+2. **Stromverbrauch:** Die Leistung einer CMOS-Schaltung steigt proportional zur Frequenz. Ein 32-kHz-Oszillator braucht nur ca. 1 µA und
+   kann mit einer Knopfzelle jahrelang laufen – auch wenn der Mikrocontroller schläft. Außerdem sind Uhrenquarze (Stimmgabelform) klein
+   und billig. 32 768 Hz liegt zudem oberhalb des Hörbereichs, also kein Pfeifen.
+
+</Loesung>
+
+## Sinusgenerator für das Labor
+
+Für Messungen an Verstärkern wird ein Sinusgenerator mit 1 kHz und sehr geringem Klirrfaktor gebaut (Wien-Brücke, OPV an ±15 V).
+
+1. Beim ersten Aufbau mit $R_1 = 2 R_2$ schwingt die Schaltung nicht. Woran liegt das?
+2. Mit $R_1 = 2{,}2 \cdot R_2$ schwingt sie, aber der Sinus hat abgeflachte Spitzen bei ca. ±13,5 V. Erkläre.
+3. Wie verbesserst du die Schaltung?
+
+<Loesung>
+
+1. Mit exakt $A = 3$ ist $\lvert A\beta \rvert = 1$ – aber nur theoretisch. Bauteiltoleranzen (1 % bei $R$, 5 % bei $C$) und die endliche
+   Leerlaufverstärkung des OPV machen $\lvert A\beta \rvert$ leicht **kleiner** als 1. Die Schaltung braucht zum Anschwingen eine Reserve.
+2. $A = 3{,}2$ → $\lvert A\beta \rvert \approx 1{,}07$: Die Amplitude wächst, bis der OPV an seiner Aussteuergrenze (Versorgung minus ca. 1,5 V)
+   **begrenzt**. Diese harte Begrenzung verzerrt den Sinus (Oberschwingungen, hoher Klirrfaktor).
+3. Eine **Amplitudenregelung** einbauen: $R_1$ aufteilen und einem Teil zwei antiparallele Dioden parallel schalten (einfach) – oder
+   besser einen JFET bzw. eine kleine Glühlampe/einen NTC verwenden, die die Verstärkung sanft und ohne Verzerrung innerhalb einer Periode
+   auf 3 zurückregeln. Dann bleibt die Amplitude deutlich unter der Aussteuergrenze.
+
+</Loesung>
+
+## Taktgeber für eine Warnleuchte
+
+Eine Warnleuchte soll mit ca. 1 Hz blinken. Verwendet wird ein Relaxationsoszillator mit OPV ($R_2 = R_3$) und $C = 10\,\mathrm{\mu F}$;
+der Ausgang schaltet über einen Transistor die LED.
+
+1. Dimensioniere $R_1$.
+2. Welches Tastverhältnis hat das Rechteck?
+3. Warum darf man hier keinen Elektrolytkondensator verwenden?
+
+<Loesung>
+
+1. $R_1 = \dfrac{1}{2 f C \ln 3} = \dfrac{1}{2 \cdot 1\,\mathrm{Hz} \cdot 10\,\mathrm{\mu F} \cdot 1{,}099} \approx 45{,}5\,\mathrm{k\Omega}$ → $47\,\mathrm{k\Omega}$ (0,97 Hz).
+2. Bei symmetrischen Sättigungsspannungen sind beide Halbperioden gleich lang → **50 %**. Für andere Tastverhältnisse kann man $R_1$
+   durch zwei Widerstände mit je einer Diode ersetzen (getrennte Lade- und Entladewege).
+3. Die Kondensatorspannung wechselt zwischen **positiven und negativen** Werten ($\pm k U_\mathrm{sat}$). Ein gepolter Elko würde in
+   Sperrrichtung betrieben. Man nimmt einen **Folien- oder Keramikkondensator** – oder einen bipolaren Elko.
+
+</Loesung>
+
+## Frequenzstabilität messen
+
+Im Labor werden ein OPV-Relaxationsoszillator und ein 32,768-kHz-Quarzoszillator mit dem Frequenzzähler beobachtet.
+
+1. Du berührst den Kondensator des Relaxationsoszillators mit dem Finger bzw. erwärmst ihn mit dem Föhn. Was beobachtest du? Und beim Quarz?
+2. Am Quarz-Pin des Mikrocontrollers misst du mit einem normalen 10:1-Tastkopf (ca. 12 pF) – die Frequenz ändert sich, manchmal stoppt der
+   Oszillator ganz. Warum? Wie misst man richtig?
+
+<Loesung>
+
+1. Beim Relaxationsoszillator ändert sich die Frequenz deutlich (Prozentbereich): Der Finger bringt zusätzliche Kapazität und Leckströme,
+   die Wärme verändert $C$, $R$ und die Sättigungsspannungen. Der Quarzoszillator ändert sich nur um wenige ppm – die hohe Güte des
+   Quarzes lässt nur eine sehr schmale Frequenz zu.
+2. Die Tastkopfkapazität liegt parallel zu einem Lastkondensator → $C_\mathrm{L}$ steigt → die Frequenz sinkt, und die Schleifenverstärkung wird
+   kleiner (der Oszillator kann aussetzen). Besser: am **Takt-Ausgang** des Mikrocontrollers messen (z. B. MCO-Pin, gepuffert) oder einen
+   **aktiven Tastkopf** mit < 1 pF verwenden.
+
+</Loesung>
+
+## Oszillatoren in LTspice simulieren
+
+Baue einen RC-Phasenschieber-Oszillator ($R = 10\,\mathrm{k\Omega}$, $C = 1\,\mathrm{nF}$, $R_\mathrm{f} = 330\,\mathrm{k\Omega}$) in LTspice auf –
+einmal mit einem idealen OPV, einmal mit einem realen Modell (z. B. LM358).
+
+1. Die Simulation zeigt am Ausgang nur 0 V. Warum, und wie bringst du die Schaltung zum Schwingen?
+2. Welche Frequenz erwartest du? Wie misst du sie in der Simulation?
+3. Warum sieht der Sinus beim idealen OPV „perfekt“ begrenzt aus, beim realen OPV anders?
+
+<Loesung>
+
+1. Die Simulation startet mit einem exakt berechneten Arbeitspunkt – **ohne Rauschen**. Es gibt nichts, was verstärkt werden könnte.
+   Abhilfe: Startbedingung setzen (z. B. `.ic V(n1)=10m` an einem Knoten), die Option `startup` bei `.tran` verwenden oder einen kurzen
+   Impuls einkoppeln.
+2. $f_0 = 1/(2\pi\sqrt{6}RC) \approx 6{,}50\,\mathrm{kHz}$. Messen: Zeitabstand mehrerer Nulldurchgänge im eingeschwungenen Zustand
+   (Cursor) oder per FFT (`View → FFT`) eines Zeitfensters mit ganzen Perioden.
+3. $A = 33 > 29$: Die Amplitude wächst bis zur Begrenzung. Ein idealer OPV ohne Versorgungsgrenze würde die Amplitude **unbegrenzt**
+   anwachsen lassen; ein reales Modell begrenzt an der Versorgung und hat zusätzlich eine endliche Bandbreite und Slew-Rate, die Phase
+   und Signalform verändern. Simulation mit realem Modell und Messung im Labor stimmen deshalb besser überein.
+
+</Loesung>

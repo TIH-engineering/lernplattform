@@ -1,12 +1,36 @@
 ---
 title: Operationsverstärker
-description: "Idealer und realer OPV, invertierender und nichtinvertierender Verstärker, Komparator."
+description: "Idealer und realer OPV, Gegen- und Mitkopplung, Verstärkerschaltungen, Rechenschaltungen, Komparator und Schmitt-Trigger – Theorie, Rechenbeispiele, Praxis und Quiz."
+sidebar:
+  label: Übersicht
 ---
 
-:::note[In Arbeit]
-Dieser Themenbereich wird gerade erstellt. Schau bald wieder vorbei!
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Der Operationsverstärker (OPV, englisch *op amp*) ist der „Universalbaustein“ der Analogtechnik. Mit ein paar Widerständen
+und Kondensatoren wird aus ihm ein Verstärker, ein Addierer, ein Filter, ein Komparator oder ein Oszillator.
+Das Besondere: **Die äußere Beschaltung bestimmt die Funktion** – nicht der OPV selbst.
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- die Eigenschaften des idealen und des realen OPV nennen und die „goldenen Regeln“ anwenden,
+- Gegen- und Mitkopplung unterscheiden,
+- invertierende und nichtinvertierende Verstärker sowie Spannungsfolger berechnen und dimensionieren – auch mit Verstärkung in dB,
+- Addierer, Differenzverstärker, Integrierer, Differenzierer und Transimpedanzverstärker erkennen und berechnen,
+- Komparator und Schmitt-Trigger erklären und die Schaltschwellen berechnen,
+- reale Grenzen wie Aussteuerbereich, Verstärkungs-Bandbreite-Produkt und Slew-Rate beurteilen.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="Idealer/realer OPV, Grundschaltungen, Rechenschaltungen, Schmitt-Trigger, reale Grenzen" href="/operationsverstaerker/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="Verstärker auslegen, dB, Addierer, Integrator, Schmitt-Trigger, Slew-Rate" href="/operationsverstaerker/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Mikrofonverstärker, Sensorsignal für den ADC, Lichtsensor, Datenblatt LM358" href="/operationsverstaerker/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen über Operationsverstärker" href="/operationsverstaerker/quiz/" />
+</CardGrid>
+
+:::tip[Weiter geht's mit]
+OPVs sind die Grundlage für [aktive Filter](/filter/) und viele [Oszillatoren](/oszillatoren/).
 :::
-
-**Geplante Inhalte:** Idealer und realer OPV, invertierender und nichtinvertierender Verstärker, Komparator.
-
-Wie bei allen Themenbereichen wird es **Theorie**, **Rechenbeispiele**, **Praxisbeispiele** und ein **Quiz** geben.

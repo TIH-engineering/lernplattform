@@ -1,0 +1,37 @@
+---
+title: Dioden
+description: "Halbleiter, pn-Übergang, Diodenkennlinie, Gleichrichter, Z-Diode, LED, Schottky- und Fotodiode – Theorie, Rechenbeispiele, Praxis und Quiz."
+sidebar:
+  label: Übersicht
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Dioden sind die einfachsten Halbleiterbauelemente: Sie lassen den Strom **nur in eine Richtung** durch.
+Damit kann man Wechselspannung gleichrichten, Schaltungen vor Verpolung und Spannungsspitzen schützen,
+Spannungen stabilisieren (Z-Diode) oder Licht erzeugen und messen (LED, Fotodiode).
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- erklären, wie durch Dotierung n- und p-Halbleiter entstehen und was am pn-Übergang passiert,
+- die Kennlinie einer Diode zeichnen und die wichtigsten Kenngrößen aus einem Datenblatt ablesen,
+- Einweg- und Brückengleichrichter mit Ladekondensator beschreiben und die Brummspannung berechnen,
+- eine Spannungsstabilisierung mit Z-Diode dimensionieren,
+- Vorwiderstände für LEDs berechnen,
+- Schottky-, Foto-, Kapazitäts- und Schutzdioden unterscheiden und typische Anwendungen nennen.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="Halbleiter, pn-Übergang, Kennlinie, Gleichrichter, Z-Diode, Spezialdioden" href="/dioden/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="Vorwiderstand, Brummspannung, Z-Diode, Spannungsverdoppler" href="/dioden/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Verpolungsschutz, Netzteil, LED-Beleuchtung, ESD-Schutz" href="/dioden/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen über Dioden" href="/dioden/quiz/" />
+</CardGrid>
+
+:::tip[Voraussetzungen]
+[Ohmsches Gesetz und Quellen](/grundlagen/ohmsches-gesetz/), [Reihen- und Parallelschaltung](/grundlagen/schaltungen/),
+[Kondensator](/grundlagen/kondensator/) und [Wechselgrößen](/grundlagen/wechselstrom/) (Scheitelwert, Effektivwert).
+:::

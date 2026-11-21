@@ -96,3 +96,25 @@ fragen:
       - text: Sie messen den Scheitelwert statt des Effektivwerts.
       - text: Der Innenwiderstand ist bei Wechselstrom zu klein.
     erklaerung: Für beliebige Signalformen braucht man ein True-RMS-Messgerät, das den echten Effektivwert bestimmt.
+
+  - typ: mc
+    stufe: standard
+    frage: In einem RL-Reihenkreis wird die Frequenz erhöht (Spannung bleibt gleich). Was passiert mit dem Strom?
+    optionen:
+      - text: Er sinkt, weil der induktive Blindwiderstand steigt.
+        richtig: true
+      - text: Er steigt, weil der induktive Blindwiderstand sinkt.
+      - text: Er bleibt gleich, weil R sich nicht ändert.
+      - text: Er wird zu null.
+    erklaerung: '$X_L = 2\pi f L$ wächst mit der Frequenz, damit wächst die Impedanz. Im RC-Kreis ist es umgekehrt: $X_C$ sinkt, der Strom steigt.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Warum nimmt eine ideale Spule keine Wirkleistung auf?
+    optionen:
+      - text: Strom und Spannung sind um 90° verschoben – die Energie wird abwechselnd gespeichert und zurückgegeben.
+        richtig: true
+      - text: Weil durch eine Spule kein Strom fließt.
+      - text: Weil die Spannung an einer Spule immer null ist.
+      - text: Weil Spulen nur bei Gleichstrom funktionieren.
+    erklaerung: Über eine Periode gemittelt ist die Leistung null. Ein Wirkwiderstand setzt Energie in Wärme um, ein Blindwiderstand nicht.

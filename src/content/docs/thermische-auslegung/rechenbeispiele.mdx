@@ -1,0 +1,220 @@
+---
+title: Rechenbeispiele – Thermische Auslegung
+description: Rechenbeispiele zu Verlustleistung eines Linearreglers, Sperrschichttemperatur, Temperaturen im Ersatzschaltbild, Leistung ohne Kühlkörper, Kühlkörperauswahl, Endstufe mit zwei Transistoren, SMD-Regler auf der Leiterplatte, Wärmeleitpad, Zeitkonstante und Pulsbetrieb.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import Statisch from '../../../assets/elektronik/waerme-statisch.svg';
+
+## Verlustleistung eines Linearreglers
+
+<Stufe wert="grundlagen" />
+
+Ein Festspannungsregler (5 V) wird aus $12\,\mathrm{V}$ versorgt und liefert $0{,}5\,\mathrm{A}$. Sein Eigenstromverbrauch beträgt $5\,\mathrm{mA}$.
+Berechne die Verlustleistung und den Wirkungsgrad.
+
+<Loesung>
+
+**Gegeben:** $U_\mathrm{E} = 12\,\mathrm{V}$, $U_\mathrm{A} = 5\,\mathrm{V}$, $I_\mathrm{A} = 0{,}5\,\mathrm{A}$, $I_\mathrm{q} = 5\,\mathrm{mA}$ · **Gesucht:** $P_\mathrm{V}$, $\eta$
+
+$$
+P_\mathrm{V} = (U_\mathrm{E} - U_\mathrm{A}) \cdot I_\mathrm{A} + U_\mathrm{E} \cdot I_\mathrm{q} = 7\,\mathrm{V} \cdot 0{,}5\,\mathrm{A} + 12\,\mathrm{V} \cdot 5\,\mathrm{mA} = 3{,}5\,\mathrm{W} + 0{,}06\,\mathrm{W} \approx 3{,}56\,\mathrm{W}
+$$
+
+$$
+\eta = \frac{P_\mathrm{ab}}{P_\mathrm{auf}} = \frac{5\,\mathrm{V} \cdot 0{,}5\,\mathrm{A}}{12\,\mathrm{V} \cdot 0{,}505\,\mathrm{A}} \approx 41\,\%
+$$
+
+Mehr als die Hälfte der Leistung wird zu Wärme.
+
+</Loesung>
+
+## Sperrschichttemperatur ohne Kühlkörper
+
+<Stufe wert="grundlagen" />
+
+Ein Transistor setzt $2\,\mathrm{W}$ um. Das Datenblatt nennt $R_\mathrm{th,ja} = 50\,\mathrm{K/W}$ und $\vartheta_\mathrm{j,max} = 150\,°\mathrm{C}$.
+Wie heiß wird der Chip bei $25\,°\mathrm{C}$ Umgebungstemperatur? Und bei $60\,°\mathrm{C}$ im Schaltschrank?
+
+<Loesung>
+
+$$
+\vartheta_\mathrm{j} = \vartheta_\mathrm{a} + P_\mathrm{V} \cdot R_\mathrm{th,ja} = 25\,°\mathrm{C} + 2\,\mathrm{W} \cdot 50\,\mathrm{K/W} = 125\,°\mathrm{C}
+$$
+
+Bei 60 °C Umgebung: $60\,°\mathrm{C} + 100\,\mathrm{K} = 160\,°\mathrm{C}$ → **zu heiß**. Die Umgebungstemperatur muss immer für den
+ungünstigsten Fall eingesetzt werden.
+
+</Loesung>
+
+## Temperaturen im Ersatzschaltbild
+
+<Stufe wert="grundlagen" />
+
+<Abbildung bild={Statisch} unterschrift="Statisches thermisches Ersatzschaltbild" />
+
+Ein Linearregler setzt $1\,\mathrm{W}$ um, die Umgebung hat $20\,°\mathrm{C}$. Es gilt $R_\mathrm{th,jc} = 3\,\mathrm{K/W}$,
+$R_\mathrm{th,ch} = 0{,}5\,\mathrm{K/W}$, $R_\mathrm{th,ha} = 20\,\mathrm{K/W}$. Berechne die Temperaturen von Kühlkörper, Gehäuse und Chip.
+
+<Loesung>
+
+Der Wärmestrom von 1 W fließt durch alle Widerstände. Von der Umgebung aus aufaddieren:
+
+$$
+\vartheta_\mathrm{h} = 20\,°\mathrm{C} + 1\,\mathrm{W} \cdot 20\,\mathrm{K/W} = 40\,°\mathrm{C}
+\qquad
+\vartheta_\mathrm{c} = 40\,°\mathrm{C} + 0{,}5\,\mathrm{K} = 40{,}5\,°\mathrm{C}
+\qquad
+\vartheta_\mathrm{j} = 40{,}5\,°\mathrm{C} + 3\,\mathrm{K} = 43{,}5\,°\mathrm{C}
+$$
+
+</Loesung>
+
+## Wie viel Leistung ohne Kühlkörper?
+
+<Stufe wert="standard" />
+
+Ein Leistungstransistor im TO-247-Gehäuse hat laut Datenblatt $P_\mathrm{tot} = 200\,\mathrm{W}$ bei $\vartheta_\mathrm{c} = 25\,°\mathrm{C}$,
+$R_\mathrm{th,jc} = 0{,}625\,\mathrm{K/W}$, $R_\mathrm{th,ja} = 40\,\mathrm{K/W}$, $\vartheta_\mathrm{j,max} = 150\,°\mathrm{C}$.
+Wie viel Leistung darf er **ohne** Kühlkörper bei $40\,°\mathrm{C}$ Umgebung umsetzen? Erkläre den Unterschied zu den 200 W.
+
+<Loesung>
+
+$$
+P_\mathrm{max} = \frac{\vartheta_\mathrm{j,max} - \vartheta_\mathrm{a}}{R_\mathrm{th,ja}} = \frac{150\,°\mathrm{C} - 40\,°\mathrm{C}}{40\,\mathrm{K/W}} = 2{,}75\,\mathrm{W}
+$$
+
+Die 200 W gelten nur, wenn das **Gehäuse** auf 25 °C gehalten wird: $(150 - 25)\,\mathrm{K} / 0{,}625\,\mathrm{K/W} = 200\,\mathrm{W}$.
+Das wäre ein unendlich guter Kühlkörper. Ohne Kühlkörper ist der Übergang Gehäuse → Luft der Engpass.
+
+</Loesung>
+
+## Kühlkörper für einen Linearregler auswählen
+
+<Stufe wert="standard" />
+
+Ein Linearregler im TO-220-Gehäuse setzt im ungünstigsten Fall $8\,\mathrm{W}$ um. Datenblatt: $R_\mathrm{th,jc} = 3\,\mathrm{K/W}$.
+Montage mit Wärmeleitpaste: $R_\mathrm{th,ch} = 0{,}5\,\mathrm{K/W}$. Im Gerät herrschen bis zu $40\,°\mathrm{C}$; der Chip soll höchstens
+$125\,°\mathrm{C}$ erreichen.
+
+1. Welchen Wärmewiderstand darf der Kühlkörper höchstens haben?
+2. Gewählt wird ein Strangkühlkörper mit $5{,}3\,\mathrm{K/W}$. Wie heiß werden Kühlkörper und Chip?
+
+<Loesung>
+
+**Gegeben:** $P_\mathrm{V} = 8\,\mathrm{W}$, $\vartheta_\mathrm{a} = 40\,°\mathrm{C}$, $\vartheta_\mathrm{j,max} = 125\,°\mathrm{C}$ · **Gesucht:** $R_\mathrm{th,ha,max}$, $\vartheta_\mathrm{h}$, $\vartheta_\mathrm{j}$
+
+1. $R_\mathrm{th,ha} \leq \dfrac{125\,°\mathrm{C} - 40\,°\mathrm{C}}{8\,\mathrm{W}} - 3\,\mathrm{K/W} - 0{,}5\,\mathrm{K/W} = 10{,}6\,\mathrm{K/W} - 3{,}5\,\mathrm{K/W} \approx 7{,}1\,\mathrm{K/W}$
+2. $\vartheta_\mathrm{h} = 40\,°\mathrm{C} + 8\,\mathrm{W} \cdot 5{,}3\,\mathrm{K/W} = 82{,}4\,°\mathrm{C}$ ·
+   $\vartheta_\mathrm{j} = 40\,°\mathrm{C} + 8\,\mathrm{W} \cdot 8{,}8\,\mathrm{K/W} = 110{,}4\,°\mathrm{C}$ → passt, mit 15 K Reserve.
+
+Achtung: Der Kühlkörper ist mit 82 °C heiß genug für Verbrennungen – Berührschutz vorsehen.
+
+</Loesung>
+
+## Wärmeleitpad statt Paste
+
+<Stufe wert="standard" />
+
+Weil die Metallfahne des Reglers am Ausgang liegt, muss er isoliert montiert werden. Ein Silikon-Wärmeleitpad hat die Dicke
+$d = 0{,}25\,\mathrm{mm}$ und $\lambda = 1{,}5\,\mathrm{W/(m \cdot K)}$, die Kontaktfläche beträgt $1{,}4\,\mathrm{cm^2}$.
+
+1. Berechne $R_\mathrm{th,ch}$ des Pads.
+2. Reicht der Kühlkörper aus dem vorigen Beispiel noch?
+
+<Loesung>
+
+1. $R_\mathrm{th,ch} = \dfrac{d}{\lambda A} = \dfrac{0{,}25 \cdot 10^{-3}\,\mathrm{m}}{1{,}5\,\mathrm{W/(m \cdot K)} \cdot 1{,}4 \cdot 10^{-4}\,\mathrm{m^2}} \approx 1{,}2\,\mathrm{K/W}$
+2. $\vartheta_\mathrm{j} = 40\,°\mathrm{C} + 8\,\mathrm{W} \cdot (3 + 1{,}2 + 5{,}3)\,\mathrm{K/W} = 116\,°\mathrm{C}$ → passt noch, die Reserve schrumpft aber auf 9 K.
+
+</Loesung>
+
+## Endstufe mit zwei Transistoren
+
+<Stufe wert="vertiefung" />
+
+Eine Audio-Endstufe hat zwei Leistungstransistoren ($R_\mathrm{th,jc} = 0{,}625\,\mathrm{K/W}$) auf **einem** Kühlkörper, isoliert mit
+Glimmerscheibe und Paste ($R_\mathrm{th,ch} = 0{,}4\,\mathrm{K/W}$). Jeder Transistor setzt im ungünstigsten Fall $25\,\mathrm{W}$ um.
+Umgebung bis $35\,°\mathrm{C}$, Chip höchstens $125\,°\mathrm{C}$. Welchen Wärmewiderstand muss der Kühlkörper haben?
+
+<Loesung>
+
+Durch den Kühlkörper fließen **beide** Wärmeströme (50 W), durch jedes Gehäuse nur 25 W:
+
+$$
+\vartheta_\mathrm{j} = \vartheta_\mathrm{a} + 50\,\mathrm{W} \cdot R_\mathrm{th,ha} + 25\,\mathrm{W} \cdot (0{,}625 + 0{,}4)\,\mathrm{K/W} \leq 125\,°\mathrm{C}
+$$
+
+$$
+R_\mathrm{th,ha} \leq \frac{125\,°\mathrm{C} - 35\,°\mathrm{C} - 25{,}6\,\mathrm{K}}{50\,\mathrm{W}} \approx 1{,}29\,\mathrm{K/W}
+$$
+
+Das ist ein großes Rippenprofil oder ein kleinerer Kühlkörper mit Lüfter.
+
+</Loesung>
+
+## SMD-Regler auf der Leiterplatte
+
+<Stufe wert="standard" />
+
+Ein Low-Drop-Regler im SOT-223-Gehäuse erzeugt $3{,}3\,\mathrm{V}$ aus $5\,\mathrm{V}$ bei $300\,\mathrm{mA}$. Im Gerät herrschen bis zu
+$50\,°\mathrm{C}$. Angenommen: $R_\mathrm{th,ja} = 110\,\mathrm{K/W}$ mit minimalem Lötpad, $60\,\mathrm{K/W}$ mit ca. $4\,\mathrm{cm^2}$ Kupferfläche.
+
+1. Berechne die Verlustleistung (Eigenverbrauch vernachlässigt).
+2. Berechne die Chiptemperatur für beide Layouts. Welches würdest du wählen?
+
+<Loesung>
+
+1. $P_\mathrm{V} = (5 - 3{,}3)\,\mathrm{V} \cdot 0{,}3\,\mathrm{A} = 0{,}51\,\mathrm{W}$
+2. Minimalpad: $50\,°\mathrm{C} + 0{,}51\,\mathrm{W} \cdot 110\,\mathrm{K/W} \approx 106\,°\mathrm{C}$ ·
+   mit Kupferfläche: $50\,°\mathrm{C} + 0{,}51\,\mathrm{W} \cdot 60\,\mathrm{K/W} \approx 81\,°\mathrm{C}$
+
+Beide liegen unter 125 °C, aber die Variante mit Kupferfläche hat deutlich mehr Reserve und schont benachbarte Bauteile. Eine halbe Watt
+ist für ein SOT-223 ohne Kupferfläche schon viel.
+
+</Loesung>
+
+## Wie lange dauert das Aufwärmen?
+
+<Stufe wert="standard" />
+
+Ein Aluminium-Kühlkörper wiegt $30\,\mathrm{g}$ ($c = 0{,}9\,\mathrm{J/(g \cdot K)}$) und hat $R_\mathrm{th,ha} = 5{,}3\,\mathrm{K/W}$.
+
+1. Berechne seine Wärmekapazität und die thermische Zeitkonstante.
+2. Nach welcher Zeit ist er praktisch eingeschwungen?
+3. Bei $5\,\mathrm{W}$ und $20\,°\mathrm{C}$: Welche Temperatur hat er nach $\tau$?
+
+<Loesung>
+
+1. $C_\mathrm{th} = m \cdot c = 30\,\mathrm{g} \cdot 0{,}9\,\mathrm{J/(g \cdot K)} = 27\,\mathrm{J/K}$ ·
+   $\tau = R_\mathrm{th} C_\mathrm{th} = 5{,}3\,\mathrm{K/W} \cdot 27\,\mathrm{J/K} \approx 143\,\mathrm{s}$
+2. $5\tau \approx 716\,\mathrm{s} \approx 12\,\mathrm{min}$ – deshalb lässt man im Labor ca. 10 Minuten „einpendeln“.
+3. Endwert $20\,°\mathrm{C} + 5\,\mathrm{W} \cdot 5{,}3\,\mathrm{K/W} = 46{,}5\,°\mathrm{C}$. Nach $\tau$: $20\,°\mathrm{C} + 0{,}63 \cdot 26{,}5\,\mathrm{K} \approx 36{,}7\,°\mathrm{C}$.
+
+(Vereinfachung: Die Wärmekapazitäten von Chip und Gehäuse sind dagegen vernachlässigbar.)
+
+</Loesung>
+
+## Kurzer Strompuls im Chip
+
+<Stufe wert="vertiefung" />
+
+Ein MOSFET-Chip (Silizium, $5\,\mathrm{mm} \times 5\,\mathrm{mm} \times 0{,}3\,\mathrm{mm}$, Dichte $2{,}33\,\mathrm{g/cm^3}$, $c = 0{,}7\,\mathrm{J/(g \cdot K)}$) wird beim
+Einschalten eines Motors $1\,\mathrm{ms}$ lang mit $100\,\mathrm{W}$ belastet.
+
+1. Berechne die Wärmekapazität des Chips.
+2. Um wie viel erwärmt er sich höchstens (adiabatische Näherung)?
+3. Was würde passieren, wenn die 100 W dauerhaft anlägen ($R_\mathrm{th,jc} = 0{,}6\,\mathrm{K/W}$, Gehäuse auf 50 °C)?
+
+<Loesung>
+
+1. $V = 5 \cdot 5 \cdot 0{,}3\,\mathrm{mm^3} = 7{,}5\,\mathrm{mm^3} = 7{,}5 \cdot 10^{-3}\,\mathrm{cm^3}$ → $m \approx 17{,}5\,\mathrm{mg}$ →
+   $C_\mathrm{th} = 0{,}0175\,\mathrm{g} \cdot 0{,}7\,\mathrm{J/(g \cdot K)} \approx 12\,\mathrm{mJ/K}$
+2. $E = 100\,\mathrm{W} \cdot 1\,\mathrm{ms} = 0{,}1\,\mathrm{J}$ → $\Delta\vartheta \leq E/C_\mathrm{th} = 0{,}1\,\mathrm{J} / 0{,}012\,\mathrm{J/K} \approx 8\,\mathrm{K}$ – harmlos.
+   (In Wirklichkeit fließt schon während des Pulses Wärme ab, es wird also noch etwas weniger.)
+3. Dauerhaft: $\Delta\vartheta = 100\,\mathrm{W} \cdot 0{,}6\,\mathrm{K/W} = 60\,\mathrm{K}$ über dem Gehäuse → 110 °C – und der Kühlkörper müsste
+   100 W abführen. Kurze Pulse sind also viel weniger kritisch, solange sie selten genug kommen.
+
+</Loesung>

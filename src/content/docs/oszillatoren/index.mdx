@@ -1,12 +1,37 @@
 ---
 title: Oszillatoren
-description: "Schwingbedingung, RC- und LC-Oszillatoren, Quarzoszillator, Kippschaltungen."
+description: "Rückkopplung und Barkhausen-Kriterium, RC-Phasenschieber- und Wien-Brücken-Oszillator, Relaxationsoszillator mit OPV, Quarzoszillator mit Lastkapazität und Frequenzabweichung in ppm."
+sidebar:
+  label: Übersicht
 ---
 
-:::note[In Arbeit]
-Dieser Themenbereich wird gerade erstellt. Schau bald wieder vorbei!
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Jeder Mikrocontroller braucht einen Takt, jede Uhr eine Zeitbasis, jedes Funkgerät eine Trägerfrequenz. Erzeugt werden diese
+Signale von **Oszillatoren**: Schaltungen, die **ohne Eingangssignal** selbstständig schwingen. Das Grundprinzip ist immer gleich –
+ein Verstärker und ein Rückkopplungsnetzwerk, das bei genau einer Frequenz die richtige Phase liefert.
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- erklären, was ein Oszillator ist, wie er aus dem Rauschen anschwingt und warum er **Mitkopplung** braucht,
+- das **Barkhausen-Kriterium** (Amplituden- und Phasenbedingung) formulieren und anwenden,
+- RC-Phasenschieber-, Wien-Brücken- und Relaxationsoszillatoren beschreiben, berechnen und dimensionieren,
+- begründen, warum ein Sinusoszillator eine **Amplitudenregelung** braucht,
+- den **Quarz** mit Ersatzschaltbild erklären, Lastkondensatoren berechnen und Frequenzabweichungen in **ppm** angeben,
+- einen Quarzoszillator an einem Mikrocontroller (Pierce-Oszillator) auslegen und prüfen.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="Barkhausen, RC-, Wien-, Relaxations- und Quarzoszillator" href="/oszillatoren/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="Frequenzen, Verstärkung, Dimensionierung, Lastkapazität, ppm" href="/oszillatoren/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Mikrocontroller-Takt, Echtzeituhr, Sinusgenerator, Messung und Simulation" href="/oszillatoren/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen über Oszillatoren" href="/oszillatoren/quiz/" />
+</CardGrid>
+
+:::tip[Voraussetzungen]
+[Operationsverstärker](/operationsverstaerker/) (inkl. Schmitt-Trigger), [Filter](/filter/),
+[Kondensator](/grundlagen/kondensator/) (Laden und Entladen) und [Resonanz](/grundlagen/resonanz-filter/).
 :::
-
-**Geplante Inhalte:** Schwingbedingung, RC- und LC-Oszillatoren, Quarzoszillator, Kippschaltungen.
-
-Wie bei allen Themenbereichen wird es **Theorie**, **Rechenbeispiele**, **Praxisbeispiele** und ein **Quiz** geben.

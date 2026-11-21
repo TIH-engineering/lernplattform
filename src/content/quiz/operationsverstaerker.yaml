@@ -1,0 +1,149 @@
+titel: Operationsverstärker
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Aussagen treffen auf einen idealen Operationsverstärker zu?
+    optionen:
+      - text: Unendlicher Eingangswiderstand
+        richtig: true
+      - text: Unendliche Leerlaufverstärkung
+        richtig: true
+      - text: Kein Strom fließt in die Eingänge
+        richtig: true
+      - text: Unendlicher Ausgangswiderstand
+    erklaerung: Der ideale OPV hat einen Ausgangswiderstand von **null** – er kann jede Last treiben, ohne dass die Spannung einbricht.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was bedeutet „virtueller Kurzschluss“ bei einem gegengekoppelten OPV?
+    optionen:
+      - text: Die Spannungen an beiden Eingängen sind praktisch gleich, obwohl kein Strom zwischen ihnen fließt.
+        richtig: true
+      - text: Die Eingänge sind intern tatsächlich kurzgeschlossen.
+      - text: Der Ausgang ist mit Masse verbunden.
+      - text: Der OPV ist defekt.
+    erklaerung: Der OPV regelt seinen Ausgang über die Gegenkopplung so, dass U+ = U− wird. Beim invertierenden Verstärker liegt der −-Eingang deshalb auf „virtueller Masse“.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Eigenschaften hat ein invertierender Verstärker?
+    optionen:
+      - text: Das Signal wird invertiert (180° Phasenverschiebung).
+        richtig: true
+      - text: Die Verstärkung ist immer größer oder gleich 1.
+      - text: Der Eingangswiderstand ist praktisch unendlich.
+      - text: Der Ausgang ist phasengleich zum Eingang.
+    erklaerung: Beim invertierenden Verstärker kann |V| auch kleiner als 1 sein, und der Eingangswiderstand ist R1.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Eigenschaften hat ein nichtinvertierender Verstärker?
+    optionen:
+      - text: Ausgang ist phasengleich zum Eingang.
+        richtig: true
+      - text: Hoher Eingangswiderstand
+        richtig: true
+      - text: Die Verstärkung ist immer kleiner als 1.
+      - text: Das Signal wird invertiert.
+    erklaerung: 'V = 1 + Rf/Rg ist immer ≥ 1. Das Signal liegt direkt am +-Eingang, daher ist der Eingangswiderstand sehr hoch.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Invertierender Verstärker: $R_1 = 10\,\mathrm{k\Omega}$, $R_\mathrm{f} = 47\,\mathrm{k\Omega}$, $U_\mathrm{e} = 0{,}5\,\mathrm{V}$. Wie groß ist $U_\mathrm{a}$ (mit Vorzeichen)?'
+    loesung: -2.35
+    einheit: V
+    erklaerung: '$U_\mathrm{a} = -\dfrac{47}{10} \cdot 0{,}5\,\mathrm{V} = -2{,}35\,\mathrm{V}$'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Nichtinvertierender Verstärker: $R_\mathrm{g} = 2\,\mathrm{k\Omega}$, $R_\mathrm{f} = 18\,\mathrm{k\Omega}$, $U_\mathrm{e} = 1{,}2\,\mathrm{V}$. Wie groß ist $U_\mathrm{a}$?'
+    loesung: 12
+    einheit: V
+    erklaerung: '$V = 1 + 18/2 = 10$ → $U_\mathrm{a} = 12\,\mathrm{V}$ (die Versorgung muss dafür groß genug sein!).'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Welcher Verstärkungsfaktor entspricht $40\,\mathrm{dB}$ (Spannung)?'
+    loesung: 100
+    einheit: ''
+    erklaerung: '$V = 10^{40/20} = 10^{2} = 100$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein nichtinvertierender Verstärker soll $V = 26\,\mathrm{dB}$ haben, $R_\mathrm{g} = 10\,\mathrm{k\Omega}$. Wie groß muss $R_\mathrm{f}$ sein (in kΩ, gerundet auf ganze kΩ)?'
+    loesung: 190
+    einheit: kΩ
+    toleranz: 2
+    erklaerung: '$V = 10^{26/20} \approx 20$ → $R_\mathrm{f} = (V - 1) \cdot R_\mathrm{g} = 19 \cdot 10\,\mathrm{k\Omega} = 190\,\mathrm{k\Omega}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum wird bei OPV-Verstärkern fast immer Gegenkopplung verwendet?
+    optionen:
+      - text: Damit die Verstärkung stabil ist und nur von den Widerständen abhängt
+        richtig: true
+      - text: Damit der OPV schneller in die Sättigung geht
+      - text: Damit der Ausgangswiderstand steigt
+      - text: Damit die Versorgungsspannung kleiner sein kann
+    erklaerung: Die Leerlaufverstärkung ist riesig und streut. Gegenkopplung macht die Schaltung berechenbar, linear und stabil.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Umkehraddierer mit $R_1 = R_2 = R_3 = 10\,\mathrm{k\Omega}$, $R_\mathrm{f} = 20\,\mathrm{k\Omega}$; $U_1 = 0{,}4\,\mathrm{V}$, $U_2 = 1{,}0\,\mathrm{V}$, $U_3 = 0{,}6\,\mathrm{V}$. Wie groß ist $U_\mathrm{a}$?'
+    loesung: -4
+    einheit: V
+    erklaerung: '$U_\mathrm{a} = -\dfrac{20}{10} (0{,}4 + 1{,}0 + 0{,}6)\,\mathrm{V} = -4\,\mathrm{V}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Signalform entsteht am Ausgang eines Integrierers, wenn am Eingang eine Rechteckspannung anliegt?
+    optionen:
+      - text: Eine Dreieckspannung
+        richtig: true
+      - text: Ebenfalls eine Rechteckspannung
+      - text: Eine Sinusspannung
+      - text: Kurze Nadelimpulse
+    erklaerung: Jede konstante Eingangsspannung erzeugt eine Rampe – abwechselnd steigend und fallend ergibt das ein Dreieck. Nadelimpulse entstehen beim Differenzierer.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Transimpedanzverstärker hat $R_\mathrm{f} = 220\,\mathrm{k\Omega}$. Welche Ausgangsspannung ergibt ein Fotostrom von $8\,\mu\mathrm{A}$ (mit Vorzeichen)?'
+    loesung: -1.76
+    einheit: V
+    erklaerung: '$U_\mathrm{a} = -I \cdot R_\mathrm{f} = -8\,\mu\mathrm{A} \cdot 220\,\mathrm{k\Omega} = -1{,}76\,\mathrm{V}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Welchen Vorteil hat ein Schmitt-Trigger gegenüber einem einfachen Komparator?
+    optionen:
+      - text: Durch die Hysterese schaltet er bei verrauschten Signalen nicht mehrfach hin und her.
+        richtig: true
+      - text: Er verstärkt das Signal linear.
+      - text: Er braucht keine Versorgungsspannung.
+      - text: Er hat nur eine einzige Schaltschwelle.
+    erklaerung: Mitkopplung erzeugt zwei Schwellen. Erst wenn die andere Schwelle erreicht wird, kippt der Ausgang zurück.
+
+  - typ: mc
+    stufe: standard
+    frage: Was ist die Slew-Rate eines OPV, und was passiert, wenn sie zu klein ist?
+    optionen:
+      - text: Die maximale Änderungsgeschwindigkeit der Ausgangsspannung – schnelle, große Signale werden verzerrt (Sinus wird zum Dreieck).
+        richtig: true
+      - text: Die maximale Verstärkung – das Signal wird zu klein.
+      - text: Die Offsetspannung – der Ausgang driftet.
+      - text: Die maximale Ausgangsspannung – das Signal wird abgeschnitten.
+    erklaerung: 'Die Slew-Rate wird in V/µs angegeben. Bedingung für einen unverzerrten Sinus: 2πf·û ≤ SR.'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein OPV hat ein Verstärkungs-Bandbreite-Produkt von $1\,\mathrm{MHz}$. Welche Bandbreite hat ein nichtinvertierender Verstärker mit $V = 50$ ungefähr?'
+    loesung: 20
+    einheit: kHz
+    erklaerung: '$f_\mathrm{g} \approx \mathrm{GBW} / V = 1\,\mathrm{MHz} / 50 = 20\,\mathrm{kHz}$'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein Schmitt-Trigger hat $\beta = R_2/(R_1 + R_2) = 0{,}2$, der Ausgang springt zwischen $\pm 10\,\mathrm{V}$. Wie groß ist die Hysterese $U_\mathrm{T+} - U_\mathrm{T-}$?'
+    loesung: 4
+    einheit: V
+    erklaerung: '$U_\mathrm{T\pm} = \pm 0{,}2 \cdot 10\,\mathrm{V} = \pm 2\,\mathrm{V}$ → Hysterese 4 V.'

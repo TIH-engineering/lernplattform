@@ -1,0 +1,226 @@
+---
+title: Theorie – Filter
+description: "Filterarten und Begriffe, Pegel in dB, Bode-Diagramm, passive RC- und RL-Filter 1. Ordnung, passive Filter 2. Ordnung mit Güte und Butterworth, Belastung und Entkopplung, aktive Filter mit OPV, Sallen-Key-Auslegung, Analyse mehrstufiger Schaltungen."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Tiefpass from '../../../assets/grundlagen/rc-tiefpass.svg';
+import Hochpass from '../../../assets/elektronik/rc-hochpass.svg';
+import RLC from '../../../assets/elektronik/rlc-tiefpass.svg';
+import SallenKey from '../../../assets/elektronik/sallen-key-tiefpass.svg';
+import Bode from '../../../assets/elektronik/bode-tiefpass.svg';
+
+## 1 · Filterarten und Begriffe
+
+| Filter | lässt durch | sperrt | Beispiel |
+| --- | --- | --- | --- |
+| **Tiefpass** (TP) | tiefe Frequenzen | hohe Frequenzen | Rauschen vor dem ADC entfernen |
+| **Hochpass** (HP) | hohe Frequenzen | tiefe Frequenzen (auch Gleichspannung) | Trittschall beim Mikrofon, Koppelkondensator |
+| **Bandpass** (BP) | ein Frequenzband | darunter und darüber | Senderwahl, Sprachband 300 Hz … 3,4 kHz |
+| **Bandsperre** (BS) | alles außer einem Band | ein schmales Band | 50-Hz-Brummfilter |
+
+- **Durchlassbereich / Sperrbereich:** Frequenzbereich, der durchgelassen bzw. gedämpft wird.
+- **Grenzfrequenz** $f_\mathrm{g}$: Frequenz, bei der die Ausgangsspannung auf $1/\sqrt{2} \approx 70{,}7\,\%$ gefallen ist (**−3 dB**).
+- **Ordnung** $n$: Anzahl der (unabhängigen) Energiespeicher. Weit im Sperrbereich fällt der Betrag mit **$n \cdot 20$ dB pro Dekade**.
+
+Die Übertragungsfunktion beschreibt Betrag und Phase des Filters für jede Frequenz:
+
+$$
+\underline{H}(\mathrm{j}\omega) = \frac{\underline{U}_\mathrm{a}}{\underline{U}_\mathrm{e}}
+$$
+
+## 2 · Pegel und Bode-Diagramm
+
+### Pegel in Dezibel
+
+$$
+\text{Spannung: } \; a = 20 \cdot \log_{10} \frac{U_2}{U_1}\,\mathrm{dB}
+\qquad
+\text{Leistung: } \; a = 10 \cdot \log_{10} \frac{P_2}{P_1}\,\mathrm{dB}
+$$
+
+Wichtige Werte: Faktor 2 ≙ +6 dB, Faktor 10 ≙ +20 dB, $1/\sqrt{2}$ ≙ −3 dB, 0,1 ≙ −20 dB, 0,01 ≙ −40 dB.
+Bei hintereinandergeschalteten Stufen werden die **dB-Werte addiert**.
+
+### Bode-Diagramm
+
+<Abbildung bild={Bode} unterschrift="Betragsgang eines Tiefpasses 1. Ordnung (blau) und 2. Ordnung (Butterworth, gestrichelt) mit fg = 1 kHz" />
+
+Das Bode-Diagramm zeigt
+
+- den **Betragsgang** $|H|$ in dB über der Frequenz und
+- den **Phasengang** $\varphi$ über der Frequenz,
+
+jeweils mit **logarithmischer Frequenzachse** (jede Dekade gleich breit). Dadurch werden die Kurven fern der Grenzfrequenz zu
+**Geraden (Asymptoten)** – ein Bode-Diagramm lässt sich deshalb schnell von Hand skizzieren:
+
+1. Durchlassbereich als waagrechte Linie auf der Höhe der Verstärkung (z. B. 0 dB oder +26 dB).
+2. Ab jeder Grenzfrequenz die Steigung ändern: Tiefpass 1. Ordnung −20 dB/Dekade, 2. Ordnung −40 dB/Dekade, Hochpass entsprechend positiv.
+3. An der Knickstelle liegt die echte Kurve 3 dB unter der Asymptote (bei 1. Ordnung).
+
+## 3 · Passive Filter 1. Ordnung
+
+### RC-Tiefpass
+
+<Abbildung bild={Tiefpass} unterschrift="RC-Tiefpass: Ausgang am Kondensator" />
+
+Spannungsteiler aus $R$ und $X_\mathrm{C}$:
+
+$$
+\underline{H} = \frac{\frac{1}{\mathrm{j}\omega C}}{R + \frac{1}{\mathrm{j}\omega C}} = \frac{1}{1 + \mathrm{j}\omega RC} = \frac{1}{1 + \mathrm{j}\frac{f}{f_\mathrm{g}}}
+\qquad
+f_\mathrm{g} = \frac{1}{2\pi R C}
+$$
+
+$$
+|H| = \frac{1}{\sqrt{1 + (f/f_\mathrm{g})^2}}
+\qquad
+\varphi = -\arctan\frac{f}{f_\mathrm{g}}
+$$
+
+| $f$ | $\ll f_\mathrm{g}$ | $f_\mathrm{g}$ | $10\,f_\mathrm{g}$ | $100\,f_\mathrm{g}$ |
+| --- | --- | --- | --- | --- |
+| $\vert H\vert $ | ≈ 1 (0 dB) | 0,707 (−3 dB) | ≈ 0,1 (−20 dB) | ≈ 0,01 (−40 dB) |
+| $\varphi$ | ≈ 0° | −45° | ≈ −84° | ≈ −90° |
+
+### RC-Hochpass
+
+<Abbildung bild={Hochpass} unterschrift="RC-Hochpass: Ausgang am Widerstand" />
+
+$$
+\underline{H} = \frac{R}{R + \frac{1}{\mathrm{j}\omega C}} = \frac{\mathrm{j}\frac{f}{f_\mathrm{g}}}{1 + \mathrm{j}\frac{f}{f_\mathrm{g}}}
+\qquad
+|H| = \frac{f/f_\mathrm{g}}{\sqrt{1 + (f/f_\mathrm{g})^2}}
+\qquad
+\varphi = 90° - \arctan\frac{f}{f_\mathrm{g}}
+$$
+
+Gleiche Grenzfrequenz-Formel, aber +20 dB/Dekade **unterhalb** von $f_\mathrm{g}$. Gleichspannung wird vollständig gesperrt.
+
+### RL-Filter
+
+Mit einer Spule statt eines Kondensators gilt $f_\mathrm{g} = \dfrac{R}{2\pi L}$. Ausgang am Widerstand → Tiefpass, Ausgang an der Spule → Hochpass.
+Für Signalfilter nimmt man meist RC (Spulen sind groß, teuer und nicht ideal); RL-Filter findet man in der Leistungselektronik.
+
+### Achtung Belastung
+
+Die Formeln gelten für einen **unbelasteten** Ausgang. Ein Lastwiderstand liegt parallel zum Ausgangsbauteil und verändert Verstärkung und
+Grenzfrequenz (wie beim [belasteten Spannungsteiler](/grundlagen/schaltungen/rechenbeispiele/#belasteter-spannungsteiler)).
+Abhilfe: Lastwiderstand ≫ Filterimpedanz oder ein **Spannungsfolger** als Puffer.
+
+## 4 · Passive Filter 2. Ordnung
+
+### Zwei RC-Glieder hintereinander
+
+Zwei RC-Tiefpässe ergeben einen Tiefpass 2. Ordnung (−40 dB/Dekade). **Aber:** Ohne Entkopplung belastet die zweite Stufe die erste.
+Die Gesamtfunktion ist dann **nicht** das Produkt der Einzelfunktionen, die Grenzfrequenz verschiebt sich nach unten und der Übergang wird
+„weich“. Mit einem Spannungsfolger zwischen den Stufen gilt das Produkt; bei gleichen Stufen ist der Betrag bei $f_\mathrm{g}$ der Einzelstufe
+dann $0{,}707^2 = 0{,}5$ (**−6 dB**). Kompromiss ohne OPV: zweite Stufe deutlich hochohmiger dimensionieren (z. B. $R_2 = 10\,R_1$, $C_2 = C_1/10$).
+
+### RLC-Tiefpass und Güte
+
+<Abbildung bild={RLC} unterschrift="Passiver RLC-Tiefpass 2. Ordnung" />
+
+$$
+\underline{H}(s) = \frac{1}{LC\,s^2 + RC\,s + 1} = \frac{\omega_0^2}{s^2 + \frac{\omega_0}{Q}s + \omega_0^2}
+\qquad (s = \mathrm{j}\omega)
+$$
+
+Koeffizientenvergleich mit der **Standardform 2. Ordnung**:
+
+$$
+\omega_0 = \frac{1}{\sqrt{LC}}
+\qquad
+Q = \frac{1}{R}\sqrt{\frac{L}{C}}
+\qquad
+\text{Dämpfung } \zeta = \frac{1}{2Q} = \frac{R}{2}\sqrt{\frac{C}{L}}
+$$
+
+| Güte $Q$ | Verhalten |
+| --- | --- |
+| $Q < 0{,}5$ | stark gedämpft, sehr weicher Übergang |
+| $Q = 0{,}5$ | kritisch gedämpft (zwei gleiche RC-Glieder, entkoppelt) |
+| $Q = 1/\sqrt{2} \approx 0{,}707$ | **Butterworth:** Betragsgang im Durchlassbereich maximal flach, $f_\mathrm{g} = f_0$ |
+| $Q > 0{,}707$ | **Resonanzüberhöhung** vor der Grenzfrequenz – unerwünscht bei Filtern |
+| $Q \gg 1$ | starke Überhöhung, schwingfähig (Schwingkreis) |
+
+Eine Überhöhung tritt bei $f_\mathrm{r} = f_0 \sqrt{1 - \dfrac{1}{2Q^2}}$ auf (nur für $Q > 0{,}707$).
+**Damit es keine Überhöhung gibt, muss der Widerstand groß genug sein** (Dämpfung): $R \geq \dfrac{1}{0{,}707}\sqrt{\dfrac{L}{C}}$.
+
+**Entwurf** eines Butterworth-RLC-Tiefpasses für $f_\mathrm{g}$ bei gegebenem $L$:
+
+$$
+\omega_0 = 2\pi f_\mathrm{g}
+\qquad
+C = \frac{1}{\omega_0^2 L}
+\qquad
+R = \frac{\omega_0 L}{Q} = \sqrt{2}\,\omega_0 L
+$$
+
+Typische Anwendung: LC-Ausgangsfilter von Schaltwandlern und Class-D-Verstärkern (dort ist der Lastwiderstand Teil der Dämpfung).
+
+## 5 · Aktive Filter
+
+Aktive Filter verwenden einen OPV. Vorteile:
+
+- **keine Spulen** nötig – auch bei tiefen Frequenzen klein und günstig,
+- **Entkopplung:** Der OPV-Ausgang ist niederohmig, Stufen beeinflussen sich nicht,
+- **Verstärkung** im Durchlassbereich möglich,
+- Güte und Filtercharakteristik gezielt einstellbar.
+
+Nachteile: Versorgungsspannung nötig, begrenzter Aussteuerbereich, Bandbreite durch GBW und Slew-Rate begrenzt.
+
+### Aktive Filter 1. Ordnung
+
+- **RC-Glied + Spannungsfolger** oder nichtinvertierender Verstärker: $f_\mathrm{g} = 1/(2\pi RC)$, Verstärkung $V = 1 + R_\mathrm{f}/R_\mathrm{g}$.
+- **Invertierender Tiefpass:** Kondensator parallel zu $R_\mathrm{f}$: $V_0 = -R_\mathrm{f}/R_1$, $f_\mathrm{g} = \dfrac{1}{2\pi R_\mathrm{f} C}$.
+
+### Sallen-Key-Tiefpass 2. Ordnung
+
+<Abbildung bild={SallenKey} unterschrift="Sallen-Key-Tiefpass mit nichtinvertierendem Verstärker (Verstärkung K = 1 + Rf/Rg)" />
+
+Zwei RC-Glieder; $C_1$ ist aber nicht nach Masse, sondern auf den **Ausgang** geführt (Mitkopplung). Dadurch lässt sich die Güte über die
+Verstärkung $K$ einstellen. Mit **gleichen Bauteilen** $R_1 = R_2 = R$, $C_1 = C_2 = C$ gilt:
+
+$$
+f_0 = \frac{1}{2\pi R C}
+\qquad
+Q = \frac{1}{3 - K}
+\qquad
+K = 1 + \frac{R_\mathrm{f}}{R_\mathrm{g}}
+$$
+
+**Butterworth-Auslegung** ($Q = 0{,}707$, dann $f_\mathrm{g} = f_0$):
+
+1. Grenzfrequenz $f_\mathrm{g}$ festlegen.
+2. Praktischen Kondensatorwert $C$ wählen (z. B. 10 nF … 100 nF).
+3. $R = \dfrac{1}{2\pi f_\mathrm{g} C}$ berechnen und Normwert wählen.
+4. $K = 3 - \sqrt{2} \approx 1{,}586$ einstellen: $R_\mathrm{f} \approx 0{,}586 \cdot R_\mathrm{g}$ (z. B. $R_\mathrm{g} = 10\,\mathrm{k\Omega}$, $R_\mathrm{f} = 5{,}9\,\mathrm{k\Omega}$).
+
+Beachte: Der Filter **verstärkt** dann im Durchlassbereich um $K \approx 1{,}59$ (+4 dB). Mit $K = 1$ (Spannungsfolger) wäre $Q = 0{,}5$ –
+der Filter ist dann kritisch gedämpft, aber kein Butterworth-Filter, und die −3-dB-Frequenz liegt bei etwa $0{,}64 \cdot f_0$.
+(In Testaufgaben wird bei gleichen Bauteilen oft vereinfacht $f_\mathrm{g} \approx \dfrac{1}{2\pi RC}$ verwendet.)
+
+**Sallen-Key-Hochpass:** R und C vertauscht – gleiche Formeln.
+
+### Filtercharakteristiken
+
+| Charakteristik | Eigenschaft | Einsatz |
+| --- | --- | --- |
+| **Butterworth** | maximal flacher Durchlassbereich | Standard, Messtechnik, Audio |
+| Tschebyscheff | steilerer Übergang, dafür Welligkeit im Durchlassbereich | wenn steile Flanken wichtig sind |
+| Bessel | konstante Laufzeit, gutes Rechteckverhalten, flacher Übergang | Impulssignale |
+
+Höhere Ordnungen entstehen durch **Hintereinanderschalten** von Stufen 2. (und 1.) Ordnung mit passend gewählten Güten.
+
+## 6 · Mehrstufige Schaltungen analysieren
+
+So gehst du bei einer Schaltungsanalyse vor:
+
+1. **Stufen erkennen:** Wo sind passive RC-Glieder, Spannungsfolger, aktive Filter, Verstärker? Welche Art (TP/HP)?
+2. **Grenzfrequenzen** der Filterstufen berechnen: $f_\mathrm{g} = 1/(2\pi RC)$.
+3. **Verstärkungen** der Verstärkerstufen berechnen (auch in dB) – Vorzeichen bei invertierenden Stufen beachten.
+4. **Gesamtfunktion:** Bandpass, wenn ein Hochpass (tiefe Grenze) und ein Tiefpass (hohe Grenze) kombiniert sind.
+5. **Bode-Diagramm skizzieren:** Durchlass-Pegel = Summe der dB-Verstärkungen; an jeder Grenzfrequenz die Steigung ändern.
+6. **Ausgangssignal** bei einer bestimmten Frequenz: Liegt sie im Durchlassbereich, gilt $\hat{u}_\mathrm{a} \approx |V_\mathrm{ges}| \cdot \hat{u}_\mathrm{e}$;
+   sonst die Dämpfung der betroffenen Stufen mit $|H|$ berechnen.

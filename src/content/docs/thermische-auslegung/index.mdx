@@ -1,0 +1,38 @@
+---
+title: Thermische Auslegung
+description: "Verlustleistung, Wärmeleitung, Konvektion und Strahlung, thermisches Ersatzschaltbild, Wärmewiderstände aus Datenblättern, Kühlkörper auswählen, Leiterplatte als Kühlfläche, dynamisches Modell und Pulsbetrieb."
+sidebar:
+  label: Übersicht
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Jeder Linearregler, jeder Leistungstransistor und jeder MOSFET erzeugt **Wärme**. Wird sie nicht abgeführt, steigt die Temperatur –
+das Bauteil arbeitet falsch, altert schneller oder wird zerstört. Die gute Nachricht: Wärme lässt sich mit denselben Werkzeugen berechnen
+wie ein elektrischer Stromkreis. Aus Verlustleistung, Wärmewiderständen und Umgebungstemperatur wird ein **thermisches Ersatzschaltbild**.
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- die **Verlustleistung** von Linearreglern, Transistoren, Dioden und Widerständen berechnen,
+- Wärmeleitung, Konvektion und Wärmestrahlung erklären und unterscheiden,
+- ein **statisches thermisches Ersatzschaltbild** aufstellen und die Sperrschichttemperatur berechnen,
+- Wärmewiderstände aus **Datenblättern** lesen und einen passenden **Kühlkörper** auswählen,
+- den Einfluss von Bauform, Kupferflächen, Wärmeleitmaterial und Isolierscheiben beurteilen,
+- mit einem **dynamischen Modell** (Wärmekapazitäten, Zeitkonstante) Erwärmungsvorgänge und Pulsbetrieb abschätzen,
+- Temperaturen messen und Modelle mit Messungen vergleichen.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="Wärmeübertragung, Ersatzschaltbild, Datenblatt, Kühlkörper, dynamisches Modell" href="/thermische-auslegung/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="Verlustleistung, Sperrschichttemperatur, Kühlkörperauswahl, Zeitkonstante, Pulsbetrieb" href="/thermische-auslegung/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Linearregler in vier Bauformen, Temperaturmessung, Wärmebildkamera, LTspice-Modell" href="/thermische-auslegung/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen zur thermischen Auslegung" href="/thermische-auslegung/quiz/" />
+</CardGrid>
+
+:::tip[Voraussetzungen]
+[Energie und Leistung](/grundlagen/energie-leistung/), [Ohmsches Gesetz und Reihenschaltung](/grundlagen/ohmsches-gesetz/),
+[Kondensator](/grundlagen/kondensator/) (Laden mit Zeitkonstante), [Transistoren](/transistoren/) (Längsregler).
+:::

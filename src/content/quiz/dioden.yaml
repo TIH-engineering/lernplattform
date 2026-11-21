@@ -1,0 +1,138 @@
+titel: Dioden
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Eine Si-Diode wird in Durchlassrichtung mit nur 0,3 V betrieben. Was passiert?
+    optionen:
+      - text: Es fließt praktisch kein Strom, weil die Schleusenspannung nicht erreicht ist.
+        richtig: true
+      - text: Es fließt ein großer Strom, weil die Diode in Durchlassrichtung gepolt ist.
+      - text: Die Diode bricht durch.
+      - text: Die Diode leuchtet schwach.
+    erklaerung: Erst ab etwa 0,6 … 0,7 V wird die Sperrschicht abgebaut und der Strom steigt stark an.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Fremdatome erzeugen in Silizium eine n-Dotierung?
+    optionen:
+      - text: Fünfwertige Atome wie Phosphor (Donatoren)
+        richtig: true
+      - text: Dreiwertige Atome wie Bor (Akzeptoren)
+      - text: Vierwertige Atome wie Germanium
+      - text: Edelgasatome
+    erklaerung: Das fünfte Außenelektron wird im Kristall nicht gebraucht und ist frei beweglich – Elektronen sind die Majoritätsträger.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie ist die Kathode auf einer Diode meist gekennzeichnet?
+    optionen:
+      - text: Durch einen Ring auf der Seite der Kathode
+        richtig: true
+      - text: Durch einen Ring auf der Seite der Anode
+      - text: Durch das längere Anschlussbein
+      - text: Gar nicht – Dioden haben keine Polung
+    erklaerung: Der Ring entspricht dem Strich im Schaltzeichen. Bei LEDs ist dagegen das **längere** Bein die Anode.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Eine Si-Diode ($U_\mathrm{F} = 0{,}7\,\mathrm{V}$) liegt über $220\,\Omega$ an $5\,\mathrm{V}$. Wie groß ist der Strom?'
+    loesung: 19.55
+    einheit: mA
+    erklaerung: '$I = (5\,\mathrm{V} - 0{,}7\,\mathrm{V}) / 220\,\Omega \approx 19{,}5\,\mathrm{mA}$'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Eine grüne LED ($U_\mathrm{F} = 2{,}1\,\mathrm{V}$) soll an $12\,\mathrm{V}$ mit $15\,\mathrm{mA}$ betrieben werden. Wie groß ist der Vorwiderstand (rechnerisch)?'
+    loesung: 660
+    einheit: Ω
+    erklaerung: '$R_\mathrm{V} = (12 - 2{,}1)\,\mathrm{V} / 15\,\mathrm{mA} = 660\,\Omega$ → Normwert 680 Ω.'
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Frequenz hat die Brummspannung eines Brückengleichrichters am 50-Hz-Netz?
+    optionen:
+      - text: 100 Hz
+        richtig: true
+      - text: 50 Hz
+      - text: 25 Hz
+      - text: 0 Hz – es gibt keine Brummspannung
+    erklaerung: Beide Halbwellen werden genutzt, der Ladekondensator wird zweimal pro Periode nachgeladen. Beim Einweggleichrichter sind es 50 Hz.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Brückengleichrichter wird mit $9\,\mathrm{V}$ (Effektivwert) gespeist. Wie groß ist etwa der Spitzenwert der Ausgangsspannung ($U_\mathrm{F} = 0{,}7\,\mathrm{V}$)?'
+    loesung: 11.33
+    einheit: V
+    erklaerung: '$\hat{u}_\mathrm{a} = \sqrt{2} \cdot 9\,\mathrm{V} - 2 \cdot 0{,}7\,\mathrm{V} \approx 12{,}73 - 1{,}4 \approx 11{,}3\,\mathrm{V}$ – zwei Dioden liegen im Strompfad.'
+
+  - typ: mc
+    stufe: standard
+    frage: Wie kann man die Brummspannung eines Netzteils verringern?
+    optionen:
+      - text: Größeren Ladekondensator verwenden
+        richtig: true
+      - text: Brücken- statt Einweggleichrichter verwenden
+        richtig: true
+      - text: Einen Spannungsregler nachschalten
+        richtig: true
+      - text: Den Laststrom erhöhen
+    erklaerung: '$\Delta U \approx I/(f \cdot C)$ bzw. $I/(2fC)$. Ein größerer Laststrom vergrößert den Brumm. Ein Regler (z. B. 78xx) entfernt den Rest-Brumm fast vollständig.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Eine Z-Diode ($U_\mathrm{Z} = 6{,}8\,\mathrm{V}$) hängt über $330\,\Omega$ an $10\,\mathrm{V}$, ohne Last. Wie groß ist der Z-Strom?'
+    loesung: 9.697
+    einheit: mA
+    erklaerung: '$I_\mathrm{Z} = (10 - 6{,}8)\,\mathrm{V} / 330\,\Omega \approx 9{,}7\,\mathrm{mA}$ – ohne Last fließt der ganze Strom durch die Z-Diode.'
+
+  - typ: mc
+    stufe: standard
+    frage: In welchem Bereich der Kennlinie wird eine Z-Diode zur Stabilisierung betrieben?
+    optionen:
+      - text: Im Durchbruchbereich in Sperrrichtung
+        richtig: true
+      - text: Im Durchlassbereich
+      - text: Im Sperrbereich unterhalb der Z-Spannung
+      - text: Bei 0 V
+    erklaerung: Dort ist die Kennlinie sehr steil – große Stromänderungen bewirken nur kleine Spannungsänderungen.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Vorteile hat eine Schottky-Diode gegenüber einer normalen Si-Diode?
+    optionen:
+      - text: Kleinere Durchlassspannung
+        richtig: true
+      - text: Sehr schnelles Schalten
+        richtig: true
+      - text: Höhere Sperrspannung
+      - text: Kleinerer Sperrstrom bei hoher Temperatur
+    erklaerung: Schottky-Dioden haben meist **kleinere** Sperrspannungen und **größere** Sperrströme. Dafür sind sie schnell und verlustarm.
+
+  - typ: mc
+    stufe: standard
+    frage: Eine LED wird in Sperrrichtung an 9 V angeschlossen. Was passiert?
+    optionen:
+      - text: Sie sperrt und leuchtet nicht – bei Überschreiten der kleinen Sperrspannung (oft 5 V) kann sie zerstört werden.
+        richtig: true
+      - text: Sie leuchtet mit halber Helligkeit.
+      - text: Sie leuchtet in einer anderen Farbe.
+      - text: Nichts – LEDs halten in Sperrrichtung beliebig viel Spannung aus.
+    erklaerung: LEDs vertragen nur kleine Sperrspannungen. Bei Wechselspannung schützt man sie mit einer antiparallelen Diode.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Wie ändert sich die Kapazität einer Kapazitätsdiode (Varaktor), wenn die Sperrspannung erhöht wird?
+    optionen:
+      - text: Sie wird kleiner, weil die Sperrschicht breiter wird.
+        richtig: true
+      - text: Sie wird größer, weil mehr Ladung gespeichert wird.
+      - text: Sie bleibt gleich.
+      - text: Sie wird negativ.
+    erklaerung: Die Sperrschicht wirkt wie das Dielektrikum eines Plattenkondensators – größerer „Plattenabstand“ bedeutet kleinere Kapazität.
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein Brückengleichrichter soll $0{,}5\,\mathrm{A}$ liefern, die Brummspannung darf $1\,\mathrm{V}$ betragen. Welcher Ladekondensator ist mindestens nötig?'
+    loesung: 5000
+    einheit: µF
+    erklaerung: '$C = I / (2 f \Delta U) = 0{,}5 / (2 \cdot 50 \cdot 1)\,\mathrm{F} = 5\,\mathrm{mF} = 5000\,\mu\mathrm{F}$'

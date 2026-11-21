@@ -1,0 +1,226 @@
+---
+title: Theorie – Drehstrom
+description: "Erzeugung von Drehstrom, Linien- und Zeigerdiagramm, Leiterbezeichnungen, Strang- und Außenleiterspannung, Verkettungsfaktor, Sternschaltung, Dreieckschaltung, Neutralleiter, unsymmetrische Last, Drehstromleistung, Leistungsmessung, Drehfeld und Asynchronmotor, Stern-Dreieck-Anlauf, Blindleistungskompensation, B6-Gleichrichter."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Linien from '../../../assets/drehstrom/liniendiagramm.svg';
+import Zeiger from '../../../assets/drehstrom/zeigerdiagramm.svg';
+import Stern from '../../../assets/drehstrom/sternschaltung.svg';
+import Dreieck from '../../../assets/drehstrom/dreieckschaltung.svg';
+
+## 1 · Warum Drehstrom?
+
+- **Sparsamere Übertragung:** Für dieselbe Leistung braucht man weniger Leitermaterial als mit drei getrennten Wechselstromkreisen – die
+  Rückleiter entfallen (bei symmetrischer Last fließt im Neutralleiter kein Strom).
+- **Zwei Spannungen in einem Netz:** 230 V zwischen Außenleiter und Neutralleiter, 400 V zwischen zwei Außenleitern.
+- **Drehfeld:** Drei um 120° versetzte Ströme in drei Spulen erzeugen ein **umlaufendes Magnetfeld** – damit laufen Drehstrommotoren
+  ohne Hilfsmittel an.
+- **Konstante Leistung:** Bei symmetrischer Last ist die Summe der Augenblicksleistungen zeitlich **konstant** – kein Pulsieren wie bei
+  Einphasenwechselstrom (dort schwankt $p(t)$ mit 100 Hz).
+
+## 2 · Erzeugung
+
+Im Generator sitzen drei gleiche Spulen (**Stränge**), räumlich um 120° versetzt. Ein rotierendes Magnetfeld induziert in jeder Spule eine
+sinusförmige Spannung – gleich groß, aber **zeitlich um 120° verschoben**:
+
+$$
+u_\mathrm{1N}(t) = \hat{u} \sin(\omega t)
+\qquad
+u_\mathrm{2N}(t) = \hat{u} \sin(\omega t - 120°)
+\qquad
+u_\mathrm{3N}(t) = \hat{u} \sin(\omega t - 240°)
+$$
+
+<Abbildung bild={Linien} unterschrift="Liniendiagramm: Die drei Strangspannungen sind jeweils um 120° (ein Drittel der Periode) verschoben" />
+
+Zu jedem Zeitpunkt ist die **Summe der drei Spannungen null**. Die Reihenfolge, in der die Spannungen ihr Maximum erreichen (L1 → L2 → L3),
+heißt **Phasenfolge** oder Drehsinn.
+
+<Abbildung bild={Zeiger} unterschrift="Zeigerdiagramm: Drei gleich lange Zeiger im Abstand von 120°. Die Außenleiterspannung ist die Differenz zweier Strangspannungen" />
+
+## 3 · Leiter und Spannungen im Niederspannungsnetz
+
+| Leiter | Bezeichnung | Farbe (Aderkennzeichnung) |
+| --- | --- | --- |
+| Außenleiter | L1, L2, L3 | braun, schwarz, grau |
+| Neutralleiter | N | blau |
+| Schutzleiter | PE | grün-gelb |
+
+- **Strangspannung** $U_\mathrm{Str}$ (Spannung zwischen Außenleiter und Neutralleiter, z. B. $U_\mathrm{1N}$): **230 V**
+- **Außenleiterspannung** $U$ (Spannung zwischen zwei Außenleitern, z. B. $U_\mathrm{12}$): **400 V**
+
+Aus dem Zeigerdiagramm (gleichschenkliges Dreieck mit 120° an der Spitze) folgt der **Verkettungsfaktor** $\sqrt{3}$:
+
+$$
+U = \sqrt{3} \cdot U_\mathrm{Str}
+\qquad
+\sqrt{3} \cdot 230\,\mathrm{V} \approx 400\,\mathrm{V}
+$$
+
+Die Außenleiterspannung $\underline{U}_\mathrm{12}$ eilt $\underline{U}_\mathrm{1N}$ um 30° voraus.
+
+## 4 · Sternschaltung (Y)
+
+<Abbildung bild={Stern} unterschrift="Sternschaltung: Jede Impedanz liegt zwischen einem Außenleiter und dem gemeinsamen Sternpunkt" />
+
+Die drei Verbraucher (Stränge) sind an einem Ende im **Sternpunkt** verbunden, das andere Ende hängt an je einem Außenleiter. Der Sternpunkt
+kann mit dem Neutralleiter verbunden sein (**Vierleiternetz**).
+
+$$
+U_\mathrm{Str} = \frac{U}{\sqrt{3}}
+\qquad
+I = I_\mathrm{Str}
+$$
+
+Jeder Strang liegt an **230 V**, der Leiterstrom ist gleich dem Strangstrom.
+
+### Symmetrische Last und Neutralleiter
+
+Sind alle drei Impedanzen gleich (**symmetrische Last**), sind die drei Ströme gleich groß und um 120° verschoben. Ihre **Summe ist null** –
+im Neutralleiter fließt **kein Strom**:
+
+$$
+\underline{I}_\mathrm{N} = \underline{I}_1 + \underline{I}_2 + \underline{I}_3 = 0 \qquad (\text{symmetrisch})
+$$
+
+### Unsymmetrische Last
+
+Im Haushalt sind die Lasten fast nie gleich verteilt. Mit angeschlossenem Neutralleiter liegt trotzdem jeder Strang an 230 V – jeder Strom
+wird für sich berechnet: $\underline{I}_k = \underline{U}_{k\mathrm{N}} / \underline{Z}_k$. Der Neutralleiter führt die **Zeigersumme**:
+
+$$
+\underline{I}_\mathrm{N} = \underline{I}_1 + \underline{I}_2 + \underline{I}_3 \neq 0
+$$
+
+Weil die Ströme um 120° versetzt sind, ist $I_\mathrm{N}$ meist kleiner als die Summe der Beträge.
+
+:::danger[Neutralleiterbruch]
+Fällt bei unsymmetrischer Last der Neutralleiter aus, **verschiebt sich der Sternpunkt**. Die Verbraucher zweier Stränge liegen dann in Reihe an
+400 V – das Gerät mit der **kleineren Leistung** (größerer Widerstand) bekommt die **höhere Spannung** und kann zerstört werden. Deshalb darf
+der Neutralleiter nie abgesichert oder einzeln geschaltet werden.
+:::
+
+## 5 · Dreieckschaltung (Δ)
+
+<Abbildung bild={Dreieck} unterschrift="Dreieckschaltung: Jede Impedanz liegt zwischen zwei Außenleitern" />
+
+Jeder Strang liegt **zwischen zwei Außenleitern**, es gibt keinen Neutralleiter.
+
+$$
+U_\mathrm{Str} = U
+\qquad
+I = \sqrt{3} \cdot I_\mathrm{Str}
+$$
+
+Jeder Strang liegt an **400 V**. Der Leiterstrom ist die Differenz zweier Strangströme, z. B. $\underline{I}_1 = \underline{I}_{12} - \underline{I}_{31}$,
+bei symmetrischer Last also $\sqrt{3}$-mal so groß wie der Strangstrom.
+
+### Stern oder Dreieck – was ändert sich?
+
+Werden **dieselben drei Widerstände** einmal im Stern und einmal im Dreieck angeschlossen:
+
+| | Stern | Dreieck | Verhältnis |
+| --- | --- | --- | --- |
+| Spannung am Strang | 230 V | 400 V | $\sqrt{3}$ |
+| Strangstrom | $I_\mathrm{Str}$ | $\sqrt{3} \cdot I_\mathrm{Str}$ | $\sqrt{3}$ |
+| Leiterstrom | $I$ | $3 \cdot I$ | 3 |
+| Leistung | $P$ | $3 \cdot P$ | **3** |
+
+Das nutzt man beim **Stern-Dreieck-Anlauf** von Motoren und bei Heizungen mit zwei Leistungsstufen.
+
+## 6 · Leistung im Drehstromnetz
+
+Die Gesamtleistung ist die Summe der drei Strangleistungen. Bei **symmetrischer** Last gilt – egal ob Stern oder Dreieck:
+
+$$
+P = 3 \cdot U_\mathrm{Str} \cdot I_\mathrm{Str} \cdot \cos\varphi = \sqrt{3} \cdot U \cdot I \cdot \cos\varphi
+$$
+
+$$
+Q = \sqrt{3} \cdot U \cdot I \cdot \sin\varphi
+\qquad
+S = \sqrt{3} \cdot U \cdot I = \sqrt{P^2 + Q^2}
+$$
+
+Dabei sind $U$ und $I$ die **Außenleiter**größen (die man von außen messen kann) und $\varphi$ der Phasenwinkel **eines Strangs**
+(zwischen Strangspannung und Strangstrom).
+
+:::caution[Typischer Fehler]
+$\sqrt{3}$ gehört zur Formel mit **Außenleiter**größen. Mit Stranggrößen steht der Faktor **3** davor. Nie $\sqrt{3}$ und Stranggrößen mischen.
+:::
+
+Bei **unsymmetrischer** Last rechnet man jeden Strang einzeln und addiert die **Wirkleistungen** (und getrennt die Blindleistungen).
+
+### Leistungsmessung
+
+- **symmetrische Last:** ein Leistungsmesser in einem Strang, Ergebnis × 3
+- **Vierleiternetz, unsymmetrisch:** drei Leistungsmesser (je Strang einer), Summe bilden
+- **Dreileiternetz:** **Aron-Schaltung** mit zwei Leistungsmessern – $P = P_1 + P_2$ (ein Messwert kann negativ sein)
+
+Moderne **Drehstromzähler** und Leistungsanalysatoren messen alle drei Stränge gleichzeitig.
+
+## 7 · Drehfeld und Asynchronmotor
+
+Drei räumlich um 120° versetzte Spulen, gespeist von drei um 120° verschobenen Strömen, erzeugen ein Magnetfeld mit **konstanter Stärke**,
+das mit der Netzfrequenz **umläuft** – das **Drehfeld**. Seine Drehzahl (synchrone Drehzahl) hängt von der Polpaarzahl $p$ ab:
+
+$$
+n_\mathrm{s} = \frac{f}{p} \qquad \text{bzw. in } 1/\mathrm{min}: \; n_\mathrm{s} = \frac{60 \cdot f}{p}
+$$
+
+| Polpaare $p$ | 1 | 2 | 3 | 4 |
+| --- | --- | --- | --- | --- |
+| $n_\mathrm{s}$ bei 50 Hz | 3000 1/min | 1500 1/min | 1000 1/min | 750 1/min |
+
+Der **Asynchronmotor** (Kurzschlussläufer) – der häufigste Motor der Industrie – dreht sich etwas langsamer als das Drehfeld. Nur durch diesen
+**Schlupf** $s = (n_\mathrm{s} - n)/n_\mathrm{s}$ (typisch 2 … 6 %) werden im Läufer Ströme induziert, die ein Drehmoment erzeugen.
+
+- **Drehrichtung umkehren:** zwei beliebige Außenleiter vertauschen.
+- **Drehzahl verstellen:** mit einem **Frequenzumrichter** (Gleichrichter + Zwischenkreis + Wechselrichter, siehe
+  [Leistungselektronik](/leistungselektronik/)), der Frequenz und Spannung verändert.
+
+### Typenschild und Stern-Dreieck-Anlauf
+
+Auf dem Typenschild steht z. B. **400/690 V Δ/Y**: Jeder Strang ist für 400 V gebaut. Am 400-V-Netz wird der Motor daher im **Dreieck**
+betrieben; an einem 690-V-Netz im Stern. Steht dort **230/400 V Δ/Y**, gehört er am 400-V-Netz in **Stern**.
+
+Beim Einschalten zieht ein Asynchronmotor das 5- bis 8-Fache des Nennstroms. Beim **Stern-Dreieck-Anlauf** (für Motoren mit 400 V Δ) läuft er
+zuerst im Stern an – Strangspannung nur 230 V, **Anlaufstrom und Anlaufmoment auf 1/3** – und wird nach dem Hochlaufen ins Dreieck
+umgeschaltet. Heute übernehmen das oft **Sanftanlasser** oder Frequenzumrichter.
+
+## 8 · Blindleistungskompensation
+
+Motoren brauchen **induktive Blindleistung** für ihr Magnetfeld. Sie belastet Leitungen und Transformatoren, ohne nutzbare Arbeit zu
+verrichten; Netzbetreiber verrechnen sie deshalb bei Großkunden. Abhilfe: **Kondensatoren** parallel zum Verbraucher, die Blindleistung
+„vor Ort“ liefern. Die benötigte Kompensationsleistung, um von $\cos\varphi_1$ auf $\cos\varphi_2$ zu verbessern:
+
+$$
+Q_\mathrm{C} = P \cdot \left(\tan\varphi_1 - \tan\varphi_2\right)
+$$
+
+Jeder der drei Kondensatoren liefert $Q_\mathrm{C}/3$. Mit $Q = U^2 \cdot \omega C$:
+
+$$
+C_\Delta = \frac{Q_\mathrm{C}}{3 \cdot \omega \cdot U^2}
+\qquad
+C_\mathrm{Y} = \frac{Q_\mathrm{C}}{3 \cdot \omega \cdot U_\mathrm{Str}^2} = 3 \cdot C_\Delta
+$$
+
+Im **Dreieck** braucht man nur **ein Drittel** der Kapazität (die Kondensatoren liegen an 400 V statt 230 V) – deshalb werden
+Kompensationsanlagen fast immer im Dreieck geschaltet.
+
+## 9 · Drehstrom und Elektronik: der B6-Gleichrichter
+
+Größere Netzteile, Frequenzumrichter und Ladegeräte richten alle drei Außenleiter mit einer **Drehstrombrücke (B6)** aus sechs Dioden gleich.
+Die Ausgangsspannung setzt sich aus den Kuppen der sechs Außenleiterspannungen zusammen – die Welligkeit hat die **6-fache Netzfrequenz
+(300 Hz)** und ist viel kleiner als beim einphasigen [Brückengleichrichter](/dioden/theorie/).
+
+$$
+U_\mathrm{d,AV} = \frac{3\sqrt{2}}{\pi} \cdot U \approx 1{,}35 \cdot U \approx 540\,\mathrm{V}
+\qquad
+\hat{u} = \sqrt{2} \cdot U \approx 566\,\mathrm{V} \;\;(\text{mit Glättungskondensator, unbelastet})
+$$
+
+Die Zwischenkreisspannung eines Frequenzumrichters am 400-V-Netz liegt deshalb bei rund 540 … 565 V – lebensgefährlich, auch noch Minuten
+nach dem Abschalten (Kondensatoren!).

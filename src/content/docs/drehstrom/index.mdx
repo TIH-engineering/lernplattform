@@ -1,0 +1,43 @@
+---
+title: Drehstrom
+description: "Dreiphasenwechselstrom: Erzeugung, Strang- und Außenleiterspannung, Stern- und Dreieckschaltung, symmetrische und unsymmetrische Last, Neutralleiter, Drehstromleistung, Drehfeld und Motor, Kompensation, Drehstrom-Gleichrichter."
+sidebar:
+  label: Übersicht
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Fast die gesamte elektrische Energie wird als **Drehstrom** (Dreiphasenwechselstrom) erzeugt, übertragen und verteilt. Jeder Hausanschluss hat
+drei Außenleiter, Herd, Durchlauferhitzer, Wallbox und Wärmepumpe hängen an 400 V, und jeder Industriemotor läuft mit Drehstrom. Auch in der
+Elektronik begegnet er dir: im Frequenzumrichter, im Drehstrom-Gleichrichter und im Ladegerät eines Elektroautos.
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- die Erzeugung von Drehstrom erklären und Linien- und Zeigerdiagramm zeichnen,
+- Strang- und Außenleitergrößen unterscheiden und mit dem Verkettungsfaktor $\sqrt{3}$ umrechnen,
+- Verbraucher in **Stern- und Dreieckschaltung** berechnen und die Leistungen vergleichen,
+- die Aufgabe des **Neutralleiters** erklären und den Neutralleiterstrom bei unsymmetrischer Last bestimmen,
+- Wirk-, Blind- und Scheinleistung im Drehstromnetz berechnen und eine Kompensation auslegen,
+- das **Drehfeld**, die Drehzahl eines Motors und den **Stern-Dreieck-Anlauf** erklären,
+- die Gleichspannung eines **B6-Gleichrichters** abschätzen.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="Erzeugung, Stern und Dreieck, Leistung, unsymmetrische Last, Drehfeld, Kompensation" href="/drehstrom/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="Ströme, Leistungen, Neutralleiterstrom, Motor, Kompensation" href="/drehstrom/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Hausanschluss, Neutralleiterbruch, Durchlauferhitzer, Wallbox, Motor-Typenschild" href="/drehstrom/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen über Drehstrom" href="/drehstrom/quiz/" />
+</CardGrid>
+
+:::tip[Voraussetzungen]
+[Wechselgrößen](/grundlagen/wechselstrom/), [komplexe Rechnung](/grundlagen/komplexe-rechnung/) und
+[Leistung bei Wechselstrom](/grundlagen/wechselstromleistung/).
+:::
+
+:::caution[Sicherheit]
+Drehstrom mit 400 V ist lebensgefährlich. Arbeiten an Netzanlagen dürfen nur Elektrofachkräfte durchführen. Im Labor wird mit
+Schutzkleinspannung oder an abgesicherten Laborversuchsständen unter Aufsicht gearbeitet.
+:::

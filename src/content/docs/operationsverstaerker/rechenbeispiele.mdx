@@ -1,0 +1,215 @@
+---
+title: Rechenbeispiele – Operationsverstärker
+description: Rechenbeispiele zu invertierendem und nichtinvertierendem Verstärker, Auslegung in dB, Aussteuerbereich, Addierer, Differenzverstärker, Integrierer, Transimpedanzverstärker, Schmitt-Trigger und Slew-Rate.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import Inv from '../../../assets/elektronik/opv-invertierend.svg';
+import NichtInv from '../../../assets/elektronik/opv-nichtinvertierend.svg';
+import Schmitt from '../../../assets/elektronik/opv-schmitt-trigger.svg';
+
+Wenn nichts anderes angegeben ist, gilt der **ideale OPV**.
+
+## Invertierender Verstärker
+
+<Stufe wert="grundlagen" />
+
+<Abbildung bild={Inv} unterschrift="Invertierender Verstärker" />
+
+$R_1 = 22\,\mathrm{k\Omega}$, $R_\mathrm{f} = 150\,\mathrm{k\Omega}$, Versorgung $\pm 5\,\mathrm{V}$ (Ausgang erreicht ideal die Versorgung).
+
+a) Wie groß ist die Verstärkung? b) Welche Ausgangsspannung ergibt sich bei $U_\mathrm{e} = 100\,\mathrm{mV}$?
+c) Wie groß darf die Eingangsspannung höchstens sein, damit der Ausgang nicht in die Sättigung geht?
+
+<Loesung>
+
+a) $V = -\dfrac{R_\mathrm{f}}{R_1} = -\dfrac{150\,\mathrm{k\Omega}}{22\,\mathrm{k\Omega}} \approx -6{,}82$
+
+b) $U_\mathrm{a} = V \cdot U_\mathrm{e} \approx -6{,}82 \cdot 0{,}1\,\mathrm{V} \approx -0{,}68\,\mathrm{V}$
+
+c) $|U_\mathrm{e,max}| = \dfrac{5\,\mathrm{V}}{6{,}82} \approx 0{,}73\,\mathrm{V}$. Bei realen (nicht Rail-to-Rail-) OPVs ist der Ausgangsbereich
+kleiner, z. B. ±3,5 V → nur ca. 0,5 V Eingangsspannung.
+
+</Loesung>
+
+## Nichtinvertierender Verstärker
+
+<Stufe wert="grundlagen" />
+
+<Abbildung bild={NichtInv} unterschrift="Nichtinvertierender Verstärker" />
+
+$R_\mathrm{g} = 10\,\mathrm{k\Omega}$, $R_\mathrm{f} = 560\,\mathrm{k\Omega}$, $U_\mathrm{e} = 60\,\mathrm{mV}$. Berechne Verstärkung (auch in dB) und Ausgangsspannung.
+
+<Loesung>
+
+$$
+V = 1 + \frac{R_\mathrm{f}}{R_\mathrm{g}} = 1 + \frac{560}{10} = 57
+\qquad
+V_\mathrm{dB} = 20 \log_{10} 57 \approx 35{,}1\,\mathrm{dB}
+\qquad
+U_\mathrm{a} = 57 \cdot 60\,\mathrm{mV} = 3{,}42\,\mathrm{V}
+$$
+
+</Loesung>
+
+## Verstärker nach dB-Vorgabe auslegen
+
+<Stufe wert="standard" />
+
+a) Dimensioniere einen **invertierenden** Verstärker mit $32\,\mathrm{dB}$ Verstärkung ($R_1 = 1\,\mathrm{k\Omega}$).
+b) Dimensioniere einen **nichtinvertierenden** Verstärker mit $26\,\mathrm{dB}$ ($R_\mathrm{g} = 10\,\mathrm{k\Omega}$).
+
+<Loesung>
+
+**a)** $|V| = 10^{32/20} \approx 39{,}8$ → $R_\mathrm{f} = 39{,}8 \cdot 1\,\mathrm{k\Omega} = 39{,}8\,\mathrm{k\Omega}$ (Normwert 39 kΩ → 31,8 dB)
+
+**b)** $V = 10^{26/20} \approx 19{,}95 \approx 20$ → $\dfrac{R_\mathrm{f}}{R_\mathrm{g}} = V - 1 = 19$ → $R_\mathrm{f} = 190\,\mathrm{k\Omega}$
+(z. B. 180 kΩ + 10 kΩ in Reihe)
+
+**Typischer Fehler bei b):** $R_\mathrm{f} = 200\,\mathrm{k\Omega}$ – das „+1“ vergessen. Dann wäre $V = 21$ (26,4 dB).
+
+</Loesung>
+
+## Addierer
+
+<Stufe wert="standard" />
+
+Ein Umkehraddierer hat $R_1 = 10\,\mathrm{k\Omega}$, $R_2 = 20\,\mathrm{k\Omega}$, $R_3 = 40\,\mathrm{k\Omega}$ und $R_\mathrm{f} = 80\,\mathrm{k\Omega}$.
+Die Eingangsspannungen sind $U_1 = 0{,}5\,\mathrm{V}$, $U_2 = 1{,}2\,\mathrm{V}$, $U_3 = -0{,}4\,\mathrm{V}$. Berechne $U_\mathrm{a}$.
+
+<Loesung>
+
+Die Ströme in die virtuelle Masse:
+$\dfrac{0{,}5\,\mathrm{V}}{10\,\mathrm{k\Omega}} = 50\,\mu\mathrm{A}$, $\dfrac{1{,}2\,\mathrm{V}}{20\,\mathrm{k\Omega}} = 60\,\mu\mathrm{A}$,
+$\dfrac{-0{,}4\,\mathrm{V}}{40\,\mathrm{k\Omega}} = -10\,\mu\mathrm{A}$ → Summe $100\,\mu\mathrm{A}$
+
+$$
+U_\mathrm{a} = -R_\mathrm{f} \cdot \sum I = -80\,\mathrm{k\Omega} \cdot 100\,\mu\mathrm{A} = -8{,}0\,\mathrm{V}
+$$
+
+</Loesung>
+
+## Differenzverstärker
+
+<Stufe wert="standard" />
+
+Ein Differenzverstärker hat $R_1 = R_3 = 10\,\mathrm{k\Omega}$ und $R_2 = R_4 = 47\,\mathrm{k\Omega}$. Es liegen $U_1 = 2{,}5\,\mathrm{V}$ und
+$U_2 = 1{,}8\,\mathrm{V}$ an. Berechne $U_\mathrm{a}$. Was ändert sich, wenn auf beiden Eingängen zusätzlich eine Störung von 0,3 V liegt?
+
+<Loesung>
+
+$$
+U_\mathrm{a} = \frac{R_2}{R_1} (U_2 - U_1) = 4{,}7 \cdot (1{,}8\,\mathrm{V} - 2{,}5\,\mathrm{V}) \approx -3{,}29\,\mathrm{V}
+$$
+
+Eine gleiche Störung auf beiden Eingängen (Gleichtakt) ändert die Differenz nicht → $U_\mathrm{a}$ bleibt gleich. Genau dafür setzt
+man Differenzverstärker ein.
+
+</Loesung>
+
+## Integrierer
+
+<Stufe wert="standard" />
+
+a) An einem Integrierer ($R = 100\,\mathrm{k\Omega}$, $C = 10\,\mu\mathrm{F}$, $U_\mathrm{a}(0) = 0$) liegt eine konstante Eingangsspannung von $2\,\mathrm{V}$.
+Wie groß ist $U_\mathrm{a}$ nach $0{,}2\,\mathrm{s}$?
+
+b) Ein zweiter Integrierer ($R = 220\,\mathrm{k\Omega}$, $C = 4{,}7\,\mu\mathrm{F}$) startet bei $U_\mathrm{a}(0) = +2\,\mathrm{V}$, die Eingangsspannung ist $-1{,}5\,\mathrm{V}$.
+Wie groß ist $U_\mathrm{a}$ nach $0{,}8\,\mathrm{s}$?
+
+<Loesung>
+
+a) $U_\mathrm{a} = -\dfrac{U_\mathrm{e}}{RC} \cdot t = -\dfrac{2\,\mathrm{V}}{1\,\mathrm{s}} \cdot 0{,}2\,\mathrm{s} = -0{,}4\,\mathrm{V}$ ($RC = 100\,\mathrm{k\Omega} \cdot 10\,\mu\mathrm{F} = 1\,\mathrm{s}$)
+
+b) $RC = 220\,\mathrm{k\Omega} \cdot 4{,}7\,\mu\mathrm{F} = 1{,}034\,\mathrm{s}$
+
+$$
+U_\mathrm{a} = U_\mathrm{a}(0) - \frac{U_\mathrm{e}}{RC} \cdot t = 2\,\mathrm{V} - \frac{-1{,}5\,\mathrm{V}}{1{,}034\,\mathrm{s}} \cdot 0{,}8\,\mathrm{s} \approx 3{,}16\,\mathrm{V}
+$$
+
+Eine **negative** Eingangsspannung lässt die Ausgangsspannung **steigen** (invertierend!).
+
+</Loesung>
+
+## Transimpedanzverstärker
+
+<Stufe wert="standard" />
+
+Eine Fotodiode liefert $I_\mathrm{P} = 35\,\mu\mathrm{A}$. Der Transimpedanzverstärker hat $R_\mathrm{f} = 330\,\mathrm{k\Omega}$ und eine Versorgung von ±12 V.
+Berechne $U_\mathrm{a}$. Geht der OPV in Sättigung?
+
+<Loesung>
+
+$$
+U_\mathrm{a} = -I_\mathrm{P} \cdot R_\mathrm{f} = -35\,\mu\mathrm{A} \cdot 330\,\mathrm{k\Omega} = -11{,}55\,\mathrm{V}
+$$
+
+Ideal liegt das unter 12 V – aber nur knapp. Ein realer OPV, der nur bis ±10,5 V aussteuern kann, wäre schon gesättigt.
+Abhilfe: kleineres $R_\mathrm{f}$ (z. B. 220 kΩ → −7,7 V).
+
+</Loesung>
+
+## Schmitt-Trigger
+
+<Stufe wert="standard" />
+
+<Abbildung bild={Schmitt} unterschrift="Invertierender Schmitt-Trigger" />
+
+Ein invertierender Schmitt-Trigger hat $R_1 = 47\,\mathrm{k\Omega}$ (vom Ausgang zum +-Eingang) und $R_2 = 10\,\mathrm{k\Omega}$ (vom +-Eingang nach Masse).
+Der Ausgang springt zwischen $+12\,\mathrm{V}$ und $-12\,\mathrm{V}$. Berechne die Schaltschwellen und die Hysterese.
+Was passiert, wenn das Eingangssignal von −5 V langsam auf +5 V steigt?
+
+<Loesung>
+
+$$
+\beta = \frac{R_2}{R_1 + R_2} = \frac{10}{57} \approx 0{,}175
+\qquad
+U_\mathrm{T\pm} = \pm 0{,}175 \cdot 12\,\mathrm{V} \approx \pm 2{,}1\,\mathrm{V}
+\qquad
+U_\mathrm{H} \approx 4{,}2\,\mathrm{V}
+$$
+
+Bei −5 V ist der Eingang kleiner als die Schwelle → Ausgang **+12 V**, die Schwelle liegt bei +2,1 V. Erst wenn $U_\mathrm{e}$ über +2,1 V
+steigt, kippt der Ausgang auf **−12 V**; ab jetzt liegt die Schwelle bei −2,1 V. Kleine Störungen um 2 V lösen kein Zurückkippen aus.
+
+</Loesung>
+
+## Slew-Rate
+
+<Stufe wert="vertiefung" />
+
+a) Ein Audioverstärker soll einen Sinus mit $10\,\mathrm{V}$ Amplitude bis $20\,\mathrm{kHz}$ unverzerrt ausgeben. Welche Slew-Rate braucht der OPV mindestens?
+b) Bis zu welcher Frequenz schafft ein LM358 ($SR \approx 0{,}3\,\mathrm{V}/\mu\mathrm{s}$) einen Sinus mit 10 V Amplitude?
+
+<Loesung>
+
+a) $SR_\mathrm{min} = 2\pi f \hat{u} = 2\pi \cdot 20\,\mathrm{kHz} \cdot 10\,\mathrm{V} \approx 1{,}26 \cdot 10^{6}\,\mathrm{V/s} = 1{,}26\,\mathrm{V}/\mu\mathrm{s}$
+
+b) $f_\mathrm{max} = \dfrac{SR}{2\pi \hat{u}} = \dfrac{0{,}3 \cdot 10^{6}\,\mathrm{V/s}}{2\pi \cdot 10\,\mathrm{V}} \approx 4{,}8\,\mathrm{kHz}$
+
+Darüber wird der Sinus zum Dreieck verzerrt – für hochwertiges Audio ist der LM358 also ungeeignet.
+
+</Loesung>
+
+## Zweistufiger Verstärker und Bandbreite
+
+<Stufe wert="vertiefung" />
+
+Stufe 1: invertierender Verstärker mit $R_1 = 5\,\mathrm{k\Omega}$, $R_\mathrm{f} = 25\,\mathrm{k\Omega}$. Stufe 2: nichtinvertierender Verstärker mit
+$R_\mathrm{g} = 2\,\mathrm{k\Omega}$, $R_\mathrm{f} = 18\,\mathrm{k\Omega}$. $U_\mathrm{e} = 0{,}2\,\mathrm{V}$.
+
+a) Berechne die Ausgangsspannung und die Gesamtverstärkung in dB.
+b) Der OPV hat ein GBW von 1 MHz. Warum ist die zweistufige Lösung besser als eine Stufe mit $V = -50$?
+
+<Loesung>
+
+a) $V_1 = -5$, $V_2 = 1 + 9 = 10$ → $V = -50$; $U_\mathrm{a} = -50 \cdot 0{,}2\,\mathrm{V} = -10\,\mathrm{V}$.
+In dB: $20 \log 5 + 20 \log 10 \approx 14 + 20 = 34\,\mathrm{dB}$ (die dB-Werte werden addiert).
+
+b) Eine Stufe mit $|V| = 50$ hätte nur $f_\mathrm{g} \approx 1\,\mathrm{MHz}/50 = 20\,\mathrm{kHz}$ Bandbreite. Bei zwei Stufen hat jede eine größere
+Bandbreite – die Gesamtbandbreite ist deutlich höher. (Genau genommen zählt beim invertierenden Verstärker die
+„Rauschverstärkung“ $1 + R_\mathrm{f}/R_1 = 6$, also $f_\mathrm{g} \approx 167\,\mathrm{kHz}$; Stufe 2: $\approx 100\,\mathrm{kHz}$.)
+
+</Loesung>

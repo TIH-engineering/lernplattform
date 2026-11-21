@@ -1,0 +1,315 @@
+---
+title: Theorie – Thermische Auslegung
+description: "Warum Wärme wichtig ist, Verlustleistung, Wärmeleitung, Konvektion und Strahlung, thermisch-elektrische Analogie, statisches Ersatzschaltbild, Datenblattwerte, Kühlkörperauswahl, Wärmeleitmaterial und Isolation, Leiterplatte als Kühlfläche, mehrere Bauteile auf einem Kühlkörper, dynamisches Modell, Pulsbetrieb, Temperaturmessung."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Statisch from '../../../assets/elektronik/waerme-statisch.svg';
+import Dynamisch from '../../../assets/elektronik/waerme-dynamisch.svg';
+import Kurve from '../../../assets/elektronik/erwaermungskurve.svg';
+
+## 1 · Warum thermische Auslegung?
+
+In jeder elektronischen Schaltung wird ein Teil der elektrischen Energie unvermeidlich in **Wärme** umgewandelt. Besonders Bauteile, die
+Leistung umsetzen oder regeln – Linearregler, Transistoren, MOSFETs, Leistungs-ICs – werden heiß. Wird die Wärme nicht ausreichend
+abgeführt, steigt die Temperatur, bis
+
+- das Bauteil **falsch arbeitet** (Kennwerte driften, Schutzschaltungen schalten ab),
+- die **Lebensdauer sinkt** (Faustregel: 10 K mehr halbieren die Lebensdauer vieler Bauteile, z. B. von Elektrolytkondensatoren),
+- das Bauteil **zerstört** wird.
+
+Die wichtigste Grenze ist die **maximale Sperrschichttemperatur** $\vartheta_\mathrm{j,max}$ des Halbleiterchips (*junction*), meist
+**150 °C** (manche 125 °C oder 175 °C). In der Praxis plant man mit **Reserve** und bleibt z. B. unter 125 °C.
+
+:::note[Temperatur und Temperaturdifferenz]
+Temperaturen in °C schreibt man mit $\vartheta$ (Theta), absolute Temperaturen in K mit $T$. Eine **Temperaturdifferenz** $\Delta\vartheta$ gibt
+man in **Kelvin** an: Von 25 °C auf 85 °C sind es 60 K.
+:::
+
+## 2 · Verlustleistung
+
+Die Wärmequelle ist die **Verlustleistung** $P_\mathrm{V}$ – der Teil der aufgenommenen Leistung, der nicht als Nutzleistung weitergegeben wird:
+
+$$
+P_\mathrm{V} = P_\mathrm{auf} - P_\mathrm{ab}
+$$
+
+| Bauteil | Verlustleistung |
+| --- | --- |
+| **Linearregler** | $P_\mathrm{V} = (U_\mathrm{E} - U_\mathrm{A}) \cdot I_\mathrm{A} + U_\mathrm{E} \cdot I_\mathrm{q}$ (Spannungsdifferenz × Laststrom + Eigenverbrauch) |
+| **Bipolartransistor** | $P_\mathrm{V} \approx U_\mathrm{CE} \cdot I_\mathrm{C}$ (Basisleistung meist vernachlässigbar) |
+| **MOSFET (eingeschaltet)** | $P_\mathrm{V} = I_\mathrm{D,eff}^2 \cdot R_\mathrm{DS(on)}$, beim Schalten zusätzlich [Schaltverluste](/leistungselektronik/theorie/leistungshalbleiter/) |
+| **Diode** | $P_\mathrm{V} \approx U_\mathrm{F} \cdot I_\mathrm{F,AV}$ |
+| **Widerstand** | $P_\mathrm{V} = I^2 \cdot R = U^2 / R$ |
+
+Beim Linearregler sieht man das Problem sofort: Er „verheizt“ die gesamte Spannungsdifferenz. Ein 5-V-Regler an 12 V mit 0,5 A setzt
+$7\,\mathrm{V} \cdot 0{,}5\,\mathrm{A} = 3{,}5\,\mathrm{W}$ in Wärme um – mehr als die Last selbst bekommt (2,5 W).
+
+## 3 · Wie Wärme transportiert wird
+
+Die Wärme muss vom Chip bis in die Umgebungsluft gelangen. Dabei wirken drei Mechanismen.
+
+### Wärmeleitung (Konduktion)
+
+Wärme wandert durch **feste Materialien** – vom Chip ins Gehäuse, vom Gehäuse durch die Wärmeleitpaste in den Kühlkörper, durch Kupferflächen
+der Leiterplatte. Der Wärmewiderstand einer Schicht hängt (wie beim [Leiterwiderstand](/grundlagen/leiterwiderstand/)) von Dicke, Fläche
+und Material ab:
+
+$$
+R_\mathrm{th} = \frac{d}{\lambda \cdot A}
+\qquad
+\lambda: \text{Wärmeleitfähigkeit in } \mathrm{W/(m \cdot K)}
+$$
+
+| Material | $\lambda$ in W/(m·K) | Bemerkung |
+| --- | --- | --- |
+| Kupfer | ≈ 390 | Leiterbahnen, Kupferflächen, Heatspreader |
+| Aluminium (Legierung) | ≈ 150 … 220 | Kühlkörper: leicht, billig, gut strangpressbar |
+| Silizium | ≈ 150 | Halbleiterchip |
+| Aluminiumoxid-Keramik | ≈ 20 … 30 | Isolierscheiben |
+| Wärmeleitpaste, -pad | ≈ 1 … 5 | füllt Luftspalte |
+| Leiterplattenmaterial FR4 | ≈ 0,3 | schlechter Wärmeleiter – deshalb thermische Vias |
+| ruhende Luft | ≈ 0,026 | **Isolator** – jeder Luftspalt stört |
+
+### Konvektion
+
+An der Oberfläche von Bauteil oder Kühlkörper gibt die Wärme an die **vorbeiströmende Luft** ab.
+
+- **Natürliche (freie) Konvektion:** Die Luft an der heißen Oberfläche erwärmt sich, steigt auf, kühlere Luft strömt nach. Deshalb
+  montiert man Kühlrippen **senkrecht** und lässt Lüftungsschlitze oben und unten frei.
+- **Erzwungene Konvektion:** Ein **Lüfter** bewegt die Luft – die Wärme wird deutlich schneller abgeführt (Computer, Netzteile, Umrichter).
+  Derselbe Kühlkörper hat dann einen wesentlich kleineren Wärmewiderstand.
+
+Grob gilt $R_\mathrm{th} = 1/(\alpha \cdot A)$ mit dem Wärmeübergangskoeffizienten $\alpha \approx 5 \ldots 10\,\mathrm{W/(m^2 K)}$ bei freier und
+$20 \ldots 100\,\mathrm{W/(m^2 K)}$ bei erzwungener Konvektion. Große Oberfläche (Rippen!) bedeutet kleinen Wärmewiderstand.
+
+### Wärmestrahlung
+
+Jede warme Oberfläche gibt Wärme als **elektromagnetische Strahlung** (Infrarot) ab:
+
+- funktioniert auch **ohne Luft** (im Vakuum, im Weltraum),
+- nimmt mit der Temperatur **stark zu** (mit $T^4$),
+- hängt von der **Oberfläche** ab (Emissionsgrad $\varepsilon$): Dunkle, matte Oberflächen strahlen viel besser ab als glänzende Metalle.
+  Deshalb sind viele Kühlkörper **schwarz eloxiert**.
+
+### Vereinfachung für die Auslegung
+
+In einer Baugruppe wirken alle drei Mechanismen gleichzeitig: Leitung im Bauteil und zum Kühlkörper, Konvektion und Strahlung an der
+Oberfläche. Für eine erste Abschätzung betrachtet man meist nur **Leitung und Konvektion** und vernachlässigt die Strahlung. Das ist eine
+**konservative** Rechnung: Die berechneten Temperaturen sind eher etwas **höher** als in Wirklichkeit – ein **Worst-Case**, der im
+technischen Design erwünscht ist.
+
+:::note
+Die Wärmewiderstände in **Kühlkörperdatenblättern** sind gemessen und enthalten Konvektion **und** Strahlung bereits – für eine bestimmte
+Einbaulage (meist senkrecht) und Temperaturdifferenz.
+:::
+
+## 4 · Thermisch-elektrische Analogie
+
+Wärmefluss lässt sich wie ein elektrischer Stromkreis berechnen:
+
+| thermische Größe | Einheit | elektrisches Analogon |
+| --- | --- | --- |
+| Temperatur $\vartheta$ | °C | Potenzial (Spannung gegen Masse) $\varphi$ |
+| Temperaturdifferenz $\Delta\vartheta$ | K | Spannung $U$ |
+| Wärmestrom = Verlustleistung $P_\mathrm{V}$ | W | Strom $I$ |
+| Wärmewiderstand $R_\mathrm{th}$ | K/W | Widerstand $R$ |
+| Wärmekapazität $C_\mathrm{th}$ | J/K = W·s/K | Kapazität $C$ |
+| thermische Zeitkonstante $\tau_\mathrm{th} = R_\mathrm{th} C_\mathrm{th}$ | s | Zeitkonstante $\tau = RC$ |
+
+Das „**thermische Ohmsche Gesetz**“ lautet damit:
+
+$$
+\Delta\vartheta = P_\mathrm{V} \cdot R_\mathrm{th}
+\qquad\Leftrightarrow\qquad
+U = I \cdot R
+$$
+
+Ein Wärmewiderstand von 10 K/W bedeutet: Pro Watt Verlustleistung wird es um 10 K wärmer.
+
+## 5 · Statisches Ersatzschaltbild
+
+<Abbildung bild={Statisch} unterschrift="Statisches Modell: Die Verlustleistung fließt wie ein Strom durch die Wärmewiderstände in Reihe zur Umgebung" />
+
+- **Stromquelle:** Verlustleistung $P_\mathrm{V}$ (Wärmestrom), entsteht im Chip
+- $R_\mathrm{th,jc}$: Chip → Gehäuse (*junction–case*), vom Hersteller festgelegt, steht im Datenblatt
+- $R_\mathrm{th,ch}$: Gehäuse → Kühlkörper (*case–heatsink*), Übergang mit Wärmeleitpaste, -pad oder Isolierscheibe
+- $R_\mathrm{th,ha}$: Kühlkörper → Umgebung (*heatsink–ambient*), aus dem Kühlkörperdatenblatt
+- **Spannungsquelle:** Umgebungstemperatur $\vartheta_\mathrm{a}$ (*ambient*)
+
+Die Widerstände liegen **in Reihe** – derselbe Wärmestrom fließt durch alle. Die Sperrschichttemperatur ist
+
+$$
+\vartheta_\mathrm{j} = \vartheta_\mathrm{a} + P_\mathrm{V} \cdot \left( R_\mathrm{th,jc} + R_\mathrm{th,ch} + R_\mathrm{th,ha} \right)
+$$
+
+Wie bei einem Spannungsteiler lassen sich auch die Zwischentemperaturen berechnen: $\vartheta_\mathrm{h} = \vartheta_\mathrm{a} + P_\mathrm{V} R_\mathrm{th,ha}$,
+$\vartheta_\mathrm{c} = \vartheta_\mathrm{h} + P_\mathrm{V} R_\mathrm{th,ch}$.
+
+**Beispiel:** 1 W, 20 °C Umgebung, $R_\mathrm{th,jc} = 3\,\mathrm{K/W}$, $R_\mathrm{th,ch} = 0{,}5\,\mathrm{K/W}$, $R_\mathrm{th,ha} = 20\,\mathrm{K/W}$:
+Kühlkörper 40 °C, Gehäuse 40,5 °C, Chip 43,5 °C. Der größte Wärmewiderstand bestimmt den größten Temperaturanstieg – meistens ist das
+der Übergang an die Luft.
+
+**Ohne Kühlkörper** gibt das Datenblatt direkt den Gesamtwert $R_\mathrm{th,ja}$ (*junction–ambient*) an – gemessen unter genormten
+Bedingungen (bei SMD-Gehäusen auf einer Testleiterplatte mit festgelegter Kupferfläche).
+
+## 6 · Datenblattwerte richtig lesen
+
+Ein Beispiel aus dem Datenblatt eines NPN-Leistungstransistors im TO-247-Gehäuse (MJW3281A, onsemi):
+
+| Angabe | Wert |
+| --- | --- |
+| Total Power Dissipation $P_\mathrm{D}$ @ $T_\mathrm{C} = 25\,°\mathrm{C}$ | 200 W |
+| Junction Temperature $T_\mathrm{J,max}$ | 150 °C |
+| Thermal Resistance Junction-to-Case $R_\mathrm{\theta JC}$ | 0,625 °C/W (= K/W) |
+| Thermal Resistance Junction-to-Ambient $R_\mathrm{\theta JA}$ | 40 °C/W |
+
+:::caution[Die 200 W sind ein Laborwert]
+„200 W bei $T_\mathrm{C} = 25\,°\mathrm{C}$“ heißt: Das **Gehäuse** wird auf 25 °C gehalten – das ginge nur mit einem unendlich großen Kühlkörper.
+$(150 - 25)\,\mathrm{K} / 0{,}625\,\mathrm{K/W} = 200\,\mathrm{W}$. **Ohne Kühlkörper** bei 40 °C Umgebung sind nur
+$(150 - 40)\,\mathrm{K} / 40\,\mathrm{K/W} \approx 2{,}75\,\mathrm{W}$ erlaubt!
+:::
+
+Weitere Datenblattangaben:
+
+- **Derating-Kurve:** zulässige Verlustleistung über der Gehäusetemperatur – sie fällt linear auf 0 W bei $\vartheta_\mathrm{j,max}$.
+- **Transiente Wärmeimpedanz** $Z_\mathrm{th}(t)$: wirksamer Wärmewiderstand bei kurzen Pulsen (siehe Abschnitt 10).
+- **SOA** (Safe Operating Area): Bei Bipolartransistoren begrenzt bei hohen Spannungen zusätzlich der **zweite Durchbruch** die Leistung.
+
+## 7 · Kühlkörper auswählen
+
+### Vorgehen
+
+1. Verlustleistung im **ungünstigsten Fall** bestimmen (höchste Eingangsspannung, größter Strom).
+2. Höchste Umgebungstemperatur festlegen (im Gehäuse oft 40 … 60 °C, nicht 25 °C!).
+3. Zulässige Sperrschichttemperatur mit Reserve wählen (z. B. 125 °C).
+4. Benötigten Wärmewiderstand des Kühlkörpers berechnen:
+
+$$
+R_\mathrm{th,ha} \leq \frac{\vartheta_\mathrm{j,max} - \vartheta_\mathrm{a,max}}{P_\mathrm{V}} - R_\mathrm{th,jc} - R_\mathrm{th,ch}
+$$
+
+5. Kühlkörper mit **kleinerem** $R_\mathrm{th}$ auswählen und die Sperrschichttemperatur nachrechnen.
+6. Ergibt sich ein negativer oder unrealistisch kleiner Wert, reicht ein passiver Kühlkörper nicht: Lüfter, mehrere Bauteile parallel,
+   ein Gehäuse mit kleinerem $R_\mathrm{th,jc}$ – oder ein Schaltregler statt Linearregler.
+
+### Bauformen
+
+| Kühlkörper | typischer $R_\mathrm{th,ha}$ | Einsatz |
+| --- | --- | --- |
+| kleiner Fingerkühlkörper / Klemmkühlkörper für TO-220 | ca. 15 … 30 K/W | wenige Watt |
+| Strangprofil für Leiterplattenmontage, ca. 50 mm (z. B. Fischer Elektronik SK 129) | ca. 5 K/W | 5 … 10 W |
+| großes Rippenprofil, 100 … 200 mm | ca. 0,5 … 2 K/W | Endstufen, Netzteile |
+| Profil mit Lüfter | ca. 0,1 … 0,5 K/W | Umrichter, Prozessoren |
+
+Der Datenblattwert gilt für eine bestimmte Länge, senkrechte Rippen und freie Konvektion. Steht der Kühlkörper waagrecht, eng im Gehäuse
+oder neben anderen warmen Bauteilen, wird er schlechter.
+
+### Übergang Gehäuse – Kühlkörper
+
+Zwei Metallflächen berühren sich nur an wenigen Punkten, dazwischen ist **Luft** – ein schlechter Wärmeleiter. Deshalb füllt man den Spalt:
+
+| Montage (TO-220, typisch) | $R_\mathrm{th,ch}$ |
+| --- | --- |
+| trocken, ohne Paste | ca. 1 … 2 K/W |
+| mit dünner Schicht **Wärmeleitpaste** | ca. 0,3 … 0,5 K/W |
+| Isolierscheibe (Glimmer/Keramik) mit Paste | ca. 0,5 … 1 K/W |
+| Silikon-Wärmeleitpad (isolierend) | ca. 1 … 2 K/W |
+
+Die Metallfahne vieler Leistungsgehäuse ist **elektrisch mit einem Anschluss verbunden** (Kollektor, Drain oder Ausgang). Sitzen mehrere
+Bauteile auf einem Kühlkörper oder liegt der Kühlkörper an Masse, braucht man eine **Isolierscheibe und eine Isolierbuchse** für die Schraube –
+das erhöht $R_\mathrm{th,ch}$. Wärmeleitpaste immer **dünn** auftragen: Sie soll nur Luft verdrängen, eine dicke Schicht isoliert.
+
+## 8 · Leiterplatte als Kühlfläche
+
+SMD-Gehäuse (SOT-223, DPAK, QFN mit *Exposed Pad*) geben ihre Wärme über die Lötfläche an die **Kupferflächen** der Leiterplatte ab.
+Der wirksame Wärmewiderstand hängt stark vom Layout ab:
+
+- **Kupferfläche vergrößern** – auf der Oberseite und (über Vias verbunden) auf der Unterseite. Mehr als einige cm² bringen aber immer weniger.
+- **Thermische Vias** unter dem Pad leiten die Wärme durch das schlecht leitende FR4 auf andere Lagen.
+- **Dickeres Kupfer** (70 µm statt 35 µm) verteilt die Wärme besser.
+- Warme Bauteile nicht dicht nebeneinander und nicht unter temperaturempfindliche Bauteile (Elkos, Sensoren) setzen.
+
+Das Datenblatt nennt $R_\mathrm{th,ja}$ für eine bestimmte Testleiterplatte. Ein SOT-223 kann ohne zusätzliche Kupferfläche weit über
+100 K/W haben, mit einigen cm² Kupfer etwa die Hälfte – deshalb ist bei SMD-Bauteilen eine **Messung am Prototyp** besonders wichtig.
+
+## 9 · Mehrere Bauteile auf einem Kühlkörper
+
+Sitzen mehrere Bauteile auf einem Kühlkörper, fließen alle Wärmeströme **gemeinsam** durch $R_\mathrm{th,ha}$:
+
+$$
+\vartheta_\mathrm{h} = \vartheta_\mathrm{a} + (P_1 + P_2 + \ldots) \cdot R_\mathrm{th,ha}
+\qquad
+\vartheta_\mathrm{j,1} = \vartheta_\mathrm{h} + P_1 \cdot (R_\mathrm{th,jc} + R_\mathrm{th,ch})
+$$
+
+Im Ersatzschaltbild sind das mehrere Stromquellen, die an einem Knoten (Kühlkörper) zusammenkommen.
+
+:::caution[Thermische Mitkopplung bei Bipolartransistoren]
+Die Basis-Emitter-Spannung sinkt pro Kelvin um ca. 2 mV. Wird ein Transistor wärmer, leitet er bei gleicher Ansteuerung mehr Strom, wird
+noch wärmer … (*thermal runaway*). Abhilfe: **Emitterwiderstände** (Gegenkopplung) und bei Endstufen ein Temperaturfühler auf dem
+Kühlkörper, der den Ruhestrom nachregelt.
+:::
+
+## 10 · Dynamisches Modell
+
+<Abbildung bild={Dynamisch} unterschrift="Dynamisches Modell: Chip, Gehäuse und Kühlkörper speichern Wärme in ihren Wärmekapazitäten" />
+
+Das statische Modell liefert nur den **eingeschwungenen** Endwert. Oft interessiert aber der **zeitliche Verlauf**: Wie lange dauert es, bis
+der Kühlkörper warm ist? Wie heiß wird der Chip bei einem kurzen Stromstoß? Dafür ergänzt man die **Wärmekapazitäten**:
+
+$$
+C_\mathrm{th} = m \cdot c
+\qquad
+c: \text{spezifische Wärmekapazität, z. B. Aluminium } 0{,}9\,\mathrm{J/(g \cdot K)}, \text{ Kupfer } 0{,}39\,\mathrm{J/(g \cdot K)}, \text{ Silizium } 0{,}7\,\mathrm{J/(g \cdot K)}
+$$
+
+- $C_\mathrm{th,j}$: winziger Chip → sehr kleine Wärmekapazität, erwärmt sich in Millisekunden
+- $C_\mathrm{th,c}$: Gehäuse mit Kupferfahne → Sekunden
+- $C_\mathrm{th,h}$: Kühlkörper → Minuten
+
+### Erwärmungskurve
+
+<Abbildung bild={Kurve} unterschrift="Nach dem Einschalten steigt die Temperatur exponentiell zum Endwert an" />
+
+Für einen einzelnen Wärmewiderstand mit Wärmekapazität gilt – genau wie beim [Laden eines Kondensators](/grundlagen/kondensator/):
+
+$$
+\vartheta(t) = \vartheta_\mathrm{a} + P_\mathrm{V} R_\mathrm{th} \left(1 - \mathrm{e}^{-t/\tau_\mathrm{th}}\right)
+\qquad
+\tau_\mathrm{th} = R_\mathrm{th} \cdot C_\mathrm{th}
+$$
+
+Nach $\tau$ sind 63 % des Temperaturanstiegs erreicht, nach $5\tau$ praktisch der Endwert. Ein Kühlkörper braucht oft **10 Minuten und
+mehr**, bis er eingeschwungen ist – Temperaturmessungen also nicht zu früh ablesen!
+
+### Pulsbetrieb
+
+Wird ein Halbleiter nur **kurz** belastet (Einschaltstrom, Motoranlauf, Kurzschluss bis zur Abschaltung), kommt die Wärme gar nicht bis
+zum Kühlkörper. Sie bleibt im Chip und im Gehäuse. Zwei Folgen:
+
+- Kurze Pulse dürfen **viel höher** sein als die Dauerleistung – die kleinen Wärmekapazitäten puffern die Energie.
+- Der Chip kann trotzdem **überhitzen**, während der Kühlkörper noch kalt ist. Die Chiptemperatur ist nicht messbar – man schätzt sie mit dem
+  dynamischen Modell oder der Kurve $Z_\mathrm{th}(t)$ aus dem Datenblatt ab: $\Delta\vartheta_\mathrm{j} = P_\mathrm{puls} \cdot Z_\mathrm{th}(t_\mathrm{puls})$.
+
+Für sehr kurze Pulse genügt die **adiabatische Näherung** (keine Wärme fließt ab): $\Delta\vartheta = E / C_\mathrm{th} = P \cdot t / C_\mathrm{th}$.
+
+### Simulation
+
+Weil das Modell ein gewöhnliches RC-Netzwerk ist, lässt es sich in **LTspice** simulieren: Stromquelle mit 1 A ≙ 1 W, Spannung 1 V ≙ 1 °C,
+Widerstand 1 Ω ≙ 1 K/W, Kapazität 1 F ≙ 1 J/K. Eine Transientenanalyse zeigt dann die Erwärmung jedes Knotens.
+
+## 11 · Temperaturen messen
+
+| Methode | Vorteile | worauf achten? |
+| --- | --- | --- |
+| **Temperatursensor-IC** (z. B. MCP9700: 500 mV bei 0 °C, 10 mV/K) | billig, direkt mit ADC oder Oszilloskop/Datenlogger auswertbar | guter thermischer Kontakt (Wärmeleitpaste, Klebeband), Sensor selbst erwärmt den Messpunkt kaum |
+| **Thermoelement** | schnell, klein, hohe Temperaturen | Messverstärker mit Vergleichsstellenkompensation |
+| **Wärmebildkamera** | zeigt die Verteilung auf der ganzen Platine, findet Hotspots | **Emissionsgrad**: blanke Metallflächen spiegeln und zeigen zu niedrige Werte → mattes schwarzes Klebeband oder Lack auf den Messpunkt |
+
+Die **Sperrschichttemperatur** kann man nicht direkt messen. Man misst die Gehäusetemperatur und rechnet zurück:
+$\vartheta_\mathrm{j} \approx \vartheta_\mathrm{c} + P_\mathrm{V} \cdot R_\mathrm{th,jc}$.
+
+Mit den Messungen passt man das Modell an: Werte aus dem Datenblatt ($R_\mathrm{th,jc}$) bleiben, geschätzte Werte (Kupferfläche, Übergänge,
+Wärmekapazitäten) werden so lange verändert, bis Simulation und Messung übereinstimmen. Mit dem angepassten Modell lässt sich dann die
+**maximal zulässige Leistung** jeder Variante berechnen.

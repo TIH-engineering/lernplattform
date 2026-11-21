@@ -105,22 +105,57 @@ export default defineConfig({
 			sidebar: [
 				{ label: 'Startseite', slug: 'index' },
 				{ label: 'So benutzt du diese Seite', slug: 'hinweise' },
+				// 1) Grundlagen: Theorie steht im Schulbuch (GET1/GET2)
 				grundlagen,
-				leer('Transistoren', 'transistoren'),
-				leer('Operationsverstärker', 'operationsverstaerker'),
-				leer('Filter', 'filter'),
-				leer('Oszillatoren', 'oszillatoren'),
-				thema('Leistungselektronik', 'leistungselektronik', {
-					theorieOrdner: true,
-					zusatz: [
-						['Simulationen', 'simulationen'],
-						['Literatur & Links', 'literatur'],
+				// 2) Elektronik: kein Lehrbuch → eigene Theorie
+				{
+					label: 'Elektronik',
+					items: [
+						thema('Dioden', 'dioden'),
+						thema('Transistoren', 'transistoren'),
+						thema('Operationsverstärker', 'operationsverstaerker'),
+						thema('Filter', 'filter'),
+						thema('Oszillatoren', 'oszillatoren'),
+						thema('Thermische Auslegung', 'thermische-auslegung'),
 					],
-				}),
-				leer('Sensoren', 'sensoren'),
-				leer('Aktuatoren', 'aktuatoren'),
-				leer('Messtechnik', 'messtechnik'),
-				leer('Regelungstechnik', 'regelungstechnik'),
+				},
+				// 3) Energietechnik
+				{
+					label: 'Energietechnik',
+					items: [
+						thema('Drehstrom', 'drehstrom'),
+						thema('Leistungselektronik', 'leistungselektronik', {
+							theorieOrdner: true,
+							zusatz: [
+								['Simulationen', 'simulationen'],
+								['Literatur & Links', 'literatur'],
+							],
+						}),
+					],
+				},
+				// 4) Projektmanagement: statt Rechenbeispielen Fallbeispiele und Diplomarbeits-Planung
+				{
+					label: 'Projektmanagement',
+					collapsed: true,
+					items: [
+						{ label: 'Übersicht', slug: 'projektmanagement' },
+						{ label: 'Theorie', slug: 'projektmanagement/theorie' },
+						{ label: 'Fallbeispiele', slug: 'projektmanagement/fallbeispiele' },
+						{ label: 'Diplomarbeit planen', slug: 'projektmanagement/diplomarbeit' },
+						{ label: 'Quiz', slug: 'projektmanagement/quiz' },
+					],
+				},
+				// 5) Noch in Arbeit
+				{
+					label: 'Weitere Themen',
+					collapsed: true,
+					items: [
+						leer('Sensoren', 'sensoren'),
+						leer('Aktuatoren', 'aktuatoren'),
+						leer('Messtechnik', 'messtechnik'),
+						leer('Regelungstechnik', 'regelungstechnik'),
+					],
+				},
 			],
 		}),
 	],

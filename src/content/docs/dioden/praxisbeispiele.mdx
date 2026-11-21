@@ -1,0 +1,112 @@
+---
+title: Praxisbeispiele – Dioden
+description: Verpolungsschutz, Netzteil mit Brückengleichrichter messen, LED-Leiste für 12 V, ESD-Schutz an der USB-Buchse und Fehlersuche an Dioden.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Verpolungsschutz
+
+Ein Gerät wird aus einer 12-V-Batterie versorgt und zieht bis zu 2 A. Es soll keinen Schaden nehmen, wenn die Batterie
+verkehrt angeschlossen wird. Drei Lösungen werden diskutiert:
+
+1. Diode in Reihe (Si oder Schottky)
+2. Diode **parallel** in Sperrrichtung zur Versorgung, davor eine Sicherung
+3. P-Kanal-MOSFET in der Plusleitung („ideale Diode“)
+
+Vergleiche die Lösungen bezüglich Verlusten und Verhalten bei Verpolung.
+
+<Loesung>
+
+| Lösung | normaler Betrieb | bei Verpolung |
+| --- | --- | --- |
+| Reihendiode | Verlust $U_\mathrm{F} \cdot I$ (Si: ≈ 1,6 W, Schottky ≈ 0,8 W), Spannung sinkt um $U_\mathrm{F}$ | Diode sperrt – Gerät geschützt, kein Strom |
+| Paralleldiode + Sicherung | keine Verluste | Diode leitet → Kurzschluss → **Sicherung löst aus** (muss getauscht werden) |
+| P-MOSFET | nur $I^2 \cdot R_\mathrm{DS(on)}$ (z. B. 20 mΩ → 0,08 W) | MOSFET sperrt |
+
+Der MOSFET ist die verlustärmste Lösung. Er ist so eingebaut, dass seine Body-Diode beim Einschalten leitet; dann wird das Gate
+negativ gegenüber der Source und der Kanal schaltet durch. Bei Verpolung bleibt das Gate positiv – der MOSFET sperrt.
+
+</Loesung>
+
+## Netzteil messen: Brummspannung am Oszilloskop
+
+Im Labor misst du an einem Netzteil mit Trafo (12 V~), Brückengleichrichter und 2200 µF die Ausgangsspannung mit dem Oszilloskop.
+Last: 100 Ω.
+
+1. Welche Kurvenform und welche Brummfrequenz erwartest du?
+2. Schätze die Brummspannung ab.
+3. Warum darf man die Masse des Oszilloskops **nicht** an einen beliebigen Punkt auf der Wechselspannungsseite
+   eines Brückengleichrichters klemmen?
+
+<Loesung>
+
+1. Eine Gleichspannung mit überlagertem **Sägezahn**: steiler Anstieg beim Nachladen, langsamer Abfall dazwischen.
+   Brummfrequenz **100 Hz** (beide Halbwellen).
+2. $\hat{u}_\mathrm{a} \approx 16{,}97 - 1{,}4 \approx 15{,}6\,\mathrm{V}$, $I \approx 156\,\mathrm{mA}$,
+   $\Delta U \approx \dfrac{0{,}156\,\mathrm{A}}{100\,\mathrm{Hz} \cdot 2200\,\mu\mathrm{F}} \approx 0{,}7\,\mathrm{V}$
+3. Die Masse des Oszilloskops ist über den Schutzleiter **geerdet**. Klemmt man sie an einen Punkt, der nicht auf Erdpotenzial
+   liegt, schließt man Teile der Schaltung kurz (bei Netzschaltungen sogar gefährlich!). Abhilfe: Differenztastkopf,
+   Messung nur gegen die Ausgangsmasse oder ein Trenntransformator. Arbeiten auf der Netzseite nur unter Aufsicht!
+
+</Loesung>
+
+## LED-Leiste für 12 V
+
+Für eine Vitrine sollen 9 weiße LEDs ($U_\mathrm{F} = 3{,}1\,\mathrm{V}$, $I_\mathrm{F} = 20\,\mathrm{mA}$) an einem 12-V-Netzteil leuchten.
+
+1. Warum schaltet man nicht alle 9 LEDs einfach parallel an einen gemeinsamen Vorwiderstand?
+2. Wie viele LEDs kann man in Reihe schalten? Plane die Schaltung mit Strängen und Vorwiderständen.
+3. Wie groß ist der Wirkungsgrad der Schaltung (Anteil der Leistung in den LEDs)?
+
+<Loesung>
+
+1. LEDs haben unterschiedliche Durchlassspannungen (Exemplarstreuung). Bei Parallelschaltung übernimmt die LED mit der
+   kleinsten $U_\mathrm{F}$ den meisten Strom, wird heißer, ihre $U_\mathrm{F}$ sinkt weiter … sie wird überlastet.
+   **Jeder Strang braucht einen eigenen Vorwiderstand.**
+2. $3 \cdot 3{,}1\,\mathrm{V} = 9{,}3\,\mathrm{V}$ passt unter 12 V (4 LEDs = 12,4 V wäre zu viel). Also **3 Stränge mit je 3 LEDs**:
+   $R_\mathrm{V} = \dfrac{12\,\mathrm{V} - 9{,}3\,\mathrm{V}}{20\,\mathrm{mA}} = 135\,\Omega$ → E12: **150 Ω** (≈ 18 mA).
+3. $\eta \approx \dfrac{9{,}3\,\mathrm{V}}{12\,\mathrm{V}} \approx 78\,\%$. Professionelle LED-Treiber verwenden Konstantstrom-Schaltregler
+   (siehe [Leistungselektronik](/leistungselektronik/)).
+
+</Loesung>
+
+## ESD-Schutz an der USB-Buchse
+
+Wer einen USB-Stecker einsteckt, kann sich vorher elektrostatisch auf einige kV aufgeladen haben. Auf Platinen findet man
+direkt neben der Buchse kleine **TVS-Dioden-Arrays**.
+
+1. Wie schützen TVS-Dioden die Datenleitungen?
+2. Warum müssen sie direkt an der Buchse sitzen?
+3. Warum dürfen Schutzdioden an schnellen Datenleitungen nur eine sehr kleine Kapazität haben?
+
+<Loesung>
+
+1. Im Normalbetrieb sperren sie. Überschreitet die Spannung die Durchbruchspannung, werden sie in Nanosekunden
+   niederohmig und leiten den Impuls nach Masse ab – wie eine sehr schnelle Z-Diode.
+2. Der Impuls soll abgeleitet werden, **bevor** er über Leiterbahnen zum empfindlichen Chip gelangt. Lange Leitungen haben
+   außerdem eine Induktivität, die den Schutz verlangsamt.
+3. Jede Diode hat eine Sperrschichtkapazität. Zu viel Kapazität verschleift die steilen Flanken der Datensignale (Tiefpass!).
+
+</Loesung>
+
+## Fehlersuche: Diode prüfen
+
+Mit der Diodenprüffunktion des Multimeters misst du an einer ausgebauten Diode:
+
+| Messung | Anzeige |
+| --- | --- |
+| rot an Anode, schwarz an Kathode | 0,58 V |
+| rot an Kathode, schwarz an Anode | OL |
+
+1. Ist die Diode in Ordnung? Was für eine Diode könnte es sein?
+2. Was würdest du bei einer durchlegierten bzw. bei einer unterbrochenen Diode messen?
+
+<Loesung>
+
+1. Ja: In Durchlassrichtung zeigt das Gerät die Flussspannung beim kleinen Prüfstrom (ca. 0,5 … 0,7 V → Si-Diode),
+   in Sperrrichtung „OL“ (Überlauf = sperrt).
+2. **Durchlegiert** (Kurzschluss): in beiden Richtungen ≈ 0 V. **Unterbrochen**: in beiden Richtungen OL.
+   Eine Schottky-Diode zeigt ≈ 0,2 … 0,35 V, eine LED oft 1,8 … 2,8 V (und leuchtet manchmal schwach).
+
+</Loesung>

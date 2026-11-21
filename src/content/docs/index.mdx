@@ -5,8 +5,8 @@ template: splash
 hero:
   tagline: Theorie, Rechenbeispiele, Praxis und Quizzes zu Elektronik, Mess- und Regelungstechnik – frei zugänglich, ohne Anmeldung, ohne Tracking.
   actions:
-    - text: Los geht's mit Leistungselektronik
-      link: leistungselektronik/
+    - text: Los geht's mit den Grundlagen
+      link: grundlagen/
       icon: right-arrow
     - text: So benutzt du diese Seite
       link: hinweise/
@@ -18,13 +18,39 @@ import { Card, CardGrid, LinkCard, Badge } from '@astrojs/starlight/components';
 
 ## Themenbereiche
 
+### Grundlagen
+
 <CardGrid>
-	<LinkCard title="Grundlagen der Elektrotechnik" description="Praxisbeispiele und Quizzes zum Schulbuch – in Arbeit" href="/grundlagen/" />
-	<LinkCard title="Transistoren" description="Bipolar- und Feldeffekttransistoren – in Arbeit" href="/transistoren/" />
-	<LinkCard title="Operationsverstärker" description="Grundschaltungen und reale Eigenschaften – in Arbeit" href="/operationsverstaerker/" />
-	<LinkCard title="Filter" description="Passive und aktive Filter – in Arbeit" href="/filter/" />
-	<LinkCard title="Oszillatoren" description="Schwingbedingung und Oszillatorschaltungen – in Arbeit" href="/oszillatoren/" />
+	<LinkCard title="Grundlagen der Elektrotechnik" description="14 Themen zum Schulbuch: Rechenbeispiele, Praxisbeispiele und Quizzes – vom Ohmschen Gesetz bis zu Resonanz und Filter" href="/grundlagen/" />
+</CardGrid>
+
+### Elektronik
+
+<CardGrid>
+	<LinkCard title="Dioden" description="Kennlinie, Gleichrichter, Glättung, Z-Diode, LED" href="/dioden/" />
+	<LinkCard title="Transistoren" description="Bipolartransistor als Schalter und Verstärker, Längsregler, Stromquelle, MOSFET" href="/transistoren/" />
+	<LinkCard title="Operationsverstärker" description="Grundschaltungen, Rechenschaltungen, Schmitt-Trigger, reale Grenzen" href="/operationsverstaerker/" />
+	<LinkCard title="Filter" description="dB und Bode-Diagramm, passive und aktive Filter, Butterworth, Sallen-Key" href="/filter/" />
+	<LinkCard title="Oszillatoren" description="Barkhausen, RC-Phasenschieber, Wien-Brücke, Relaxationsoszillator, Quarz" href="/oszillatoren/" />
+	<LinkCard title="Thermische Auslegung" description="Verlustleistung, Wärmewiderstand, Kühlkörper, dynamisches Modell" href="/thermische-auslegung/" />
+</CardGrid>
+
+### Energietechnik
+
+<CardGrid>
+	<LinkCard title="Drehstrom" description="Stern und Dreieck, Neutralleiter, Drehstromleistung, Drehfeld, B6-Gleichrichter" href="/drehstrom/" />
 	<LinkCard title="Leistungselektronik" description="Gleichrichter, Schaltregler, Wechselrichter, Bauelemente" href="/leistungselektronik/" />
+</CardGrid>
+
+### Projektarbeit
+
+<CardGrid>
+	<LinkCard title="Projektmanagement" description="Ziele, Planung, Risiken, Qualität, Lasten- und Pflichtenheft – mit Fallbeispielen und Leitfaden für die Diplomarbeit" href="/projektmanagement/" />
+</CardGrid>
+
+### In Arbeit
+
+<CardGrid>
 	<LinkCard title="Sensoren" description="Messgrößen erfassen – in Arbeit" href="/sensoren/" />
 	<LinkCard title="Aktuatoren" description="Motoren, Relais, Ventile – in Arbeit" href="/aktuatoren/" />
 	<LinkCard title="Messtechnik" description="Messen, Messfehler, Messgeräte – in Arbeit" href="/messtechnik/" />

@@ -1,0 +1,140 @@
+titel: Transistoren
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Was ist der grundlegende Unterschied zwischen einem Bipolartransistor und einem MOSFET?
+    optionen:
+      - text: Der Bipolartransistor wird über einen Strom gesteuert, der MOSFET über eine Spannung.
+        richtig: true
+      - text: Der Bipolartransistor wird über eine Spannung gesteuert, der MOSFET über einen Strom.
+      - text: Beide werden gleich gesteuert, nur die Gehäuse sind unterschiedlich.
+      - text: Der MOSFET kann nur Wechselstrom schalten.
+    erklaerung: Beim BJT steuert der Basisstrom den Kollektorstrom. Beim MOSFET steuert das elektrische Feld der Gate-Spannung den Kanal – das Gate ist isoliert.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein NPN-Transistor mit $B = 150$ soll $30\,\mathrm{mA}$ Kollektorstrom führen. Wie groß ist der Mindest-Basisstrom?'
+    loesung: 0.2
+    einheit: mA
+    erklaerung: '$I_\mathrm{B} = I_\mathrm{C} / B = 30\,\mathrm{mA} / 150 = 0{,}2\,\mathrm{mA}$ – in der Praxis mit Übersteuerung mehr.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie heißen die Anschlüsse eines MOSFETs?
+    optionen:
+      - text: Gate, Drain, Source
+        richtig: true
+      - text: Basis, Kollektor, Emitter
+      - text: Anode, Kathode, Gate
+      - text: Gate, Kollektor, Emitter
+    erklaerung: Basis/Kollektor/Emitter gehören zum Bipolartransistor (und zum IGBT gehören Gate, Kollektor, Emitter).
+
+  - typ: mc
+    stufe: standard
+    frage: In einer Schaltung misst du am eingeschalteten NPN-Transistor U_CE = 0,2 V. In welchem Bereich arbeitet er?
+    optionen:
+      - text: In der Sättigung – er ist voll durchgeschaltet.
+        richtig: true
+      - text: Im Sperrbereich
+      - text: Im aktiven (linearen) Bereich
+      - text: Im Durchbruch
+    erklaerung: Eine kleine Kollektor-Emitter-Spannung bedeutet, dass der Transistor als geschlossener Schalter arbeitet – genau so soll es im Schalterbetrieb sein.
+
+  - typ: mc
+    stufe: standard
+    frage: Warum schaltet man einen Transistor im Schalterbetrieb „satt“ durch?
+    optionen:
+      - text: Damit U_CE und damit die Verlustleistung klein bleiben
+        richtig: true
+      - text: Damit der Basisstrom möglichst klein ist
+      - text: Damit der Transistor schneller ausschaltet
+      - text: Damit die Stromverstärkung steigt
+    erklaerung: 'Im linearen Bereich wäre $U_\mathrm{CE}$ groß und $P = U_\mathrm{CE} \cdot I_\mathrm{C}$ würde den Transistor erhitzen. Nachteil der Sättigung: etwas langsameres Ausschalten.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Relais ($50\,\mathrm{mA}$) wird über einen NPN-Transistor ($B = 100$) geschaltet. Welcher Basisstrom ist bei einem Übersteuerungsfaktor von 3 nötig?'
+    loesung: 1.5
+    einheit: mA
+    erklaerung: '$I_\mathrm{B} = 3 \cdot 50\,\mathrm{mA} / 100 = 1{,}5\,\mathrm{mA}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Längsregler hat eine Z-Diode mit $U_\mathrm{Z} = 5{,}6\,\mathrm{V}$ an der Basis. Wie groß ist die Ausgangsspannung am Emitter?'
+    loesung: 4.9
+    einheit: V
+    erklaerung: '$U_\mathrm{a} = U_\mathrm{Z} - U_\mathrm{BE} = 5{,}6\,\mathrm{V} - 0{,}7\,\mathrm{V} = 4{,}9\,\mathrm{V}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Bei einer Konstantstromquelle liegt die Basis auf $2{,}2\,\mathrm{V}$, der Emitterwiderstand beträgt $50\,\Omega$. Welcher Strom fließt?'
+    loesung: 30
+    einheit: mA
+    erklaerung: '$I = (2{,}2\,\mathrm{V} - 0{,}7\,\mathrm{V}) / 50\,\Omega = 30\,\mathrm{mA}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum bleibt der Strom einer Transistor-Konstantstromquelle unabhängig vom Lastwiderstand?
+    optionen:
+      - text: Weil die Spannung am Emitterwiderstand durch die Basisreferenz fest vorgegeben ist
+        richtig: true
+      - text: Weil der Transistor immer gesättigt ist
+      - text: Weil der Lastwiderstand parallel zum Transistor liegt
+      - text: Weil die Versorgungsspannung geregelt wird
+    erklaerung: 'Solange der Transistor im aktiven Bereich bleibt, gilt $I \approx (U_\mathrm{Ref} - U_\mathrm{BE}) / R_\mathrm{E}$ – egal wie groß $R_\mathrm{L}$ ist (bis $R_\mathrm{L,max}$).'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was bedeutet U_GS(th) bei einem MOSFET?
+    optionen:
+      - text: Die Gate-Source-Spannung, ab der sich ein leitender Kanal zu bilden beginnt
+        richtig: true
+      - text: Die Spannung, bei der der MOSFET vollständig durchgeschaltet ist
+      - text: Die maximale Drain-Source-Spannung
+      - text: Die Spannung an der Body-Diode
+    erklaerung: Bei U_GS(th) fließt erst ein winziger Strom (z. B. 250 µA). Für einen kleinen R_DS(on) braucht man eine deutlich höhere Gate-Spannung.
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Faktoren beeinflussen die Verlustleistung eines MOSFETs im Schaltbetrieb?
+    optionen:
+      - text: Der Durchlasswiderstand R_DS(on)
+        richtig: true
+      - text: Die Schaltfrequenz und die Gate-Ladung (Flankensteilheit)
+        richtig: true
+      - text: Die Farbe des Gehäuses
+      - text: Die Länge der Gate-Leitung hat keinen Einfluss
+    erklaerung: 'Durchlassverluste $I^2 R_\mathrm{DS(on)}$ plus Schaltverluste, die mit Frequenz und langsamen Flanken steigen.'
+
+  - typ: mc
+    stufe: standard
+    frage: Wozu dient ein Widerstand zwischen Gate und Source (Pull-down) bei einem MOSFET-Schalter?
+    optionen:
+      - text: Er hält den MOSFET sicher aus, solange das Steuersignal nicht definiert ist.
+        richtig: true
+      - text: Er begrenzt den Drainstrom.
+      - text: Er ersetzt die Freilaufdiode.
+      - text: Er erhöht die Schaltgeschwindigkeit.
+    erklaerung: Ein offenes Gate kann sich durch Störungen aufladen. Der Pull-down legt es definiert auf 0 V (z. B. beim Neustart des Mikrocontrollers).
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum braucht man an einem 3,3-V-Mikrocontroller einen „Logic-Level“-MOSFET?
+    optionen:
+      - text: Weil dessen R_DS(on) schon bei niedriger Gate-Spannung (z. B. 2,5 V oder 4,5 V) garantiert ist
+        richtig: true
+      - text: Weil normale MOSFETs bei 3,3 V zu schnell schalten
+      - text: Weil Logic-Level-MOSFETs eine höhere Sperrspannung haben
+      - text: Weil normale MOSFETs einen Basisstrom brauchen
+    erklaerung: Standard-MOSFETs sind oft erst bei 10 V voll durchgeschaltet. Mit 3,3 V blieben sie halb leitend und würden heiß.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Ein PNP-Transistor ist als High-Side-Schalter mit dem Emitter an +5 V geschaltet. Bei welchem Steuersignal leitet er?
+    optionen:
+      - text: Bei 0 V an der Basis (über den Basiswiderstand)
+        richtig: true
+      - text: Bei 5 V an der Basis
+      - text: Bei 10 V an der Basis
+      - text: Er leitet nie, PNP-Transistoren sind nur für Verstärker
+    erklaerung: Die Basis muss etwa 0,7 V **unter** dem Emitter liegen. Bei 5 V an der Basis ist U_BE = 0 – der Transistor sperrt.

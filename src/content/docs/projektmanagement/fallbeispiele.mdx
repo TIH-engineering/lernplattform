@@ -1,0 +1,270 @@
+---
+title: Fallbeispiele – Projektmanagement
+description: Fallbeispiele aus der Hardwareentwicklung mit Musterlösungen – Projekt oder Routine, Organisationsform wählen, Prüfadapter unter Zeitdruck, Sensorboard mit Messetermin, Lieferengpass und Änderungswunsch, zu hoher Stromverbrauch, Fehler nach Serienstart, falsche Stückliste, Anforderungen für einen Serviceadapter.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+
+:::tip[So arbeitest du mit den Fällen]
+Bearbeite jeden Fall allein oder zu dritt (ca. 20 Minuten), halte die Antworten stichwortartig fest und begründe jede Entscheidung mit
+mindestens einem fachlichen Argument. Fehlt dir eine Information, triff eine **plausible Annahme und kennzeichne sie** – genau das gehört
+zur Projektarbeit. Die Musterlösungen sind **eine** sinnvolle Lösung; andere sind ebenfalls richtig, wenn sie nachvollziehbar begründet sind.
+:::
+
+## Projekt oder Routine?
+
+<Stufe wert="grundlagen" />
+
+Entscheide und begründe in einem Satz: (a) jährliche Kalibrierung aller Messgeräte, (b) Entwicklung eines Prüfgeräts für ein neues Produkt,
+(c) Tausch eines defekten Netzteils, (d) Redesign einer Steuerplatine, weil der Mikrocontroller abgekündigt wurde, (e) Firmware-Update nach Checkliste.
+
+<Loesung>
+
+(a) Routine – wiederkehrend, standardisiert. (b) **Projekt** – neuartig, mit Termin, Budget und mehreren Beteiligten. (c) Routine – bekanntes
+Vorgehen. (d) **Projekt** – klarer Anlass, Zieltermin, technische Risiken und Abhängigkeiten (neue MCU, neue Firmware, neue Prüfung).
+(e) Routine – wiederholbare Betriebsaufgabe.
+
+</Loesung>
+
+## Welche Organisationsform passt?
+
+<Stufe wert="grundlagen" />
+
+Wähle eine Organisationsform und nenne den Nachteil, um den man sich aktiv kümmern muss:
+
+- **A:** kleine PCB-Änderung, 2 Personen, 3 Wochen, klarer Umfang, nur Elektronikabteilung
+- **B:** neue Maschinenplattform, 18 Monate, viele Abteilungen, hohe strategische Priorität
+- **C:** Kunden-Sonderprojekt, 6 Monate, Elektronik + Mechanik + Software + Einkauf, alle bleiben in ihren Abteilungen
+
+<Loesung>
+
+- **A: Linienprojekt** – kaum Zusatzaufwand. Nachteil: Das Projekt kann vom Tagesgeschäft verdrängt werden → Termin und Verantwortliche:n festlegen.
+- **B: reine Projektorganisation** – eigenes Team, schnelle Entscheidungen. Nachteil: hoher Ressourcenbedarf, Wissenstransfer zurück in die
+  Linie und „Wohin nach dem Projekt?“ müssen geplant werden.
+- **C: Matrixorganisation** – Fachleute bleiben in ihren Abteilungen. Nachteil: **Prioritätskonflikte** zwischen Abteilungsleitung und
+  Projektleitung → verbindliche Zeitanteile vereinbaren, Eskalationsweg klären.
+
+</Loesung>
+
+## Fall 1 · Der eilige Prüfadapter
+
+<Stufe wert="standard" />
+
+Ein Unternehmen braucht für die Endprüfung einer neuen Baugruppe einen automatischen Prüfadapter. Die Produktionsleitung sagt:
+„In **sechs Wochen** einsatzbereit, höchstens **8000 €**.“ Die Qualitätsabteilung will eine **lückenlose Prüfprotokollierung**,
+die Instandhaltung möchte **Standardkomponenten**. Der Entwickler weiß: Die elektrischen **Schnittstellen** der Baugruppe sind noch nicht
+endgültig festgelegt.
+
+1. Warum ist das ein Projekt? Nenne drei Merkmale.
+2. Formuliere drei Projektziele, mindestens eines messbar.
+3. Nenne vier Stakeholder mit ihren Interessen. Wo gibt es Konflikte?
+4. Ordne die Aussagen ein: Anforderung, Randbedingung, Lösungsansatz oder offener Punkt.
+5. Beschreibe einen Zielkonflikt im magischen Dreieck. Welche Entscheidung muss die Projektleitung vorbereiten?
+6. *Zusatz:* Was sollte vor der Detailentwicklung im Lastenheft stehen?
+
+<Loesung>
+
+1. Einmalig (neue Baugruppe), klares Ziel, zeitlich begrenzt (6 Wochen), begrenzte Ressourcen (8000 €), mehrere Beteiligte, Unsicherheit
+   (offene Schnittstellen).
+2. **Termin:** „Der Prüfadapter ist spätestens 6 Wochen nach Projektfreigabe für die Produktion freigegeben.“ **Kosten:** „Die projektbezogenen
+   Beschaffungs- und Fertigungskosten überschreiten 8000 € nicht.“ **Leistung:** „Der Adapter führt die festgelegten elektrischen Prüfungen
+   automatisch durch und speichert für jedes Gerät ein eindeutig zuordenbares Prüfprotokoll.“
+3. | Stakeholder | Interesse | möglicher Konflikt |
+   | --- | --- | --- |
+   | Produktionsleitung | Termin, Durchsatz, einfache Bedienung | Termin gegen Entwicklungsrisiko und Qualität |
+   | Qualitätsabteilung | Rückverfolgbarkeit, dokumentierte Ergebnisse | mehr Aufwand und Kosten |
+   | Instandhaltung | Standardteile, Reparierbarkeit, Ersatzteile | Standardteile evtl. größer oder teurer |
+   | Entwicklung | klare Schnittstellen, genug Zeit | offene Schnittstellen gefährden den Termin |
+   | Bedienpersonal | Ergonomie, kurze Rüstzeit | Komfortfunktionen erhöhen den Umfang |
+4. 6 Wochen und 8000 € → **Randbedingungen** (Termin, Kosten). Prüfprotokollierung → **Anforderung** (Qualität/Dokumentation).
+   Standardkomponenten → **Anforderung** bzw. technische Randbedingung (Wartbarkeit). „Automatischer Prüfadapter“ → **Lösungsrahmen**.
+   Offene Schnittstellen → **offener Punkt / Risiko**. Noch zu klären: Welche Signale, Pegel, Ströme und Stecker? Welche Prüfschritte und
+   Toleranzen? Wo und in welchem Format werden Protokolle gespeichert? Welche Taktzeit ist nötig?
+5. Die offenen Schnittstellen verzögern die Entwicklung. Termin halten geht nur mit **Mehrkosten** (Expressfertigung, mehr Personal) oder
+   **weniger Umfang**. Die Projektleitung stellt Optionen mit ihren Folgen dar – A) Termin + Mehrkosten, B) Termin + reduzierter Umfang,
+   C) voller Umfang + späterer Termin. **Entscheiden** muss der Auftraggeber.
+6. Ausgangslage und Ziel, funktionale Anforderungen (Prüfungen, Protokoll), nicht-funktionale Anforderungen (Bedienbarkeit, Wartbarkeit,
+   Durchsatz), Schnittstellen und Randbedingungen, Abnahmekriterien, Budget und Termin, **Abgrenzung** (was gehört nicht dazu?).
+
+</Loesung>
+
+## Fall 2 · Sensorboard unter Termindruck
+
+<Stufe wert="standard" />
+
+Für eine Maschine soll ein Sensorboard entstehen (Temperatur, Strom, Vibration, Kommunikation über CAN). Bis zur Fachmesse bleiben **acht Wochen**.
+Leiterplattenfertigung: 2 Wochen, Bestückung und Versand: 1 Woche. Im Team: eine Hardwareentwicklerin, ein Firmwareentwickler, eine
+Konstrukteurin; ein externer Partner macht die EMV-Vorprüfung.
+
+1. Skizziere ein Phasenmodell von der Anforderung bis zur Freigabe. Was kann parallel laufen?
+2. Erstelle einen groben PSP mit mindestens vier Teilbereichen und acht Arbeitspaketen.
+3. Wer ist für die wichtigsten Pakete verantwortlich, wo braucht es Abstimmung?
+4. Definiere drei eindeutige Meilensteine.
+5. Was liegt auf dem kritischen Pfad? Nenne zwei Terminrisiken mit Gegenmaßnahme.
+
+<Loesung>
+
+1. Anforderungen/Konzept → Hardware- und Firmwareentwurf → Layout → Fertigung/Bestückung → Inbetriebnahme/Integration → Verifikation/EMV → Freigabe.
+   **Parallel:** Firmware auf einem Entwicklungsboard, während Layout und Fertigung laufen; Mechanik und Prüfvorbereitung parallel zur Fertigung.
+2. **Projektmanagement:** Anforderungen abstimmen, Termin-/Risikoplan pflegen · **Hardware:** Bauteilauswahl, Schaltplan, Layout, Design-Review ·
+   **Firmware:** CAN-Kommunikation, Sensortreiber, Diagnose · **Mechanik:** Steckverbinder und Einbauraum, Integrationsaufbau ·
+   **Verifikation:** Inbetriebnahmetest, Funktionsprüfung, EMV-Vorprüfung, Freigabedokumentation.
+3. Schaltplan/Layout: Hardwareentwicklerin (Abstimmung: Pinbelegung mit Firmware, Maße mit Konstruktion, Lieferbarkeit mit Einkauf).
+   Firmware: Firmwareentwickler (elektrische Schnittstellen mit Hardware). Mechanik: Konstrukteurin. EMV: externer Partner (Testzustand mit
+   Hardware und Firmware). Gesamtfreigabe: Projektleitung.
+4. **M1 Anforderungen freigegeben** (Messbereiche, CAN-Spezifikation, Versorgung, Umgebung, Abnahmekriterien abgestimmt und versioniert) ·
+   **M2 Design Freeze** (Schaltplan und Layout reviewt, kritische Bauteile lieferbar, Fertigungsdaten freigegeben) ·
+   **M3 Prototyp in Betrieb** (Versorgung stabil, µC programmierbar, CAN und ein Sensor funktionieren) · **M4 Verifikation bestanden** ·
+   **M5 Messefreigabe** (Hardware, Firmware und Dokumentation in einem freigegebenen Stand).
+5. Kritischer Pfad: Anforderungen → Schaltplan → Layout → Fertigung → Bestückung → Inbetriebnahme → EMV → Freigabe. Die 3 Wochen Fertigung
+   lassen nur ca. 5 Wochen für alles andere.
+
+   | Risiko | Folge | Gegenmaßnahme |
+   | --- | --- | --- |
+   | Bauteil nicht lieferbar | Redesign, Bestückung verspätet | Verfügbarkeit vor Design Freeze prüfen, Alternativteil, früh bestellen |
+   | Fehler in der ersten Leiterplatte | zweite Fertigungsrunde | Reviews, ERC/DRC, Checkliste, kritische Schaltungsteile vorab testen |
+   | EMV-Problem spät entdeckt | Redesign kurz vor der Messe | EMV-gerecht entwerfen, Prüftermin früh reservieren |
+
+</Loesung>
+
+## Fall 3 · Lieferengpass und Änderungswunsch
+
+<Stufe wert="vertiefung" />
+
+Ein Steuergerät ist in der Prototypenphase. Gleichzeitig passiert zweierlei: Der Mikrocontroller hat plötzlich **18 Wochen Lieferzeit**,
+und der Kunde verlangt **nachträglich Ethernet**. Ausliefertermin in **zehn Wochen**, **70 %** des Budgets sind verbraucht.
+
+1. Ordne beide Ereignisse ein (Risiko, Problem, Änderung). Warum behandelt man sie unterschiedlich?
+2. Bewerte beide qualitativ nach Auswirkung auf Zeit, Kosten und Qualität.
+3. Nenne je drei Handlungsoptionen und wähle begründet eine aus.
+4. Welche Unterlagen müssen aktualisiert werden?
+5. Wer muss was wann erfahren? Was darf das Entwicklerteam **nicht** allein entscheiden?
+
+<Loesung>
+
+1. Lieferzeit: **Problem (Issue)** – das Risiko ist eingetreten, der Plan ist so nicht mehr ausführbar. Ethernet: **Änderungswunsch** – der
+   vereinbarte Umfang wird erweitert und muss formal bewertet und freigegeben werden.
+2. Lieferengpass: Zeit sehr hoch, Kosten mittel bis hoch, Technik hoch (neue MCU = Redesign und neue Tests) → **kritisch**.
+   Ethernet: Zeit hoch, Kosten hoch, Technik hoch (Hardware, Firmware, EMV, Stecker, Tests) → nur mit **Change-Freigabe**.
+3. **MCU:** Restbestände bei Distributoren prüfen · pin- oder softwarekompatible Alternative qualifizieren · Redesign auf andere MCU-Familie ·
+   Termin verschieben. Gewählt: zuerst seriöse Restbestände und kompatible Alternativen prüfen, sonst Redesign mit Auswirkungsanalyse.
+   (Ein ungeprüfter Kauf bei einem Broker ist wegen **Fälschungsgefahr** riskant.)
+   **Ethernet:** ablehnen und für eine spätere Version vormerken · mit angepasstem Termin und Budget aufnehmen · nur vorbereiten (Platz,
+   Stecker reservieren). Gewählt: bei 10 Wochen und 70 % Budget nur mit ausdrücklicher Freigabe von Termin und Kosten durch den Kunden,
+   sonst Folgeversion.
+4. Risikoregister/Problemliste, Änderungsantrag und Änderungsliste, Lasten-/Pflichtenheft (erst nach Freigabe!), Terminplan, Budgetplan,
+   Stückliste und Hardwareunterlagen, Prüfplan, Entscheidungsprotokoll.
+5. Sofort: Projektleitung (Gesamtbild), Einkauf (Verfügbarkeit, Alternativen), Hardware/Firmware (Aufwand schätzen), Qualität (Requalifikation).
+   Vor der Umsetzung: Kunde (Folgen des Ethernet-Wunsches → formale Entscheidung), Lenkungskreis (Zielkonflikt).
+   Das Team darf technische Varianten ausarbeiten und empfehlen, aber **Umfang, Termin und Budget** nicht allein ändern.
+
+</Loesung>
+
+## Prototyp braucht zu viel Strom
+
+<Stufe wert="standard" />
+
+Der Prototyp funktioniert, zieht aber **40 % mehr Strom** als spezifiziert – die Akkulaufzeit wird verfehlt. In drei Wochen ist ein Kundentest.
+Ein Hardware-Redesign dauert mindestens zwei Wochen, eine Firmware-Optimierung könnte helfen, der Effekt ist unklar.
+
+1. Risiko, Problem oder Änderung?
+2. Welche Fakten fehlen noch?
+3. Welche Optionen gibt es, und wer entscheidet?
+
+<Loesung>
+
+1. Ein **Problem** – eine Anforderung ist (nachweislich) nicht erfüllt.
+2. Wo genau fließt der Mehrstrom (Messung je Versorgungszweig, im Schlafmodus und aktiv)? Liegt es an Bauteilen, Firmware (Schlafmodus nicht
+   aktiv?) oder an der Spezifikation? Wie viel Laufzeit braucht der Kundentest wirklich?
+3. (a) Firmware-Optimierung mit festem Zeitlimit (z. B. 3 Tage) und Messung, (b) Redesign parallel vorbereiten, (c) Kundentest mit bekannter
+   Einschränkung (größerer Akku, kürzere Laufzeit) und offener Kommunikation, (d) Kundentest verschieben. Optionen (c) und (d) betreffen
+   den Kunden – die Entscheidung trifft der Auftraggeber auf Vorschlag der Projektleitung.
+
+</Loesung>
+
+## Fall 4 · Fehler nach Serienstart
+
+<Stufe wert="vertiefung" />
+
+Ein neues Messmodul ist freigegeben und schon in **300 Geräten** verbaut. Im Feld gibt es sporadische Ausfälle. Ursache: Der Footprint eines
+Steckverbinders war nur für eine **ähnliche, aber nicht identische** Variante geprüft. Die Bibliothek enthielt beide Varianten mit fast gleichen
+Namen, im Review fiel es nicht auf, und es ist nicht dokumentiert, wer den Footprint freigegeben hat.
+
+1. Unterscheide Fehlerursache, Fehlerfolge und Prozessschwäche.
+2. Nenne vier QS-Maßnahmen, die den Fehler verhindert oder früher entdeckt hätten.
+3. Erstelle eine Checkliste mit fünf Punkten für die PCB-Freigabe.
+4. Welche Dokumente und Versionsstände müssen nachvollziehbar sein?
+5. Formuliere drei Lessons Learned – mindestens eine muss den Prozess verbessern.
+
+<Loesung>
+
+1. **Ursache:** falscher bzw. nicht freigegebener Footprint für den eingesetzten Stecker. **Folge:** sporadische Kontaktprobleme, Ausfälle
+   bei 300 Geräten. **Prozessschwächen:** verwechselbare Bibliotheksnamen, Footprint nicht systematisch gegen Datenblatt und Bestellnummer
+   geprüft, Freigabeverantwortung nicht dokumentiert.
+2. Bibliotheksfreigabe (nur geprüfte Footprints mit Versionsstand), eindeutige Benennung mit Hersteller-Teilenummer, Footprint-Review gegen
+   Datenblatt (Raster, Pads, Orientierung, Kontur), Vier-Augen-Prinzip für Steckverbinder, 3D-Check mit Gehäuse und Gegenstecker,
+   Erstmusterprüfung vor der Serienfreigabe, Freigabecheckliste, Rückverfolgbarkeit aller Stände.
+3. | Nr. | Prüfpunkt | Nachweis |
+   | --- | --- | --- |
+   | 1 | ERC ohne ungeklärte Fehler, Versorgungen und Schnittstellen geprüft | Review-Protokoll |
+   | 2 | kritische Footprints gegen Datenblatt und Bestellnummer geprüft | Checkliste mit Namen der prüfenden Person |
+   | 3 | DRC bestanden, Abstände, Bohrungen, Lagenaufbau nach Herstellerregeln | DRC-Bericht |
+   | 4 | Stückliste, Bestellnummern, Layout und Bibliotheksstand passen zusammen | Versionsvergleich |
+   | 5 | Fertigungsdaten vollständig (Gerber, Bohrdaten, Bestückungsdaten, Zeichnungen) | Release-Paket mit Versionsnummer |
+4. Anforderungsstand, Schaltplan- und Layoutversion mit Bibliotheksstand, Stückliste mit exakten Teilenummern, Fertigungsdaten, Prüfberichte
+   von Prototyp und Nullserie, Änderungshistorie, Freigabeprotokoll (wer, was, wann), Zuordnung Seriennummer → Hardwareversion.
+5. Neue Footprints nur nach dokumentiertem Review freigeben · Benennungsregel mit Hersteller-Teilenummer, alte Varianten als „veraltet“
+   kennzeichnen · PCB-Freigabe nur über Checkliste mit Person, Datum, Version · Steckverbinder im Prüfplan explizit (Passung, Gegenstück, Belastung).
+
+**Qualitätsprüfung oder Qualitätssicherung?** Prototyp vermessen und Stecker prüfen ist **Prüfung**. Bibliotheksfreigabe, Review, Checkliste
+und Versionsmanagement sind **Sicherung** – sie verhindern den Fehler, bevor er entsteht.
+
+</Loesung>
+
+## Falsche Stückliste beim Bestücker
+
+<Stufe wert="standard" />
+
+Eine **ältere Revision** der Stückliste wird an den Bestücker geschickt. Drei Bauteile sind falsch; zwei funktionieren zunächst, verringern
+aber die Temperaturreserve. Der Fehler fällt erst im Klimatest auf.
+
+1. Welche präventiven Maßnahmen fehlten?
+2. Welche Prüfstufe hat den Fehler trotzdem gefunden?
+3. Wie verhinderst du eine Wiederholung?
+
+<Loesung>
+
+1. Eindeutige Versionierung der Stückliste, Freigabe des Fertigungspakets als **Ganzes** (Layout + Stückliste + Bestückungsdaten mit gleicher
+   Revision), Versionsvergleich vor dem Versand, Vier-Augen-Prinzip.
+2. Der **Klimatest** (Qualitätsprüfung der Verifikation) – zum Glück vor der Auslieferung.
+3. Fertigungsdaten nur aus einem freigegebenen Release-Paket versenden (nicht „die Datei vom Desktop“), Revision auf der Leiterplatte und in
+   der Stückliste aufdrucken, Wareneingangs-/Erstmusterprüfung beim Bestücker gegen die freigegebene Stückliste.
+
+</Loesung>
+
+## Anforderungen für einen Serviceadapter
+
+<Stufe wert="standard" />
+
+Ein Instandhaltungsteam möchte vier 24-V-Signale an einer Maschine **ohne Laptop** prüfen. Das Gerät wird im Schaltschrank verwendet und
+aus dem vorhandenen 24-V-Netz versorgt. Der Auftraggeber sagt: „Das Gerät soll **klein, robust und intuitiv** sein.“
+
+1. Formuliere aus den vagen Wünschen zwei prüfbare Anforderungen.
+2. Lastenheft oder Pflichtenheft? (a) „Betrieb an 18 … 30 V DC“, (b) „Weitbereichs-Schaltregler mit Verpolschutz“, (c) „Fehler muss vor Ort
+   erkennbar sein“, (d) „vier zweifarbige LEDs auf der Frontplatte“.
+3. Formuliere für eine Muss-Anforderung ein Akzeptanzkriterium.
+4. Was muss vor dem Entwicklungsstart noch geklärt werden?
+
+<Loesung>
+
+1. *klein:* „Das Gerät passt in ein Hutschienengehäuse mit höchstens 4 Teilungseinheiten (≈ 72 mm).“ *robust:* „Das Gerät funktioniert bei
+   0 … 55 °C und übersteht Verpolung und Kurzschluss der Eingänge bis 30 V ohne Schaden.“ *intuitiv:* „Der Zustand jedes Eingangs ist ohne
+   Anleitung an einer beschrifteten Anzeige ablesbar.“
+2. (a) Lastenheft · (b) Pflichtenheft · (c) Lastenheft · (d) Pflichtenheft
+3. Für „Betrieb an 18 … 30 V DC“: „Bei 18 V, 24 V und 30 V Versorgungsspannung und 25 °C werden alle vier Eingänge korrekt erkannt und angezeigt;
+   die Messung wird im Prüfbericht T-04 dokumentiert.“
+4. Z. B.: Schaltschwellen der Signale (ab wann gilt „1“?), maximale Leitungslänge, Montageart, Umgebungstemperatur im Schaltschrank,
+   erforderliche Normen (z. B. für Industriegeräte), Stückzahl und Budget.
+
+</Loesung>
