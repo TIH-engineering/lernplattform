@@ -1,0 +1,172 @@
+---
+title: Theorie – Grundlagen der Messtechnik
+description: "Messen, Messtechnik und Metrologie, SI-Basiseinheiten und Vorsätze, Messgröße, Messwert und Messergebnis, Mess- und Anzeigebereich, Kennlinie, Empfindlichkeit, Linearisierung um einen Arbeitspunkt, Drift und Hysterese, Kalibrieren, Justieren, Eichen, Messprinzip und Messverfahren, Messkette."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Messkette from '../../../assets/mtrs/messkette.svg';
+import NTC from '../../../assets/mtrs/ntc-linearisierung.svg';
+
+## 1 · Was heißt Messen?
+
+**Messen** heißt, eine physikalische Größe **quantitativ** zu erfassen – durch **Vergleich mit einer bekannten Vergleichsgröße** (Einheit).
+Das Ergebnis ist immer **Zahlenwert × Einheit**:
+
+$$
+\text{Größe} = \{\text{Zahlenwert}\} \cdot [\text{Einheit}]
+\qquad\text{z. B.}\qquad U = 10 \cdot 1\,\mathrm{V} = 10\,\mathrm{V}
+$$
+
+Die **Messtechnik** liefert Informationen über einen Prozess – als Grundlage für Anzeigen, Überwachung, Steuerung und Regelung. Sie beschäftigt sich mit
+
+- der **Gewinnung** eines elektrischen Signals aus der Messgröße (Sensoren),
+- der **Übertragung und Verarbeitung** der Messsignale,
+- der **Ausgabe, Darstellung und Speicherung** der Ergebnisse.
+
+Man unterscheidet die **Messung elektrischer Größen** (Spannung, Strom, Widerstand, Kapazität, Frequenz …) und die **Messung nichtelektrischer
+Größen** (Temperatur, Kraft, Druck, Weg, Licht …), die erst mit einem **Sensor** in ein elektrisches Signal umgewandelt werden. Die Wissenschaft vom
+Messen heißt **Metrologie** (nicht verwechseln mit Meteorologie).
+
+## 2 · Einheiten
+
+### Ein Meter – vier Definitionen
+
+Früher maß man in Fuß und Elle – jede Stadt mit eigenem Maß. 1795 wurde in Paris das **Meter** als zehnmillionster Teil des Erdmeridianviertels
+festgelegt, 1889 als Abstand zweier Striche auf dem **Urmeter** (Platin-Iridium-Stab), 1960 über die Wellenlänge einer Kryptonlinie. Seit 1983
+gilt: **Ein Meter ist die Strecke, die Licht im Vakuum in 1/299 792 458 Sekunde zurücklegt.** Mit jeder neuen Definition wurde die Einheit
+genauer reproduzierbar – heute beruhen alle SI-Einheiten auf festgelegten **Naturkonstanten**.
+
+### SI-Basiseinheiten
+
+| Größe | Formelzeichen | Einheit | Zeichen |
+| --- | --- | --- | --- |
+| Länge | $l$ | Meter | m |
+| Masse | $m$ | Kilogramm | kg |
+| Zeit | $t$ | Sekunde | s |
+| elektrische Stromstärke | $I$ | Ampere | A |
+| thermodynamische Temperatur | $T$ | Kelvin | K |
+| Stoffmenge | $n$ | Mol | mol |
+| Lichtstärke | $I_\mathrm{v}$ | Candela | cd |
+
+Alle anderen Einheiten sind daraus **abgeleitet**, z. B.
+
+$$
+1\,\mathrm{N} = 1\,\frac{\mathrm{kg \cdot m}}{\mathrm{s^2}}
+\qquad
+1\,\mathrm{J} = 1\,\mathrm{N \cdot m} = 1\,\frac{\mathrm{kg \cdot m^2}}{\mathrm{s^2}}
+\qquad
+1\,\mathrm{V} = 1\,\frac{\mathrm{W}}{\mathrm{A}} = 1\,\frac{\mathrm{kg \cdot m^2}}{\mathrm{A \cdot s^3}}
+$$
+
+Nicht mehr zulässig sind z. B. PS, Torr, at oder kp (Kilopond). Für große und kleine Werte verwendet man **Vorsätze**:
+p ($10^{-12}$), n ($10^{-9}$), µ ($10^{-6}$), m ($10^{-3}$), k ($10^{3}$), M ($10^{6}$), G ($10^{9}$), T ($10^{12}$).
+
+## 3 · Grundbegriffe
+
+| Begriff | Bedeutung |
+| --- | --- |
+| **Messgröße** | die physikalische Größe, die erfasst werden soll (z. B. Temperatur) |
+| **Messwert** | der bei einer Messung ermittelte Wert der Messgröße, mit Einheit (z. B. 23,4 °C) |
+| **Messergebnis** | bester Schätzwert aus einem oder mehreren Messwerten – **mit Angabe der Unsicherheit** (z. B. Mittelwert ± Vertrauensbereich) |
+| **Messbereich** | Bereich der Eingangsgröße, in dem das Gerät die **festgelegten Fehlergrenzen einhält** |
+| **Anzeigebereich** | Bereich der Werte, die das Gerät **darstellen** kann – er kann größer sein als der Messbereich |
+| **Kennlinie** | Zusammenhang zwischen Eingangsgröße $X$ (Messgröße) und Ausgangsgröße $Y$ (Anzeige, Spannung) – das statische Verhalten |
+| **Drift** | Änderung der Anzeige **über die Zeit**, obwohl die Messgröße konstant bleibt (z. B. durch Erwärmung, Alterung) |
+| **Hysterese** | bei steigender und fallender Messgröße ergeben sich für denselben Eingangswert unterschiedliche Ausgangswerte |
+
+**Beispiel Mess- und Anzeigebereich:** Ein Thermometer kann −40 … +125 °C anzeigen, seine Genauigkeit von ±0,5 K garantiert der Hersteller
+aber nur zwischen −10 und +85 °C. Außerhalb dieses Messbereichs ist die Anzeige zwar möglich, aber nicht spezifiziert.
+
+## 4 · Messprinzip, Messverfahren und Messkette
+
+- **Messprinzip:** der physikalische Effekt, auf dem die Messung beruht (z. B. Widerstand ändert sich mit der Temperatur; eine Feder dehnt
+  sich proportional zur Kraft).
+- **Messverfahren:** die technische Umsetzung eines Messprinzips.
+- **Messeinrichtung:** die gesamte Anordnung, die ein Messverfahren verwirklicht – im einfachsten Fall ein einzelnes Messgerät.
+
+### Einteilung der Messverfahren
+
+| Gegensatzpaar | Erklärung | Beispiel |
+| --- | --- | --- |
+| **direkt** / **indirekt** | Die gesuchte Größe wird unmittelbar erfasst / aus anderen Messgrößen berechnet. | Federwaage / Leistung aus $P = U \cdot I$ |
+| **analog** / **digital** | Mess- bzw. Anzeigewert ist stetig / wertdiskret (in Stufen). | Zeigerinstrument / Digitalmultimeter |
+| **Ausschlag** / **Kompensation** | Ein Ausschlag ist proportional zur Messgröße / ein Gegensignal stellt ein Gleichgewicht her (Nullabgleich). | Federwaage, Zeigerinstrument / Balkenwaage, abgeglichene Messbrücke |
+
+Kompensationsverfahren sind meist **genauer**, weil im abgeglichenen Zustand kein Strom durch das Anzeigegerät fließt und nur das
+Vergleichsnormal die Genauigkeit bestimmt. Ausschlagverfahren sind **schneller** und einfacher.
+
+### Messkette
+
+<Abbildung bild={Messkette} unterschrift="Messkette: vom physikalischen Effekt bis zur Anzeige oder zum Regler" />
+
+1. Der **Sensor** (Aufnehmer, Fühler) wandelt die Messgröße in ein weiterverarbeitbares Signal um – z. B. ein Pt100 die Temperatur in einen Widerstand.
+2. Die **Signalverarbeitung** bereitet es auf:
+   - **wandeln** (Widerstand → Spannung, analog → digital),
+   - **verstärken** (schwache Signale, z. B. Millivolt einer Messbrücke),
+   - **filtern** (Rauschen und Störungen entfernen),
+   - **rechnen** (bei indirekten Verfahren, z. B. $P = U \cdot I$),
+   - **linearisieren** (gekrümmte Kennlinien gerade biegen),
+   - **kompensieren** (Störgrößen wie die Umgebungstemperatur herausrechnen).
+3. Die **Ausgabe** zeigt an, speichert oder liefert den Istwert an einen **Regler**.
+
+Jedes Glied kann Fehler hinzufügen – und schon der Sensor kann das Messobjekt beeinflussen (**Rückwirkung**: ein Temperaturfühler entzieht dem
+Messobjekt Wärme, ein Spannungsmesser belastet die Schaltung).
+
+## 5 · Kennlinie und Empfindlichkeit
+
+Die **Empfindlichkeit** $E$ gibt an, wie stark sich die Ausgangsgröße ändert, wenn sich die Eingangsgröße ändert (DIN 1319). Sie ist die
+**Steigung der Kennlinie**:
+
+$$
+E = \frac{\Delta Y}{\Delta X} = \frac{Y_2 - Y_1}{X_2 - X_1}
+\qquad
+[E] = \frac{\text{Einheit der Ausgangsgröße}}{\text{Einheit der Eingangsgröße}}
+$$
+
+Beispiele: ein Temperatursensor mit $10\,\mathrm{mV/K}$, ein Drucksensor mit $0{,}02\,\mathrm{V/kPa}$, ein NTC mit $-0{,}45\,\mathrm{k\Omega/K}$.
+
+- **Lineare Kennlinie** (Gerade): Die Empfindlichkeit ist überall **gleich**.
+- **Nichtlineare Kennlinie** (gekrümmt): Die Empfindlichkeit hängt vom **Arbeitspunkt** ab. Man berechnet sie abschnittsweise zwischen zwei
+  benachbarten Messpunkten und vergleicht die **Beträge** $\lvert E \rvert$.
+- Ein **negatives** Vorzeichen (z. B. NTC) heißt: Die Ausgangsgröße sinkt, wenn die Eingangsgröße steigt.
+
+## 6 · Linearisierung um einen Arbeitspunkt
+
+<Abbildung bild={NTC} unterschrift="Die gekrümmte NTC-Kennlinie wird im Arbeitsbereich durch eine Gerade (Sekante) ersetzt" />
+
+Die meisten Sensoren haben **gekrümmte** Kennlinien – z. B. der NTC (Heißleiter): Bei tiefen Temperaturen ist er sehr empfindlich, bei hohen
+kaum noch. Für einen begrenzten **Arbeitsbereich** ersetzt man die Kurve durch eine **Gerade**:
+
+$$
+Y_\mathrm{lin}(X) = k \cdot X + d
+$$
+
+**Vorgehen** mit zwei Punkten $(X_1 \mid Y_1)$ und $(X_2 \mid Y_2)$ an den Rändern des Arbeitsbereichs:
+
+1. Steigung: $k = \dfrac{Y_2 - Y_1}{X_2 - X_1}$ (das ist die Empfindlichkeit in diesem Bereich)
+2. Achsenabschnitt: $d = Y_1 - k \cdot X_1$
+3. Kontrolle: Der zweite Punkt muss die Gleichung ebenfalls erfüllen.
+
+Die Gerade stimmt an den beiden Punkten exakt, dazwischen und außerhalb weicht sie ab – je stärker die Krümmung und je größer der Bereich,
+desto größer der **Linearisierungsfehler**. Statt der Sekante kann man auch die **Tangente** im Arbeitspunkt verwenden (grafisch ermittelt).
+In Mikrocontrollern ersetzt man die Linearisierung oft durch eine **Tabelle** oder die exakte Formel.
+
+## 7 · Kalibrieren, Justieren, Eichen
+
+| Begriff | Was passiert? | Eingriff am Gerät? |
+| --- | --- | --- |
+| **Kalibrieren** | Messabweichung durch Vergleich mit einem genaueren **Referenzgerät** oder **Normal** feststellen und dokumentieren (Kalibrierschein) | **nein** |
+| **Justieren** | Gerät so **einstellen** (abgleichen), dass die Abweichung möglichst klein wird | **ja** |
+| **Eichen** | **amtliche** Prüfung nach Eichvorschriften durch die Eichbehörde, Gerät bekommt eine Eichmarke | Prüfung (und ggf. Plombe) |
+
+Geeicht werden müssen Messgeräte im **geschäftlichen Verkehr**: Stromzähler, Zapfsäulen, Waagen im Geschäft. Laborgeräte werden
+regelmäßig **kalibriert**. Über eine Kette von Vergleichen sind alle Kalibrierungen auf die **nationalen Normale** zurückgeführt
+(in Österreich beim Bundesamt für Eich- und Vermessungswesen, BEV) – das nennt man **Rückführbarkeit**.
+
+Ist bei einer Kalibrierung eine konstante Abweichung $F$ bekannt (systematischer Fehler), kann man jeden späteren Messwert **berichtigen**:
+
+$$
+K = -F
+\qquad
+x_\mathrm{korr} = x_\mathrm{a} + K
+$$

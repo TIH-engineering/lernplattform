@@ -1,0 +1,206 @@
+---
+title: Rechenbeispiele – Sensoren
+description: Rechenbeispiele zu NTC-Widerstand und B-Wert, NTC im Spannungsteiler, Temperaturkoeffizient eines PTC, Pt100 mit Linearisierungsfehler, Temperatur aus dem Pt100-Widerstand, Thermoelement, Widerstand und Widerstandsänderung eines DMS, Piezo-Kraftaufnehmer und Hall-Sensor.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import Teiler from '../../../assets/mtrs/ntc-spannungsteiler.svg';
+
+## NTC-Widerstand bei verschiedenen Temperaturen
+
+<Stufe wert="grundlagen" />
+
+Ein NTC hat $R_{25} = 10\,\mathrm{k\Omega}$ und $B = 3950\,\mathrm{K}$. Berechne seinen Widerstand bei $0\,°\mathrm{C}$ und bei $60\,°\mathrm{C}$.
+
+<Loesung>
+
+Temperaturen in Kelvin: $T_0 = 273{,}15\,\mathrm{K}$, $T_{60} = 333{,}15\,\mathrm{K}$, $T_{25} = 298{,}15\,\mathrm{K}$.
+
+$$
+R_0 = 10\,\mathrm{k\Omega} \cdot \mathrm{e}^{3950\,\mathrm{K} \cdot \left(\frac{1}{273{,}15\,\mathrm{K}} - \frac{1}{298{,}15\,\mathrm{K}}\right)} = 10\,\mathrm{k\Omega} \cdot \mathrm{e}^{1{,}2126} \approx 33{,}6\,\mathrm{k\Omega}
+$$
+
+$$
+R_{60} = 10\,\mathrm{k\Omega} \cdot \mathrm{e}^{3950 \cdot \left(\frac{1}{333{,}15} - \frac{1}{298{,}15}\right)} = 10\,\mathrm{k\Omega} \cdot \mathrm{e}^{-1{,}3919} \approx 2{,}49\,\mathrm{k\Omega}
+$$
+
+Zwischen 0 °C und 60 °C ändert sich der Widerstand um den Faktor 13.
+
+</Loesung>
+
+## B-Wert aus zwei Messpunkten
+
+<Stufe wert="standard" />
+
+Ein unbekannter NTC hat bei $25\,°\mathrm{C}$ einen Widerstand von $10{,}0\,\mathrm{k\Omega}$ und bei $85\,°\mathrm{C}$ von $1{,}08\,\mathrm{k\Omega}$. Bestimme den B-Wert.
+
+<Loesung>
+
+$$
+B = \frac{\ln(R_1/R_2)}{\dfrac{1}{T_1} - \dfrac{1}{T_2}} = \frac{\ln(10{,}0/1{,}08)}{\dfrac{1}{298{,}15\,\mathrm{K}} - \dfrac{1}{358{,}15\,\mathrm{K}}} = \frac{2{,}2256}{5{,}619 \cdot 10^{-4}\,\mathrm{K^{-1}}} \approx 3960\,\mathrm{K}
+$$
+
+Im Datenblatt steht dafür z. B. „$B_{25/85} = 3960\,\mathrm{K}$“.
+
+</Loesung>
+
+## Temperaturmessung im Spannungsteiler
+
+<Stufe wert="standard" />
+
+<Abbildung bild={Teiler} unterschrift="NTC im Spannungsteiler" />
+
+Ein Mikrocontroller misst die Spannung am NTC ($R_{25} = 10\,\mathrm{k\Omega}$, $B = 3950\,\mathrm{K}$) in einem Teiler mit $R_1 = 10\,\mathrm{k\Omega}$ an
+$U_\mathrm{B} = 5\,\mathrm{V}$. Welche Temperatur gehört zu $U_\mathrm{a} = 2{,}2\,\mathrm{V}$ und zu $U_\mathrm{a} = 2{,}8\,\mathrm{V}$?
+
+<Loesung>
+
+$U_\mathrm{a} = 2{,}2\,\mathrm{V}$: $R_\mathrm{NTC} = R_1 \cdot \dfrac{U_\mathrm{a}}{U_\mathrm{B} - U_\mathrm{a}} = 10\,\mathrm{k\Omega} \cdot \dfrac{2{,}2}{2{,}8} \approx 7{,}86\,\mathrm{k\Omega}$
+
+$$
+T = \frac{1}{\dfrac{\ln(7{,}86/10)}{3950\,\mathrm{K}} + \dfrac{1}{298{,}15\,\mathrm{K}}} \approx 303{,}7\,\mathrm{K} \approx 30{,}5\,°\mathrm{C}
+$$
+
+$U_\mathrm{a} = 2{,}8\,\mathrm{V}$: $R_\mathrm{NTC} \approx 12{,}73\,\mathrm{k\Omega}$ → $T \approx 292{,}8\,\mathrm{K} \approx 19{,}7\,°\mathrm{C}$
+
+Wärmer → kleinerer Widerstand → kleinere Spannung am NTC.
+
+</Loesung>
+
+## Temperaturkoeffizient eines Kaltleiters
+
+<Stufe wert="standard" />
+
+Ein PTC hat bei der Bezugstemperatur $\vartheta_\mathrm{N} = 100\,°\mathrm{C}$ den Widerstand $R_\mathrm{N} = 100\,\Omega$,
+bei $\vartheta = 175\,°\mathrm{C}$ bereits $R_T = 5\,\mathrm{k\Omega}$. Berechne den Temperaturkoeffizienten $\alpha$ im Ansatz $R_T = R_\mathrm{N} \cdot \mathrm{e}^{\alpha (T - T_\mathrm{N})}$.
+
+<Loesung>
+
+Umformen mit dem natürlichen Logarithmus:
+
+$$
+\alpha = \frac{\ln(R_T/R_\mathrm{N})}{T - T_\mathrm{N}} = \frac{\ln(5000/100)}{175\,°\mathrm{C} - 100\,°\mathrm{C}} = \frac{3{,}912}{75\,\mathrm{K}} \approx 0{,}052\,\mathrm{K^{-1}}
+$$
+
+Zum Vergleich: Kupfer hat nur $0{,}0039\,\mathrm{K^{-1}}$ – der PTC reagiert über 13-mal so stark.
+
+</Loesung>
+
+## Pt100 und Linearisierungsfehler
+
+<Stufe wert="standard" />
+
+Berechne den Widerstand eines Pt100 bei $80\,°\mathrm{C}$ ($A = 3{,}9083 \cdot 10^{-3}\,\mathrm{°C^{-1}}$, $B = -5{,}775 \cdot 10^{-7}\,\mathrm{°C^{-2}}$).
+Wie groß ist der Fehler (absolut und relativ), wenn man nur mit dem linearen Glied rechnet?
+
+<Loesung>
+
+$$
+R_{80} = 100\,\Omega \cdot (1 + 3{,}9083 \cdot 10^{-3} \cdot 80 - 5{,}775 \cdot 10^{-7} \cdot 80^2) = 100\,\Omega \cdot (1 + 0{,}31266 - 0{,}00370) \approx 130{,}90\,\Omega
+$$
+
+Linear: $R_\mathrm{lin} = 100\,\Omega \cdot (1 + 0{,}31266) = 131{,}27\,\Omega$ → $F = +0{,}37\,\Omega$, $F_\mathrm{r} \approx +0{,}28\,\%$.
+In Temperatur ausgedrückt ≈ 1 K – für genaue Messungen zu viel.
+
+</Loesung>
+
+## Temperatur aus dem Pt100-Widerstand
+
+<Stufe wert="vertiefung" />
+
+Ein Pt100 hat $115{,}0\,\Omega$. Bestimme die Temperatur (a) mit der Näherung 0,385 Ω/K und (b) exakt mit der quadratischen Gleichung.
+
+<Loesung>
+
+(a) $\vartheta \approx \dfrac{115{,}0 - 100}{0{,}385}\,°\mathrm{C} \approx 39{,}0\,°\mathrm{C}$
+
+(b) $B \vartheta^2 + A \vartheta + (1 - R/R_0) = 0$ → $-5{,}775 \cdot 10^{-7}\,\vartheta^2 + 3{,}9083 \cdot 10^{-3}\,\vartheta - 0{,}15 = 0$
+
+$$
+\vartheta = \frac{-A + \sqrt{A^2 - 4 B (1 - R/R_0)}}{2B} \approx 38{,}60\,°\mathrm{C}
+$$
+
+Die Näherung mit 0,385 Ω/K (mittlere Steigung zwischen 0 und 100 °C) liegt hier um 0,4 K daneben.
+
+</Loesung>
+
+## Thermoelement
+
+<Stufe wert="grundlagen" />
+
+Ein Thermoelement Typ K ($k \approx 41\,\mathrm{\mu V/K}$) liefert $8{,}2\,\mathrm{mV}$. Die Vergleichsstelle (Messgeräteklemmen) hat $22\,°\mathrm{C}$.
+Wie heiß ist die Messstelle?
+
+<Loesung>
+
+$\Delta\vartheta = \dfrac{U_\mathrm{th}}{k} = \dfrac{8{,}2 \cdot 10^{-3}\,\mathrm{V}}{41 \cdot 10^{-6}\,\mathrm{V/K}} = 200\,\mathrm{K}$ → $\vartheta_\mathrm{M} = 22\,°\mathrm{C} + 200\,\mathrm{K} = 222\,°\mathrm{C}$
+
+Ohne Vergleichsstellenkompensation würde man fälschlich 200 °C angeben.
+
+</Loesung>
+
+## Widerstand eines Folien-DMS
+
+<Stufe wert="grundlagen" />
+
+Das Messgitter eines DMS besteht aus Konstantan ($\rho = 0{,}49\,\mathrm{\Omega \cdot mm^2/m}$). Gesamtlänge des Leiters $120\,\mathrm{mm}$, Breite $20\,\mathrm{\mu m}$,
+Dicke $5\,\mathrm{\mu m}$. Berechne den Widerstand.
+
+<Loesung>
+
+$A = 20\,\mathrm{\mu m} \cdot 5\,\mathrm{\mu m} = 100\,\mathrm{\mu m^2} = 1 \cdot 10^{-4}\,\mathrm{mm^2}$
+
+$$
+R = \rho \cdot \frac{l}{A} = 0{,}49\,\frac{\Omega \cdot \mathrm{mm^2}}{\mathrm{m}} \cdot \frac{0{,}12\,\mathrm{m}}{1 \cdot 10^{-4}\,\mathrm{mm^2}} = 588\,\Omega
+$$
+
+</Loesung>
+
+## Widerstandsänderung eines DMS
+
+<Stufe wert="standard" />
+
+Ein DMS mit $R = 120\,\Omega$ und $k = 2{,}0$ wird auf einen Stahlträger geklebt, der sich unter Last um $\varepsilon = 800\,\mathrm{\mu m/m}$ dehnt.
+
+1. Wie groß ist die Widerstandsänderung?
+2. Um wie viel verlängert sich ein 50 cm langes Stück des Trägers?
+
+<Loesung>
+
+1. $\dfrac{\Delta R}{R} = k \cdot \varepsilon = 2{,}0 \cdot 800 \cdot 10^{-6} = 0{,}0016$ → $\Delta R = 0{,}0016 \cdot 120\,\Omega = 0{,}192\,\Omega$ – winzig, daher braucht man eine Messbrücke.
+2. $\Delta l = \varepsilon \cdot l = 800 \cdot 10^{-6} \cdot 500\,\mathrm{mm} = 0{,}4\,\mathrm{mm}$
+
+</Loesung>
+
+## Piezo-Kraftaufnehmer
+
+<Stufe wert="standard" />
+
+Ein Quarz-Kraftaufnehmer ($k_\mathrm{p} = 2{,}3\,\mathrm{pC/N}$) wird mit einem Kraftstoß von $150\,\mathrm{N}$ belastet. Sensor und Kabel haben zusammen $1\,\mathrm{nF}$.
+Welche Ladung und welche Spannung entstehen? Warum kann man damit kein Gewicht über Stunden messen?
+
+<Loesung>
+
+$Q = k_\mathrm{p} \cdot F = 2{,}3\,\mathrm{pC/N} \cdot 150\,\mathrm{N} = 345\,\mathrm{pC}$ · $U = Q/C = 345 \cdot 10^{-12}\,\mathrm{C}/10^{-9}\,\mathrm{F} = 0{,}345\,\mathrm{V}$
+
+Die Ladung fließt über Isolations- und Eingangswiderstände ab – die Spannung sinkt mit der Zeit auf null. Piezo-Sensoren eignen sich nur für
+**dynamische** Messungen.
+
+</Loesung>
+
+## Linearer Hall-Sensor
+
+<Stufe wert="grundlagen" />
+
+Ein linearer Hall-Sensor-IC liefert ohne Magnetfeld $2{,}5\,\mathrm{V}$, die Empfindlichkeit beträgt $5\,\mathrm{mV/mT}$. Welche Spannung liefert er bei
+$B = +40\,\mathrm{mT}$ und bei $B = -30\,\mathrm{mT}$ (umgekehrter Pol)? Welche Flussdichte gehört zu $3{,}1\,\mathrm{V}$?
+
+<Loesung>
+
+$U = 2{,}5\,\mathrm{V} + 5\,\mathrm{mV/mT} \cdot B$ → $+40\,\mathrm{mT}$: $2{,}7\,\mathrm{V}$ · $-30\,\mathrm{mT}$: $2{,}35\,\mathrm{V}$
+
+$B = \dfrac{3{,}1\,\mathrm{V} - 2{,}5\,\mathrm{V}}{5\,\mathrm{mV/mT}} = 120\,\mathrm{mT}$
+
+</Loesung>

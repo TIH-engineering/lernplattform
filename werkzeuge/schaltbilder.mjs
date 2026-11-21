@@ -1078,3 +1078,242 @@ const FARBEN = ['currentColor', AKZENT, '#d97706'];
 		text(372, 96, sym('I', '12'), 'end', 'font-size="13"');
 	speichere('drehstrom/dreieckschaltung.svg', 560, 300, 'Dreieckschaltung: je eine Impedanz zwischen zwei Außenleitern, kein Neutralleiter', s);
 }
+
+// =====================================================================
+// MESS- UND REGELUNGSTECHNIK  →  src/assets/mtrs/
+// =====================================================================
+/** Messgerät (Kreis mit Buchstabe) zwischen zwei achsparallelen Punkten, Text bleibt waagrecht */
+function geraet(x1, y1, x2, y2, buchstabe) {
+	const xm = (x1 + x2) / 2, ym = (y1 + y2) / 2, r = 16;
+	const dx = Math.sign(x2 - x1), dy = Math.sign(y2 - y1);
+	return strich(x1, y1, xm - dx * r, ym - dy * r) + strich(xm + dx * r, ym + dy * r, x2, y2) +
+		`<circle cx="${xm}" cy="${ym}" r="${r}"/>` + text(xm, ym + 5, buchstabe, 'middle', 'font-weight="600"');
+}
+/** Kasten mit Text */
+const kasten = (x, y, b, h, zeilen, extra = '') =>
+	`<rect x="${x}" y="${y}" width="${b}" height="${h}" rx="6" ${extra}/>` +
+	zeilen.map((z, i) => text(x + b / 2, y + h / 2 + 5 + (i - (zeilen.length - 1) / 2) * 17, z, 'middle', i ? 'font-size="12"' : '')).join('');
+
+// M1) Messkette
+speichere('mtrs/messkette.svg', 680, 170, 'Messkette: Messgröße, Sensor, Signalverarbeitung, Ausgabe',
+	kasten(10, 50, 110, 60, ['Messgröße', 'z. B. Temperatur']) + pfeil(120, 80, 160, 80) +
+	kasten(160, 50, 120, 60, ['Sensor', 'ϑ → R → U'], `stroke="${AKZENT}"`) + pfeil(280, 80, 320, 80) +
+	kasten(320, 40, 200, 80, ['Signalverarbeitung', 'verstärken · filtern', 'linearisieren · A/D-wandeln']) + pfeil(520, 80, 560, 80) +
+	kasten(560, 50, 110, 60, ['Ausgabe', 'Anzeige · Regler']) +
+	text(340, 155, 'Störgrößen (Temperatur, Rauschen, Rückwirkung) wirken auf jedes Glied', 'middle', 'font-size="12"'));
+
+// M2) NTC-Kennlinie mit Linearisierung
+{
+	const x0 = 70, y0 = 230, sx = 7, sy = 6; // T 0..60 °C, R 0..35 kΩ
+	const R = (T) => 10 * Math.exp(3950 * (1 / (T + 273.15) - 1 / 298.15));
+	const X = (T) => x0 + T * sx, Y = (r) => y0 - r * sy;
+	const pts = []; for (let T = 0; T <= 60; T += 1) pts.push([X(T), Y(Math.min(R(T), 35))]);
+	const [T1, T2] = [20, 30], k = (R(T2) - R(T1)) / (T2 - T1);
+	const lin = (T) => R(T1) + k * (T - T1);
+	let g = '';
+	for (let T = 10; T <= 60; T += 10) g += strich(X(T), y0, X(T), y0 + 5) + text(X(T), y0 + 19, `${T}`, 'middle', 'font-size="11"');
+	for (let r = 10; r <= 30; r += 10) g += strich(x0 - 5, Y(r), x0, Y(r)) + text(x0 - 8, Y(r) + 4, `${r}`, 'end', 'font-size="11"');
+	speichere('mtrs/ntc-linearisierung.svg', 540, 270, 'NTC-Kennlinie mit linearer Näherung zwischen 20 °C und 30 °C',
+		pfeil(x0, y0, x0 + 450, y0) + pfeil(x0, y0, x0, 15) + g + text(x0 + 450, y0 + 36, sym('ϑ') + ' in °C', 'end', 'font-size="12"') +
+		text(x0 + 8, 25, sym('R') + ' in kΩ', 'start', 'font-size="12"') +
+		`<polyline points="${p(pts)}" stroke-width="2.5"/>` +
+		strich(X(8), Y(lin(8)), X(44), Y(lin(44)), `stroke="${AKZENT}" stroke-width="2" stroke-dasharray="7 4"`) +
+		punkt(X(T1), Y(R(T1))) + punkt(X(T2), Y(R(T2))) +
+		text(X(T2) + 10, Y(R(T2)) - 8, 'Arbeitsbereich 20 … 30 °C', 'start', `font-size="12" fill="${AKZENT}"`) +
+		text(X(46), Y(lin(44)) + 4, sym('R', 'lin') + ' = ' + sym('k') + '·' + sym('ϑ') + ' + ' + sym('d'), 'start', `font-size="12" fill="${AKZENT}"`) +
+		text(X(4), Y(31), 'NTC (10 kΩ, B = 3950 K)', 'start', 'font-size="12"'));
+}
+
+// M3) Normalverteilung
+{
+	const x0 = 280, y0 = 220, s = 60, h = 170;
+	const f = (z) => Math.exp(-z * z / 2);
+	const pts = []; for (let z = -3.6; z <= 3.6; z += 0.05) pts.push([x0 + z * s, y0 - h * f(z)]);
+	const flaeche = [[x0 - s, y0]]; for (let z = -1; z <= 1.001; z += 0.05) flaeche.push([x0 + z * s, y0 - h * f(z)]); flaeche.push([x0 + s, y0]);
+	let g = '';
+	for (const k of [-3, -2, -1, 1, 2, 3]) g += strich(x0 + k * s, y0, x0 + k * s, y0 - h * f(k), 'stroke-width="0.8" stroke-dasharray="3 3"') +
+		text(x0 + k * s, y0 + 18, (k > 0 ? '+' : '−') + Math.abs(k) + 'σ', 'middle', 'font-size="12"');
+	speichere('mtrs/normalverteilung.svg', 560, 300, 'Normalverteilung: 68,3 % der Werte liegen innerhalb ±σ, 95,5 % innerhalb ±2σ, 99,7 % innerhalb ±3σ',
+		`<polygon points="${p(flaeche)}" fill="${AKZENT}" fill-opacity="0.25" stroke="none"/>` +
+		pfeil(40, y0, 530, y0) + `<polyline points="${p(pts)}" stroke-width="2.5"/>` + g +
+		strich(x0, y0, x0, y0 - h, 'stroke-width="1"') + text(x0, y0 + 18, sym('x̄'), 'middle') +
+		text(x0 + 6, y0 - 60, '68,3 %', 'start', `font-size="13" fill="${AKZENT}"`) +
+		mass(x0 - 2 * s, 255, x0 + 2 * s, 255) + text(x0, 250, '95,5 %', 'middle', 'font-size="12"') +
+		mass(x0 - 3 * s, 285, x0 + 3 * s, 285) + text(x0, 280, '99,7 %', 'middle', 'font-size="12"') + text(530, y0 - 8, sym('x'), 'end'));
+}
+
+// M4) Kennwerte einer Sinusspannung
+{
+	const x0 = 70, y0 = 140, b = 400, a = 100;
+	const pts = []; for (let g = 0; g <= 360; g += 3) pts.push([x0 + g / 360 * b, y0 - a * Math.sin(g * Math.PI / 180)]);
+	const betrag = []; for (let g = 0; g <= 360; g += 3) betrag.push([x0 + g / 360 * b, y0 - a * Math.abs(Math.sin(g * Math.PI / 180))]);
+	const lin = (w, extra) => strich(x0, y0 - w * a, x0 + b, y0 - w * a, extra);
+	speichere('mtrs/sinus-kennwerte.svg', 600, 290, 'Kennwerte einer Sinusspannung: Scheitelwert, Spitze-Spitze-Wert, Effektivwert und Gleichrichtwert',
+		pfeil(x0, y0, x0 + b + 40, y0) + pfeil(x0, y0 + a + 25, x0, 20) + text(x0 + b + 40, y0 + 20, sym('t'), 'end') + text(x0 + 8, 30, sym('u'), 'start') +
+		`<polyline points="${p(betrag)}" stroke-width="1.2" stroke-dasharray="3 3"/>` +
+		`<polyline points="${p(pts)}" stroke-width="2.5"/>` +
+		lin(1, 'stroke-width="0.8" stroke-dasharray="4 3"') + lin(-1, 'stroke-width="0.8" stroke-dasharray="4 3"') +
+		lin(1 / Math.SQRT2, `stroke="${AKZENT}" stroke-width="2"`) + lin(2 / Math.PI, 'stroke="#d97706" stroke-width="2" stroke-dasharray="8 4"') +
+		text(x0 + b + 8, y0 - a + 4, sym('Û'), 'start') + text(x0 + b + 8, y0 - a / Math.SQRT2 + 4, sym('U') + ' = 0,707 ' + sym('Û'), 'start', `fill="${AKZENT}" font-size="13"`) +
+		text(x0 + b + 8, y0 - 2 * a / Math.PI + 14, sym('|ū|') + ' = 0,637 ' + sym('Û'), 'start', 'fill="#d97706" font-size="13"') +
+		mass(x0 + b * 0.62, y0 - a, x0 + b * 0.62, y0 + a) + text(x0 + b * 0.62 + 8, y0 + 50, sym('U', 'ss') + ' = 2' + sym('Û'), 'start', 'font-size="13"') +
+		text(x0 + b * 0.25, y0 + a + 20, 'gestrichelt: Betrag |u| (Gleichrichtung)', 'middle', 'font-size="11"'));
+}
+
+// M5) Mischspannung
+{
+	const x0 = 70, y0 = 230, b = 400, s = 18, Ud = 5, Ua = 3;
+	const pts = []; for (let g = 0; g <= 720; g += 4) pts.push([x0 + g / 720 * b, y0 - s * (Ud + Ua * Math.sin(g * Math.PI / 180))]);
+	speichere('mtrs/mischspannung.svg', 600, 270, 'Mischspannung aus Gleichanteil und sinusförmigem Wechselanteil',
+		pfeil(x0, y0, x0 + b + 40, y0) + pfeil(x0, y0 + 10, x0, 20) + text(x0 + b + 40, y0 + 20, sym('t'), 'end') + text(x0 + 8, 30, sym('u'), 'start') +
+		`<polyline points="${p(pts)}" stroke-width="2.5"/>` +
+		strich(x0, y0 - s * Ud, x0 + b, y0 - s * Ud, `stroke="${AKZENT}" stroke-width="2" stroke-dasharray="7 4"`) +
+		text(x0 + b + 8, y0 - s * Ud + 4, sym('U', 'DC') + ' = ' + sym('ū'), 'start', `fill="${AKZENT}"`) +
+		mass(x0 + b * 0.125 + 2, y0 - s * Ud, x0 + b * 0.125 + 2, y0 - s * (Ud + Ua)) + text(x0 + b * 0.125 + 10, y0 - s * (Ud + 1.5) + 4, sym('û', '~'), 'start', 'font-size="13"') +
+		strich(x0 - 4, y0 - s * (Ud + Ua), x0 + b, y0 - s * (Ud + Ua), 'stroke-width="0.7" stroke-dasharray="3 3"') + text(x0 - 8, y0 - s * (Ud + Ua) + 4, sym('û'), 'end', 'font-size="13"'));
+}
+
+// M6) Kennlinien NTC und PTC (logarithmische R-Achse)
+{
+	const x0 = 70, y0 = 230, b = 420, h = 200; // T -20..160 °C, R 10 Ω .. 1 MΩ (5 Dekaden)
+	const X = (T) => x0 + (T + 20) / 180 * b, Y = (r) => y0 - (Math.log10(r) - 1) / 5 * h;
+	const ntc = [], ptc = [];
+	for (let T = -20; T <= 160; T += 2) {
+		ntc.push([X(T), Y(Math.max(10, 10000 * Math.exp(3950 * (1 / (T + 273.15) - 1 / 298.15))))]);
+		const r = T < 80 ? 100 * (1 - 0.003 * (T - 25)) : 100 * Math.pow(10, Math.min(4, (T - 80) / 12));
+		ptc.push([X(T), Y(r)]);
+	}
+	let g = '';
+	for (const T of [0, 40, 80, 120, 160]) g += strich(X(T), y0, X(T), y0 + 5) + text(X(T), y0 + 19, `${T}`, 'middle', 'font-size="11"');
+	for (const [r, t] of [[100, '100 Ω'], [1e4, '10 kΩ'], [1e6, '1 MΩ']]) g += strich(x0 - 5, Y(r), x0, Y(r)) + text(x0 - 8, Y(r) + 4, t, 'end', 'font-size="11"');
+	speichere('mtrs/ntc-ptc-kennlinien.svg', 560, 270, 'Widerstands-Temperatur-Kennlinien von Heißleiter (NTC) und Kaltleiter (PTC), Widerstand logarithmisch',
+		pfeil(x0, y0, x0 + b + 30, y0) + pfeil(x0, y0, x0, 15) + g + text(x0 + b + 30, y0 + 36, sym('ϑ') + ' in °C', 'end', 'font-size="12"') +
+		text(x0 + 8, 25, sym('R') + ' (logarithmisch)', 'start', 'font-size="12"') +
+		`<polyline points="${p(ntc)}" stroke-width="2.5" stroke="${AKZENT}"/>` + `<polyline points="${p(ptc)}" stroke-width="2.5"/>` +
+		text(X(-5), Y(4e4), 'NTC (Heißleiter)', 'start', `font-size="12" fill="${AKZENT}"`) + text(X(105), Y(3e5), 'PTC (Kaltleiter)', 'end', 'font-size="12"') +
+		strich(X(80), Y(100) - 6, X(80), y0, 'stroke-width="0.8" stroke-dasharray="3 3"') + text(X(82), Y(60), sym('ϑ', 'N') + ' (Nenn-/Curie-Temperatur)', 'start', 'font-size="11"'));
+}
+
+/** Temperaturabhängiger Widerstand: Rechteck mit Schrägstrich, senkrecht */
+const thermistor = (x, y1, y2) => widerstand(x, y1, x, y2) + strich(x - 14, (y1 + y2) / 2 + 16, x + 14, (y1 + y2) / 2 - 16) + strich(x + 14, (y1 + y2) / 2 - 16, x + 22, (y1 + y2) / 2 - 16);
+
+// M7) NTC im Spannungsteiler
+speichere('mtrs/ntc-spannungsteiler.svg', 420, 280, 'Temperaturmessung mit NTC im Spannungsteiler',
+	text(160, 22, '+' + sym('U', 'B')) + draht([160, 30], [160, 50]) + widerstand(160, 50, 160, 130) + neben(160, 90, 'R', '1') +
+	draht([160, 130], [160, 145]) + punkt(160, 145) + draht([160, 145], [300, 145]) + klemme(304, 145) +
+	thermistor(160, 145, 230) + text(140, 193, sym('ϑ'), 'end') + text(190, 205, 'NTC', 'start', 'font-size="12"') +
+	draht([160, 230], [160, 250]) + punkt(160, 250) + draht([160, 250], [300, 250]) + klemme(304, 250) + masse(160, 250) +
+	pfeil(330, 155, 330, 240) + text(338, 202, sym('U', 'a'), 'start'));
+
+// M8) Thermoelement
+speichere('mtrs/thermoelement.svg', 560, 220, 'Thermoelement: zwei verschiedene Metalle, Messstelle und Vergleichsstelle',
+	`<circle cx="90" cy="110" r="7" fill="${AKZENT}" stroke="${AKZENT}"/>` + text(90, 150, 'Messstelle', 'middle', 'font-size="12"') + text(90, 166, sym('ϑ', 'M'), 'middle') +
+	`<path d="M90,110 C150,60 250,60 330,60" stroke-width="3"/>` + text(210, 50, 'Metall A (z. B. NiCr)', 'middle', 'font-size="12"') +
+	`<path d="M90,110 C150,160 250,160 330,160" stroke-width="3" stroke="${AKZENT}"/>` + text(210, 182, 'Metall B (z. B. Ni)', 'middle', `font-size="12" fill="${AKZENT}"`) +
+	`<rect x="330" y="45" width="40" height="130" stroke-dasharray="5 3" stroke-width="1.2"/>` + text(350, 200, 'Vergleichsstelle ' + sym('ϑ', 'V'), 'middle', 'font-size="12"') +
+	draht([370, 60], [460, 60], [460, 92]) + draht([370, 160], [460, 160], [460, 128]) + `<circle cx="460" cy="110" r="18"/>` + text(460, 115, 'V', 'middle', 'font-weight="600"') +
+	text(486, 115, sym('U', 'th') + ' ~ ' + sym('ϑ', 'M') + ' − ' + sym('ϑ', 'V'), 'start', 'font-size="13"'));
+
+// M9) Hall-Effekt
+speichere('mtrs/hall-effekt.svg', 580, 280, 'Hall-Effekt: Strom durch ein Plättchen im Magnetfeld erzeugt quer eine Hallspannung',
+	`<polygon points="${p([[120, 90], [380, 90], [420, 170], [160, 170]])}" stroke-width="2"/>` +
+	draht([40, 130], [140, 130]) + draht([400, 130], [440, 130]) + stromspitze(90, 130, 'r') + text(80, 120, sym('I'), 'middle') +
+	pfeil(180, 10, 180, 80) + pfeil(340, 10, 340, 80) + text(188, 30, sym('B'), 'start') + text(348, 30, sym('B'), 'start') +
+	punkt(250, 90) + punkt(290, 170) + draht([250, 90], [250, 50], [500, 50], [500, 100]) + geraet(500, 100, 500, 180, 'V') + draht([500, 180], [500, 240], [290, 240], [290, 170]) +
+	text(524, 145, sym('U', 'H'), 'start', `fill="${AKZENT}"`) +
+	text(262, 112, '− − −', 'start', `font-size="13" fill="${AKZENT}"`) + text(240, 160, '+ + +', 'start', `font-size="13" fill="${AKZENT}"`) +
+	text(270, 270, 'Lorentzkraft lenkt die Ladungsträger zur Seite → Querspannung', 'middle', 'font-size="12"'));
+
+// M10) Dehnungsmessstreifen
+{
+	let m = 'M90,160 L120,160';
+	for (let i = 0; i < 8; i++) { const x = 120 + i * 30; m += ` L${x},60 L${x + 15},60 L${x + 15},160 L${x + 30},160`; }
+	m += ' L${x}';
+	m = m.replace(' L${x}', '');
+	speichere('mtrs/dms.svg', 520, 250, 'Dehnungsmessstreifen: mäanderförmiges Messgitter auf einer Trägerfolie',
+		`<rect x="70" y="40" width="330" height="140" rx="8" stroke-width="1.2" stroke-dasharray="6 3"/>` +
+		`<path d="${m}" stroke="${AKZENT}" stroke-width="2.5" fill="none"/>` + draht([90, 160], [90, 210]) + draht([360, 160], [380, 160], [380, 210]) +
+		punkt(90, 210) + punkt(380, 210) + text(235, 230, 'Anschlüsse', 'middle', 'font-size="12"') +
+		mass(20, 110, 60, 110) + mass(410, 110, 500, 110) + text(455, 100, 'Dehnung ε', 'middle', 'font-size="12"') +
+		text(235, 30, 'Trägerfolie mit Messgitter (z. B. Konstantan)', 'middle', 'font-size="12"'));
+}
+
+// M11) Messbereichserweiterung Spannung
+speichere('mtrs/vorwiderstand.svg', 520, 220, 'Spannungsmessbereich erweitern: Vorwiderstand in Reihe zum Messwerk',
+	klemme(40, 80) + klemme(480, 80) + draht([44, 80], [100, 80]) + widerstand(100, 80, 220, 80) + ueber(160, 80, 'R', 'V') +
+	draht([220, 80], [270, 80]) + `<rect x="270" y="55" width="120" height="50" rx="4" stroke-dasharray="5 3" stroke-width="1.2"/>` +
+	geraet(280, 80, 380, 80, 'V') + text(330, 125, 'Messwerk ' + sym('R', 'i') + ', ' + sym('U', 'M'), 'middle', 'font-size="12"') + draht([390, 80], [476, 80]) +
+	pfeil(60, 165, 460, 165) + text(260, 185, sym('U') + ' (neuer Messbereich)', 'middle') +
+	pfeil(110, 105, 210, 105, AKZENT) + text(160, 125, sym('U', 'V'), 'middle', `fill="${AKZENT}"`) + draht([270, 80], [280, 80]) + draht([380, 80], [390, 80]));
+
+// M12) Shunt
+speichere('mtrs/shunt.svg', 520, 240, 'Strommessbereich erweitern: Nebenwiderstand (Shunt) parallel zum Messwerk',
+	klemme(40, 120) + klemme(480, 120) + draht([44, 120], [130, 120]) + punkt(130, 120) + punkt(390, 120) + draht([390, 120], [476, 120]) +
+	draht([130, 120], [130, 60], [200, 60]) + geraet(200, 60, 320, 60, 'A') + draht([320, 60], [390, 60], [390, 120]) + text(260, 30, 'Messwerk ' + sym('R', 'i') + ', ' + sym('I', 'M'), 'middle', 'font-size="12"') +
+	draht([130, 120], [130, 180], [200, 180]) + widerstand(200, 180, 320, 180) + text(260, 206, sym('R', 'N') + ' (Shunt), ' + sym('I', 'N'), 'middle', 'font-size="12"') + draht([320, 180], [390, 180], [390, 120]) +
+	stromspitze(80, 120, 'r') + text(80, 110, sym('I')) + stromspitze(170, 60, 'r') + stromspitze(170, 180, 'r'));
+
+// M13) Spannungs- und stromrichtige Messung
+function rmess(name, titel, spannungsrichtig) {
+	const o = 50, u = 200;
+	let s = gquelle(50, o, u, 'U', '0') + draht([50, o], [100, o]) + geraet(100, o, 200, o, 'A') + draht([200, o], [260, o]);
+	if (spannungsrichtig) {
+		s += punkt(260, o) + draht([260, o], [380, o]) + widerstand(380, o, 380, u) + neben(380, 125, 'R', 'x') +
+			geraet(260, o, 260, u, 'V') + punkt(260, u) + draht([50, u], [380, u]) + stromspitze(330, o, 'r') + text(330, o - 10, sym('I', 'x')) +
+			stromspitze(260, 90, 'u') + text(270, 92, sym('I', 'V'), 'start', 'font-size="13"');
+	} else {
+		s += draht([260, o], [380, o]) + widerstand(380, o, 380, u) + neben(380, 125, 'R', 'x') + punkt(80, o) + punkt(380, u) +
+			draht([80, o], [80, 20], [460, 20], [460, 90]) + geraet(460, 90, 460, 160, 'V') + draht([460, 160], [460, u], [380, u]) +
+			draht([50, u], [380, u]) + text(480, 130, sym('U', 'A') + ' + ' + sym('U', 'x'), 'start', 'font-size="12"') + stromspitze(330, o, 'r') + text(330, o - 10, sym('I', 'x'));
+	}
+	speichere(name, 580, 250, titel, s);
+}
+rmess('mtrs/spannungsrichtig.svg', 'Spannungsrichtige Messung: Voltmeter direkt am Widerstand, Amperemeter misst auch den Voltmeterstrom', true);
+rmess('mtrs/stromrichtig.svg', 'Stromrichtige Messung: Amperemeter direkt in Reihe zum Widerstand, Voltmeter misst auch die Spannung am Amperemeter', false);
+
+// M14) Wheatstone-Brücke
+speichere('mtrs/wheatstone.svg', 520, 280, 'Wheatstone-Messbrücke mit Diagonalspannung UB',
+	gquelle(60, 40, 240, 'U', '0') + draht([60, 40], [380, 40]) + draht([60, 240], [380, 240]) + punkt(200, 40) + punkt(200, 240) +
+	widerstand(200, 40, 200, 140) + neben(200, 90, 'R', '1', 'links') + widerstand(200, 140, 200, 240) + neben(200, 190, 'R', '2', 'links') +
+	widerstand(380, 40, 380, 140) + neben(380, 90, 'R', '3') + widerstand(380, 140, 380, 240) + neben(380, 190, 'R', '4') +
+	punkt(200, 140) + punkt(380, 140) + draht([200, 140], [250, 140]) + draht([330, 140], [380, 140]) + geraet(250, 140, 330, 140, 'V') +
+	pfeil(215, 165, 365, 165, AKZENT) + text(290, 185, sym('U', 'B'), 'middle', `fill="${AKZENT}"`) + text(190, 133, 'a', 'end', 'font-size="12"') + text(390, 133, 'b', 'start', 'font-size="12"'));
+
+// M15) Quantisierungskennlinie 3 Bit
+{
+	const x0 = 70, y0 = 260, sx = 50, sy = 26;
+	let st = [[x0, y0]];
+	for (let k = 0; k < 8; k++) { const xa = x0 + (k === 0 ? 0 : (k - 0.5) * sx), xb = x0 + (k + 0.5) * sx; st.push([xa, y0 - k * sy], [Math.min(xb, x0 + 8 * sx), y0 - k * sy]); }
+	let g = '';
+	for (let k = 1; k <= 8; k++) g += strich(x0 + k * sx, y0, x0 + k * sx, y0 + 5) + text(x0 + k * sx, y0 + 18, k === 8 ? sym('U', 'ref') : `${k}/8`, 'middle', 'font-size="10"');
+	for (let k = 0; k < 8; k++) g += text(x0 - 8, y0 - k * sy + 4, k.toString(2).padStart(3, '0'), 'end', 'font-size="11"');
+	speichere('mtrs/adc-kennlinie.svg', 540, 300, 'Kennlinie eines idealen 3-Bit-A/D-Umsetzers: 8 Stufen, Quantisierungsfehler höchstens eine halbe Stufe',
+		pfeil(x0, y0, x0 + 8 * sx + 40, y0) + pfeil(x0, y0, x0, 20) + g + text(x0 + 8 * sx + 40, y0 + 36, sym('U', 'e'), 'end') + text(x0 + 8, 30, 'Digitalwert', 'start', 'font-size="12"') +
+		strich(x0, y0, x0 + 8 * sx, y0 - 8 * sy, `stroke="${AKZENT}" stroke-dasharray="6 4" stroke-width="1.5"`) +
+		`<polyline points="${p(st)}" stroke-width="2.5"/>` + mass(x0 + 3.5 * sx + 70, y0 - 3 * sy, x0 + 3.5 * sx + 70, y0 - 4 * sy) +
+		text(x0 + 3.5 * sx + 80, y0 - 3.5 * sy + 4, '1 LSB = ' + sym('U', 'ref') + '/2' + '<tspan dy="-6" font-size="9">n</tspan>', 'start', 'font-size="12"'));
+}
+
+// M16) Dämpfung eines Zeigermesswerks
+{
+	const x0 = 60, y0 = 220, b = 440, h = 140, T = 180;
+	const kurve = (D) => {
+		const pts = [];
+		for (let t = 0; t <= 1; t += 0.005) {
+			const w = 2 * Math.PI * 2.2, tt = t;
+			let y;
+			if (D < 1) { const wd = w * Math.sqrt(1 - D * D); y = 1 - Math.exp(-D * w * tt) * (Math.cos(wd * tt) + D / Math.sqrt(1 - D * D) * Math.sin(wd * tt)); }
+			else if (D === 1) y = 1 - Math.exp(-w * tt) * (1 + w * tt);
+			else { const a = w * (D - Math.sqrt(D * D - 1)), c = w * (D + Math.sqrt(D * D - 1)); y = 1 - (c * Math.exp(-a * tt) - a * Math.exp(-c * tt)) / (c - a); }
+			pts.push([x0 + t * b, y0 - y * h]);
+		}
+		return pts;
+	};
+	speichere('mtrs/daempfung.svg', 560, 270, 'Einschwingen eines Zeigers bei schwacher, richtiger und zu starker Dämpfung',
+		pfeil(x0, y0, x0 + b + 30, y0) + pfeil(x0, y0, x0, 20) + text(x0 + b + 30, y0 + 20, sym('t'), 'end') + text(x0 + 8, 30, 'Zeigerausschlag', 'start', 'font-size="12"') +
+		strich(x0, y0 - h, x0 + b, y0 - h, 'stroke-width="0.8" stroke-dasharray="4 3"') + text(x0 + b + 4, y0 - h + 4, 'Endwert', 'start', 'font-size="11"') +
+		`<polyline points="${p(kurve(0.2))}" stroke-width="2"/>` + `<polyline points="${p(kurve(0.7))}" stroke-width="2.5" stroke="${AKZENT}"/>` +
+		`<polyline points="${p(kurve(3))}" stroke-width="2" stroke-dasharray="7 4"/>` +
+		text(x0 + 210, 32, 'zu schwach: schwingt', 'start', 'font-size="12"') + text(x0 + 100, y0 - 20, 'richtig: kurzes Überschwingen', 'start', `font-size="12" fill="${AKZENT}"`) +
+		text(x0 + 300, y0 - 60, 'zu stark: kriecht', 'start', 'font-size="12"'));
+}

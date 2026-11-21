@@ -1,0 +1,36 @@
+---
+title: Digitale Messtechnik und Laborgeräte
+description: "A/D-Umsetzer: Auflösung, Quantisierungsstufen und Quantisierungsfehler, sukzessive Approximation und andere Verfahren, Abtasttheorem, D/A-Umsetzer, Digitalmultimeter und Genauigkeitsangaben, Oszilloskop, Tastkopf, Funktionsgenerator."
+sidebar:
+  label: Übersicht
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Fast jede Messung endet heute als Zahl in einem Mikrocontroller, einem Multimeter oder einem Oszilloskop. Dazwischen steht der **A/D-Umsetzer** – er
+bestimmt, wie fein (Auflösung) und wie schnell gemessen wird. Und im Labor entscheidet der richtige Umgang mit **Multimeter, Oszilloskop und
+Funktionsgenerator**, ob eine Messung stimmt.
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- Auflösung, **Quantisierungsstufen** und **Quantisierungsfehler** eines A/D-Umsetzers berechnen,
+- aus einem Digitalwert die Spannung berechnen und umgekehrt,
+- das Verfahren der **sukzessiven Approximation** Schritt für Schritt durchführen und weitere Verfahren einordnen,
+- das **Abtasttheorem** erklären,
+- Genauigkeitsangaben von Digitalmultimetern (± % vom Messwert + Digits) auswerten,
+- ein **Oszilloskop** sicher bedienen (V/Div, Zeitbasis, Trigger, Kopplung, Tastkopf) und einen **Funktionsgenerator** richtig einstellen.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="A/D-Umsetzer, Verfahren, Abtastung, D/A-Umsetzer, Multimeter, Oszilloskop, Funktionsgenerator" href="/digitale-messtechnik/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="Auflösung, Quantisierungsfehler, SAR-Schritte, Multimeter-Genauigkeit, Oszilloskopbild" href="/digitale-messtechnik/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Mikrocontroller misst Spannung, Tastkopf abgleichen, Netzspannung messen, Aliasing, Funktionsgenerator an 50 Ω" href="/digitale-messtechnik/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen" href="/digitale-messtechnik/quiz/" />
+</CardGrid>
+
+:::tip[Voraussetzungen]
+[Messfehler](/messfehler/) und [Signalkennwerte](/signalkennwerte/). Mehr zu Filtern vor dem A/D-Umsetzer: [Filter – Praxisbeispiele](/filter/praxisbeispiele/).
+:::

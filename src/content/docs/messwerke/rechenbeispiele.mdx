@@ -1,0 +1,170 @@
+---
+title: Rechenbeispiele – Messwerke und Messbereiche
+description: Rechenbeispiele zu Drehmoment und Ausschlag eines Drehspulmesswerks, Dreheisenskala, Vorwiderständen für mehrere Spannungsbereiche, Shunt, Belastungsfehler eines Spannungsmessers, strom- und spannungsrichtiger Widerstandsmessung und Widerstandsmessung mit Spannungsteiler.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import Spannungsrichtig from '../../../assets/mtrs/spannungsrichtig.svg';
+import Stromrichtig from '../../../assets/mtrs/stromrichtig.svg';
+
+## Drehmoment eines Drehspulmesswerks
+
+<Stufe wert="standard" />
+
+Eine Drehspule hat $N = 100$ Windungen und die Fläche $A = 2\,\mathrm{cm^2}$, im Luftspalt herrscht $B = 0{,}2\,\mathrm{T}$. Bei $I = 1\,\mathrm{mA}$ soll der Zeiger
+voll ausschlagen ($90°$).
+
+1. Berechne das elektrische Drehmoment bei Vollausschlag.
+2. Welche Federkonstante muss die Spiralfeder haben?
+3. Welchen Ausschlag ergibt $0{,}4\,\mathrm{mA}$?
+
+<Loesung>
+
+1. $M = B \cdot I \cdot N \cdot A = 0{,}2\,\mathrm{T} \cdot 10^{-3}\,\mathrm{A} \cdot 100 \cdot 2 \cdot 10^{-4}\,\mathrm{m^2} = 4 \cdot 10^{-6}\,\mathrm{N \cdot m}$
+   (Einheit: $\mathrm{T \cdot A \cdot m^2} = \mathrm{\frac{V s}{m^2} \cdot A \cdot m^2} = \mathrm{W s} = \mathrm{N m}$)
+2. $c = M/\alpha = 4 \cdot 10^{-6}\,\mathrm{N\,m}/90° \approx 4{,}44 \cdot 10^{-8}\,\mathrm{N\,m/°}$ – eine extrem weiche Feder.
+3. $\alpha \sim I$ → $\alpha = 90° \cdot 0{,}4/1 = 36°$
+
+</Loesung>
+
+## Skala eines Dreheisenmesswerks
+
+<Stufe wert="grundlagen" />
+
+Ein Dreheisen-Strommesser schlägt bei $2\,\mathrm{A}$ voll aus ($90°$). Welchen Ausschlag ergibt $1\,\mathrm{A}$ bei idealer quadratischer Abhängigkeit?
+Was bedeutet das für die Skala?
+
+<Loesung>
+
+$\alpha \sim I^2$ → $\alpha = 90° \cdot (1/2)^2 = 22{,}5°$ – der halbe Strom ergibt nur ein Viertel des Ausschlags. Die Skalenteilung ist am Anfang **zusammengedrängt**
+und wird nach oben weiter; kleine Ströme sind schlecht ablesbar.
+
+</Loesung>
+
+## Drehspul oder Dreheisen?
+
+<Stufe wert="grundlagen" />
+
+An einer Sinusspannung mit $U = 12\,\mathrm{V}$ (ohne Gleichanteil) liegen ein Drehspulinstrument ohne Gleichrichter und ein Dreheisengerät. Was zeigen sie an?
+Was zeigen sie an einer Gleichspannung von 12 V?
+
+<Loesung>
+
+Sinus: Drehspul **0 V** (arithmetischer Mittelwert), Dreheisen **12 V** (Effektivwert). Gleichspannung: beide **12 V**.
+
+</Loesung>
+
+## Vorwiderstände für drei Spannungsbereiche
+
+<Stufe wert="standard" />
+
+Ein Messwerk hat bei Vollausschlag $U_\mathrm{M} = 2\,\mathrm{V}$ und $R_\mathrm{i} = 20\,\mathrm{k\Omega}$. Es soll für die Bereiche 20 V, 100 V und 500 V erweitert werden.
+
+1. Berechne die Vorwiderstände.
+2. Wie groß ist der Eingangswiderstand im 100-V-Bereich? Wie groß ist der Kennwert in kΩ/V?
+
+<Loesung>
+
+$I_\mathrm{M} = U_\mathrm{M}/R_\mathrm{i} = 2\,\mathrm{V}/20\,\mathrm{k\Omega} = 100\,\mathrm{\mu A}$
+
+1. $R_\mathrm{V} = \dfrac{U - U_\mathrm{M}}{I_\mathrm{M}}$: 20 V → $\dfrac{18\,\mathrm{V}}{100\,\mathrm{\mu A}} = 180\,\mathrm{k\Omega}$ · 100 V → $980\,\mathrm{k\Omega}$ · 500 V → $4{,}98\,\mathrm{M\Omega}$
+2. $R_\mathrm{e} = R_\mathrm{i} + R_\mathrm{V} = 1\,\mathrm{M\Omega}$ · Kennwert $1/I_\mathrm{M} = 10\,\mathrm{k\Omega/V}$
+
+</Loesung>
+
+## Shunt für einen Strommesser
+
+<Stufe wert="standard" />
+
+Ein Messwerk hat $I_\mathrm{M} = 50\,\mathrm{mA}$ und $R_\mathrm{i} = 2\,\Omega$. Es soll bis $5\,\mathrm{A}$ messen. Berechne den Shunt und seine Verlustleistung bei Vollausschlag.
+
+<Loesung>
+
+$U_\mathrm{M} = 2\,\Omega \cdot 50\,\mathrm{mA} = 0{,}1\,\mathrm{V}$ · $I_\mathrm{N} = 5\,\mathrm{A} - 0{,}05\,\mathrm{A} = 4{,}95\,\mathrm{A}$
+
+$$
+R_\mathrm{N} = \frac{U_\mathrm{M}}{I_\mathrm{N}} = \frac{0{,}1\,\mathrm{V}}{4{,}95\,\mathrm{A}} \approx 20{,}2\,\mathrm{m\Omega}
+\qquad
+P_\mathrm{N} = 0{,}1\,\mathrm{V} \cdot 4{,}95\,\mathrm{A} \approx 0{,}5\,\mathrm{W}
+$$
+
+Kontrolle mit $R_\mathrm{N} = R_\mathrm{i}/(n - 1) = 2\,\Omega/99$ ✓
+
+</Loesung>
+
+## Belastungsfehler am Spannungsteiler
+
+<Stufe wert="standard" />
+
+Ein Spannungsteiler aus zwei Widerständen mit je $100\,\mathrm{k\Omega}$ liegt an $10\,\mathrm{V}$. Die Spannung am unteren Widerstand wird gemessen mit
+(a) einem Digitalmultimeter ($R_\mathrm{i} = 1\,\mathrm{M\Omega}$, angenommen) und (b) einem Analoggerät mit 20 kΩ/V im 10-V-Bereich. Berechne die Anzeigen und die Fehler.
+
+<Loesung>
+
+Ohne Messgerät: 5 V.
+
+(a) $R_\parallel = 100\,\mathrm{k\Omega} \parallel 1\,\mathrm{M\Omega} = 90{,}9\,\mathrm{k\Omega}$ → $U = 10\,\mathrm{V} \cdot \dfrac{90{,}9}{100 + 90{,}9} \approx 4{,}76\,\mathrm{V}$ → $-4{,}8\,\%$
+
+(b) $R_\mathrm{i} = 20\,\mathrm{k\Omega/V} \cdot 10\,\mathrm{V} = 200\,\mathrm{k\Omega}$ → $R_\parallel = 66{,}7\,\mathrm{k\Omega}$ → $U = 4{,}0\,\mathrm{V}$ → $-20\,\%$
+
+Faustregel: Der Innenwiderstand des Voltmeters sollte mindestens 100-mal so groß sein wie der Widerstand der Schaltung an der Messstelle (hier der Innenwiderstand
+des Teilers, 50 kΩ).
+
+</Loesung>
+
+## Stromrichtige Widerstandsmessung
+
+<Stufe wert="standard" />
+
+<Abbildung bild={Stromrichtig} unterschrift="Stromrichtige Messung" />
+
+Mit der stromrichtigen Schaltung werden $U = 12{,}0\,\mathrm{V}$ und $I = 40{,}0\,\mathrm{mA}$ gemessen. Das Amperemeter hat $R_\mathrm{A} = 5\,\Omega$,
+das Voltmeter $R_\mathrm{V} = 1\,\mathrm{M\Omega}$.
+
+1. Berechne den Widerstand unkompensiert und kompensiert.
+2. Wie groß ist der Fehler ohne Kompensation?
+3. War die Schaltung richtig gewählt?
+
+<Loesung>
+
+1. Unkompensiert: $R = U/I = 300\,\Omega$ · kompensiert: $R_\mathrm{x} = U/I - R_\mathrm{A} = 295\,\Omega$
+2. $F = +5\,\Omega$, $F_\mathrm{r} = 5/295 \approx +1{,}7\,\%$
+3. $R_\mathrm{g} = \sqrt{5\,\Omega \cdot 1\,\mathrm{M\Omega}} \approx 2{,}2\,\mathrm{k\Omega}$. Da $R_\mathrm{x} < R_\mathrm{g}$, wäre die **spannungsrichtige** Schaltung besser gewesen
+   (Fehler dort nur $\approx R_\mathrm{x}/R_\mathrm{V} = 0{,}03\,\%$).
+
+</Loesung>
+
+## Spannungsrichtige Messung eines großen Widerstands
+
+<Stufe wert="vertiefung" />
+
+<Abbildung bild={Spannungsrichtig} unterschrift="Spannungsrichtige Messung" />
+
+Spannungsrichtig gemessen: $U = 10{,}0\,\mathrm{V}$, $I = 0{,}105\,\mathrm{mA}$, $R_\mathrm{V} = 1\,\mathrm{M\Omega}$. Berechne den Widerstand unkompensiert und
+kompensiert sowie den Fehler.
+
+<Loesung>
+
+Unkompensiert: $R = 10\,\mathrm{V}/0{,}105\,\mathrm{mA} \approx 95{,}2\,\mathrm{k\Omega}$
+
+$I_\mathrm{V} = 10\,\mathrm{V}/1\,\mathrm{M\Omega} = 10\,\mathrm{\mu A}$ → $I_\mathrm{x} = 105 - 10 = 95\,\mathrm{\mu A}$ → kompensiert: $R_\mathrm{x} = 10\,\mathrm{V}/95\,\mathrm{\mu A} \approx 105{,}3\,\mathrm{k\Omega}$
+
+Fehler: $F = 95{,}2 - 105{,}3 = -10{,}1\,\mathrm{k\Omega}$, $F_\mathrm{r} \approx -9{,}5\,\%$ – bei so großen Widerständen ist die stromrichtige Schaltung besser.
+
+</Loesung>
+
+## Widerstand über einen Spannungsteiler
+
+<Stufe wert="grundlagen" />
+
+Ein unbekannter Widerstand liegt in Reihe mit $R = 1\,\mathrm{k\Omega}$ an $5{,}0\,\mathrm{V}$. Am unbekannten Widerstand misst du $1{,}8\,\mathrm{V}$. Berechne $R_\mathrm{x}$.
+
+<Loesung>
+
+$$
+R_\mathrm{x} = R \cdot \frac{U_\mathrm{x}}{U - U_\mathrm{x}} = 1\,\mathrm{k\Omega} \cdot \frac{1{,}8\,\mathrm{V}}{3{,}2\,\mathrm{V}} \approx 563\,\Omega
+$$
+
+</Loesung>

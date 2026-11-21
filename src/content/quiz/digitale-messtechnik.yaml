@@ -1,0 +1,117 @@
+titel: Digitale Messtechnik und Laborgeräte
+fragen:
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie viele Quantisierungsstufen hat ein 10-Bit-A/D-Umsetzer?'
+    loesung: 1024
+    einheit: ''
+    toleranz: 0
+    toleranzArt: absolut
+    erklaerung: '$2^{10} = 1024$ Stufen (Werte 0 … 1023).'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist der maximale Quantisierungsfehler eines idealen 8-Bit-Umsetzers mit 5 V Referenz (in mV)?'
+    loesung: 9.766
+    einheit: mV
+    erklaerung: '$U_\mathrm{LSB} = 5\,\mathrm{V}/256 \approx 19{,}5\,\mathrm{mV}$ → $\pm\tfrac{1}{2}$ LSB ≈ ±9,8 mV'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein 12-Bit-ADC (U_ref = 4,096 V) liefert den Wert 1500. Wie groß ist die Eingangsspannung?'
+    loesung: 1.5
+    einheit: V
+    erklaerung: '$U_\mathrm{LSB} = 4{,}096\,\mathrm{V}/4096 = 1\,\mathrm{mV}$ → $U = 1500 \cdot 1\,\mathrm{mV} = 1{,}5\,\mathrm{V}$. Deshalb sind Referenzen mit 4,096 V beliebt.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was ist ein Quantisierungsfehler?
+    optionen:
+      - text: Der Fehler, weil alle Spannungen innerhalb einer Stufe denselben Digitalwert bekommen
+        richtig: true
+      - text: Ein Fehler durch zu langsames Abtasten
+      - text: Ein Fehler durch eine falsche Referenzspannung
+      - text: Ein Ablesefehler am Display
+    erklaerung: Er beträgt beim idealen, rundenden Umsetzer höchstens ±½ LSB und wird mit mehr Bits kleiner.
+
+  - typ: mc
+    stufe: standard
+    frage: Wie arbeitet ein A/D-Umsetzer mit sukzessiver Approximation?
+    optionen:
+      - text: Er bestimmt die Bits nacheinander vom höchsten zum niedrigsten durch Vergleich mit einem D/A-Umsetzer.
+        richtig: true
+      - text: Er vergleicht gleichzeitig mit allen Stufen.
+      - text: Er zählt, wie lange ein Kondensator zum Entladen braucht.
+      - text: Er tastet mit einem Bit sehr schnell ab und filtert digital.
+    erklaerung: Nach n Schritten ist die Wandlung fertig. Gleichzeitig mit allen Stufen = Flash, Zeitmessung = Dual-Slope, 1-Bit + Filter = Sigma-Delta.
+
+  - typ: mc
+    stufe: standard
+    frage: Was besagt das Abtasttheorem?
+    optionen:
+      - text: Die Abtastfrequenz muss größer als das Doppelte der höchsten Signalfrequenz sein.
+        richtig: true
+      - text: Die Abtastfrequenz muss gleich der Signalfrequenz sein.
+      - text: Man muss mindestens zehnmal pro Sekunde abtasten.
+      - text: Die Auflösung muss mindestens 8 Bit betragen.
+    erklaerung: Sonst entsteht Aliasing – zu hohe Frequenzen erscheinen als falsche tiefe Frequenzen.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Multimeter (±(1 % + 2 Digits), Auflösung 0,01 V) zeigt 5,00 V. Wie groß ist die Fehlergrenze (in V)?'
+    loesung: 0.07
+    einheit: V
+    toleranz: 0.001
+    toleranzArt: absolut
+    erklaerung: '$0{,}01 \cdot 5{,}00\,\mathrm{V} + 2 \cdot 0{,}01\,\mathrm{V} = 0{,}07\,\mathrm{V}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wozu dient der Trigger eines Oszilloskops?
+    optionen:
+      - text: Er startet die Darstellung immer an derselben Stelle des Signals – das Bild steht still.
+        richtig: true
+      - text: Er stellt die Spannung pro Kästchen ein.
+      - text: Er trennt den Gleichanteil ab.
+      - text: Er gleicht den Tastkopf ab.
+    erklaerung: Eingestellt werden Flanke (steigend/fallend) und Pegel.
+
+  - typ: mc
+    stufe: standard
+    frage: Wann verwendet man am Oszilloskop die AC-Kopplung?
+    optionen:
+      - text: Um eine kleine Welligkeit auf einer großen Gleichspannung vergrößert darzustellen
+        richtig: true
+      - text: Um Wechselspannungen genauer zu messen als mit DC-Kopplung
+      - text: Um die Netzspannung sicher zu messen
+      - text: Um den Trigger auszuschalten
+    erklaerung: AC-Kopplung entfernt den Gleichanteil. Bei sehr tiefen Frequenzen verfälscht sie das Signal – im Zweifel DC-Kopplung verwenden.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Rechteck belegt 4 Kästchen Spitze-Spitze bei 2 V/Div. Der 10:1-Tastkopf ist am Oszilloskop richtig eingestellt. Wie groß ist U_ss?'
+    loesung: 8
+    einheit: V
+    erklaerung: '4 Div · 2 V/Div = 8 V. Ist der Tastkopffaktor richtig eingestellt, rechnet das Oszilloskop ihn schon in die V/Div-Angabe ein.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Ein Funktionsgenerator ist auf 1 Vpp (50 Ω) eingestellt und direkt mit dem Oszilloskop (1 MΩ) verbunden. Was zeigt das Oszilloskop?
+    optionen:
+      - text: etwa 2 Vpp
+        richtig: true
+      - text: 1 Vpp
+      - text: 0,5 Vpp
+      - text: 0 V
+    erklaerung: Die Amplitude gilt für eine 50-Ω-Last. Im Leerlauf (hochohmig) fällt am 50-Ω-Innenwiderstand nichts ab – die Spannung ist doppelt so groß.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum darf man die Masseklemme eines normalen Tastkopfs nicht an einen beliebigen Punkt einer netzbetriebenen Schaltung klemmen?
+    optionen:
+      - text: Weil sie über das Oszilloskop mit dem Schutzleiter verbunden ist – es kann ein Kurzschluss entstehen.
+        richtig: true
+      - text: Weil sie sonst die Bandbreite verringert
+      - text: Weil das Oszilloskop dann nicht triggern kann
+      - text: Das ist kein Problem.
+    erklaerung: Für Potenziale, die nicht auf Erde liegen, braucht man einen Differenztastkopf oder einen Trenntransformator.

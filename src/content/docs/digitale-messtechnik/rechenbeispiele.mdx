@@ -1,0 +1,165 @@
+---
+title: Rechenbeispiele – Digitale Messtechnik und Laborgeräte
+description: Rechenbeispiele zu Auflösung und Quantisierungsfehler eines A/D-Umsetzers, Digitalwert in Spannung umrechnen, benötigte Bitzahl, sukzessive Approximation Schritt für Schritt, Abtasttheorem, Genauigkeit eines Digitalmultimeters, Oszilloskopbild mit Tastkopf und Funktionsgenerator an verschiedenen Lasten.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import ADC from '../../../assets/mtrs/adc-kennlinie.svg';
+
+## Quantisierungsfehler eines 8-Bit-Umsetzers
+
+<Stufe wert="grundlagen" />
+
+<Abbildung bild={ADC} unterschrift="Kennlinie eines idealen A/D-Umsetzers" />
+
+Ein idealer 8-Bit-A/D-Umsetzer hat die Referenzspannung $U_\mathrm{ref} = 5\,\mathrm{V}$. Wie viele Stufen hat er, wie groß ist eine Stufe (LSB), und wie groß ist der
+maximale Quantisierungsfehler?
+
+<Loesung>
+
+$2^8 = 256$ Stufen · $U_\mathrm{LSB} = \dfrac{5\,\mathrm{V}}{256} \approx 19{,}5\,\mathrm{mV}$ · $F_\mathrm{Q,max} = \pm\tfrac{1}{2}\,U_\mathrm{LSB} \approx \pm 9{,}8\,\mathrm{mV}$
+
+</Loesung>
+
+## Vom Digitalwert zur Temperatur
+
+<Stufe wert="standard" />
+
+Ein Mikrocontroller mit 10-Bit-ADC ($U_\mathrm{ref} = 3{,}3\,\mathrm{V}$) liest von einem Temperatursensor (10 mV/K, 0 V bei 0 °C) den Wert 62.
+
+1. Welche Spannung und welche Temperatur gehören dazu?
+2. Wie fein kann die Temperatur höchstens aufgelöst werden?
+
+<Loesung>
+
+1. $U_\mathrm{LSB} = 3{,}3\,\mathrm{V}/1024 \approx 3{,}22\,\mathrm{mV}$ → $U = 62 \cdot 3{,}22\,\mathrm{mV} \approx 0{,}200\,\mathrm{V}$ → $\vartheta = 0{,}200\,\mathrm{V}/(10\,\mathrm{mV/K}) = 20{,}0\,°\mathrm{C}$
+2. Eine Stufe entspricht $3{,}22\,\mathrm{mV}/(10\,\mathrm{mV/K}) \approx 0{,}32\,\mathrm{K}$ – feinere Unterschiede sieht der Controller nicht. Mit einer Verstärkung vor dem ADC
+   (z. B. ×5) oder einem 12-Bit-ADC wird es feiner.
+
+</Loesung>
+
+## Wie viele Bits sind nötig?
+
+<Stufe wert="standard" />
+
+Eine Spannung im Bereich 0 … 5 V soll mit einer Auflösung von mindestens 1 mV gemessen werden. Wie viele Bit braucht der A/D-Umsetzer?
+
+<Loesung>
+
+Benötigte Stufen: $5\,\mathrm{V}/1\,\mathrm{mV} = 5000$. $2^{12} = 4096$ reicht nicht, $2^{13} = 8192$ reicht → **13 Bit**, in der Praxis ein **14- oder 16-Bit**-Umsetzer
+(gängige Größen). Mit 16 Bit: $5\,\mathrm{V}/65\,536 \approx 76\,\mathrm{\mu V}$.
+
+</Loesung>
+
+## Sukzessive Approximation Schritt für Schritt
+
+<Stufe wert="vertiefung" />
+
+Ein 8-Bit-SAR-Umsetzer hat $U_\mathrm{ref} = 5{,}12\,\mathrm{V}$ (LSB = 20 mV). Die Eingangsspannung beträgt $3{,}17\,\mathrm{V}$. Führe die Wandlung durch.
+
+<Loesung>
+
+| Schritt | Bit | Versuchswert | $U_\mathrm{DAC}$ | $U_\mathrm{e} \geq U_\mathrm{DAC}$? | Bit bleibt |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 7 | 1000 0000 = 128 | 2,56 V | ja | 1 |
+| 2 | 6 | 1100 0000 = 192 | 3,84 V | nein | 0 |
+| 3 | 5 | 1010 0000 = 160 | 3,20 V | nein | 0 |
+| 4 | 4 | 1001 0000 = 144 | 2,88 V | ja | 1 |
+| 5 | 3 | 1001 1000 = 152 | 3,04 V | ja | 1 |
+| 6 | 2 | 1001 1100 = 156 | 3,12 V | ja | 1 |
+| 7 | 1 | 1001 1110 = 158 | 3,16 V | ja | 1 |
+| 8 | 0 | 1001 1111 = 159 | 3,18 V | nein | 0 |
+
+Ergebnis: **1001 1110** = 158 → $158 \cdot 20\,\mathrm{mV} = 3{,}16\,\mathrm{V}$. Der Rest von 10 mV ist der Quantisierungsfehler (dieser Umsetzer schneidet ab).
+Nach 8 Vergleichen ist die Wandlung fertig – unabhängig von der Eingangsspannung.
+
+</Loesung>
+
+## Abtasttheorem
+
+<Stufe wert="standard" />
+
+Ein Mikrocontroller tastet ein Signal mit $f_\mathrm{a} = 2\,\mathrm{kHz}$ ab.
+
+1. Welche Frequenzen darf das Signal höchstens enthalten?
+2. Eine Störung mit 1,9 kHz gelangt ungefiltert an den ADC. Als welche Frequenz erscheint sie?
+
+<Loesung>
+
+1. $f_\mathrm{max} < f_\mathrm{a}/2 = 1\,\mathrm{kHz}$
+2. $\lvert 1{,}9\,\mathrm{kHz} - 2\,\mathrm{kHz} \rvert = 100\,\mathrm{Hz}$ – die Störung erscheint als (falsches) 100-Hz-Signal und lässt sich nachträglich nicht mehr vom
+   Nutzsignal unterscheiden. Ein Tiefpass vor dem ADC ist Pflicht.
+
+</Loesung>
+
+## Genauigkeit eines Digitalmultimeters
+
+<Stufe wert="standard" />
+
+Ein 3½-stelliges Multimeter (2000 Counts) hat im Gleichspannungsbereich ±(0,5 % v. M. + 3 Digits). Gemessen wird eine Spannung von ungefähr 123 V.
+
+1. Welche Fehlergrenze ergibt sich im 200-V-Bereich (Anzeige 123,4 V)?
+2. Und im 2000-V-Bereich (Anzeige 123 V)?
+
+<Loesung>
+
+1. Auflösung 0,1 V → $0{,}005 \cdot 123{,}4\,\mathrm{V} + 3 \cdot 0{,}1\,\mathrm{V} \approx \pm 0{,}92\,\mathrm{V}$ (±0,75 %)
+2. Auflösung 1 V → $0{,}005 \cdot 123\,\mathrm{V} + 3 \cdot 1\,\mathrm{V} \approx \pm 3{,}6\,\mathrm{V}$ (±2,9 %)
+
+Die Digits wirken wie ein fester Fehler bezogen auf den Bereich – auch beim Digitalmultimeter den kleinsten passenden Bereich wählen.
+
+</Loesung>
+
+## Oszilloskopbild auswerten
+
+<Stufe wert="grundlagen" />
+
+Ein Sinus belegt am Bildschirm 3,2 Kästchen Spitze-Spitze bei 500 mV/Div, eine Periode dauert 5 Kästchen bei 200 µs/Div. Der verwendete Tastkopf steht auf
+10:1, am Oszilloskop ist aber versehentlich „1×“ eingestellt.
+
+1. Was liest man ab (Spitze-Spitze-Spannung, Frequenz)?
+2. Wie groß sind die tatsächlichen Werte? Wie groß ist der Effektivwert?
+
+<Loesung>
+
+1. $U_\mathrm{ss} = 3{,}2 \cdot 0{,}5\,\mathrm{V} = 1{,}6\,\mathrm{V}$ · $T = 5 \cdot 200\,\mathrm{\mu s} = 1\,\mathrm{ms}$ → $f = 1\,\mathrm{kHz}$
+2. Der Tastkopf teilt durch 10 → tatsächlich $U_\mathrm{ss} = 16\,\mathrm{V}$, $\hat{u} = 8\,\mathrm{V}$, $U = 8\,\mathrm{V}/\sqrt{2} \approx 5{,}66\,\mathrm{V}$. Die Frequenz stimmt.
+
+</Loesung>
+
+## Bandbreite eines Oszilloskops
+
+<Stufe wert="vertiefung" />
+
+Ein Oszilloskop hat eine Bandbreite von $50\,\mathrm{MHz}$.
+
+1. Wie groß ist seine Anstiegszeit ungefähr?
+2. Ein Rechtecksignal mit 20 MHz wird dargestellt. Wie sieht es aus?
+3. Welche Amplitude zeigt es bei einem Sinus mit 50 MHz und $U_\mathrm{ss} = 1\,\mathrm{V}$?
+
+<Loesung>
+
+1. $t_\mathrm{r} \approx 0{,}35/B = 0{,}35/50\,\mathrm{MHz} = 7\,\mathrm{ns}$
+2. Ein Rechteck besteht aus der Grundwelle (20 MHz) und Oberschwingungen (60 MHz, 100 MHz …). Die Oberschwingungen werden stark gedämpft – das Rechteck sieht fast
+   wie ein **Sinus** aus. Für saubere Flanken braucht man mindestens 200 … 500 MHz.
+3. Bei der Bandbreite ist die Anzeige um 3 dB zu klein: $0{,}707 \cdot 1\,\mathrm{V} \approx 0{,}71\,\mathrm{V}$ – fast 30 % Fehler!
+
+</Loesung>
+
+## Funktionsgenerator an verschiedenen Lasten
+
+<Stufe wert="standard" />
+
+Ein Funktionsgenerator ($R_\mathrm{i} = 50\,\Omega$) ist auf „2 Vpp (50 Ω)“ eingestellt. Welche Spannung liegt tatsächlich an (a) einem 50-Ω-Widerstand, (b) dem Oszilloskop
+(1 MΩ), (c) einem Lautsprecher mit 8 Ω?
+
+<Loesung>
+
+Bei der Einstellung „2 Vpp an 50 Ω“ erzeugt der Generator intern eine Leerlaufspannung von 4 Vpp.
+
+(a) $4\,\mathrm{V} \cdot \dfrac{50}{50 + 50} = 2\,\mathrm{V_{pp}}$ ✓ · (b) $4\,\mathrm{V} \cdot \dfrac{10^6}{10^6 + 50} \approx 4\,\mathrm{V_{pp}}$ (doppelt!) ·
+(c) $4\,\mathrm{V} \cdot \dfrac{8}{58} \approx 0{,}55\,\mathrm{V_{pp}}$ – der Generator kann einen Lautsprecher kaum treiben.
+
+</Loesung>

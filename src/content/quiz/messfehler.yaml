@@ -1,0 +1,119 @@
+titel: Messfehler und Messunsicherheit
+fragen:
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Gerät zeigt 12,18 V an, der richtige Wert ist 12,00 V. Wie groß ist der relative Fehler in Prozent (mit Vorzeichen)?'
+    loesung: 1.5
+    einheit: '%'
+    toleranz: 0.02
+    toleranzArt: absolut
+    erklaerung: '$F = +0{,}18\,\mathrm{V}$ → $F_\mathrm{r} = 0{,}18/12{,}00 \cdot 100\,\% = +1{,}5\,\%$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie erkennt und behandelt man systematische Fehler?
+    optionen:
+      - text: Durch Kalibrieren bzw. Vergleich mit einem Referenzgerät erkennen und dann berichtigen
+        richtig: true
+      - text: Durch viele Wiederholungsmessungen und Mittelwertbildung
+      - text: Gar nicht – sie sind zufällig.
+      - text: Durch einen größeren Messbereich
+    erklaerung: Systematische Fehler sind bei jeder Wiederholung gleich – Mitteln hilft nicht. Zufällige Fehler werden dagegen durch Mitteln kleiner.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welcher Anteil normalverteilter Messwerte liegt im Bereich Mittelwert ± 2s?
+    optionen:
+      - text: rund 95 %
+        richtig: true
+      - text: rund 68 %
+      - text: rund 99,7 %
+      - text: 100 %
+    erklaerung: '±1s: 68,3 %, ±2s: 95,5 %, ±3s: 99,7 %.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Berechne die Stichprobenvarianz der Messwerte 19,8 · 20,0 · 20,1 · 20,2 · 19,9 (in mA²).'
+    loesung: 0.025
+    einheit: mA²
+    toleranz: 0.0005
+    toleranzArt: absolut
+    erklaerung: 'Mittelwert 20,0 mA, Summe der Abweichungsquadrate 0,10 mA² → $s^2 = 0{,}10/(5-1) = 0{,}025\,\mathrm{mA^2}$, $s \approx 0{,}158\,\mathrm{mA}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum teilt man bei der Stichprobenvarianz durch n − 1 statt durch n?
+    optionen:
+      - text: Weil der Mittelwert aus denselben Daten geschätzt wird und die Streuung sonst zu klein herauskäme
+        richtig: true
+      - text: Weil der erste Messwert nicht zählt
+      - text: Damit das Ergebnis eine ganze Zahl ist
+      - text: Das ist nur eine Konvention ohne Grund.
+    erklaerung: Diese Bessel-Korrektur macht die Schätzung unverzerrt. Für sehr viele Messwerte spielt der Unterschied keine Rolle mehr.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Mittelwert 10,10 cm, s = 0,20 cm aus n = 5 Messungen, t = 2,78. Wie groß ist die halbe Breite des 95-%-Vertrauensbereichs in cm?'
+    loesung: 0.249
+    einheit: cm
+    toleranz: 0.003
+    toleranzArt: absolut
+    erklaerung: '$t \cdot s/\sqrt{n} = 2{,}78 \cdot 0{,}20\,\mathrm{cm}/\sqrt{5} \approx 0{,}249\,\mathrm{cm}$ → 9,85 … 10,35 cm'
+
+  - typ: mc
+    stufe: standard
+    frage: 'Was beschreibt der Bereich x̄ ± t·s/√n?'
+    optionen:
+      - text: Den Bereich, in dem der wahre Wert (Mittelwert) mit der gewählten Sicherheit liegt
+        richtig: true
+      - text: Den Bereich, in dem ein einzelner neuer Messwert liegt
+      - text: Die Fehlergrenze aus der Genauigkeitsklasse
+      - text: Den Messbereich des Geräts
+    erklaerung: Für einen Einzelwert gilt ungefähr x̄ ± 2s – das ist breiter.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Messgerät Klasse 2,5 hat den Endwert 40 V. Wie groß ist die absolute Fehlergrenze?'
+    loesung: 1
+    einheit: V
+    erklaerung: '$G = 2{,}5\,\% \cdot 40\,\mathrm{V} = \pm 1\,\mathrm{V}$ – unabhängig vom angezeigten Wert.'
+
+  - typ: mc
+    stufe: standard
+    frage: In welchem Teil der Skala sollte man bei einem analogen Messgerät ablesen?
+    optionen:
+      - text: Im oberen Drittel
+        richtig: true
+      - text: Im unteren Drittel
+      - text: Genau in der Mitte
+      - text: Das ist egal.
+    erklaerung: Die Fehlergrenze ist ein fester Anteil vom Endwert. Bei großem Ausschlag ist der relative Fehler am kleinsten.
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'P = U · I mit U = 10 V ± 1 % und I = 2 A ± 3 % (Fehlergrenzen). Wie groß ist die relative Fehlergrenze von P in % (Worst Case)?'
+    loesung: 4
+    einheit: '%'
+    erklaerung: Beim Produkt addieren sich die relativen Fehlergrenzen – 1 % + 3 % = 4 %, also P = (20 ± 0,8) W.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum ist die Differenz zweier fast gleich großer Messwerte problematisch?
+    optionen:
+      - text: Die absoluten Fehler addieren sich, das Ergebnis ist klein – der relative Fehler wird sehr groß.
+        richtig: true
+      - text: Weil man nicht subtrahieren darf.
+      - text: Weil sich die Fehler dabei aufheben.
+      - text: Weil das Ergebnis immer negativ ist.
+    erklaerung: 'Beispiel: (5,0 ± 0,05) A − (4,6 ± 0,05) A = (0,4 ± 0,1) A, also ±25 %.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Wann addiert man Unsicherheiten quadratisch statt einfach?
+    optionen:
+      - text: Wenn es zufällige, voneinander unabhängige Unsicherheiten sind
+        richtig: true
+      - text: Wenn man den ungünstigsten Fall (Worst Case) sucht
+      - text: Nur bei Summen
+      - text: Nie
+    erklaerung: Es ist unwahrscheinlich, dass alle zufälligen Abweichungen gleichzeitig maximal in dieselbe Richtung gehen. Fehlergrenzen im Worst Case addiert man dagegen betragsmäßig.

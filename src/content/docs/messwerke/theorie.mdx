@@ -1,0 +1,210 @@
+---
+title: Theorie – Messwerke und Messbereiche
+description: "Drehspulmesswerk mit Drehmoment und linearer Skala, Dreheisenmesswerk mit quadratischer Abhängigkeit und Effektivwertmessung, Vergleich, Dämpfung und Einschwingen, Skalensymbole, Strom- und Spannungsmessung, Innenwiderstand und Rückwirkung, Messbereichserweiterung mit Vorwiderstand, Kennwert in Ohm pro Volt, Shunt, spannungsrichtige und stromrichtige Widerstandsmessung mit Kompensation, Widerstandsmessung mit Spannungsteiler."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Daempfung from '../../../assets/mtrs/daempfung.svg';
+import Vorwiderstand from '../../../assets/mtrs/vorwiderstand.svg';
+import Shunt from '../../../assets/mtrs/shunt.svg';
+import Spannungsrichtig from '../../../assets/mtrs/spannungsrichtig.svg';
+import Stromrichtig from '../../../assets/mtrs/stromrichtig.svg';
+
+## 1 · Analoge Messwerke
+
+Ein analoges Messwerk wandelt den Strom in ein **Drehmoment** um. Eine Spiralfeder erzeugt ein **Gegenmoment**, das mit dem Drehwinkel wächst.
+Der Zeiger bleibt dort stehen, wo beide Momente gleich groß sind.
+
+### Drehspulmesswerk
+
+**Aufbau:** Ein **Dauermagnet** mit Polschuhen und ein feststehender Weicheisenkern bilden einen ringförmigen Luftspalt mit gleichmäßigem, radialem Magnetfeld.
+Darin dreht sich eine kleine **Spule** (Drehspule) auf einem Aluminiumrähmchen. Zwei **Spiralfedern** führen ihr den Strom zu und erzeugen das Rückstellmoment.
+
+**Funktion:** Auf die stromdurchflossenen Spulenseiten wirkt im Magnetfeld die Kraft $F = B \cdot I \cdot l \cdot N$. Mit dem Hebelarm ergibt sich das
+**Drehmoment** (Spulenfläche $A$, Windungszahl $N$):
+
+$$
+M_\mathrm{el} = B \cdot I \cdot N \cdot A
+\qquad\qquad
+M_\mathrm{F} = c \cdot \alpha
+\qquad\Rightarrow\qquad
+\alpha = \frac{B \cdot N \cdot A}{c} \cdot I \sim I
+$$
+
+($c$ = Federkonstante in N·m/°). Weil $B$ im radialen Luftspalt überall gleich ist, ist der Ausschlag **proportional zum Strom** – die Skala ist **linear**.
+
+**Eigenschaften:**
+
+- Kehrt sich der Strom um, schlägt der Zeiger in die andere Richtung aus → **Polarität beachten**, Nullpunkt oft in der Mitte möglich.
+- Bei Wechselstrom (50 Hz) kann der Zeiger nicht folgen → er zeigt den **arithmetischen Mittelwert**, bei reinem Sinus also **null**.
+  Für Wechselgrößen braucht man einen **Messgleichrichter**; die Skala wird dann mit dem Formfaktor 1,11 auf Effektivwerte (nur für Sinus) umgerechnet.
+- Sehr **empfindlich** (Vollausschlag schon bei 10 µA … 1 mA), sehr **genau** (bis Klasse 0,1), kleiner Eigenverbrauch.
+- Gedämpft wird durch **Wirbelströme** im Aluminiumrähmchen, die sich bei der Bewegung im Magnetfeld bilden.
+
+### Dreheisenmesswerk
+
+**Aufbau:** Eine **feststehende Spule** umschließt zwei Weicheisenplättchen – eines fest, eines am drehbaren Zeiger.
+
+**Funktion:** Fließt Strom durch die Spule, werden beide Plättchen **gleichsinnig magnetisiert** und **stoßen sich ab**. Die Kraft hängt von beiden
+Magnetisierungen ab, also vom Strom zum Quadrat:
+
+$$
+M_\mathrm{el} \sim I^2
+\qquad\Rightarrow\qquad
+\alpha \sim I^2
+$$
+
+**Eigenschaften:**
+
+- Die Richtung des Stroms spielt keine Rolle (beide Plättchen ändern ihre Polarität gemeinsam) → misst **Gleich- und Wechselstrom**.
+- Weil $\alpha \sim I^2$ und die Trägheit über die Periode mittelt, zeigt es den **echten Effektivwert** – auch bei nicht sinusförmigen Signalen (bei niedrigen Frequenzen).
+- Die Skala ist **nichtlinear** (am Anfang zusammengedrängt; durch die Form der Plättchen etwas ausgeglichen).
+- **Robust**, überlastbar, billig – aber höherer Eigenverbrauch und weniger empfindlich. Typisch: Schalttafelinstrumente für Netzstrom und -spannung.
+- Gedämpft wird meist mit **Luftdämpfung** (Flügel in einer Kammer), weil es keinen Dauermagneten gibt.
+
+### Vergleich
+
+| | Drehspulmesswerk | Dreheisenmesswerk |
+| --- | --- | --- |
+| Ausschlag | $\sim I$ (linear) | $\sim I^2$ |
+| misst | arithmetischen Mittelwert (DC) | Effektivwert (AC und DC) |
+| Wechselstrom | nur mit Gleichrichter, Effektivwert nur bei Sinus richtig | direkt, auch bei verzerrten Kurven |
+| Empfindlichkeit, Eigenverbrauch | sehr empfindlich, klein | weniger empfindlich, größer |
+| Genauigkeit | hoch | mittel |
+| Einsatz | Präzision, Gleichgrößen, Vielfachmessgeräte | Netzspannung, Netzstrom, Schalttafeln |
+
+**Typische Testfrage:** Ein Drehspulgerät zeigt 0 V, ein Dreheisengerät 15 V an derselben Spannung. Richtig ist das **Dreheisengerät** – die Spannung ist eine
+reine Wechselspannung mit 15 V Effektivwert; ihr Mittelwert (den das Drehspulgerät anzeigt) ist null.
+
+### Dämpfung und Einschwingen
+
+<Abbildung bild={Daempfung} unterschrift="Einschwingen des Zeigers bei zu schwacher, richtiger und zu starker Dämpfung" />
+
+Zeiger und Drehspule bilden mit der Feder ein schwingungsfähiges System. Ohne Dämpfung würde der Zeiger lange um den Endwert pendeln.
+
+- **zu schwach** gedämpft: Der Zeiger **schwingt** mehrmals über – lange Wartezeit bis zum Ablesen.
+- **zu stark** gedämpft: Der Zeiger **kriecht** langsam an den Endwert heran.
+- **richtig** gedämpft: Der Zeiger erreicht den Endwert schnell mit höchstens einem kleinen Überschwingen – das ist **anzustreben**. Normen fordern z. B., dass der
+  Zeiger nach etwa 4 s auf 1,5 % ruhig steht.
+
+### Skalensymbole
+
+Auf der Skala stehen Symbole für Messwerk (Hufeisenmagnet mit Spule = Drehspul, Eisenplättchen = Dreheisen), Stromart (— Gleichstrom, ~ Wechselstrom),
+**Gebrauchslage** (waagrecht, senkrecht, schräg – wegen der Lagerreibung einhalten!), **Genauigkeitsklasse** und **Prüfspannung** (Stern mit Zahl, z. B. 2 kV –
+Isolationsfestigkeit zwischen Messkreis und Gehäuse).
+
+## 2 · Strom- und Spannungsmessung
+
+| | Strommesser (Amperemeter) | Spannungsmesser (Voltmeter) |
+| --- | --- | --- |
+| Anschluss | **in Reihe** zum Verbraucher (Stromkreis auftrennen) | **parallel** zum Bauteil |
+| ideal | Innenwiderstand $R_\mathrm{i} = 0$ | Innenwiderstand $R_\mathrm{i} = \infty$ |
+| real | kleiner Spannungsfall am Messgerät | kleiner Strom fließt durch das Messgerät |
+
+Jedes reale Messgerät **beeinflusst** die Schaltung (**Rückwirkung**, Belastungsfehler). Ein Spannungsmesser parallel zu einem hochohmigen Bauteil bildet mit diesem
+eine Parallelschaltung und senkt die Spannung; ein Strommesser vergrößert den Widerstand im Stromkreis. Digitalmultimeter haben im Spannungsbereich meist
+$R_\mathrm{i} = 10\,\mathrm{M\Omega}$, analoge Vielfachmessgeräte oft nur 20 kΩ/V.
+
+:::danger[Strommesser nie parallel anschließen!]
+Ein Strommesser hat fast keinen Widerstand. Parallel an eine Spannungsquelle angeschlossen, entsteht ein **Kurzschluss** – die Sicherung im Messgerät löst aus,
+im schlimmsten Fall explodiert das Gerät.
+:::
+
+## 3 · Messbereichserweiterung
+
+Ein Messwerk hat bei **Vollausschlag** den Strom $I_\mathrm{M}$ und die Spannung $U_\mathrm{M} = R_\mathrm{i} \cdot I_\mathrm{M}$ (z. B. 100 µA und 100 mV). Für größere
+Werte schaltet man Widerstände davor bzw. parallel.
+
+### Spannungsbereich: Vorwiderstand
+
+<Abbildung bild={Vorwiderstand} unterschrift="Der Vorwiderstand übernimmt die überschüssige Spannung" />
+
+Der Vorwiderstand $R_\mathrm{V}$ liegt **in Reihe** und übernimmt die Spannung, die das Messwerk nicht verträgt. Durch beide fließt bei Vollausschlag $I_\mathrm{M}$:
+
+$$
+R_\mathrm{V} = \frac{U - U_\mathrm{M}}{I_\mathrm{M}} = R_\mathrm{i} \cdot (n - 1)
+\qquad n = \frac{U}{U_\mathrm{M}} \;(\text{Erweiterungsfaktor})
+$$
+
+Der Eingangswiderstand des Voltmeters ist dann $R_\mathrm{e} = R_\mathrm{i} + R_\mathrm{V} = U/I_\mathrm{M}$. Er wächst mit dem Messbereich. Man gibt deshalb den
+**Kennwert** an:
+
+$$
+r = \frac{R_\mathrm{e}}{U} = \frac{1}{I_\mathrm{M}}
+\qquad \text{z. B. } 20\,\mathrm{k\Omega/V} \;\Rightarrow\; \text{im 10-V-Bereich } R_\mathrm{e} = 200\,\mathrm{k\Omega}
+$$
+
+### Strombereich: Nebenwiderstand (Shunt)
+
+<Abbildung bild={Shunt} unterschrift="Der Shunt übernimmt den größten Teil des Stroms" />
+
+Der Nebenwiderstand $R_\mathrm{N}$ liegt **parallel** zum Messwerk und übernimmt den überschüssigen Strom. Beide haben dieselbe Spannung $U_\mathrm{M}$:
+
+$$
+R_\mathrm{N} = \frac{U_\mathrm{M}}{I - I_\mathrm{M}} = \frac{R_\mathrm{i}}{n - 1}
+\qquad n = \frac{I}{I_\mathrm{M}}
+$$
+
+Shunts für große Ströme sind sehr **niederohmig** (mΩ) und haben getrennte Strom- und Spannungsanschlüsse (**Vierleiteranschluss**), damit Übergangswiderstände
+nicht mitgemessen werden. Ihre Verlustleistung $P = U_\mathrm{M} \cdot (I - I_\mathrm{M})$ muss abgeführt werden. Auch Digitalmultimeter und
+Batteriemanagementsysteme messen Ströme über Shunts.
+
+## 4 · Widerstandsmessung mit Strom- und Spannungsmesser
+
+Aus $R_\mathrm{x} = U/I$ lässt sich ein Widerstand **indirekt** bestimmen. Weil aber eines der beiden Messgeräte immer „falsch“ sitzt, gibt es zwei Schaltungen.
+
+### Spannungsrichtige Messung
+
+<Abbildung bild={Spannungsrichtig} unterschrift="Spannungsrichtig: Das Voltmeter misst genau die Spannung am Widerstand, das Amperemeter auch den Voltmeterstrom" />
+
+Das Voltmeter misst **genau** $U_\mathrm{x}$, das Amperemeter aber $I = I_\mathrm{x} + I_\mathrm{V}$. Der berechnete Widerstand $U/I$ ist **zu klein**.
+
+$$
+R_\mathrm{x} = \frac{U}{I - I_\mathrm{V}} = \frac{U}{I - \dfrac{U}{R_\mathrm{V}}}
+\qquad \text{(kompensiert)}
+$$
+
+Geeignet für **kleine** Widerstände ($R_\mathrm{x} \ll R_\mathrm{V}$), weil dann $I_\mathrm{V}$ vernachlässigbar ist.
+
+### Stromrichtige Messung
+
+<Abbildung bild={Stromrichtig} unterschrift="Stromrichtig: Das Amperemeter misst genau den Strom durch den Widerstand, das Voltmeter auch den Spannungsfall am Amperemeter" />
+
+Das Amperemeter misst **genau** $I_\mathrm{x}$, das Voltmeter aber $U = U_\mathrm{x} + U_\mathrm{A}$. Der berechnete Widerstand ist **zu groß** (um $R_\mathrm{A}$).
+
+$$
+R_\mathrm{x} = \frac{U - I \cdot R_\mathrm{A}}{I} = \frac{U}{I} - R_\mathrm{A}
+\qquad \text{(kompensiert)}
+$$
+
+Geeignet für **große** Widerstände ($R_\mathrm{x} \gg R_\mathrm{A}$).
+
+### Welche Schaltung?
+
+Beide Fehler sind gleich groß beim **Grenzwiderstand**
+
+$$
+R_\mathrm{g} = \sqrt{R_\mathrm{A} \cdot R_\mathrm{V}}
+$$
+
+- $R_\mathrm{x} < R_\mathrm{g}$ → **spannungsrichtig**
+- $R_\mathrm{x} > R_\mathrm{g}$ → **stromrichtig**
+
+Merkhilfe: Der **kleine** Widerstand möchte die Spannung **direkt** gemessen haben (spannungsrichtig), der **große** den Strom.
+
+### Widerstand über einen Spannungsteiler
+
+Ohne Strommesser: $R_\mathrm{x}$ wird mit einem **bekannten** Widerstand $R$ in Reihe an die Spannung $U$ gelegt und die Spannung $U_\mathrm{x}$ gemessen
+(hochohmiges Voltmeter):
+
+$$
+R_\mathrm{x} = R \cdot \frac{U_\mathrm{x}}{U - U_\mathrm{x}}
+$$
+
+So misst auch ein Mikrocontroller einen NTC oder ein Potentiometer. Am genauesten ist es, wenn $R$ und $R_\mathrm{x}$ ähnlich groß sind. Noch genauer misst man
+mit einer [Messbrücke](/messbruecken/theorie/) oder in **Vierleitertechnik**.
+
+### Ohmmeter im Multimeter
+
+Das Multimeter schickt einen bekannten **Konstantstrom** durch den Widerstand und misst die Spannung – eine stromrichtige Messung mit eingebauter Quelle.
+Deshalb: Widerstände **nur im spannungslosen Zustand** messen, und Bauteile möglichst auslöten (parallele Pfade in der Schaltung verfälschen das Ergebnis).

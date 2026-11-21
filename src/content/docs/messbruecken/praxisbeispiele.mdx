@@ -1,0 +1,92 @@
+---
+title: Praxisbeispiele – Messbrücken
+description: Wägezelle mit Kennwert in mV/V auswerten, Pt100 in Zwei- und Dreileiterschaltung, Brücke im Labor abgleichen, Messbrücke in LTspice simulieren, Widerstand eines Kupferkabels in Vierleitertechnik.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Wägezelle auswerten
+
+Eine Wägezelle für eine Paketwaage hat das Datenblatt: Nennlast 50 kg, Kennwert 2,0 mV/V, Brückenwiderstand 350 Ω, empfohlene Speisung 5 … 10 V.
+
+1. Welche Diagonalspannung liefert sie bei 5 V Speisung und 12 kg?
+2. Wie groß ist der Speisestrom?
+3. Was bedeutet „ratiometrische Messung“, und warum macht man das?
+
+<Loesung>
+
+1. Bei Nennlast: $2{,}0\,\mathrm{mV/V} \cdot 5\,\mathrm{V} = 10\,\mathrm{mV}$ → bei 12 kg: $10\,\mathrm{mV} \cdot 12/50 = 2{,}4\,\mathrm{mV}$
+2. Die Vollbrücke hat zwischen den Speiseanschlüssen ebenfalls 350 Ω → $I = 5\,\mathrm{V}/350\,\Omega \approx 14\,\mathrm{mA}$
+3. Der A/D-Umsetzer verwendet die **Speisespannung der Brücke als Referenz**. Weil $U_\mathrm{B}$ proportional zu $U_0$ ist, kürzt sich $U_0$ heraus – Schwankungen
+   der Versorgung haben keinen Einfluss auf das Wägeergebnis.
+
+</Loesung>
+
+## Pt100: Zwei- oder Dreileiterschaltung?
+
+Ein Pt100 ist über je 10 m Kupferleitung (jede Ader 0,6 Ω) an eine Brücke angeschlossen.
+
+1. Wie groß ist der Messfehler in Zweileiterschaltung?
+2. Wie funktioniert die Dreileiterschaltung?
+
+<Loesung>
+
+1. Beide Adern liegen in Reihe zum Pt100: $1{,}2\,\Omega$ → $1{,}2/0{,}385 \approx 3{,}1\,\mathrm{K}$ zu viel.
+2. Eine Ader liegt im Brückenzweig des Pt100, die zweite im benachbarten Zweig (beim Vergleichswiderstand), die dritte führt nur zum Messgerät und ist stromlos.
+   Die beiden gleich großen Leitungswiderstände liegen in **benachbarten** Zweigen desselben Teilers – im Abgleich heben sie sich auf. Voraussetzung: gleich lange,
+   gleiche Adern. Noch genauer ist die Vierleiterschaltung.
+
+</Loesung>
+
+## Eine Brücke im Labor abgleichen
+
+Im Labor soll ein unbekannter Widerstand (ca. 2 kΩ) mit einer Brücke aus zwei 1-kΩ-Präzisionswiderständen, einer Widerstandsdekade und einem Multimeter als
+Nullindikator gemessen werden.
+
+1. Wie schaltest du die Brücke, und auf welchen Wert musst du die Dekade ungefähr stellen?
+2. Warum beginnt man im größten Spannungsbereich des Multimeters und schaltet dann herunter?
+3. Wovon hängt die Genauigkeit des Ergebnisses ab?
+
+<Loesung>
+
+1. $R_\mathrm{x}$ und Dekade bilden einen Teiler, die beiden 1-kΩ-Widerstände den anderen. Mit $R_1 = R_\mathrm{x}$, $R_2$ = Dekade, $R_3 = R_4 = 1\,\mathrm{k\Omega}$ gilt im Abgleich
+   $R_\mathrm{x} = R_2$ – die Dekade wird also auf ca. 2 kΩ gestellt.
+2. Weit vom Abgleich entfernt ist $U_\mathrm{B}$ groß. Nähert man sich dem Abgleich, wird sie klein, und man braucht einen empfindlichen Bereich, um die letzte
+   Stelle der Dekade einzustellen.
+3. Von der **Toleranz der Vergleichswiderstände** (Dekade und die beiden 1-kΩ-Widerstände) und davon, wie klein man $U_\mathrm{B}$ noch erkennen kann – nicht von der
+   Genauigkeit des Multimeters oder der Speisespannung.
+
+</Loesung>
+
+## Simulation der Ausschlagbrücke
+
+Eine Viertelbrücke mit 350-Ω-DMS ($k = 2$) und 5 V Speisung wird in einer Schaltungssimulation (z. B. LTspice) aufgebaut. Der DMS wird als Widerstand
+$350\,\Omega \cdot (1 + k \cdot \varepsilon)$ modelliert, die Dehnung wird von 0 bis 10 000 µm/m durchgefahren (DC-Sweep).
+
+1. Welche Spannung erwartest du bei 1000 µm/m und bei 10 000 µm/m nach der Näherungsformel?
+2. Die Simulation zeigt bei 10 000 µm/m (DMS in der Position von $R_2$) nur 24,75 mV. Warum?
+
+<Loesung>
+
+1. $U_\mathrm{B} \approx \dfrac{U_0}{4} \cdot k\varepsilon$: 1000 µm/m → $\dfrac{5}{4} \cdot 0{,}002\,\mathrm{V} = 2{,}5\,\mathrm{mV}$ · 10 000 µm/m → $25\,\mathrm{mV}$
+2. Die Näherung gilt nur für **kleine** Änderungen. Exakt: $U_\mathrm{B} = 5\,\mathrm{V} \cdot \left(\dfrac{1{,}02}{2{,}02} - 0{,}5\right) \approx 24{,}75\,\mathrm{mV}$ – die
+   Viertelbrücke ist leicht **nichtlinear** (1 % Abweichung bei dieser großen Dehnung). In der Vollbrücke mit gegensinnig gedehnten DMS ist die Kennlinie
+   exakt linear.
+
+</Loesung>
+
+## Widerstand eines Kabels in Vierleitertechnik
+
+Der Widerstand einer 50-m-Kabeltrommel (2 × 1,5 mm²) soll geprüft werden. Ein Laborgerät speist 1,00 A ein (Stromklemmen an den Enden), mit zwei getrennten
+Messspitzen misst man an denselben Enden 0,595 V.
+
+1. Wie groß ist der Widerstand (Hin- und Rückleiter in Reihe)?
+2. Passt das zum erwarteten Wert ($\gamma_\mathrm{Cu} = 56\,\mathrm{m/(\Omega \cdot mm^2)}$)?
+
+<Loesung>
+
+1. $R = 0{,}595\,\mathrm{V}/1{,}00\,\mathrm{A} = 0{,}595\,\Omega$
+2. Erwartet: $R = \dfrac{100\,\mathrm{m}}{56 \cdot 1{,}5}\,\Omega \approx 1{,}19\,\Omega$ – gemessen ist nur die **Hälfte**. Vermutlich wurde nur **eine Ader** (50 m) gemessen statt der
+   Schleife aus Hin- und Rückleiter: $50/(56 \cdot 1{,}5) \approx 0{,}595\,\Omega$ ✓. Gut, dass man das Ergebnis mit einer Abschätzung kontrolliert!
+
+</Loesung>

@@ -1,0 +1,245 @@
+---
+title: Theorie – Sensoren
+description: "Sensorbegriff, aktive und passive Sensoren, Wirkprinzipien, temperaturabhängige Metallwiderstände, Kaltleiter PTC, Heißleiter NTC mit B-Gleichung, Varistor VDR, Fotowiderstand LDR, magnetfeldabhängige Widerstände, Widerstandsthermometer Pt100 mit Zwei-, Drei- und Vierleiterschaltung, Thermoelement mit Seebeck- und Peltier-Effekt, Piezo-Aufnehmer, Dehnungsmessstreifen mit k-Faktor, Hall-Effekt und Hall-Sensoren, Sensorauswahl."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Kennlinien from '../../../assets/mtrs/ntc-ptc-kennlinien.svg';
+import Teiler from '../../../assets/mtrs/ntc-spannungsteiler.svg';
+import Thermo from '../../../assets/mtrs/thermoelement.svg';
+import Hall from '../../../assets/mtrs/hall-effekt.svg';
+import DMS from '../../../assets/mtrs/dms.svg';
+
+## 1 · Was ist ein Sensor?
+
+Ein **Sensor** (Messgrößenaufnehmer, Fühler) erfasst eine physikalische oder chemische Größe – Temperatur, Druck, Beschleunigung, Licht,
+pH-Wert … – und wandelt sie mithilfe eines physikalischen Effekts in ein weiterverarbeitbares **elektrisches Signal** um.
+
+### Passive und aktive Sensoren
+
+| | passive Sensoren | aktive Sensoren |
+| --- | --- | --- |
+| Prinzip | Die Messgröße ändert einen **Parameter** (R, L, C) | Der Sensor **erzeugt selbst** eine Spannung oder Ladung |
+| Hilfsenergie | **nötig** (Messstrom, Speisespannung) | **nicht nötig** |
+| Beispiele | NTC, Pt100, DMS, LDR, kapazitiver Füllstandsensor | Thermoelement, Piezo-Aufnehmer, Fotoelement (Solarzelle), Tauchspulenmikrofon |
+
+Die meisten Sensoren sind **passiv**. Achtung: Viele moderne Sensor-**ICs** (z. B. Hall-Sensoren, digitale Temperatursensoren) enthalten
+Elektronik und brauchen deshalb eine Versorgung, auch wenn das zugrunde liegende Prinzip ein anderes ist.
+
+### Einteilung nach dem Wirkprinzip
+
+| Wirkprinzip | Messgröße ändert … | Beispiele |
+| --- | --- | --- |
+| resistiv | den Widerstand | NTC, PTC, Pt100, DMS, LDR, Potentiometer |
+| kapazitiv | die Kapazität (Plattenabstand, Fläche, Dielektrikum) | Touchscreen, Füllstand, Feuchte, Druck (Membran als Platte) |
+| induktiv | die Induktivität bzw. Kopplung | Näherungsschalter, Metalldetektor, Drehzahlgeber |
+| piezoelektrisch | erzeugt Ladung bei Kraft | Beschleunigung, Klopfsensor, Ultraschall |
+| thermoelektrisch | erzeugt Spannung bei Temperaturdifferenz | Thermoelement |
+| magnetisch | erzeugt Spannung bzw. Widerstandsänderung im Magnetfeld | Hall-Sensor, Feldplatte, GMR |
+| optisch | Strom oder Widerstand bei Licht | Fotodiode, Fototransistor, LDR |
+
+## 2 · Temperaturabhängige Widerstände
+
+Bei **Metallen** steigt der Widerstand mit der Temperatur leicht und fast linear:
+
+$$
+R_\vartheta = R_{20} \cdot \left(1 + \alpha_{20} \cdot \Delta\vartheta + \beta_{20} \cdot \Delta\vartheta^2\right)
+\qquad \Delta\vartheta = \vartheta - 20\,°\mathrm{C}
+$$
+
+(z. B. Kupfer: $\alpha_{20} \approx 3{,}9 \cdot 10^{-3}\,\mathrm{K^{-1}}$). **Thermistoren** (*thermal sensitive resistors*) aus Halbleiterkeramik reagieren
+dagegen sehr **stark** und nichtlinear auf die Temperatur.
+
+<Abbildung bild={Kennlinien} unterschrift="Kennlinien von Heißleiter (NTC) und Kaltleiter (PTC) – Widerstand logarithmisch aufgetragen" />
+
+### Kaltleiter (PTC)
+
+**PTC** = *Positive Temperature Coefficient*: Der Widerstand **steigt** mit der Temperatur – „kalt leitet er gut“.
+
+- Kennlinie: Unterhalb der **Nenn- bzw. Bezugstemperatur** $\vartheta_\mathrm{N}$ (Curie-Temperatur, typisch 60 … 180 °C) ist der Widerstand klein und
+  fast konstant. Darüber steigt er auf einem schmalen Temperaturbereich um mehrere **Zehnerpotenzen** an.
+- Material: dotierte Bariumtitanat-Keramik (bzw. leitfähiger Kunststoff bei „Polyfuses“).
+- Im steilen Bereich gilt näherungsweise $R_T = R_\mathrm{N} \cdot \mathrm{e}^{\alpha (T - T_\mathrm{N})}$ mit großem Temperaturkoeffizienten $\alpha$ (z. B. 0,05 … 0,3 K⁻¹).
+- **Einsatz:** selbstrückstellende Sicherungen (Überstromschutz), **Motorschutz** (Fühler in der Wicklung), selbstregelnde Heizelemente
+  (Spiegelheizung, Heißklebepistole), Übertemperatur-Schalter.
+
+### Heißleiter (NTC)
+
+**NTC** = *Negative Temperature Coefficient*: Der Widerstand **sinkt** mit steigender Temperatur – „heiß leitet er gut“.
+
+- Kennlinie: stark fallend, gekrümmt (exponentiell). Bei tiefen Temperaturen sehr empfindlich, bei hohen weniger.
+- Material: Metalloxid-Keramik. Einsatzbereich etwa −50 … +150 °C (Spezialtypen bis 300 °C).
+- Kennwert $R_{25}$ (Widerstand bei 25 °C, z. B. 10 kΩ) und **B-Wert** (Materialkonstante, 3000 … 5000 K):
+
+$$
+R_T = R_{25} \cdot \mathrm{e}^{B \left(\frac{1}{T} - \frac{1}{T_{25}}\right)}
+\qquad T \text{ in Kelvin},\; T_{25} = 298{,}15\,\mathrm{K}
+$$
+
+Aus zwei Messpunkten erhält man den B-Wert, und umgestellt die Temperatur:
+
+$$
+B = \frac{\ln(R_1/R_2)}{\dfrac{1}{T_1} - \dfrac{1}{T_2}}
+\qquad\qquad
+T = \frac{1}{\dfrac{\ln(R_T/R_{25})}{B} + \dfrac{1}{T_{25}}}
+$$
+
+- **Einsatz:** Temperaturmessung (Heizung, Kühlschrank, Akkupacks, Fieberthermometer), **Einschaltstrombegrenzung** in Netzteilen (kalt hochohmig, warm
+  niederohmig), Temperaturkompensation.
+
+<Abbildung bild={Teiler} unterschrift="NTC im Spannungsteiler: Die Ausgangsspannung ändert sich mit der Temperatur" />
+
+**Auswertung im Spannungsteiler:** Mit $R_1$ in Reihe gilt
+
+$$
+U_\mathrm{a} = U_\mathrm{B} \cdot \frac{R_\mathrm{NTC}}{R_1 + R_\mathrm{NTC}}
+\qquad\Rightarrow\qquad
+R_\mathrm{NTC} = R_1 \cdot \frac{U_\mathrm{a}}{U_\mathrm{B} - U_\mathrm{a}}
+$$
+
+Wählt man $R_1 = R_\mathrm{NTC}$ in der Mitte des Messbereichs, ist der Teiler dort am empfindlichsten und zugleich recht linear.
+**Eigenerwärmung** vermeiden: Der Messstrom heizt den NTC auf und verfälscht die Messung – deshalb hochohmige Typen und kleine Spannungen.
+
+### Varistor (VDR)
+
+**VDR** = *Voltage Dependent Resistor*. Unterhalb seiner **Ansprechspannung** ist er sehr hochohmig, darüber sinkt sein Widerstand schlagartig, der Strom
+steigt steil an. Die Kennlinie ist **symmetrisch** (für beide Polaritäten gleich).
+
+- Material: Zinkoxid-Körner (Metalloxid-Varistor, MOV).
+- **Einsatz:** **Überspannungsschutz** – parallel zum Gerät bzw. zum Netzeingang. Eine Überspannungsspitze (Blitz, Schalten von Induktivitäten) wird
+  kurzgeschlossen und die Sicherung davor löst bei Dauerüberlast aus. Auch in Überspannungs-Steckdosenleisten.
+
+### Fotowiderstand (LDR)
+
+**LDR** = *Light Dependent Resistor*: Der Widerstand **sinkt** mit zunehmender Beleuchtungsstärke (Licht erzeugt freie Ladungsträger im Halbleiter).
+
+- Typisch: im Dunkeln einige MΩ, bei hellem Licht 100 Ω … einige kΩ. Langsam (Millisekunden bis Sekunden).
+- **Einsatz:** Dämmerungsschalter, Belichtungsmesser, einfache Lichtschranken.
+- Die klassischen LDR enthalten **Cadmiumsulfid** und sind wegen der EU-Richtlinie RoHS kaum noch erlaubt – heute nimmt man **Fotodioden** oder
+  **Fototransistoren** (schneller, linearer).
+
+### Magnetfeldabhängige Widerstände (MDR)
+
+Bei **MDR** (Feldplatten, magnetoresistive Sensoren) steigt der Widerstand im Magnetfeld. Moderne Varianten (AMR, GMR) messen Winkel, Drehzahl
+und Position; der GMR-Effekt machte die Leseköpfe großer Festplatten möglich.
+
+## 3 · Widerstandsthermometer Pt100
+
+Ein **Pt100** ist ein Widerstand aus **Platin** mit genau **100 Ω bei 0 °C** (Pt1000: 1000 Ω). Platin ist chemisch beständig, langzeitstabil und sein
+Widerstand steigt fast linear mit der Temperatur – deshalb ist der Pt100 der Standard für **genaue** Temperaturmessung in der Industrie.
+
+Für $\vartheta \geq 0\,°\mathrm{C}$ gilt (Callendar-Van-Dusen-Gleichung nach EN 60751):
+
+$$
+R_\vartheta = R_0 \cdot \left(1 + A \cdot \vartheta + B \cdot \vartheta^2\right)
+\qquad A = 3{,}9083 \cdot 10^{-3}\,\mathrm{°C^{-1}},\; B = -5{,}775 \cdot 10^{-7}\,\mathrm{°C^{-2}}
+$$
+
+Grob: **0,385 Ω pro Kelvin**. Bei 100 °C hat ein Pt100 138,5 Ω. Rechnet man nur mit dem linearen Glied, entsteht ein kleiner Linearisierungsfehler
+(bei 100 °C etwa 0,6 Ω ≙ 1,5 K).
+
+- Messbereich ca. −200 … +600 °C (Sonderbauformen mehr), genormte **Toleranzklassen** (z. B. Klasse A: ±(0,15 + 0,002·|ϑ|) K, Klasse B: ±(0,3 + 0,005·|ϑ|) K).
+- **Messstrom** klein halten (≈ 1 mA), sonst Eigenerwärmung.
+- **Zuleitungen** verfälschen die Messung: 1 Ω Leitungswiderstand ≙ 2,6 K! Deshalb gibt es die **Dreileiter**- und **Vierleiterschaltung**, bei denen die
+  Zuleitungswiderstände kompensiert bzw. gar nicht gemessen werden (siehe [Messbrücken](/messbruecken/theorie/)).
+
+## 4 · Thermoelement
+
+<Abbildung bild={Thermo} unterschrift="Thermoelement: Zwei verschiedene Metalle sind an der Messstelle verbunden; die Spannung hängt von der Temperaturdifferenz ab" />
+
+**Thermoelektrizität (Seebeck-Effekt):** Verbindet man zwei **verschiedene Metalle** und erwärmt die Verbindungsstelle, entsteht zwischen den freien
+Enden eine kleine Spannung – die **Thermospannung**. Sie ist proportional zur **Temperaturdifferenz** zwischen Messstelle und Vergleichsstelle:
+
+$$
+U_\mathrm{th} = k \cdot (\vartheta_\mathrm{M} - \vartheta_\mathrm{V})
+$$
+
+| Typ | Metallpaar | Empfindlichkeit $k$ | Bereich (etwa) |
+| --- | --- | --- | --- |
+| **K** | NiCr–Ni | ≈ 41 µV/K | −200 … +1200 °C |
+| **J** | Fe–CuNi | ≈ 52 µV/K | −200 … +750 °C |
+| **T** | Cu–CuNi | ≈ 43 µV/K | −200 … +350 °C |
+| **S** | PtRh–Pt | ≈ 10 µV/K | 0 … 1600 °C |
+
+- Thermoelemente sind **aktive** Sensoren, robust, klein, schnell und für **sehr hohe Temperaturen** geeignet (Ofen, Abgas, Lötkolben).
+- Weil nur die Differenz gemessen wird, muss die Temperatur der **Vergleichsstelle** (Klemmen am Messgerät) bekannt sein – Messgeräte messen sie mit
+  einem eingebauten Sensor und rechnen sie dazu (**Vergleichsstellenkompensation**).
+- Die Spannungen sind sehr klein (Millivolt) → empfindlicher, rauscharmer Messverstärker nötig. Verlängert wird nur mit passender **Ausgleichsleitung**.
+
+**Peltier-Effekt** (Umkehrung): Schickt man einen Strom durch eine Verbindung zweier verschiedener Leiter (in der Praxis Halbleiter), wird eine Seite
+**kalt** und die andere **warm** – **elektrothermische Kälteerzeugung**. Anwendungen: Kühlbox fürs Auto, Kühlung von Laserdioden und Kamerasensoren,
+Thermocycler. Der Wirkungsgrad ist schlecht, dafür gibt es keine bewegten Teile.
+
+## 5 · Piezo-Aufnehmer
+
+Bestimmte Kristalle (Quarz) und Keramiken (Blei-Zirkonat-Titanat, PZT) erzeugen bei mechanischer **Verformung** an ihren Oberflächen eine elektrische
+**Ladung** – der **piezoelektrische Effekt**:
+
+$$
+Q = k_\mathrm{p} \cdot F
+\qquad\text{(Quarz: } k_\mathrm{p} \approx 2{,}3\,\mathrm{pC/N})
+\qquad
+U = \frac{Q}{C}
+$$
+
+- **Aktiver** Sensor, sehr steif, hohe Grenzfrequenz.
+- Die Ladung fließt über Isolations- und Eingangswiderstände langsam ab – Piezo-Aufnehmer messen deshalb nur **dynamische** (sich ändernde) Kräfte,
+  keine statischen Gewichte. Ausgewertet wird mit einem **Ladungsverstärker**.
+- **Einsatz:** Beschleunigungs- und Vibrationssensoren, Klopfsensor im Motor, Drucksensoren für Verbrennungsvorgänge, Mikrofone, Ultraschall,
+  Gasanzünder (hohe Spannung durch Schlag).
+- **Umgekehrter** Effekt: Eine Spannung verformt den Kristall → Piezo-Summer, Ultraschallsender, Piezo-Aktoren (Einspritzdüsen, Nanopositionierung),
+  Schwingquarz.
+
+## 6 · Dehnungsmessstreifen (DMS)
+
+<Abbildung bild={DMS} unterschrift="Dehnungsmessstreifen: Ein mäanderförmiges Messgitter auf einer Trägerfolie wird mit dem Bauteil gedehnt" />
+
+Ein DMS ist ein dünnes, mäanderförmiges **Metallgitter** (meist **Konstantan**) auf einer Trägerfolie, die auf das Bauteil geklebt wird. Dehnt sich das Bauteil,
+wird der Leiter **länger und dünner** – sein Widerstand steigt.
+
+$$
+R = \rho \cdot \frac{l}{A}
+\qquad
+\varepsilon = \frac{\Delta l}{l}
+\qquad
+\frac{\Delta R}{R} = k \cdot \varepsilon
+$$
+
+- Die **Dehnung** $\varepsilon$ hat keine Einheit, man gibt sie meist in **µm/m** an (1 µm/m = $10^{-6}$).
+- Der **k-Faktor** beschreibt die Empfindlichkeit, bei Metall-DMS **k ≈ 2**. Typische Nennwiderstände 120 Ω, 350 Ω, 1000 Ω.
+- Die Widerstandsänderungen sind winzig (bei 1000 µm/m nur 0,2 %) → Auswertung in einer **Wheatstone-Brücke** mit Verstärker
+  (siehe [Messbrücken](/messbruecken/theorie/)). In der Brücke lassen sich auch Temperatureinflüsse kompensieren.
+- **Direkt messbar** ist nur die **Dehnung**. **Indirekt** – über die Verformung eines Federkörpers – misst man **Kraft, Gewicht, Druck, Drehmoment**
+  (Wägezellen in Waagen, Kraftmessdosen, Drucksensoren).
+
+## 7 · Hall-Effekt und Hall-Sensoren
+
+<Abbildung bild={Hall} unterschrift="Hall-Effekt: Die Lorentzkraft lenkt die Ladungsträger zur Seite, quer zum Strom entsteht die Hallspannung" />
+
+Fließt ein Strom $I$ durch ein dünnes Halbleiterplättchen (Dicke $d$), das von einem Magnetfeld $B$ senkrecht durchsetzt wird, lenkt die **Lorentzkraft** die
+bewegten Ladungsträger zur Seite. An den Seitenrändern sammeln sich Ladungen – quer zum Strom entsteht die **Hallspannung**:
+
+$$
+U_\mathrm{H} = R_\mathrm{H} \cdot \frac{I \cdot B}{d}
+\qquad R_\mathrm{H}: \text{Hall-Konstante des Materials}
+$$
+
+Die Hallspannung ist proportional zu **Strom** und **Flussdichte**. In Metallen ist sie winzig, in Halbleitern (InSb, GaAs, Si) groß genug für Sensoren.
+
+- **Hall-Sensor-ICs** enthalten Plättchen, Stromquelle und Verstärker: **lineare** Sensoren liefern z. B. 2,5 V ohne Feld und ±x mV/mT, **Hall-Schalter**
+  schalten ab einer bestimmten Flussdichte.
+- **Einsatz:** berührungslose Positions- und Endlagenerkennung, Drehzahlmessung (Raddrehzahl für ABS, Fahrradtacho), Kommutierung bürstenloser Motoren,
+  **potentialfreie Strommessung** (Magnetfeld um einen Leiter), Kompass im Smartphone.
+
+## 8 · Den richtigen Sensor wählen
+
+| Anwendung | gut geeignet | Begründung |
+| --- | --- | --- |
+| Kühlschrank (0 … 10 °C) | **NTC** | billig, im Bereich sehr empfindlich, Genauigkeit ±0,5 K reicht |
+| Präzise Prozesstemperatur (0 … 400 °C) | **Pt100** (Vierleiter) | genau, stabil, genormt, austauschbar |
+| Brennofen, Abgas (> 600 °C) | **Thermoelement Typ K** | hohe Temperaturen, robust, schnell |
+| Motorwicklung schützen | **PTC** | schaltet beim Erreichen der Grenztemperatur sprunghaft |
+| Gewicht einer Waage | **DMS** in Vollbrücke | statische Kraft, genau |
+| Vibration einer Maschine | **Piezo**-Beschleunigungssensor | dynamisch, hohe Frequenz |
+| Raddrehzahl, Endlage | **Hall**-Sensor | berührungslos, verschleißfrei, schmutzunempfindlich |
+| Netzeingang schützen | **VDR** | begrenzt Überspannungsspitzen |

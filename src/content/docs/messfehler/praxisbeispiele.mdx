@@ -1,0 +1,91 @@
+---
+title: Praxisbeispiele – Messfehler und Messunsicherheit
+description: Körpergrößen der Klasse als Normalverteilung, Ablesefehler und Parallaxe, hat sich die Position verschoben, Messgerät für eine Kontrolle auswählen, Messkategorien CAT II bis CAT IV.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Die Körpergröße der Klasse
+
+Alle Schüler:innen einer Klasse messen ihre Körpergröße mit demselben Maßband. Die Werte werden in Klassen zu je 5 cm eingeteilt und als
+Säulendiagramm dargestellt.
+
+1. Welche Form erwartest du für das Diagramm? Warum?
+2. Mittelwert 176 cm, Standardabweichung 7 cm. In welchem Bereich liegen etwa zwei Drittel der Klasse?
+3. Jemand misst sich mit Schuhen. Welche Fehlerart ist das?
+
+<Loesung>
+
+1. Eine **Glockenkurve** (Normalverteilung): Viele unabhängige Einflüsse (Gene, Ernährung, Alter …) wirken zusammen; mittlere Größen sind häufig,
+   sehr kleine und sehr große selten. Bei nur 25 Personen sieht die Glocke allerdings noch recht „zackig“ aus.
+2. $\bar{x} \pm s$ = 169 … 183 cm (68 %).
+3. Ein **systematischer** Fehler (immer ein paar Zentimeter zu viel) – durch Mitteln über die Klasse verschwindet er nicht, er verschiebt den Mittelwert.
+
+</Loesung>
+
+## Ablesefehler am Zeigerinstrument
+
+Ein analoges Messgerät hat hinter dem Zeiger einen kleinen **Spiegelstreifen** auf der Skala.
+
+1. Wozu dient er?
+2. Ist ein Ablesefehler systematisch oder zufällig?
+
+<Loesung>
+
+1. Schaut man schräg auf die Skala, liest man wegen des Abstands zwischen Zeiger und Skala einen falschen Wert ab (**Parallaxe**). Man liest richtig,
+   wenn der Zeiger sein eigenes Spiegelbild genau verdeckt – dann blickt man senkrecht auf die Skala.
+2. Beides ist möglich: Wer immer von derselben Seite schaut, macht einen **systematischen** Fehler, wechselnde Blickwinkel ergeben **zufällige** Fehler.
+
+</Loesung>
+
+## Hat sich die Position verschoben?
+
+Ein Roboterarm fährt immer wieder dieselbe Position an. Eine Messreihe ergab $\bar{x}_1 = 50{,}00\,\mathrm{mm}$, $s_1 = 0{,}02\,\mathrm{mm}$. Nach einer Wartung
+misst man erneut sieben Mal und erhält $\bar{x}_2 = 50{,}08\,\mathrm{mm}$, $s_2 = 0{,}03\,\mathrm{mm}$.
+
+1. Liegen die Bereiche $\bar{x} \pm 2s$ überlappend?
+2. Was schließt du daraus?
+
+<Loesung>
+
+1. Vorher: 49,96 … 50,04 mm. Nachher: 50,02 … 50,14 mm. Die Bereiche überlappen nur knapp (50,02 … 50,04 mm).
+2. Der Unterschied der Mittelwerte (0,08 mm) ist deutlich größer als die Streuung – die Position hat sich sehr wahrscheinlich **systematisch
+   verschoben** (z. B. Nullpunkt nach der Wartung neu gesetzt). Abhilfe: neu justieren und erneut messen. Ein sauberer statistischer Test würde die
+   Vertrauensbereiche der Mittelwerte vergleichen – die sind noch schmaler und überlappen hier gar nicht.
+
+</Loesung>
+
+## Welches Messgerät für die Prüfung?
+
+In der Endprüfung einer Netzteilplatine soll die Ausgangsspannung $5{,}00\,\mathrm{V} \pm 2\,\%$ geprüft werden.
+
+1. Wie genau muss das Prüfmessgerät mindestens sein? (Faustregel: Messunsicherheit höchstens ein Zehntel der Toleranz)
+2. Reicht ein analoges Gerät Klasse 1,5 im 10-V-Bereich? Reicht ein Digitalmultimeter mit ±(0,5 % v. M. + 2 Digits) im 20-V-Bereich (Auflösung 0,01 V)?
+
+<Loesung>
+
+1. Toleranz ±2 % = ±0,1 V → das Prüfmittel sollte höchstens ±0,01 V (0,2 %) Unsicherheit haben.
+2. Analog: $1{,}5\,\% \cdot 10\,\mathrm{V} = \pm 0{,}15\,\mathrm{V}$ – größer als die ganze Toleranz, **ungeeignet**. Digital:
+   $0{,}5\,\% \cdot 5\,\mathrm{V} + 2 \cdot 0{,}01\,\mathrm{V} = \pm 0{,}045\,\mathrm{V}$ – besser, aber noch zu ungenau für die Faustregel. Man braucht ein
+   genaueres Gerät (z. B. 0,05 % + 2 Digits im 6-V-Bereich mit 1 mV Auflösung) oder muss die Prüfgrenzen enger setzen.
+
+</Loesung>
+
+## Messkategorien
+
+Auf Multimetern steht z. B. „CAT III 600 V“ oder „CAT IV 300 V“.
+
+1. Was bedeutet die Messkategorie?
+2. Warum darf man mit einem CAT-II-Gerät nicht im Hausanschlusskasten messen, auch wenn dort „nur“ 230/400 V anliegen?
+
+<Loesung>
+
+1. Die Messkategorie (nach IEC 61010) beschreibt, an welcher Stelle der Installation das Gerät sicher messen darf – also welche **Überspannungsimpulse**
+   (z. B. durch Blitz oder Schaltvorgänge) es aushält:
+   - **CAT II:** Geräte an der Steckdose
+   - **CAT III:** feste Installation, Verteiler, Motoren
+   - **CAT IV:** Hausanschluss, Zähler, Freileitung
+2. Je näher am Netzeinspeisepunkt, desto energiereicher sind Überspannungsspitzen (mehrere kV). Ein CAT-II-Gerät kann dabei innen überschlagen
+   und explodieren (Lichtbogen) – **Lebensgefahr**. Auch die Messleitungen müssen die passende Kategorie haben.
+
+</Loesung>

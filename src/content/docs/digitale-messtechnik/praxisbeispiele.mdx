@@ -1,0 +1,101 @@
+---
+title: Praxisbeispiele – Digitale Messtechnik und Laborgeräte
+description: Mikrocontroller misst Akkuspannung, Tastkopf abgleichen, Netzspannung sicher am Oszilloskop darstellen, Aliasing im Video und am Oszilloskop, Frequenzspektrum mit dem Smartphone, Funktionsgenerator am Verstärker.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Akkuspannung mit dem Mikrocontroller messen
+
+Ein Mikrocontroller (12-Bit-ADC, $U_\mathrm{ref} = 3{,}3\,\mathrm{V}$) soll die Spannung eines Akkupacks (bis 12,6 V) überwachen.
+
+1. Warum braucht man einen Spannungsteiler? Dimensioniere ihn (Summe ca. 100 kΩ).
+2. Der ADC liefert 3350. Wie groß ist die Akkuspannung?
+3. Warum ist es schlecht, wenn der Teiler sehr hochohmig ist (z. B. 1 MΩ)?
+
+<Loesung>
+
+1. Der ADC verträgt nur 0 … 3,3 V. Teilerverhältnis z. B. 1 : 4,3 (Reserve): $R_1 = 75\,\mathrm{k\Omega}$ (oben), $R_2 = 22\,\mathrm{k\Omega}$ (unten) →
+   $12{,}6\,\mathrm{V} \cdot 22/97 \approx 2{,}86\,\mathrm{V}$ – passt.
+2. $U_\mathrm{ADC} = 3350 \cdot 3{,}3\,\mathrm{V}/4096 \approx 2{,}699\,\mathrm{V}$ → $U_\mathrm{Akku} = 2{,}699\,\mathrm{V} \cdot 97/22 \approx 11{,}90\,\mathrm{V}$
+3. Der ADC lädt beim Abtasten einen kleinen internen Kondensator. Ein sehr hochohmiger Teiler liefert dafür nicht schnell genug Strom – der Messwert wird zu klein.
+   Abhilfe: Kondensator (z. B. 100 nF) am ADC-Eingang oder niederohmigerer Teiler. Dafür fließt aber dauernd ein kleiner Strom aus dem Akku (hier ≈ 0,12 mA).
+
+</Loesung>
+
+## Tastkopf abgleichen
+
+Am Oszilloskop gibt es einen Anschluss „Probe Comp“ mit einem 1-kHz-Rechtecksignal. Ein frisch angeschlossener 10:1-Tastkopf zeigt dort ein Rechteck mit
+**Spitzen** an den Ecken.
+
+1. Was bedeutet das?
+2. Was passiert, wenn man einen schlecht abgeglichenen Tastkopf zum Messen verwendet?
+
+<Loesung>
+
+1. Der Tastkopf ist **überkompensiert**: Der Trimmkondensator ist zu groß, hohe Frequenzen werden zu stark übertragen. Mit dem kleinen Schraubendreher (Trimmer am
+   Tastkopf oder am Stecker) verstellen, bis die Ecken genau rechteckig sind. Abgerundete Ecken bedeuten Unterkompensation.
+2. Amplituden höherer Frequenzen werden falsch angezeigt, Rechtecke sehen verbogen aus, Anstiegszeiten sind falsch – der Frequenzgang des Tastkopfs ist nicht flach.
+
+</Loesung>
+
+## Netzspannung am Oszilloskop
+
+Für eine Laborübung soll die Netzspannung (230 V, 50 Hz) am Oszilloskop dargestellt werden.
+
+1. Warum darf man nicht einfach den Tastkopf an L und die Masseklemme an N anschließen?
+2. Wie misst man sicher?
+
+<Loesung>
+
+1. Die Masseklemme ist mit dem **Schutzleiter** verbunden. N liegt zwar meist nahe an Erdpotential, ist aber ein aktiver Leiter – bei vertauschtem Stecker hängt die
+   Masseklemme direkt an L → **Kurzschluss** über den Schutzleiter, Tastkopf und Gerät werden zerstört. Außerdem sind normale Tastköpfe oft nicht für diese
+   Spannung (Messkategorie) zugelassen.
+2. Mit einem **Differenztastkopf** (Hochvolt, CAT-gerecht) oder über einen **Trenntransformator** mit kleiner Sekundärspannung (z. B. 12 V) – die Kurvenform ist dieselbe.
+   Den Schutzleiter des Oszilloskops **niemals** abklemmen.
+
+</Loesung>
+
+## Aliasing sichtbar machen
+
+1. In einem Video dreht sich ein Propeller scheinbar langsam rückwärts. Erkläre das mit dem Abtasttheorem.
+2. Am Digitaloszilloskop wird ein 1-MHz-Sinus bei einer zu langsamen Zeitbasis (500 ms/Div) dargestellt. Das Bild zeigt eine langsame Schwingung mit wenigen Hz. Warum?
+
+<Loesung>
+
+1. Die Kamera tastet mit z. B. 25 Bildern/s ab. Dreht sich der Propeller zwischen zwei Bildern fast eine ganze Umdrehung (oder Blattteilung), sieht es aus, als hätte er
+   sich ein kleines Stück zurückgedreht – eine zu hohe Frequenz erscheint als tiefe, sogar mit falschem Vorzeichen.
+2. Bei langer Zeitbasis sinkt die Abtastrate des Oszilloskops stark (Speicher ist begrenzt). Liegt sie unter 2 MHz, entsteht Aliasing – man sieht eine Schwebung, die
+   gar nicht existiert. Abhilfe: Zeitbasis passend zur Signalfrequenz wählen; im Zweifel immer kontrollieren, ob die angezeigte Frequenz plausibel ist.
+
+</Loesung>
+
+## Frequenzspektrum mit dem Smartphone
+
+Mit einer Messapp (z. B. phyphox, Funktion „Audio-Spektrum“) wird ein Ton von 440 Hz eines Tongenerators und dann eine Gitarrensaite (A, 110 Hz) gemessen.
+
+1. Warum sieht man beim Tongenerator eine einzige Linie, bei der Gitarre viele?
+2. Das Mikrofon tastet mit 48 kHz ab. Bis zu welcher Frequenz kann gemessen werden?
+
+<Loesung>
+
+1. Der Generator erzeugt einen reinen **Sinus** – eine Frequenz. Die Gitarrensaite schwingt in Grundton (110 Hz) und vielen **Obertönen** (220, 330, 440 Hz …) – sie
+   bestimmen die Klangfarbe. Die FFT zerlegt das Signal in diese Anteile.
+2. Nach dem Abtasttheorem bis knapp $24\,\mathrm{kHz}$ – das reicht für das gesamte Hörspektrum.
+
+</Loesung>
+
+## Verstärker mit dem Funktionsgenerator prüfen
+
+Ein Audioverstärker (Eingangswiderstand 10 kΩ) soll mit 100 mV Effektivwert bei 1 kHz angesteuert werden. Der Generator ist auf 50-Ω-Last eingestellt.
+
+1. Welchen Spitze-Spitze-Wert musst du einstellen?
+2. Wie überprüfst du die tatsächliche Eingangsspannung?
+
+<Loesung>
+
+1. $U_\mathrm{ss} = 2\sqrt{2} \cdot 100\,\mathrm{mV} \approx 283\,\mathrm{mV}$. Weil der Verstärker hochohmig ist (≈ Leerlauf), verdoppelt sich die Spannung gegenüber der Anzeige →
+   am Generator **141 mVpp** einstellen (oder auf „High Z“ umstellen und 283 mVpp einstellen).
+2. Mit dem Oszilloskop direkt am Verstärkereingang messen (Vpp bzw. RMS-Messfunktion) – nicht der Anzeige des Generators blind vertrauen.
+
+</Loesung>

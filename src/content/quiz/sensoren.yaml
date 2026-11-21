@@ -1,0 +1,131 @@
+titel: Sensoren
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Sensoren sind aktive Sensoren (erzeugen selbst ein Signal ohne Hilfsenergie)?
+    optionen:
+      - text: Thermoelement
+        richtig: true
+      - text: Piezo-Aufnehmer
+        richtig: true
+      - text: Pt100
+      - text: Dehnungsmessstreifen
+    erklaerung: Pt100 und DMS ändern nur ihren Widerstand und brauchen einen Messstrom – sie sind passiv.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was gilt für einen Heißleiter (NTC)?
+    optionen:
+      - text: Sein Widerstand sinkt mit steigender Temperatur.
+        richtig: true
+      - text: Sein Widerstand steigt mit steigender Temperatur.
+      - text: Sein Widerstand hängt von der Spannung ab.
+      - text: Sein Widerstand sinkt mit zunehmendem Licht.
+    erklaerung: NTC = Negative Temperature Coefficient. Der Kaltleiter (PTC) verhält sich umgekehrt, der VDR hängt von der Spannung ab, der LDR vom Licht.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wofür wird ein Varistor (VDR) eingesetzt?
+    optionen:
+      - text: Als Überspannungsschutz parallel zum Gerät
+        richtig: true
+      - text: Als Temperatursensor
+      - text: Als Lichtsensor im Dämmerungsschalter
+      - text: Als Strombegrenzung in Reihe zur Last
+    erklaerung: Oberhalb seiner Ansprechspannung wird er schlagartig niederohmig und leitet die Überspannung ab.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was ist ein Pt100?
+    optionen:
+      - text: Ein Widerstandsthermometer aus Platin mit 100 Ω bei 0 °C
+        richtig: true
+      - text: Ein Thermoelement mit 100 µV/K
+      - text: Ein NTC mit 100 kΩ bei 25 °C
+      - text: Ein Drucksensor bis 100 bar
+    erklaerung: Platin ist stabil und fast linear (≈ 0,385 Ω/K). Bei 100 °C hat ein Pt100 rund 138,5 Ω.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein NTC hat R₂₅ = 10 kΩ und B = 3950 K. Wie groß ist sein Widerstand bei 0 °C (in kΩ)?'
+    loesung: 33.62
+    einheit: kΩ
+    erklaerung: '$R = 10\,\mathrm{k\Omega} \cdot \mathrm{e}^{3950 \cdot (1/273{,}15 - 1/298{,}15)} = 10\,\mathrm{k\Omega} \cdot \mathrm{e}^{1{,}213} \approx 33{,}6\,\mathrm{k\Omega}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Wie groß ist der Widerstand eines Pt100 bei 50 °C (A = 3,9083·10⁻³ /°C, B = −5,775·10⁻⁷ /°C²)?'
+    loesung: 119.40
+    einheit: Ω
+    toleranz: 0.05
+    toleranzArt: absolut
+    erklaerung: '$R = 100\,\Omega \cdot (1 + 0{,}195415 - 0{,}001444) \approx 119{,}40\,\Omega$. Linear gerechnet wären es 119,54 Ω.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Thermoelement Typ J (52 µV/K) liefert 13 mV, die Vergleichsstelle hat 20 °C. Wie heiß ist die Messstelle?'
+    loesung: 270
+    einheit: °C
+    erklaerung: '$\Delta\vartheta = 13\,\mathrm{mV}/52\,\mathrm{\mu V/K} = 250\,\mathrm{K}$ → $\vartheta_\mathrm{M} = 20\,°\mathrm{C} + 250\,\mathrm{K} = 270\,°\mathrm{C}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Wie heißt der Effekt, mit dem man elektrisch kühlen kann (z. B. Kühlbox fürs Auto)?
+    optionen:
+      - text: Peltier-Effekt
+        richtig: true
+      - text: Seebeck-Effekt
+      - text: Hall-Effekt
+      - text: Piezo-Effekt
+    erklaerung: Der Seebeck-Effekt (Thermoelement) erzeugt Spannung aus Temperaturdifferenz, der Peltier-Effekt erzeugt eine Temperaturdifferenz aus Strom.
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Größe ist mit einem DMS direkt messbar?
+    optionen:
+      - text: Die Dehnung
+        richtig: true
+      - text: Die Kraft
+      - text: Das Gewicht
+      - text: Der Druck
+    erklaerung: Kraft, Gewicht, Druck und Drehmoment misst man indirekt über die Dehnung eines Federkörpers.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein DMS (350 Ω, k = 2) wird um 500 µm/m gedehnt. Wie groß ist die Widerstandsänderung?'
+    loesung: 0.35
+    einheit: Ω
+    erklaerung: '$\Delta R = k \cdot \varepsilon \cdot R = 2 \cdot 500 \cdot 10^{-6} \cdot 350\,\Omega = 0{,}35\,\Omega$'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum misst ein Piezo-Aufnehmer keine statischen Kräfte (z. B. ein Gewicht über Stunden)?
+    optionen:
+      - text: Die erzeugte Ladung fließt über Isolations- und Eingangswiderstände ab.
+        richtig: true
+      - text: Weil Piezokristalle bei konstanter Kraft brechen
+      - text: Weil die Ladung mit der Zeit größer wird
+      - text: Weil Piezo-Aufnehmer eine Hilfsenergie brauchen
+    erklaerung: Nur Kraftänderungen erzeugen neue Ladung – geeignet für Schwingungen, Stöße, Beschleunigung.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Wovon hängt die Hallspannung ab?
+    optionen:
+      - text: Sie ist proportional zu Strom und magnetischer Flussdichte und umgekehrt proportional zur Plättchendicke.
+        richtig: true
+      - text: Sie hängt nur von der Temperatur ab.
+      - text: Sie ist proportional zur Dehnung.
+      - text: Sie entsteht nur bei Wechselstrom.
+    erklaerung: '$U_\mathrm{H} = R_\mathrm{H} \cdot I \cdot B/d$. Die Lorentzkraft lenkt die Ladungsträger zur Seite.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Welcher Sensor eignet sich am besten für die Temperaturregelung eines Kühlschranks?
+    optionen:
+      - text: NTC
+        richtig: true
+      - text: Thermoelement Typ S
+      - text: Varistor
+      - text: Hall-Sensor
+    erklaerung: Billig und im Bereich 0 … 10 °C sehr empfindlich. Ein Typ-S-Thermoelement ist für über 1000 °C gedacht und hat nur 10 µV/K.

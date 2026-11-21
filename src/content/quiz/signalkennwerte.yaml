@@ -1,0 +1,109 @@
+titel: Signalkennwerte
+fragen:
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Eine Periode dauert 2,5 ms. Wie groß ist die Frequenz?'
+    loesung: 400
+    einheit: Hz
+    erklaerung: '$f = 1/T = 1/(2{,}5 \cdot 10^{-3}\,\mathrm{s}) = 400\,\mathrm{Hz}$'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Eine Sinusspannung hat den Effektivwert 12 V. Wie groß ist der Spitze-Spitze-Wert?'
+    loesung: 33.94
+    einheit: V
+    erklaerung: '$\hat{u} = \sqrt{2} \cdot 12\,\mathrm{V} \approx 16{,}97\,\mathrm{V}$ → $U_\mathrm{ss} = 2\hat{u} \approx 33{,}9\,\mathrm{V}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was ist der Effektivwert einer Wechselspannung?
+    optionen:
+      - text: Der Wert einer Gleichspannung, die in einem Widerstand dieselbe Wärmeleistung erzeugt
+        richtig: true
+      - text: Der größte Wert in einer Periode
+      - text: Der Mittelwert über eine Periode
+      - text: Der Mittelwert des Betrags
+    erklaerung: 'RMS: quadrieren, mitteln, Wurzel ziehen. Der Mittelwert des Betrags ist der Gleichrichtwert.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie groß ist der arithmetische Mittelwert einer reinen Sinusspannung?
+    optionen:
+      - text: 'Null'
+        richtig: true
+      - text: 0,637 · û
+      - text: 0,707 · û
+      - text: û
+    erklaerung: Die Flächen über und unter der Zeitachse sind gleich groß – Kennzeichen einer reinen Wechselgröße.
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Werte haben Scheitelfaktor und Formfaktor beim Sinus?
+    optionen:
+      - text: 'kₛ = 1,414 und k_f = 1,111'
+        richtig: true
+      - text: 'kₛ = 1 und k_f = 1'
+      - text: 'kₛ = 1,732 und k_f = 1,155'
+      - text: 'kₛ = 1,111 und k_f = 1,414'
+    erklaerung: Rechteck hat 1 und 1, Dreieck 1,732 und 1,155.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Rechteck liegt 1 ms auf +8 V und 3 ms auf 0 V. Wie groß ist der Effektivwert?'
+    loesung: 4
+    einheit: V
+    erklaerung: '$U = \sqrt{(64\,\mathrm{V^2} \cdot 1\,\mathrm{ms})/4\,\mathrm{ms}} = \sqrt{16}\,\mathrm{V} = 4\,\mathrm{V}$ – der Mittelwert ist nur 2 V.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Rechteck liegt 2 ms auf +6 V und 2 ms auf −2 V. Wie groß ist der arithmetische Mittelwert?'
+    loesung: 2
+    einheit: V
+    erklaerung: '$\bar{u} = (6 \cdot 2 - 2 \cdot 2)\,\mathrm{V \cdot ms}/4\,\mathrm{ms} = 2\,\mathrm{V}$; der Gleichrichtwert wäre 4 V.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Eine Mischspannung besteht aus 14 V Gleichanteil und einem Wechselanteil mit 9 V Effektivwert. Wie groß ist der Gesamteffektivwert?'
+    loesung: 16.64
+    einheit: V
+    erklaerung: '$U = \sqrt{14^2 + 9^2}\,\mathrm{V} = \sqrt{277}\,\mathrm{V} \approx 16{,}64\,\mathrm{V}$ – quadratisch addieren, nicht 23 V!'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein PWM-Signal 0/24 V hat einen Tastgrad von 36 %. Wie groß ist der Effektivwert?'
+    loesung: 14.4
+    einheit: V
+    erklaerung: '$U = \sqrt{D} \cdot \hat{u} = 0{,}6 \cdot 24\,\mathrm{V} = 14{,}4\,\mathrm{V}$; der Mittelwert beträgt 8,64 V.'
+
+  - typ: mc
+    stufe: standard
+    frage: Was zeigt ein Multimeter in Stellung V DC bei einer Mischspannung an?
+    optionen:
+      - text: Den arithmetischen Mittelwert (Gleichanteil)
+        richtig: true
+      - text: Den Effektivwert
+      - text: Den Scheitelwert
+      - text: Den Spitze-Spitze-Wert
+    erklaerung: Der Wechselanteil mittelt sich heraus.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Ein einfaches (nicht True-RMS) Multimeter misst eine symmetrische Rechteckspannung. Was passiert?
+    optionen:
+      - text: Es zeigt etwa 11 % zu viel an.
+        richtig: true
+      - text: Es zeigt richtig an.
+      - text: Es zeigt etwa 11 % zu wenig an.
+      - text: Es zeigt null an.
+    erklaerung: 'Es misst den Gleichrichtwert (= û) und multipliziert mit dem Sinus-Formfaktor 1,111 – der Effektivwert des Rechtecks ist aber auch û.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Wozu gibt man den Scheitelfaktor eines Signals bzw. den maximalen Scheitelfaktor eines Messgeräts an?
+    optionen:
+      - text: Um zu beurteilen, ob spitze Signale (Impulse) noch richtig gemessen werden
+        richtig: true
+      - text: Um den Gleichanteil zu bestimmen
+      - text: Um die Frequenz zu berechnen
+      - text: Er hat in der Messtechnik keine Bedeutung.
+    erklaerung: Bei hohem Scheitelfaktor sind die Spitzen im Verhältnis zum Effektivwert groß – der Eingangsverstärker des Messgeräts kann übersteuern.

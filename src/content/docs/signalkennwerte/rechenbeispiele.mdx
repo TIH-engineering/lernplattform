@@ -1,0 +1,182 @@
+---
+title: Rechenbeispiele – Signalkennwerte
+description: Rechenbeispiele zu Periodendauer, Frequenz, Kreisfrequenz und Wellenlänge, Netzspannung, Phasenverschiebung, unsymmetrischem Rechtecksignal, Dreiecksignal, Mischspannung, PWM, Einweggleichrichtung und Messfehler eines Multimeters.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+
+## Periodendauer, Frequenz, Kreisfrequenz
+
+<Stufe wert="grundlagen" />
+
+Am Oszilloskop dauert eine Periode $2{,}5\,\mathrm{ms}$. Berechne Frequenz und Kreisfrequenz. Wie viele Perioden passen in $0{,}2\,\mathrm{s}$?
+
+<Loesung>
+
+$f = 1/T = 1/(2{,}5 \cdot 10^{-3}\,\mathrm{s}) = 400\,\mathrm{Hz}$ · $\omega = 2\pi f \approx 2513\,\mathrm{s^{-1}}$ · $n = 0{,}2\,\mathrm{s}/2{,}5\,\mathrm{ms} = 80$ Perioden
+
+</Loesung>
+
+## Wellenlänge eines Funksignals
+
+<Stufe wert="grundlagen" />
+
+Ein WLAN sendet bei $2{,}4\,\mathrm{GHz}$. Wie groß sind Wellenlänge und Periodendauer? Warum ist die Antenne im Router nur ein paar Zentimeter lang?
+
+<Loesung>
+
+$\lambda = c/f = 3 \cdot 10^{8}\,\mathrm{m/s} / 2{,}4 \cdot 10^{9}\,\mathrm{Hz} = 0{,}125\,\mathrm{m} = 12{,}5\,\mathrm{cm}$ · $T = 1/f \approx 0{,}42\,\mathrm{ns}$
+
+Eine einfache Stabantenne ist etwa $\lambda/4 \approx 3\,\mathrm{cm}$ lang.
+
+</Loesung>
+
+## Die Netzspannung
+
+<Stufe wert="grundlagen" />
+
+Berechne für die Netzspannung $U = 230\,\mathrm{V}$, $f = 50\,\mathrm{Hz}$: Scheitelwert, Spitze-Spitze-Wert, Gleichrichtwert und Periodendauer.
+Gib die Zeitfunktion an.
+
+<Loesung>
+
+$\hat{u} = \sqrt{2} \cdot 230\,\mathrm{V} \approx 325\,\mathrm{V}$ · $U_\mathrm{ss} = 2\hat{u} \approx 650\,\mathrm{V}$ ·
+$\overline{\lvert u \rvert} = U/k_\mathrm{f} = 230\,\mathrm{V}/1{,}111 \approx 207\,\mathrm{V}$ · $T = 20\,\mathrm{ms}$
+
+$u(t) = 325\,\mathrm{V} \cdot \sin(314\,\mathrm{s^{-1}} \cdot t)$
+
+</Loesung>
+
+## Phasenverschiebung
+
+<Stufe wert="standard" />
+
+Gegeben: $u(t) = 8\,\mathrm{V} \cdot \sin(\omega t + 45°)$ und $i(t) = 0{,}5\,\mathrm{A} \cdot \sin(\omega t - 15°)$, $f = 50\,\mathrm{Hz}$.
+Wie groß ist die Phasenverschiebung? Wer eilt voraus? Welcher Zeitverschiebung entspricht das?
+
+<Loesung>
+
+$\varphi = \varphi_u - \varphi_i = 45° - (-15°) = 60°$ – die **Spannung eilt** dem Strom um 60° **voraus**.
+
+$\Delta t = \dfrac{60°}{360°} \cdot 20\,\mathrm{ms} \approx 3{,}33\,\mathrm{ms}$
+
+</Loesung>
+
+## Sinussignal am Oszilloskop
+
+<Stufe wert="grundlagen" />
+
+Ein Sinussignal hat am Oszilloskop $U_\mathrm{ss} = 24\,\mathrm{V}$ und eine Periodendauer von 4 Kästchen bei $0{,}5\,\mathrm{ms/Div}$.
+Berechne Scheitelwert, Effektivwert, Frequenz und die Leistung an einem Widerstand von $10\,\Omega$.
+
+<Loesung>
+
+$\hat{u} = 12\,\mathrm{V}$ · $U = \hat{u}/k_\mathrm{s} = 12\,\mathrm{V}/1{,}414 \approx 8{,}49\,\mathrm{V}$ · $T = 4 \cdot 0{,}5\,\mathrm{ms} = 2\,\mathrm{ms}$ → $f = 500\,\mathrm{Hz}$
+
+$P = \dfrac{U^2}{R} = \dfrac{(8{,}49\,\mathrm{V})^2}{10\,\Omega} = 7{,}2\,\mathrm{W}$ (mit dem Effektivwert rechnen, nicht mit dem Scheitelwert!)
+
+</Loesung>
+
+## Unsymmetrisches Rechtecksignal
+
+<Stufe wert="standard" />
+
+Ein Rechtecksignal liegt $2\,\mathrm{ms}$ lang auf $+10\,\mathrm{V}$ und $3\,\mathrm{ms}$ lang auf $-5\,\mathrm{V}$. Berechne Frequenz, arithmetischen Mittelwert,
+Gleichrichtwert, Effektivwert, Scheitelfaktor und Formfaktor.
+
+<Loesung>
+
+$T = 5\,\mathrm{ms}$ → $f = 200\,\mathrm{Hz}$
+
+$$
+\bar{u} = \frac{10\,\mathrm{V} \cdot 2\,\mathrm{ms} + (-5\,\mathrm{V}) \cdot 3\,\mathrm{ms}}{5\,\mathrm{ms}} = 1\,\mathrm{V}
+\qquad
+\overline{\lvert u \rvert} = \frac{10\,\mathrm{V} \cdot 2\,\mathrm{ms} + 5\,\mathrm{V} \cdot 3\,\mathrm{ms}}{5\,\mathrm{ms}} = 7\,\mathrm{V}
+$$
+
+$$
+U = \sqrt{\frac{(10\,\mathrm{V})^2 \cdot 2\,\mathrm{ms} + (5\,\mathrm{V})^2 \cdot 3\,\mathrm{ms}}{5\,\mathrm{ms}}} = \sqrt{55}\,\mathrm{V} \approx 7{,}42\,\mathrm{V}
+$$
+
+$k_\mathrm{s} = 10\,\mathrm{V}/7{,}42\,\mathrm{V} \approx 1{,}35$ · $k_\mathrm{f} = 7{,}42\,\mathrm{V}/7\,\mathrm{V} \approx 1{,}06$
+
+</Loesung>
+
+## Dreiecksignal
+
+<Stufe wert="grundlagen" />
+
+Ein symmetrisches Dreiecksignal ohne Gleichanteil hat $\hat{u} = 6\,\mathrm{V}$. Berechne Mittelwert, Gleichrichtwert und Effektivwert.
+
+<Loesung>
+
+$\bar{u} = 0$ (reine Wechselgröße) · $\overline{\lvert u \rvert} = \hat{u}/2 = 3\,\mathrm{V}$ · $U = \hat{u}/\sqrt{3} \approx 3{,}46\,\mathrm{V}$
+
+</Loesung>
+
+## Mischspannung
+
+<Stufe wert="standard" />
+
+Hinter einem Netzteil liegt eine Gleichspannung von $12\,\mathrm{V}$ mit einer überlagerten sinusförmigen Brummspannung mit dem Scheitelwert $5\,\mathrm{V}$.
+
+1. Berechne Mittelwert und Effektivwert der Mischspannung.
+2. Welche Leistung setzt sie in einem Widerstand von $50\,\Omega$ um?
+
+<Loesung>
+
+1. $\bar{u} = 12\,\mathrm{V}$ · $U_\sim = 5\,\mathrm{V}/\sqrt{2} \approx 3{,}54\,\mathrm{V}$ · $U = \sqrt{(12\,\mathrm{V})^2 + (3{,}54\,\mathrm{V})^2} \approx 12{,}51\,\mathrm{V}$
+2. $P = U^2/R = 156{,}5\,\mathrm{V^2}/50\,\Omega \approx 3{,}13\,\mathrm{W}$ – davon 2,88 W vom Gleich- und 0,25 W vom Wechselanteil.
+
+</Loesung>
+
+## PWM-Signal an einer Heizung
+
+<Stufe wert="standard" />
+
+Eine Heizfolie ($R = 6\,\Omega$) wird mit PWM an $12\,\mathrm{V}$ betrieben, Tastgrad $D = 25\,\%$.
+
+1. Berechne Mittelwert und Effektivwert der Spannung.
+2. Welche Heizleistung ergibt sich? Vergleiche mit einer Gleichspannung in Höhe des Mittelwerts.
+
+<Loesung>
+
+1. $\bar{u} = D \cdot \hat{u} = 0{,}25 \cdot 12\,\mathrm{V} = 3\,\mathrm{V}$ · $U = \sqrt{D} \cdot \hat{u} = 0{,}5 \cdot 12\,\mathrm{V} = 6\,\mathrm{V}$
+2. $P = U^2/R = 36\,\mathrm{V^2}/6\,\Omega = 6\,\mathrm{W}$ (das sind genau 25 % von 24 W bei Dauerbetrieb). Mit 3 V Gleichspannung wären es nur
+   $9/6 = 1{,}5\,\mathrm{W}$ – für die Leistung zählt der **Effektivwert**.
+
+</Loesung>
+
+## Einweggleichrichtung
+
+<Stufe wert="standard" />
+
+Ein Sinus mit $\hat{u} = 10\,\mathrm{V}$ wird mit einer idealen Diode einweggleichgerichtet. Berechne Mittelwert, Effektivwert und Formfaktor.
+
+<Loesung>
+
+$\bar{u} = \hat{u}/\pi \approx 3{,}18\,\mathrm{V}$ · $U = \hat{u}/2 = 5\,\mathrm{V}$ (die Hälfte der Leistung des vollen Sinus: $U^2 = \tfrac{1}{2} \cdot (\hat{u}/\sqrt{2})^2$) ·
+$k_\mathrm{f} = 5/3{,}18 \approx 1{,}57$
+
+</Loesung>
+
+## Multimeter misst ein Rechteck
+
+<Stufe wert="vertiefung" />
+
+Ein einfaches Multimeter (misst den Gleichrichtwert und multipliziert mit 1,111) und ein True-RMS-Multimeter messen
+
+1. eine symmetrische Rechteckspannung mit $\hat{u} = 10\,\mathrm{V}$,
+2. eine Dreieckspannung mit $\hat{u} = 10\,\mathrm{V}$.
+
+Was zeigen die Geräte an? Wie groß ist der Fehler des einfachen Geräts?
+
+<Loesung>
+
+1. Rechteck: $\overline{\lvert u \rvert} = 10\,\mathrm{V}$ → einfaches Gerät: $1{,}111 \cdot 10\,\mathrm{V} = 11{,}1\,\mathrm{V}$; True RMS: $10\,\mathrm{V}$ → Fehler **+11 %**.
+2. Dreieck: $\overline{\lvert u \rvert} = 5\,\mathrm{V}$ → einfaches Gerät: $5{,}56\,\mathrm{V}$; True RMS: $10/\sqrt{3} = 5{,}77\,\mathrm{V}$ → Fehler **−3,8 %**.
+
+Allgemein: $F_\mathrm{r} = \dfrac{1{,}111}{k_\mathrm{f}} - 1$.
+
+</Loesung>

@@ -133,7 +133,22 @@ export default defineConfig({
 						}),
 					],
 				},
-				// 4) Projektmanagement: statt Rechenbeispielen Fallbeispiele und Diplomarbeits-Planung
+				// 4) Mess- und Regelungstechnik (MTRS): kein Lehrbuch → eigene Theorie
+				{
+					label: 'Mess- und Regelungstechnik',
+					items: [
+						thema('Grundlagen der Messtechnik', 'messtechnik'),
+						thema('Messfehler und Messunsicherheit', 'messfehler'),
+						thema('Signalkennwerte', 'signalkennwerte'),
+						thema('Sensoren', 'sensoren'),
+						thema('Messwerke und Messbereiche', 'messwerke'),
+						thema('Messbrücken', 'messbruecken'),
+						thema('Digitale Messtechnik', 'digitale-messtechnik'),
+						leer('Aktuatoren', 'aktuatoren'),
+						leer('Regelungstechnik', 'regelungstechnik'),
+					],
+				},
+				// 5) Projektmanagement: statt Rechenbeispielen Fallbeispiele
 				{
 					label: 'Projektmanagement',
 					collapsed: true,
@@ -141,19 +156,7 @@ export default defineConfig({
 						{ label: 'Übersicht', slug: 'projektmanagement' },
 						{ label: 'Theorie', slug: 'projektmanagement/theorie' },
 						{ label: 'Fallbeispiele', slug: 'projektmanagement/fallbeispiele' },
-						{ label: 'Diplomarbeit planen', slug: 'projektmanagement/diplomarbeit' },
 						{ label: 'Quiz', slug: 'projektmanagement/quiz' },
-					],
-				},
-				// 5) Noch in Arbeit
-				{
-					label: 'Weitere Themen',
-					collapsed: true,
-					items: [
-						leer('Sensoren', 'sensoren'),
-						leer('Aktuatoren', 'aktuatoren'),
-						leer('Messtechnik', 'messtechnik'),
-						leer('Regelungstechnik', 'regelungstechnik'),
 					],
 				},
 			],

@@ -1,0 +1,166 @@
+---
+title: Rechenbeispiele – Messfehler und Messunsicherheit
+description: Rechenbeispiele zu absolutem und relativem Fehler, Genauigkeitsklassen, Auswahl des Messgeräts, Mittelwert, Varianz, Standardabweichung, 95-%-Bereich eines Einzelwerts, Vertrauensbereich des Mittelwerts und Fehlerfortpflanzung.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+
+## Absoluter und relativer Fehler
+
+<Stufe wert="grundlagen" />
+
+Ein Laser-Entfernungsmesser zeigt $25{,}3\,\mathrm{m}$ an, die bekannte Strecke beträgt $25{,}0\,\mathrm{m}$. Berechne den absoluten und den relativen Fehler.
+
+<Loesung>
+
+$F = x_\mathrm{a} - x_\mathrm{r} = 25{,}3\,\mathrm{m} - 25{,}0\,\mathrm{m} = +0{,}3\,\mathrm{m}$ ·
+$F_\mathrm{r} = \dfrac{0{,}3\,\mathrm{m}}{25{,}0\,\mathrm{m}} \cdot 100\,\% = +1{,}2\,\%$ – die Anzeige ist zu hoch.
+
+</Loesung>
+
+## Fehlergrenze aus der Genauigkeitsklasse
+
+<Stufe wert="grundlagen" />
+
+Ein Strommesser der Klasse 1,0 hat den Messbereichsendwert $100\,\mathrm{A}$. Gib für die Anzeigen $90\,\mathrm{A}$, $40\,\mathrm{A}$ und $15\,\mathrm{A}$
+an, zwischen welchen Grenzen der richtige Wert liegt, und berechne jeweils den relativen Fehler.
+
+<Loesung>
+
+$G = \pm 1\,\% \cdot 100\,\mathrm{A} = \pm 1\,\mathrm{A}$ – gleich für alle Anzeigen:
+
+| Anzeige | Bereich | $G_\mathrm{r}$ bezogen auf die Anzeige |
+| --- | --- | --- |
+| 90 A | 89 … 91 A | ±1,1 % |
+| 40 A | 39 … 41 A | ±2,5 % |
+| 15 A | 14 … 16 A | ±6,7 % |
+
+Je kleiner der Ausschlag, desto größer der relative Fehler.
+
+</Loesung>
+
+## Welches Messgerät ist besser?
+
+<Stufe wert="standard" />
+
+Eine Spannung von etwa $20\,\mathrm{V}$ soll gemessen werden. Zur Wahl stehen
+
+- Gerät A: Klasse 1,5, Messbereich 60 V,
+- Gerät B: Klasse 2,5, Messbereich 30 V.
+
+Welches liefert die kleinere Fehlergrenze?
+
+<Loesung>
+
+Gerät A: $G = 1{,}5\,\% \cdot 60\,\mathrm{V} = \pm 0{,}9\,\mathrm{V}$ → $\pm 4{,}5\,\%$ von 20 V ·
+Gerät B: $G = 2{,}5\,\% \cdot 30\,\mathrm{V} = \pm 0{,}75\,\mathrm{V}$ → $\pm 3{,}75\,\%$
+
+**Gerät B** ist hier besser – trotz schlechterer Klasse, weil der Messwert näher am Bereichsendwert liegt (oberes Drittel).
+
+</Loesung>
+
+## Messreihe auswerten
+
+<Stufe wert="standard" />
+
+Eine Spannung wird fünfmal gemessen: $12{,}42$ · $12{,}38$ · $12{,}45$ · $12{,}40$ · $12{,}35$ (alle in V). Die Werte sind normalverteilt.
+
+1. Berechne Mittelwert, Stichprobenvarianz und Standardabweichung.
+2. In welchem Bereich liegt ein weiterer Einzelmesswert mit rund 95 % Wahrscheinlichkeit?
+3. Gib den 95-%-Vertrauensbereich des Mittelwerts an ($t = 2{,}78$ für $n = 5$).
+
+<Loesung>
+
+1. $\bar{U} = \dfrac{12{,}42 + 12{,}38 + 12{,}45 + 12{,}40 + 12{,}35}{5}\,\mathrm{V} = 12{,}40\,\mathrm{V}$
+
+   | $U_i$ in V | $U_i - \bar{U}$ in V | $(U_i - \bar{U})^2$ in V² |
+   | --- | --- | --- |
+   | 12,42 | +0,02 | 0,0004 |
+   | 12,38 | −0,02 | 0,0004 |
+   | 12,45 | +0,05 | 0,0025 |
+   | 12,40 | 0 | 0 |
+   | 12,35 | −0,05 | 0,0025 |
+   | | Summe | 0,0058 |
+
+   $s^2 = \dfrac{0{,}0058\,\mathrm{V^2}}{5 - 1} = 0{,}00145\,\mathrm{V^2}$ · $s = \sqrt{0{,}00145\,\mathrm{V^2}} \approx 0{,}038\,\mathrm{V}$
+2. $\bar{U} \pm 2s = 12{,}40\,\mathrm{V} \pm 0{,}076\,\mathrm{V}$ → **12,32 V … 12,48 V**
+3. $\Delta = \dfrac{t \cdot s}{\sqrt{n}} = \dfrac{2{,}78 \cdot 0{,}038\,\mathrm{V}}{\sqrt{5}} \approx 0{,}047\,\mathrm{V}$ → $U = (12{,}400 \pm 0{,}047)\,\mathrm{V}$, also **12,353 V … 12,447 V**
+
+Der Vertrauensbereich des Mittelwerts ist schmaler als der Bereich eines Einzelwerts.
+
+</Loesung>
+
+## Gesamtaufgabe im Teststil
+
+<Stufe wert="standard" />
+
+Ein Widerstand wird mit vier Messungen bestimmt: $101{,}2$ · $100{,}8$ · $101{,}5$ · $100{,}9$ (alle in Ω). Der Sollwert ist $100{,}0\,\Omega$.
+
+1. Berechne Mittelwert, Varianz und Standardabweichung.
+2. Gib den 95-%-Vertrauensbereich des Mittelwerts an ($t = 3{,}18$).
+3. Wie groß ist die Abweichung des Mittelwerts vom Sollwert (absolut und relativ)? Liegt der Sollwert im Vertrauensbereich?
+
+<Loesung>
+
+1. $\bar{R} = 101{,}1\,\Omega$ · Abweichungen $+0{,}1$, $-0{,}3$, $+0{,}4$, $-0{,}2$ → Summe der Quadrate $0{,}30\,\Omega^2$ →
+   $s^2 = 0{,}30/3 = 0{,}10\,\Omega^2$ · $s \approx 0{,}316\,\Omega$
+2. $\Delta = 3{,}18 \cdot 0{,}316\,\Omega / \sqrt{4} \approx 0{,}50\,\Omega$ → $R = (101{,}1 \pm 0{,}5)\,\Omega$, also 100,6 … 101,6 Ω
+3. $F = 101{,}1 - 100{,}0 = +1{,}1\,\Omega$, $F_\mathrm{r} = +1{,}1\,\%$. Der Sollwert liegt **außerhalb** des Vertrauensbereichs – die Abweichung ist also
+   nicht bloß Zufall: Entweder hat der Widerstand tatsächlich 101 Ω (Toleranz!), oder das Messgerät hat einen systematischen Fehler.
+
+</Loesung>
+
+## Leistung aus Spannung und Strom
+
+<Stufe wert="standard" />
+
+Eine Verlustleistung wird indirekt gemessen: $U = 15\,\mathrm{V}$ (Voltmeter Klasse 0,5, Bereich 20 V), $I = 3\,\mathrm{A}$ (Amperemeter Klasse 1, Bereich 10 A).
+Berechne $P$ und die maximale Fehlergrenze.
+
+<Loesung>
+
+$P = U \cdot I = 45\,\mathrm{W}$ · $\Delta U = 0{,}5\,\% \cdot 20\,\mathrm{V} = 0{,}10\,\mathrm{V}$ · $\Delta I = 1\,\% \cdot 10\,\mathrm{A} = 0{,}10\,\mathrm{A}$
+
+Beim Produkt addieren sich die **relativen** Fehler:
+$\dfrac{\Delta P}{P} = \dfrac{0{,}10}{15} + \dfrac{0{,}10}{3} = 0{,}67\,\% + 3{,}33\,\% = 4{,}0\,\%$ → $P = (45{,}0 \pm 1{,}8)\,\mathrm{W}$
+
+Der Strommesser dominiert – er wird nur zu 30 % ausgenutzt. Ein kleinerer Strombereich (z. B. 5 A) würde den Fehler fast halbieren.
+
+</Loesung>
+
+## Widerstand aus Spannung und Strom
+
+<Stufe wert="vertiefung" />
+
+$U = 12{,}0\,\mathrm{V}$ (Fehlergrenze ±0,2 V), $I = 0{,}300\,\mathrm{A}$ (Fehlergrenze ±0,015 A). Berechne $R$ mit (a) Größtfehler und (b) quadratischer
+Addition (die Fehler sind zufällig und unabhängig).
+
+<Loesung>
+
+$R = U/I = 40{,}0\,\Omega$ · relative Fehler: $\dfrac{0{,}2}{12} = 1{,}67\,\%$, $\dfrac{0{,}015}{0{,}3} = 5{,}0\,\%$
+
+(a) Größtfehler: $1{,}67\,\% + 5{,}0\,\% = 6{,}67\,\%$ → $R = (40{,}0 \pm 2{,}7)\,\Omega$
+
+(b) quadratisch: $\sqrt{1{,}67^2 + 5{,}0^2}\,\% \approx 5{,}27\,\%$ → $R = (40{,}0 \pm 2{,}1)\,\Omega$
+
+Auch beim Quotienten addieren sich die relativen Fehler (nicht subtrahieren!) – ein Fehler im Nenner kann das Ergebnis genauso in die
+ungünstige Richtung verschieben.
+
+</Loesung>
+
+## Strom aus einer Knotenregel
+
+<Stufe wert="vertiefung" />
+
+An einem Knoten werden drei Ströme gemessen: $I_1 = 4{,}2\,\mathrm{A}$ fließt zu, $I_2 = 1{,}5\,\mathrm{A}$ und $I_3 = 0{,}9\,\mathrm{A}$ fließen ab. Alle Messgeräte haben
+Klasse 1,5, Bereich 5 A. Berechne den vierten (abfließenden) Strom $I_4$ mit Fehlergrenze.
+
+<Loesung>
+
+$I_4 = I_1 - I_2 - I_3 = 4{,}2 - 1{,}5 - 0{,}9 = 1{,}8\,\mathrm{A}$ · Fehlergrenze je Gerät: $1{,}5\,\% \cdot 5\,\mathrm{A} = 0{,}075\,\mathrm{A}$
+
+Bei Summen und Differenzen addieren sich die **absoluten** Fehler: $\Delta I_4 = 3 \cdot 0{,}075\,\mathrm{A} = 0{,}225\,\mathrm{A}$ →
+$I_4 = (1{,}8 \pm 0{,}23)\,\mathrm{A}$, also ±12,5 %. Direkt mit einem vierten Gerät gemessen wären es nur ±0,075 A.
+
+</Loesung>

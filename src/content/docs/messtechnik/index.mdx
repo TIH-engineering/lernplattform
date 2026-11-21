@@ -1,12 +1,37 @@
 ---
-title: Messtechnik
-description: "Messfehler, Messgeräte, Oszilloskop, Messbrücken."
+title: Grundlagen der Messtechnik
+description: "Messen, SI-Einheiten, Messgröße und Messwert, Messkette, Mess- und Anzeigebereich, Kennlinie, Empfindlichkeit, Linearisierung, Drift, Kalibrieren, Justieren, Eichen und Messverfahren."
+sidebar:
+  label: Übersicht
 ---
 
-:::note[In Arbeit]
-Dieser Themenbereich wird gerade erstellt. Schau bald wieder vorbei!
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Bevor man regeln, überwachen oder optimieren kann, muss man **messen**. Ein Thermostat braucht die Raumtemperatur, ein E-Bike die
+Tretkraft, ein Ladegerät Strom und Spannung. Hier lernst du die Begriffe und Werkzeuge, mit denen jede Messung beschrieben wird – von der
+Einheit bis zur Kennlinie des Sensors.
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- erklären, was Messen bedeutet, und elektrische und nichtelektrische Größen mit SI-Einheiten angeben,
+- die Begriffe Messgröße, Messwert, Messbereich, Anzeigebereich, Drift und Hysterese erklären,
+- den Aufbau einer **Messkette** beschreiben und Aufgaben der Signalverarbeitung nennen,
+- aus einer Kennlinie die **Empfindlichkeit** bestimmen und eine nichtlineare Kennlinie **linearisieren**,
+- **Kalibrieren, Justieren und Eichen** unterscheiden,
+- Messverfahren einteilen: direkt/indirekt, analog/digital, Ausschlag/Kompensation.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="SI-Einheiten, Begriffe, Messkette, Kennlinie, Empfindlichkeit, Linearisierung, Messverfahren" href="/messtechnik/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="Einheiten, Empfindlichkeit, Linearisierung, Korrektur" href="/messtechnik/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Messkette eines Thermometers, Personenwaage, Thermometer kalibrieren, Smartphone als Messgerät" href="/messtechnik/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen" href="/messtechnik/quiz/" />
+</CardGrid>
+
+:::tip[Weiter in der Messtechnik]
+[Messfehler und Messunsicherheit](/messfehler/) → [Signalkennwerte](/signalkennwerte/) → [Sensoren](/sensoren/) →
+[Messwerke und Messbereiche](/messwerke/) → [Messbrücken](/messbruecken/) → [Digitale Messtechnik](/digitale-messtechnik/)
 :::
-
-**Geplante Inhalte:** Messfehler, Messgeräte, Oszilloskop, Messbrücken.
-
-Wie bei allen Themenbereichen wird es **Theorie**, **Rechenbeispiele**, **Praxisbeispiele** und ein **Quiz** geben.

@@ -1,0 +1,158 @@
+---
+title: Theorie – Digitale Messtechnik und Laborgeräte
+description: "Analoge und digitale Signale, Abtastung und Quantisierung, A/D-Umsetzer mit Auflösung, LSB, Kennlinie und Quantisierungsfehler, Parallel-, SAR-, Dual-Slope- und Sigma-Delta-Verfahren, Sample-and-Hold, Abtasttheorem und Aliasing, D/A-Umsetzer mit R-2R-Netzwerk und PWM, Digitalmultimeter mit Counts und Genauigkeitsangabe, Oszilloskop mit Trigger, Kopplung, Bandbreite und Tastkopf, Funktionsgenerator mit 50-Ω-Ausgang."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import ADC from '../../../assets/mtrs/adc-kennlinie.svg';
+
+## 1 · Vom analogen zum digitalen Signal
+
+Ein analoges Signal ist **zeit- und wertkontinuierlich**: Es hat zu jedem Zeitpunkt einen beliebigen Wert. Ein Mikrocontroller kann nur endlich viele Zahlen zu
+bestimmten Zeitpunkten speichern. Die Umwandlung hat deshalb zwei Schritte:
+
+1. **Abtasten** (zeitdiskret machen): Das Signal wird in festen Abständen $T_\mathrm{a}$ gemessen – mit der **Abtastfrequenz** $f_\mathrm{a} = 1/T_\mathrm{a}$.
+2. **Quantisieren** (wertdiskret machen): Jeder Abtastwert wird der nächstgelegenen von $2^n$ möglichen Stufen zugeordnet und als **Binärzahl** ausgegeben.
+
+**Vorteile digitaler Messtechnik:** keine Ablesefehler, Werte lassen sich speichern, übertragen, verrechnen und störsicher weiterleiten. **Nachteile:** begrenzte
+Auflösung, zusätzlicher Quantisierungsfehler, Aliasing bei zu kleiner Abtastrate.
+
+## 2 · Der A/D-Umsetzer
+
+<Abbildung bild={ADC} unterschrift="Kennlinie eines idealen 3-Bit-A/D-Umsetzers: 8 Stufen, jede Stufe ist 1 LSB breit" />
+
+Ein A/D-Umsetzer (ADC, *analog-to-digital converter*) mit **n Bit** teilt den Eingangsbereich $0 \ldots U_\mathrm{ref}$ in $2^n$ **Quantisierungsstufen**. Die
+kleinste Stufe heißt **LSB** (*least significant bit*):
+
+$$
+U_\mathrm{LSB} = \frac{U_\mathrm{ref}}{2^n}
+\qquad
+N = \frac{U_\mathrm{e}}{U_\mathrm{LSB}} \;(\text{ganzzahlig})
+\qquad
+U_\mathrm{e} \approx N \cdot U_\mathrm{LSB}
+$$
+
+| Auflösung | Stufen | LSB bei 5 V | LSB bei 3,3 V |
+| --- | --- | --- | --- |
+| 8 Bit | 256 | 19,5 mV | 12,9 mV |
+| 10 Bit | 1024 | 4,88 mV | 3,22 mV |
+| 12 Bit | 4096 | 1,22 mV | 0,81 mV |
+| 16 Bit | 65 536 | 76 µV | 50 µV |
+| 24 Bit | 16,8 Mio. | 0,3 µV | 0,2 µV |
+
+### Quantisierungsfehler
+
+Alle Spannungen innerhalb einer Stufe bekommen **denselben** Digitalwert – die Information, wo genau in der Stufe der Wert lag, geht verloren. Beim idealen
+Umsetzer, der zur nächstgelegenen Stufe rundet, beträgt der **Quantisierungsfehler höchstens ±½ LSB**:
+
+$$
+F_\mathrm{Q,max} = \pm\frac{1}{2} U_\mathrm{LSB} = \pm\frac{U_\mathrm{ref}}{2^{n+1}}
+$$
+
+(Ein Umsetzer, der nur abschneidet, hat einen Fehler von 0 … −1 LSB.) Dazu kommen bei realen Umsetzern **Offset-, Verstärkungs- und Linearitätsfehler** sowie
+Rauschen. Die Genauigkeit hängt außerdem direkt von der **Referenzspannung** ab: Ist $U_\mathrm{ref}$ um 1 % falsch, sind alle Messwerte um 1 % falsch.
+
+Mehr Bits verkleinern den Quantisierungsfehler. Sinnvoll sind sie aber nur, wenn Referenz, Rauschen und die übrige Messkette ebenso gut sind.
+
+### Wandlungsverfahren
+
+| Verfahren | Prinzip | Geschwindigkeit | Auflösung | typisch in |
+| --- | --- | --- | --- | --- |
+| **Parallel (Flash)** | $2^n - 1$ Komparatoren vergleichen gleichzeitig mit allen Stufen | sehr schnell (GHz) | klein (6 … 8 Bit) | Oszilloskope |
+| **Sukzessive Approximation (SAR)** | Bit für Bit vom MSB zum LSB, mit D/A-Umsetzer und Komparator | schnell (bis MHz) | 10 … 18 Bit | Mikrocontroller |
+| **Dual-Slope (Zweirampen)** | Kondensator wird eine feste Zeit mit $U_\mathrm{e}$ geladen und mit $U_\mathrm{ref}$ entladen, Zeit wird gezählt | langsam | hoch | Digitalmultimeter (unterdrückt 50-Hz-Störungen) |
+| **Sigma-Delta** | sehr schnelles 1-Bit-Abtasten und digitales Filtern | mittel | sehr hoch (16 … 24 Bit) | Waagen, Audio, Präzisionsmessung |
+
+### Sukzessive Approximation (SAR)
+
+Wie beim Zahlenraten mit „höher/tiefer“: Der Umsetzer setzt zuerst das höchste Bit (halber Bereich) und vergleicht mit dem Komparator.
+
+1. MSB auf 1 setzen → D/A-Umsetzer liefert $U_\mathrm{ref}/2$.
+2. Ist $U_\mathrm{e} \geq U_\mathrm{DAC}$, bleibt das Bit **1**, sonst wird es auf **0** zurückgesetzt.
+3. Nächstes Bit auf 1 setzen, vergleichen … bis zum LSB.
+
+Nach genau $n$ Schritten steht das Ergebnis fest. Während der Wandlung darf sich $U_\mathrm{e}$ nicht ändern – davor sitzt eine **Abtast-Halte-Schaltung**
+(*Sample & Hold*), die den Wert in einem Kondensator „einfriert“.
+
+## 3 · Abtasttheorem
+
+Damit ein Signal aus seinen Abtastwerten wieder eindeutig rekonstruiert werden kann, muss die Abtastfrequenz **mehr als doppelt** so groß sein wie die
+höchste im Signal enthaltene Frequenz (**Abtasttheorem**, Nyquist-Shannon):
+
+$$
+f_\mathrm{a} > 2 \cdot f_\mathrm{max}
+$$
+
+Sonst entsteht **Aliasing**: Zu hohe Frequenzen erscheinen als falsche, tiefe Frequenzen (bei $\lvert f - k \cdot f_\mathrm{a} \rvert$) – wie sich drehende Wagenräder im
+Film, die scheinbar rückwärts laufen. Abhilfe: ein **Tiefpass vor dem A/D-Umsetzer** (Anti-Aliasing-Filter), siehe [Filter – Praxisbeispiele](/filter/praxisbeispiele/).
+
+## 4 · D/A-Umsetzer
+
+Der D/A-Umsetzer (DAC) macht aus einer Zahl $N$ wieder eine Spannung: $U_\mathrm{a} = N \cdot U_\mathrm{ref}/2^n$.
+
+- **R-2R-Netzwerk:** eine Leiter aus Widerständen mit nur zwei Werten ($R$ und $2R$). Jedes Bit schaltet einen Zweig zwischen Referenz und Masse; jede Stufe
+  halbiert den Strom. Einfach, genau, schnell.
+- **PWM mit Tiefpass:** Ein Mikrocontroller gibt ein PWM-Signal aus; ein RC-Tiefpass bildet den **Mittelwert** $D \cdot U_\mathrm{B}$ (siehe
+  [Signalkennwerte](/signalkennwerte/theorie/)). Billig, aber langsam und mit Restwelligkeit.
+
+## 5 · Digitalmultimeter
+
+**Aufbau:** Eingangsspannungsteiler (Bereichswahl) → bei AC Gleichrichter bzw. **True-RMS**-Umsetzer → A/D-Umsetzer (meist Dual-Slope) → Anzeige. Für Strom ein
+Shunt, für Widerstand eine Konstantstromquelle.
+
+**Anzeigeumfang (Counts):** Ein „3½-stelliges“ Gerät zeigt bis **1999** (2000 Counts), ein „6000-Count“-Gerät bis 5999. Die letzte Stelle bestimmt die
+**Auflösung**: im 200-V-Bereich eines 2000-Count-Geräts 0,1 V.
+
+**Genauigkeitsangabe:** Statt einer Klasse geben Hersteller an
+
+$$
+\pm\,(\,p\,\%\ \text{vom Messwert} + d\ \text{Digits}\,)
+$$
+
+Ein **Digit** ist eine Einheit der letzten angezeigten Stelle. Beispiel: ±(0,5 % + 3 Digits) bei der Anzeige 123,4 V → $0{,}005 \cdot 123{,}4\,\mathrm{V} + 3 \cdot 0{,}1\,\mathrm{V} = \pm 0{,}92\,\mathrm{V}$.
+Auch hier gilt: im kleinsten passenden Bereich messen.
+
+**Weitere Eigenschaften:** Eingangswiderstand meist **10 MΩ** im Spannungsbereich, Bandbreite im AC-Bereich oft nur wenige hundert Hz bis kHz (Datenblatt!),
+Zusatzfunktionen Durchgangsprüfer, Diodentest, Kapazität, Frequenz, Temperatur. Und: die **Messkategorie** (CAT) beachten – siehe
+[Messfehler – Praxisbeispiele](/messfehler/praxisbeispiele/).
+
+## 6 · Oszilloskop
+
+Das Oszilloskop stellt den **zeitlichen Verlauf** einer Spannung dar: senkrecht die Spannung, waagrecht die Zeit.
+
+| Einstellung | Bedeutung |
+| --- | --- |
+| **V/Div** (Ablenkkoeffizient) | Spannung pro Kästchen (Division) senkrecht |
+| **s/Div** (Zeitbasis) | Zeit pro Kästchen waagrecht |
+| **Trigger** | startet die Darstellung immer an derselben Stelle des Signals (Flanke steigend/fallend, **Pegel**) → stehendes Bild |
+| Trigger-Modus | **Auto** (zeichnet auch ohne Trigger), **Normal** (nur bei Trigger), **Single** (einmalig, für einmalige Vorgänge) |
+| **Kopplung** | **DC**: Gleich- und Wechselanteil · **AC**: Gleichanteil wird abgetrennt (Brummen auf einer Gleichspannung vergrößert ansehen) · **GND**: Nulllinie |
+| Messfunktionen, Cursor | automatische Kennwerte (Frequenz, Vpp, Mittelwert, RMS) und Zeit-/Spannungsmessung mit Linien |
+| FFT | zeigt das **Frequenzspektrum** des Signals |
+
+**Ablesen:** Spannung = Kästchen × V/Div, Zeit = Kästchen × s/Div.
+
+**Bandbreite:** die Frequenz, bei der ein Sinus um 3 dB (auf 70,7 %) gedämpft angezeigt wird. Faustregel: Bandbreite mindestens **3- bis 5-mal** so groß wie die
+höchste interessierende Frequenz. Für Rechtecksignale ist die **Anstiegszeit** wichtig: $t_\mathrm{r} \approx 0{,}35/B$. Die **Abtastrate** sollte noch deutlich
+höher sein (z. B. 1 GSa/s bei 100 MHz).
+
+### Tastkopf
+
+Ein **10:1-Tastkopf** teilt die Spannung durch 10 und erhöht den Eingangswiderstand von 1 MΩ auf **10 MΩ** – die Schaltung wird viel weniger belastet, auch kapazitiv.
+Am Oszilloskop muss der Faktor eingestellt sein (sonst ist die Anzeige um Faktor 10 falsch). Der Tastkopf hat einen kleinen Trimmkondensator und muss mit dem
+**Rechtecksignal** des Oszilloskops **abgeglichen** werden: Die Ecken müssen genau rechteckig sein (nicht überschwingend, nicht abgerundet).
+
+:::danger[Masse des Oszilloskops]
+Die Masseklemme des Tastkopfs ist über das Netzkabel mit dem **Schutzleiter** verbunden. Klemmt man sie an einen Punkt, der nicht auf Erdpotential liegt (z. B. im
+Netzteil auf der Primärseite), entsteht ein **Kurzschluss**. Netzspannungen und „schwebende“ Potenziale nur mit **Differenztastkopf** oder einem isolierten Gerät
+messen – nie den Schutzleiter abklemmen!
+:::
+
+## 7 · Funktionsgenerator
+
+Ein Funktionsgenerator liefert **Sinus, Rechteck, Dreieck**, Impulse und oft beliebige Kurven. Einstellbar sind Frequenz, **Amplitude** (meist als Vpp), **Offset**
+(Gleichanteil) und beim Rechteck der **Tastgrad**.
+
+Der Ausgang hat einen **Innenwiderstand von 50 Ω**. Die eingestellte Amplitude gilt in der Regel für eine **50-Ω-Last**. Schließt man ihn an eine hochohmige
+Schaltung oder direkt ans Oszilloskop (1 MΩ) an, ist die Spannung **doppelt so groß** wie angezeigt. Viele Geräte lassen sich auf „High Z“ umstellen, dann stimmt die
+Anzeige für hochohmige Lasten.

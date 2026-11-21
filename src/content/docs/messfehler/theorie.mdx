@@ -1,0 +1,190 @@
+---
+title: Theorie – Messfehler und Messunsicherheit
+description: "Ursachen von Messfehlern, absoluter und relativer Messfehler, Bezugsgrößen, systematische und zufällige Fehler, Berichtigung, arithmetischer Mittelwert, Varianz und Standardabweichung mit Bessel-Korrektur, Normalverteilung, Vertrauensbereich mit Student-t-Faktor, Messunsicherheit, Genauigkeitsklassen und Fehlergrenzen, dynamischer Messfehler, Fehlerfortpflanzung."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Normal from '../../../assets/mtrs/normalverteilung.svg';
+
+## 1 · Woher kommen Messfehler?
+
+Jedes Messergebnis ist mit Abweichungen behaftet. Typische Ursachen:
+
+- **Rückwirkung** des Messgeräts auf das Messobjekt: Ein Temperaturfühler entzieht Wärme, ein Spannungsmesser belastet die Schaltung,
+  ein Strommesser hat einen Innenwiderstand (**Schaltungseinfluss**).
+- **Umwelteinflüsse:** Temperatur, Feuchte, magnetische Fremdfelder, Erschütterungen (**Einflussfehler**).
+- **Gerätefehler:** unvollkommene Kalibrierung, Nichtlinearität, Alterung, Drift.
+- **Persönliche Fehler:** falsches Ablesen (z. B. schräg auf die Skala schauen – Parallaxe), falsche Bedienung, falscher Messbereich.
+
+Den **wahren Wert** einer Messgröße kennt man nie genau. Man arbeitet deshalb mit einem **richtigen Wert** (Referenzwert), der deutlich genauer
+bekannt ist – z. B. aus einem Präzisionsgerät oder einem **Normal**.
+
+## 2 · Absoluter und relativer Fehler
+
+$$
+\text{absoluter Fehler:}\quad F = x_\mathrm{a} - x_\mathrm{r}
+\qquad\qquad
+\text{relativer Fehler:}\quad F_\mathrm{r} = \frac{F}{x_\mathrm{B}} \cdot 100\,\%
+$$
+
+$x_\mathrm{a}$ = angezeigter (gemessener) Wert, $x_\mathrm{r}$ = richtiger Wert. Merkregel: **Fehler = Ist − Soll**. Ein positiver Fehler heißt,
+die Anzeige ist zu hoch.
+
+Die **Bezugsgröße** $x_\mathrm{B}$ ist meist der richtige Wert $x_\mathrm{r}$. Bei Messgeräten mit Genauigkeitsklasse bezieht man sich dagegen
+auf den **Messbereichsendwert** $x_\mathrm{e}$. Der relative Fehler hat keine Einheit, man gibt ihn in % oder ppm an.
+
+## 3 · Systematische und zufällige Fehler
+
+| | systematische Fehler | zufällige Fehler |
+| --- | --- | --- |
+| Verhalten | bei Wiederholung unter gleichen Bedingungen **gleich** (Betrag und Vorzeichen) | streuen **regellos** nach beiden Seiten, Vorzeichen wechselt |
+| Ursachen | Kalibrierfehler, Offset, Innenwiderstand, bekannte Einflussgrößen | Rauschen, kleine unkontrollierbare Einflüsse, Ableseschwankungen |
+| Erkennen | **Kalibrierung**, Vergleich mit einem genaueren Referenzgerät | **Messwiederholungen** und Statistik |
+| Umgang | **berichtigen** (Korrektur $K = -F$) oder Ursache beseitigen | **mitteln**, Streuung angeben (Standardabweichung, Vertrauensbereich) |
+
+Systematische Fehler lassen sich durch Mitteln **nicht** verkleinern – zehn Messungen mit einem falsch kalibrierten Gerät sind zehnmal
+gleich falsch.
+
+## 4 · Statistik einer Messreihe
+
+Wird dieselbe Größe $n$-mal unter gleichen Bedingungen gemessen ($x_1 \ldots x_n$), wertet man so aus:
+
+**Arithmetischer Mittelwert** – der beste Schätzwert für die Messgröße:
+
+$$
+\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i = \frac{x_1 + x_2 + \ldots + x_n}{n}
+$$
+
+**Varianz** – mittlere quadratische Abweichung vom Mittelwert. Bei einer **Stichprobe** (wenige Messungen) teilt man durch $n - 1$
+(**Bessel-Korrektur**), weil der Mittelwert selbst aus denselben Daten geschätzt wurde und die Streuung sonst unterschätzt würde:
+
+$$
+s^2 = \frac{1}{n - 1} \sum_{i=1}^{n} (x_i - \bar{x})^2
+$$
+
+**Standardabweichung** – Maß für die Streuung, in derselben Einheit wie die Messwerte:
+
+$$
+s = \sqrt{s^2}
+$$
+
+Für sehr viele Messungen ($n \to \infty$) geht $s$ in die Standardabweichung $\sigma$ der Grundgesamtheit über (dort wird durch $n$ geteilt).
+
+**Rechenweg mit Tabelle:** Spalte $x_i$ → Spalte $x_i - \bar{x}$ → Spalte $(x_i - \bar{x})^2$ → Summe → durch $n - 1$ → Wurzel. Viele
+Taschenrechner haben dafür einen Statistikmodus (Taste $s_x$ bzw. $\sigma_{n-1}$).
+
+## 5 · Normalverteilung
+
+<Abbildung bild={Normal} unterschrift="Gauß’sche Normalverteilung: Anteil der Messwerte in den Bereichen ±σ, ±2σ und ±3σ" />
+
+Wirken viele kleine, voneinander unabhängige Einflüsse zusammen, verteilen sich die Messwerte nach der **Gauß’schen Glockenkurve**
+(Normalverteilung). Dann liegen
+
+| Bereich | Anteil der Messwerte |
+| --- | --- |
+| $\bar{x} \pm 1s$ | 68,3 % |
+| $\bar{x} \pm 2s$ | 95,5 % (≈ 95 %) |
+| $\bar{x} \pm 3s$ | 99,7 % |
+
+**Für einen einzelnen Messwert** gilt also: Mit rund 95 % Wahrscheinlichkeit liegt der nächste Messwert im Bereich $\bar{x} \pm 2s$. Die
+Fläche unter der Kurve entspricht der Wahrscheinlichkeit (statistische Sicherheit $P$).
+
+## 6 · Vertrauensbereich des Mittelwerts
+
+Auch der Mittelwert ist nur ein Schätzwert. Wie genau ist er? Mit der **Student-Verteilung** gibt man einen **Vertrauensbereich** an, in dem
+der wahre Wert mit der statistischen Sicherheit $P$ liegt:
+
+$$
+x = \bar{x} \pm \frac{t \cdot s}{\sqrt{n}}
+$$
+
+Der **Vertrauensfaktor** $t$ hängt von $P$ und von der Anzahl $n$ der Messungen ab. Für $P = 95\,\%$:
+
+| $n$ | 3 | 4 | 5 | 6 | 8 | 10 | 20 | ∞ |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| $t$ | 4,30 | 3,18 | 2,78 | 2,57 | 2,36 | 2,26 | 2,09 | 1,96 |
+
+Bei wenigen Messungen ist $t$ groß (man weiß wenig), bei vielen nähert er sich 1,96 (Normalverteilung). Durch das $\sqrt{n}$ im Nenner wird der
+Vertrauensbereich mit mehr Messungen **schmaler**: Viermal so viele Messungen halbieren ihn ungefähr.
+
+:::caution[Zwei verschiedene 95-%-Aussagen – nicht verwechseln!]
+| Frage | Formel | beschreibt |
+| --- | --- | --- |
+| Wo liegt ein **einzelner** Messwert? | $\bar{x} \pm 2s$ | die **Streuung** der Messwerte |
+| Wo liegt der **wahre Wert** (Mittelwert)? | $\bar{x} \pm t \cdot s / \sqrt{n}$ | die **Unsicherheit des Mittelwerts** |
+:::
+
+### Messunsicherheit und Messergebnis
+
+Die **Messunsicherheit** $u$ fasst den zufälligen Anteil (Vertrauensbereich) und die nur abschätzbaren, nicht korrigierten systematischen Anteile
+(z. B. Fehlergrenzen des Messgeräts) zusammen. Ein vollständiges Messergebnis lautet:
+
+$$
+x = \bar{x} \pm u \qquad \text{z. B. } U = (12{,}40 \pm 0{,}05)\,\mathrm{V}
+$$
+
+**Genauigkeit** ist ein qualitativer Begriff (Nähe zum richtigen Wert) – als Zahl gibt man Fehlergrenzen oder die Unsicherheit an.
+
+## 7 · Genauigkeitsklassen
+
+Analoge Messgeräte werden in **Genauigkeitsklassen** eingeteilt. Die Klasse gibt die **Fehlergrenze in Prozent vom Messbereichsendwert** $x_\mathrm{e}$
+an – unter Nennbedingungen (Temperatur, Gebrauchslage, Frequenz):
+
+| | Klassen |
+| --- | --- |
+| Feinmessgeräte | 0,05 · 0,1 · 0,2 · 0,5 |
+| Betriebsmessgeräte | 1 · 1,5 · 2,5 · 5 |
+
+$$
+G = \pm \frac{\text{Klasse}}{100\,\%} \cdot x_\mathrm{e}
+\qquad\qquad
+G_\mathrm{r} = \frac{G}{x_\mathrm{a}} \cdot 100\,\%
+$$
+
+Der **absolute** Fehler $G$ ist im ganzen Bereich gleich groß – der **relative** Fehler bezogen auf den Messwert wird deshalb bei kleinen
+Ausschlägen groß. Ein Gerät der Klasse 1 im 100-V-Bereich darf ±1 V abweichen: bei 90 V sind das 1,1 %, bei 10 V schon 10 %.
+
+:::tip[Faustregel]
+Den Messbereich so wählen, dass im **oberen Drittel** der Skala abgelesen wird.
+:::
+
+Digitalmultimeter geben die Fehlergrenze anders an: **± (% vom Messwert + Digits)** – siehe [Digitale Messtechnik](/digitale-messtechnik/theorie/).
+
+## 8 · Dynamischer Messfehler
+
+Ändert sich die Messgröße schnell, kann das Messsystem nicht sofort folgen (Trägheit eines Zeigers, Wärmekapazität eines Temperaturfühlers,
+Bandbreite eines Verstärkers). Die Abweichung, die dadurch entsteht, heißt **dynamischer Messfehler**. Man prüft das Zeitverhalten mit
+Testsignalen (Sprung, Sinus, Impuls). Abhilfe: schnelleres Messsystem, bei statischen Messungen den eingeschwungenen Zustand abwarten.
+
+## 9 · Fehlerfortpflanzung
+
+Wird ein Ergebnis aus mehreren fehlerbehafteten Messgrößen **berechnet** (indirekte Messung), pflanzen sich die Einzelfehler fort.
+
+### Größtfehler (ungünstigster Fall, Worst Case)
+
+Sind die Fehler **Fehlergrenzen** (z. B. aus der Genauigkeitsklasse), nimmt man an, dass alle gleichzeitig in die ungünstige Richtung wirken:
+
+| Rechnung | Fehler des Ergebnisses |
+| --- | --- |
+| Summe $y = x_1 + x_2$ und Differenz $y = x_1 - x_2$ | **absolute** Fehler addieren: $\Delta y = \Delta x_1 + \Delta x_2$ |
+| Produkt $y = x_1 \cdot x_2$ und Quotient $y = x_1 / x_2$ | **relative** Fehler addieren: $\dfrac{\Delta y}{y} = \dfrac{\Delta x_1}{x_1} + \dfrac{\Delta x_2}{x_2}$ |
+| Potenz $y = x^n$ (z. B. $P = U^2/R$) | relativer Fehler × $n$: $\dfrac{\Delta y}{y} = n \cdot \dfrac{\Delta x}{x}$ |
+
+### Zufällige, unabhängige Unsicherheiten
+
+Bei zufälligen Abweichungen ist es unwahrscheinlich, dass alle gleichzeitig ihren Größtwert in dieselbe Richtung erreichen. Man addiert
+deshalb **quadratisch** (geometrisch):
+
+$$
+\text{Summe/Differenz:}\quad u_y = \sqrt{u_1^2 + u_2^2}
+\qquad\qquad
+\text{Produkt/Quotient:}\quad \frac{u_y}{y} = \sqrt{\left(\frac{u_1}{x_1}\right)^2 + \left(\frac{u_2}{x_2}\right)^2}
+$$
+
+Das Ergebnis ist kleiner als der Größtfehler, aber realistischer.
+
+:::caution[Vorsicht bei Differenzen]
+Bei der Differenz zweier fast gleich großer Messwerte bleiben die **absoluten** Fehler erhalten, das Ergebnis wird aber klein – der
+**relative** Fehler explodiert. Beispiel: $(5{,}0 \pm 0{,}05)\,\mathrm{A} - (4{,}6 \pm 0{,}05)\,\mathrm{A} = (0{,}4 \pm 0{,}1)\,\mathrm{A}$ – das sind ±25 %!
+Kleine Unterschiede misst man deshalb besser **direkt** (z. B. mit einer Messbrücke).
+:::

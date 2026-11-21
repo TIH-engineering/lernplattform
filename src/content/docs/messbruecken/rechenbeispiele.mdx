@@ -1,0 +1,145 @@
+---
+title: Rechenbeispiele – Messbrücken
+description: Rechenbeispiele zu Abgleichbedingung, unbekanntem Widerstand aus der Diagonalspannung, Diagonalspannung einer unabgeglichenen Brücke, belasteter Brücke mit Ersatzspannungsquelle, Viertel- und Vollbrücke mit DMS, Pt100-Brücke und Thomson-Brücke.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import Wheatstone from '../../../assets/mtrs/wheatstone.svg';
+
+Alle Beispiele beziehen sich auf diese Schaltung ($U_\mathrm{B} = \varphi_\mathrm{a} - \varphi_\mathrm{b}$):
+
+<Abbildung bild={Wheatstone} unterschrift="Wheatstone-Brücke" />
+
+## Abgleich mit einer Widerstandsdekade
+
+<Stufe wert="grundlagen" />
+
+$R_1$ ist unbekannt. Mit $R_3 = 1\,\mathrm{k\Omega}$ und $R_4 = 2{,}2\,\mathrm{k\Omega}$ wird die Brücke abgeglichen, indem die Dekade $R_2$ auf $470\,\Omega$ gestellt wird.
+Wie groß ist $R_1$?
+
+<Loesung>
+
+$$
+\frac{R_1}{R_2} = \frac{R_3}{R_4}
+\quad\Rightarrow\quad
+R_1 = R_2 \cdot \frac{R_3}{R_4} = 470\,\Omega \cdot \frac{1\,\mathrm{k\Omega}}{2{,}2\,\mathrm{k\Omega}} \approx 213{,}6\,\Omega
+$$
+
+</Loesung>
+
+## Diagonalspannung einer unabgeglichenen Brücke
+
+<Stufe wert="grundlagen" />
+
+$U_0 = 12\,\mathrm{V}$, $R_1 = 100\,\Omega$, $R_2 = 200\,\Omega$, $R_3 = R_4 = 150\,\Omega$. Berechne $U_\mathrm{B}$.
+
+<Loesung>
+
+$\varphi_\mathrm{a} = 12\,\mathrm{V} \cdot \dfrac{200}{300} = 8\,\mathrm{V}$ · $\varphi_\mathrm{b} = 12\,\mathrm{V} \cdot \dfrac{150}{300} = 6\,\mathrm{V}$ → $U_\mathrm{B} = 2\,\mathrm{V}$
+
+</Loesung>
+
+## Unbekannter Widerstand aus der Diagonalspannung
+
+<Stufe wert="standard" />
+
+$R_1 = R_2 = R_3 = 1\,\mathrm{k\Omega}$, $U_0 = 10\,\mathrm{V}$. Das (ideale) Voltmeter zeigt $U_\mathrm{B} = +1\,\mathrm{V}$. Wie groß ist $R_4$? Und wenn es $-1\,\mathrm{V}$ zeigt?
+
+<Loesung>
+
+$\varphi_\mathrm{a} = 10\,\mathrm{V} \cdot \dfrac{1}{2} = 5\,\mathrm{V}$ → $\varphi_\mathrm{b} = \varphi_\mathrm{a} - U_\mathrm{B} = 4\,\mathrm{V}$
+
+$$
+\frac{R_4}{R_3 + R_4} = \frac{4\,\mathrm{V}}{10\,\mathrm{V}} = 0{,}4
+\quad\Rightarrow\quad
+R_4 = 0{,}4 \cdot (1\,\mathrm{k\Omega} + R_4)
+\quad\Rightarrow\quad
+R_4 = \frac{0{,}4}{0{,}6}\,\mathrm{k\Omega} \approx 667\,\Omega
+$$
+
+Bei $U_\mathrm{B} = -1\,\mathrm{V}$: $\varphi_\mathrm{b} = 6\,\mathrm{V}$ → $R_4 = \dfrac{0{,}6}{0{,}4}\,\mathrm{k\Omega} = 1{,}5\,\mathrm{k\Omega}$. Das **Vorzeichen** sagt, auf welcher Seite des Abgleichs man ist.
+
+</Loesung>
+
+## Belastete Brücke
+
+<Stufe wert="vertiefung" />
+
+An die Brücke aus dem zweiten Beispiel ($U_0 = 12\,\mathrm{V}$, $R_1 = 100\,\Omega$, $R_2 = 200\,\Omega$, $R_3 = R_4 = 150\,\Omega$) wird zwischen a und b ein
+Lastwiderstand $R_\mathrm{L} = 100\,\Omega$ angeschlossen. Berechne die Ersatzspannungsquelle, den Strom und die Spannung am Lastwiderstand.
+
+<Loesung>
+
+$U_\mathrm{q} = U_\mathrm{B} = 2\,\mathrm{V}$ (Leerlauf)
+
+$$
+R_\mathrm{i} = \frac{100 \cdot 200}{300}\,\Omega + \frac{150 \cdot 150}{300}\,\Omega = 66{,}7\,\Omega + 75\,\Omega = 141{,}7\,\Omega
+$$
+
+$$
+I_\mathrm{L} = \frac{2\,\mathrm{V}}{141{,}7\,\Omega + 100\,\Omega} \approx 8{,}28\,\mathrm{mA}
+\qquad
+U_\mathrm{L} = 8{,}28\,\mathrm{mA} \cdot 100\,\Omega \approx 0{,}83\,\mathrm{V}
+$$
+
+Die Last senkt die Diagonalspannung von 2 V auf 0,83 V – deshalb misst man mit möglichst hochohmigen Messgeräten.
+
+</Loesung>
+
+## DMS in Viertel- und Vollbrücke
+
+<Stufe wert="standard" />
+
+DMS mit $R = 350\,\Omega$, $k = 2{,}0$; Speisespannung $U_0 = 5\,\mathrm{V}$. Ein Bauteil dehnt sich um $\varepsilon = 500\,\mathrm{\mu m/m}$.
+
+1. Wie groß ist die Diagonalspannung bei einer Viertelbrücke (ein aktiver DMS, drei Festwiderstände)?
+2. Und bei einer Vollbrücke (zwei DMS gedehnt, zwei gestaucht)?
+3. Welche Verstärkung braucht man, damit bei Vollbrücke 2,5 V am A/D-Umsetzer ankommen?
+
+<Loesung>
+
+$k \varepsilon = 2{,}0 \cdot 500 \cdot 10^{-6} = 0{,}001$
+
+1. Viertelbrücke: $U_\mathrm{B} \approx \dfrac{U_0}{4} \cdot k\varepsilon = \dfrac{5\,\mathrm{V}}{4} \cdot 0{,}001 = 1{,}25\,\mathrm{mV}$
+2. Vollbrücke: $U_\mathrm{B} \approx U_0 \cdot k\varepsilon = 5\,\mathrm{mV}$ – viermal so viel.
+3. $V = 2{,}5\,\mathrm{V}/5\,\mathrm{mV} = 500$ – typisch für einen Instrumentenverstärker.
+
+</Loesung>
+
+## Pt100 in der Brücke
+
+<Stufe wert="standard" />
+
+Ein Pt100 sitzt an der Stelle von $R_2$, die anderen drei Widerstände haben $100\,\Omega$, $U_0 = 2\,\mathrm{V}$. Welche Diagonalspannung entsteht bei 0 °C und bei 50 °C
+($R_{50} = 119{,}40\,\Omega$)? Welchen Strom führt der Pt100 ungefähr?
+
+<Loesung>
+
+0 °C: alle vier gleich → $U_\mathrm{B} = 0$ (abgeglichen).
+
+50 °C: $\varphi_\mathrm{a} = 2\,\mathrm{V} \cdot \dfrac{119{,}40}{219{,}40} \approx 1{,}0884\,\mathrm{V}$, $\varphi_\mathrm{b} = 1{,}0\,\mathrm{V}$ → $U_\mathrm{B} \approx 88{,}4\,\mathrm{mV}$
+
+Strom: $I \approx 2\,\mathrm{V}/219\,\Omega \approx 9\,\mathrm{mA}$ – das ist für einen Pt100 schon zu viel (Eigenerwärmung). Man würde $U_0$ auf etwa 0,2 V senken
+(1 mA) und das kleinere Signal verstärken.
+
+</Loesung>
+
+## Thomson-Brücke
+
+<Stufe wert="vertiefung" />
+
+Mit einer Thomson-Brücke wird der Übergangswiderstand eines Schaltkontakts gemessen. Normalwiderstand $R_\mathrm{N} = 10\,\mathrm{m\Omega}$; im Abgleich stehen die
+gekoppelten Potentiometer im Verhältnis $R_1 : R_2 = 0{,}35$. Der Messstrom beträgt 10 A.
+
+1. Wie groß ist der Kontaktwiderstand?
+2. Welche Spannung fällt am Kontakt ab? Warum ist ein Ohmmeter (Zweileiter) dafür ungeeignet?
+
+<Loesung>
+
+1. $R_\mathrm{x} = R_\mathrm{N} \cdot \dfrac{R_1}{R_2} = 10\,\mathrm{m\Omega} \cdot 0{,}35 = 3{,}5\,\mathrm{m\Omega}$
+2. $U = 10\,\mathrm{A} \cdot 3{,}5\,\mathrm{m\Omega} = 35\,\mathrm{mV}$. Messleitungen und Prüfspitzen eines normalen Ohmmeters haben zusammen schon 0,1 … 0,3 Ω – das
+   Hundertfache des Messwerts.
+
+</Loesung>

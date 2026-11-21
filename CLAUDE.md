@@ -71,9 +71,13 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
 - **Elektronik** – kein Lehrbuch, daher mit ausführlicher Theorieseite: Dioden, Transistoren, Operationsverstärker,
   Filter, Oszillatoren, Thermische Auslegung.
 - **Energietechnik** – Drehstrom, Leistungselektronik (Theorie in Unterordner `theorie/`).
-- **Projektmanagement** – Sonderaufbau: Übersicht, Theorie, **Fallbeispiele**, **Diplomarbeit planen**, Quiz
+- **Projektmanagement** – Sonderaufbau: Übersicht, Theorie, **Fallbeispiele**, Quiz (Seite „Diplomarbeit planen“ auf Wunsch entfernt – gehört in den Unterricht)
   (keine Rechenbeispiele; eigener Eintrag in `astro.config.mjs`).
-- **Weitere Themen** (in Arbeit): Sensoren, Aktuatoren, Messtechnik, Regelungstechnik.
+- **Mess- und Regelungstechnik (MTRS)** – kein eigenes Lehrbuch, daher mit Theorie (Quellen: `Quellen/MTRS/MTRS2`,
+  Teile auch in GET1/GET2 – im Übersichtstext darauf verweisen): Grundlagen der Messtechnik (`messtechnik`), Messfehler,
+  Signalkennwerte, Sensoren, Messwerke und Messbereiche, Messbrücken, Digitale Messtechnik; Aktuatoren und
+  Regelungstechnik noch „in Arbeit“. Schaltbilder in `src/assets/mtrs/`.
+- MTRS-Unterlagen mit Schülernamen (z. B. Referats-/Themenvergaben, Leistungsbeurteilung, WebUntis) nicht verwenden.
 - Grenzfall Grundlagen/Elektronik: Was im Schulbuch GET1/GET2 steht → Grundlagen; Bauteile, Schaltungen und
   Auslegung (Halbleiter, OPV, aktive Filter, Oszillatoren, Wärme) → Elektronik. Wechselstrom-Praxisaufgaben aus
   `Quellen/HWE/Wechselstromtechnik` stehen bei den passenden Grundlagen-Themen.

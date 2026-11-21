@@ -1,0 +1,112 @@
+---
+title: Theorie – Messbrücken
+description: "Aufbau der Wheatstone-Brücke, Diagonalspannung, Abgleichbedingung, Abgleich- und Ausschlagverfahren, Empfindlichkeit, Näherung für kleine Widerstandsänderungen, Viertel-, Halb- und Vollbrücke, Dehnungsmessstreifen, Temperaturkompensation, Pt100 in der Brücke, belastete Brücke mit Ersatzspannungsquelle, stromgespeiste Brücke, Thomson-Brücke und Vierleitermessung."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Wheatstone from '../../../assets/mtrs/wheatstone.svg';
+
+## 1 · Aufbau der Wheatstone-Brücke
+
+<Abbildung bild={Wheatstone} unterschrift="Wheatstone-Brücke: zwei Spannungsteiler an derselben Speisespannung, dazwischen die Diagonalspannung" />
+
+Die Brücke besteht aus **zwei Spannungsteilern** ($R_1$/$R_2$ und $R_3$/$R_4$) an derselben Speisespannung $U_0$. Gemessen wird die Spannung zwischen den
+beiden Mittelpunkten a und b – die **Diagonal**- oder **Brückenspannung** $U_\mathrm{B}$. Mit der Spannungsteilerregel:
+
+$$
+\varphi_\mathrm{a} = U_0 \cdot \frac{R_2}{R_1 + R_2}
+\qquad
+\varphi_\mathrm{b} = U_0 \cdot \frac{R_4}{R_3 + R_4}
+\qquad
+U_\mathrm{B} = \varphi_\mathrm{a} - \varphi_\mathrm{b} = U_0 \cdot \left(\frac{R_2}{R_1 + R_2} - \frac{R_4}{R_3 + R_4}\right)
+$$
+
+(Das Voltmeter in der Diagonale sei sehr hochohmig – **unbelastete Brücke**.)
+
+## 2 · Abgleichbedingung
+
+Die Brücke ist **abgeglichen**, wenn $U_\mathrm{B} = 0$ ist – beide Teiler teilen im selben Verhältnis:
+
+$$
+\frac{R_1}{R_2} = \frac{R_3}{R_4}
+\qquad\Leftrightarrow\qquad
+R_1 \cdot R_4 = R_2 \cdot R_3
+$$
+
+Ist z. B. $R_1 = R_\mathrm{x}$ unbekannt, folgt $R_\mathrm{x} = R_2 \cdot \dfrac{R_3}{R_4}$.
+
+**Wichtig:** Die Abgleichbedingung enthält die **Speisespannung nicht**. Schwankungen von $U_0$ und Fehler des Anzeigegeräts spielen im abgeglichenen Zustand keine
+Rolle – das Anzeigegerät muss nur „null“ erkennen (**Nullindikator**). Die Genauigkeit hängt allein von den Vergleichswiderständen ab.
+
+## 3 · Abgleich- und Ausschlagverfahren
+
+| | Abgleichverfahren (Kompensation) | Ausschlagverfahren |
+| --- | --- | --- |
+| Vorgehen | Vergleichswiderstand (Dekade, Potentiometer) verstellen, bis $U_\mathrm{B} = 0$ | Brücke wird einmal abgeglichen; die Änderung von $R_\mathrm{x}$ erzeugt eine Spannung $U_\mathrm{B}$ |
+| Ergebnis aus | Abgleichbedingung | Formel für $U_\mathrm{B}$ |
+| Vorteile | sehr genau, unabhängig von $U_0$ | schnell, automatisch auswertbar, misst sich ändernde Größen |
+| Einsatz | Präzisionsmessung von Widerständen im Labor | Sensoren: DMS, Pt100, Drucksensoren |
+
+Die **Empfindlichkeit** ist am größten, wenn alle vier Widerstände (im Arbeitspunkt) **gleich groß** sind.
+
+## 4 · Brücken mit Dehnungsmessstreifen
+
+Ein [DMS](/sensoren/theorie/#6--dehnungsmessstreifen-dms) ändert seinen Widerstand nur um $\Delta R/R = k \cdot \varepsilon$ – also um Promille. Für **kleine Änderungen** um
+eine abgeglichene Brücke mit vier gleichen Widerständen $R$ gilt in guter Näherung:
+
+| Brückenart | aktive DMS | Diagonalspannung |
+| --- | --- | --- |
+| **Viertelbrücke** | 1 | $U_\mathrm{B} \approx \dfrac{U_0}{4} \cdot \dfrac{\Delta R}{R} = \dfrac{U_0}{4} \cdot k \varepsilon$ |
+| **Halbbrücke** | 2 (einer gedehnt, einer gestaucht, im selben Teiler) | $U_\mathrm{B} \approx \dfrac{U_0}{2} \cdot k \varepsilon$ |
+| **Vollbrücke** | 4 (je zwei gedehnt und gestaucht) | $U_\mathrm{B} \approx U_0 \cdot k \varepsilon$ |
+
+Je mehr aktive DMS, desto **größer** das Signal – und desto besser die Kompensation von Störungen:
+
+- **Temperaturkompensation:** Alle DMS erwärmen sich gleich. Weil im abgeglichenen Zustand nur das **Verhältnis** der Widerstände zählt, heben sich gleiche
+  Änderungen in einem Teiler auf. Bei der Viertelbrücke setzt man dafür oft einen zweiten, **unbelasteten** DMS (Kompensations-DMS) in denselben Teiler.
+- In der Vollbrücke heben sich auch Biegung und Zug je nach Anordnung gezielt auf – so misst eine Wägezelle nur die gewünschte Kraft.
+
+Hersteller geben das Ausgangssignal einer Wägezelle als **Kennwert in mV/V** an: z. B. 2 mV/V heißt 2 mV Diagonalspannung pro Volt Speisespannung bei Nennlast.
+Weil das Signal proportional zu $U_0$ ist, misst man in der Praxis **ratiometrisch**: Der A/D-Umsetzer bekommt $U_0$ als Referenzspannung, dann kürzt sich $U_0$ heraus.
+
+## 5 · Pt100 in der Brücke
+
+Ein Pt100 in einem Brückenzweig, die übrigen Widerstände 100 Ω: Bei 0 °C ist die Brücke abgeglichen, bei höherer Temperatur entsteht eine Diagonalspannung,
+die (fast) proportional zur Temperatur ist. Die **Zuleitungen** zum Sensor liegen dabei mit im Brückenzweig – deshalb gibt es die **Dreileiterschaltung**: Eine
+Zuleitung liegt im Zweig des Pt100, die zweite im benachbarten Zweig des Vergleichswiderstands, die dritte in der Messleitung. Gleich lange Leitungen
+heben sich so auf.
+
+## 6 · Belastete Brücke: Ersatzspannungsquelle
+
+Wird statt eines hochohmigen Voltmeters ein Verbraucher $R_\mathrm{L}$ (z. B. ein Messwerk) angeschlossen, berechnet man die Brücke am einfachsten als
+**Ersatzspannungsquelle** zwischen a und b:
+
+- **Quellenspannung** = Leerlaufspannung: $U_\mathrm{q} = U_\mathrm{B}$ (Formel oben)
+- **Innenwiderstand:** Speisequelle kurzschließen – dann liegen $R_1 \parallel R_2$ und $R_3 \parallel R_4$ in Reihe:
+
+$$
+R_\mathrm{i} = \frac{R_1 R_2}{R_1 + R_2} + \frac{R_3 R_4}{R_3 + R_4}
+\qquad
+I_\mathrm{L} = \frac{U_\mathrm{q}}{R_\mathrm{i} + R_\mathrm{L}}
+\qquad
+U_\mathrm{L} = I_\mathrm{L} \cdot R_\mathrm{L}
+$$
+
+Bei einer **stromgespeisten** Brücke (Konstantstromquelle $I_0$ statt $U_0$) teilt sich $I_0$ auf die beiden Zweige auf; beim Innenwiderstand wird die Stromquelle
+**geöffnet** (Leerlauf), dann liegen $(R_1 + R_3)$ und $(R_2 + R_4)$ parallel. Stromspeisung verringert den Einfluss von Zuleitungswiderständen und macht die
+Ausschlagbrücke etwas linearer.
+
+## 7 · Thomson-Brücke und Vierleitermessung
+
+Unter etwa **0,1 Ω** versagt die Wheatstone-Brücke: Zuleitungs- und Übergangswiderstände an den Klemmen sind dann so groß wie der Messwiderstand selbst.
+
+**Vierleiterprinzip (Kelvin-Messung):** Der kleine Widerstand bekommt **zwei Stromanschlüsse** und **zwei Potentialanschlüsse**. Der Messstrom fließt über die
+Stromanschlüsse, die Spannung wird **stromlos** an den Potentialanschlüssen direkt am Widerstand abgegriffen – Spannungsfälle an Zuleitungen und Klemmen gehen
+nicht ins Ergebnis ein.
+
+Die **Thomson-Brücke** (Kelvin-Brücke) nutzt das: Unbekannter Widerstand $R_\mathrm{x}$ und Normalwiderstand $R_\mathrm{N}$ sind vierpolig und liegen in einem
+**Hochstromkreis**. Die hochohmigen Brückenwiderstände (zwei gekoppelte Potentiometer) greifen an den Potentialklemmen ab. Im Abgleich gilt
+$R_\mathrm{x} = R_\mathrm{N} \cdot R_1/R_2$ – unabhängig vom Widerstand der Verbindungsleitung zwischen $R_\mathrm{x}$ und $R_\mathrm{N}$.
+
+Anwendungen: Übergangswiderstände von Schaltkontakten und Steckverbindern, Shunts, Wicklungswiderstände großer Motoren und Transformatoren, Leiterbahnen.
+Moderne **Milliohmmeter** arbeiten nach demselben Vierleiterprinzip mit Konstantstrom und Spannungsmessung.

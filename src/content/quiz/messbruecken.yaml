@@ -1,0 +1,103 @@
+titel: Messbrücken
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Wann ist eine Wheatstone-Brücke abgeglichen?
+    optionen:
+      - text: Wenn die Diagonalspannung null ist, also R1/R2 = R3/R4
+        richtig: true
+      - text: Wenn alle vier Widerstände unterschiedlich sind
+      - text: Wenn die Diagonalspannung gleich der Speisespannung ist
+      - text: Wenn kein Strom aus der Speisequelle fließt
+    erklaerung: Beide Spannungsteiler teilen dann im selben Verhältnis, die Mittelpunkte haben dasselbe Potenzial.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Warum ist das Abgleichverfahren so genau?
+    optionen:
+      - text: Die Abgleichbedingung enthält weder die Speisespannung noch die Genauigkeit des Anzeigegeräts.
+        richtig: true
+      - text: Weil dabei ein sehr großer Strom fließt
+      - text: Weil das Anzeigegerät besonders genau sein muss
+      - text: Weil die Speisespannung exakt bekannt sein muss
+    erklaerung: Es kommt nur auf die Vergleichswiderstände an – das Anzeigegerät dient nur als Nullindikator.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Abgleich bei R2 = 680 Ω, R3 = 1 kΩ, R4 = 4,7 kΩ. Wie groß ist R1 (R1/R2 = R3/R4)?'
+    loesung: 144.7
+    einheit: Ω
+    erklaerung: '$R_1 = R_2 \cdot R_3/R_4 = 680\,\Omega \cdot 1/4{,}7 \approx 144{,}7\,\Omega$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'U₀ = 10 V, R1 = 1 kΩ, R2 = 3 kΩ, R3 = R4 = 2 kΩ. Wie groß ist die Diagonalspannung φa − φb (φa zwischen R1 und R2)?'
+    loesung: 2.5
+    einheit: V
+    erklaerung: '$\varphi_\mathrm{a} = 10\,\mathrm{V} \cdot 3/4 = 7{,}5\,\mathrm{V}$, $\varphi_\mathrm{b} = 5\,\mathrm{V}$ → $U_\mathrm{B} = 2{,}5\,\mathrm{V}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'R1 = R2 = R3 = 1 kΩ, U₀ = 10 V, gemessen U_B = φa − φb = 3 V. Wie groß ist R4 (in Ω)?'
+    loesung: 250
+    einheit: Ω
+    erklaerung: '$\varphi_\mathrm{a} = 5\,\mathrm{V}$ → $\varphi_\mathrm{b} = 2\,\mathrm{V}$ → $R_4/(R_3 + R_4) = 0{,}2$ → $R_4 = 0{,}2/0{,}8 \cdot 1\,\mathrm{k\Omega} = 250\,\Omega$'
+
+  - typ: mc
+    stufe: standard
+    frage: Wann ist die Empfindlichkeit einer Ausschlagbrücke am größten?
+    optionen:
+      - text: Wenn alle vier Widerstände im Arbeitspunkt gleich groß sind
+        richtig: true
+      - text: Wenn ein Widerstand sehr viel größer ist als die anderen
+      - text: Wenn die Speisespannung möglichst klein ist
+      - text: Wenn die Brücke stark belastet ist
+    erklaerung: Dann ändert sich die Diagonalspannung pro relativer Widerstandsänderung am stärksten.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Viertelbrücke: U₀ = 10 V, k = 2, ε = 400 µm/m. Wie groß ist die Diagonalspannung ungefähr (in mV)?'
+    loesung: 2
+    einheit: mV
+    erklaerung: '$U_\mathrm{B} \approx U_0/4 \cdot k\varepsilon = 2{,}5\,\mathrm{V} \cdot 0{,}0008 = 2\,\mathrm{mV}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Vorteile hat eine Vollbrücke mit vier aktiven DMS gegenüber einer Viertelbrücke?
+    optionen:
+      - text: Viermal größeres Signal
+        richtig: true
+      - text: Temperatureinflüsse kompensieren sich
+        richtig: true
+      - text: Sie braucht keine Speisespannung
+      - text: Sie misst auch statische Kräfte ohne Verstärker in Volt
+    erklaerung: Gleiche Widerstandsänderungen (z. B. durch Temperatur) heben sich im Verhältnis auf, gegensinnige Dehnungen addieren sich.
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Belastete Brücke: R1 = R2 = 200 Ω, R3 = R4 = 300 Ω. Wie groß ist der Innenwiderstand der Ersatzspannungsquelle?'
+    loesung: 250
+    einheit: Ω
+    erklaerung: '$R_\mathrm{i} = R_1 \parallel R_2 + R_3 \parallel R_4 = 100\,\Omega + 150\,\Omega = 250\,\Omega$ (Spannungsquelle kurzgeschlossen)'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum misst man Widerstände unter etwa 0,1 Ω mit der Thomson-Brücke bzw. in Vierleitertechnik?
+    optionen:
+      - text: Weil Zuleitungs- und Übergangswiderstände sonst so groß wie der Messwert sind
+        richtig: true
+      - text: Weil kleine Widerstände nur bei Wechselstrom messbar sind
+      - text: Weil die Wheatstone-Brücke bei kleinen Widerständen zu genau wäre
+      - text: Weil kleine Widerstände keinen Strom vertragen
+    erklaerung: Die Spannung wird stromlos an eigenen Potentialanschlüssen direkt am Widerstand gemessen.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Was bedeutet der Kennwert „2 mV/V“ einer Wägezelle?
+    optionen:
+      - text: Bei Nennlast entstehen 2 mV Diagonalspannung pro Volt Speisespannung.
+        richtig: true
+      - text: Die Wägezelle braucht 2 mV Versorgung.
+      - text: Die Empfindlichkeit beträgt 2 mV pro Kilogramm.
+      - text: Der Fehler beträgt 2 mV pro Volt Messwert.
+    erklaerung: Bei 10 V Speisung liefert sie also 20 mV bei Nennlast.

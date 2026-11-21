@@ -1,0 +1,156 @@
+---
+title: Rechenbeispiele – Grundlagen der Messtechnik
+description: Rechenbeispiele zu SI-Einheiten, Empfindlichkeit eines linearen Sensors, nichtlinearer Empfindlichkeit, Linearisierung einer NTC-Kennlinie, Linearisierungsfehler und Berichtigung eines systematischen Fehlers.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import NTC from '../../../assets/mtrs/ntc-linearisierung.svg';
+
+## Energie in SI-Basiseinheiten
+
+<Stufe wert="grundlagen" />
+
+Ein Elektroauto verbraucht auf einer Fahrt $2{,}5\,\mathrm{kWh}$. Gib die Energie in Joule und in SI-Basiseinheiten an.
+
+<Loesung>
+
+$1\,\mathrm{kWh} = 1000\,\mathrm{W} \cdot 3600\,\mathrm{s} = 3{,}6 \cdot 10^{6}\,\mathrm{J}$ →
+$E = 2{,}5 \cdot 3{,}6 \cdot 10^{6}\,\mathrm{J} = 9 \cdot 10^{6}\,\mathrm{J}$
+
+Mit $1\,\mathrm{J} = 1\,\mathrm{N \cdot m} = 1\,\mathrm{kg \cdot m^2/s^2}$: $E = 9 \cdot 10^{6}\,\mathrm{kg \cdot m^2/s^2}$
+
+</Loesung>
+
+## Empfindlichkeit eines Temperatursensors
+
+<Stufe wert="grundlagen" />
+
+Ein Temperatursensor-IC liefert bei $25\,°\mathrm{C}$ eine Spannung von $0{,}75\,\mathrm{V}$ und bei $50\,°\mathrm{C}$ eine von $1{,}00\,\mathrm{V}$.
+Berechne die Empfindlichkeit in mV/°C.
+
+<Loesung>
+
+$$
+E = \frac{\Delta U}{\Delta \vartheta} = \frac{1{,}00\,\mathrm{V} - 0{,}75\,\mathrm{V}}{50\,°\mathrm{C} - 25\,°\mathrm{C}} = \frac{0{,}25\,\mathrm{V}}{25\,\mathrm{K}} = 10\,\mathrm{mV/K}
+$$
+
+(Eine Temperaturdifferenz von 1 °C ist gleich 1 K, daher ist mV/°C = mV/K.)
+
+</Loesung>
+
+## Linearer Drucksensor
+
+<Stufe wert="standard" />
+
+Ein Drucksensor liefert bei $0\,\mathrm{kPa}$ eine Spannung von $0{,}5\,\mathrm{V}$ und bei $400\,\mathrm{kPa}$ eine Spannung von $4{,}5\,\mathrm{V}$.
+Die Kennlinie ist linear.
+
+1. Berechne die Empfindlichkeit und stelle die Kennliniengleichung auf.
+2. Welche Spannung liefert er bei $250\,\mathrm{kPa}$?
+3. Der Mikrocontroller misst $2{,}1\,\mathrm{V}$. Wie groß ist der Druck?
+
+<Loesung>
+
+**Gegeben:** $(0\,\mathrm{kPa} \mid 0{,}5\,\mathrm{V})$, $(400\,\mathrm{kPa} \mid 4{,}5\,\mathrm{V})$ · **Gesucht:** $E$, $U(250\,\mathrm{kPa})$, $p(2{,}1\,\mathrm{V})$
+
+1. $E = \dfrac{4{,}5\,\mathrm{V} - 0{,}5\,\mathrm{V}}{400\,\mathrm{kPa}} = 0{,}01\,\mathrm{V/kPa}$ → $U(p) = 0{,}01\,\mathrm{V/kPa} \cdot p + 0{,}5\,\mathrm{V}$
+2. $U = 0{,}01 \cdot 250\,\mathrm{V} + 0{,}5\,\mathrm{V} = 3{,}0\,\mathrm{V}$
+3. Kennlinie umformen: $p = \dfrac{U - 0{,}5\,\mathrm{V}}{0{,}01\,\mathrm{V/kPa}} = \dfrac{1{,}6\,\mathrm{V}}{0{,}01\,\mathrm{V/kPa}} = 160\,\mathrm{kPa}$
+
+Warum beginnt die Kennlinie bei 0,5 V und nicht bei 0 V? So erkennt die Auswertung einen **Kabelbruch** (dann wären es 0 V).
+
+</Loesung>
+
+## Nichtlineare Empfindlichkeit
+
+<Stufe wert="standard" />
+
+Ein Wegsensor liefert folgende Werte:
+
+| $s$ in mm | 0 | 1 | 2 | 3 | 4 |
+| --- | --- | --- | --- | --- | --- |
+| $U$ in V | 0,3 | 1,3 | 2,0 | 2,5 | 2,8 |
+
+Berechne die Empfindlichkeit für jedes Intervall. Wo ist der Sensor am empfindlichsten?
+
+<Loesung>
+
+| Intervall | $E = \Delta U / \Delta s$ |
+| --- | --- |
+| 0 … 1 mm | $1{,}0\,\mathrm{V/mm}$ |
+| 1 … 2 mm | $0{,}7\,\mathrm{V/mm}$ |
+| 2 … 3 mm | $0{,}5\,\mathrm{V/mm}$ |
+| 3 … 4 mm | $0{,}3\,\mathrm{V/mm}$ |
+
+Am empfindlichsten zwischen 0 und 1 mm. Die Kennlinie flacht ab – kleine Wegänderungen bei 4 mm sind schwer zu erkennen.
+
+</Loesung>
+
+## NTC-Kennlinie linearisieren
+
+<Stufe wert="standard" />
+
+<Abbildung bild={NTC} unterschrift="NTC-Kennlinie mit linearer Näherung" />
+
+Ein NTC hat folgende Werte:
+
+| $\vartheta$ in °C | 10 | 20 | 30 | 40 |
+| --- | --- | --- | --- | --- |
+| $R$ in kΩ | 20,2 | 12,5 | 8,04 | 5,30 |
+
+1. Linearisiere die Kennlinie im Arbeitsbereich 20 … 30 °C.
+2. Bei 25 °C hat der NTC genau $10{,}0\,\mathrm{k\Omega}$. Wie groß ist der Linearisierungsfehler (absolut und relativ)?
+3. Welcher Temperatur würde man bei $10{,}0\,\mathrm{k\Omega}$ mit der Geraden zuordnen?
+
+<Loesung>
+
+1. $k = \dfrac{8{,}04\,\mathrm{k\Omega} - 12{,}5\,\mathrm{k\Omega}}{30\,°\mathrm{C} - 20\,°\mathrm{C}} = -0{,}446\,\mathrm{k\Omega/°C}$ ·
+   $d = 12{,}5\,\mathrm{k\Omega} - (-0{,}446\,\mathrm{k\Omega/°C}) \cdot 20\,°\mathrm{C} = 21{,}42\,\mathrm{k\Omega}$ →
+   $R_\mathrm{lin}(\vartheta) = -0{,}446\,\mathrm{k\Omega/°C} \cdot \vartheta + 21{,}42\,\mathrm{k\Omega}$
+2. $R_\mathrm{lin}(25\,°\mathrm{C}) = -0{,}446 \cdot 25 + 21{,}42 = 10{,}27\,\mathrm{k\Omega}$ → $F = 10{,}27 - 10{,}0 = +0{,}27\,\mathrm{k\Omega}$, $F_\mathrm{r} = +2{,}7\,\%$
+3. $\vartheta = \dfrac{10{,}0 - 21{,}42}{-0{,}446}\,°\mathrm{C} \approx 25{,}6\,°\mathrm{C}$ – der Temperaturfehler beträgt also gut 0,6 K, gerade in der Mitte des Bereichs.
+
+</Loesung>
+
+## Systematischen Fehler berichtigen
+
+<Stufe wert="grundlagen" />
+
+Bei der Kalibrierung zeigt ein Spannungsmesser $10{,}15\,\mathrm{V}$ an, die Referenz liefert genau $10{,}00\,\mathrm{V}$. Später misst du $6{,}48\,\mathrm{V}$.
+Welcher Wert ist richtig, wenn der Fehler konstant ist (Offset)?
+
+<Loesung>
+
+$F = x_\mathrm{a} - x_\mathrm{r} = 10{,}15\,\mathrm{V} - 10{,}00\,\mathrm{V} = +0{,}15\,\mathrm{V}$ → Korrektur $K = -F = -0{,}15\,\mathrm{V}$ →
+$x_\mathrm{korr} = 6{,}48\,\mathrm{V} - 0{,}15\,\mathrm{V} = 6{,}33\,\mathrm{V}$
+
+Achtung: Ist der Fehler nicht konstant, sondern **proportional** zum Messwert (Verstärkungsfehler von +1,5 %), wäre die Korrektur
+$6{,}48\,\mathrm{V} / 1{,}015 \approx 6{,}38\,\mathrm{V}$. Um das zu unterscheiden, kalibriert man an **mehreren** Punkten.
+
+</Loesung>
+
+## Kraftsensor linearisieren
+
+<Stufe wert="vertiefung" />
+
+Ein Kraftsensor (Wägezelle mit Verstärker) liefert:
+
+| $F$ in N | 0 | 20 | 40 | 60 | 80 |
+| --- | --- | --- | --- | --- | --- |
+| $U$ in V | 0,10 | 1,05 | 1,94 | 2,78 | 3,55 |
+
+1. Linearisiere über den **ganzen** Bereich 0 … 80 N.
+2. Wie groß ist die größte Abweichung der Geraden von den Messpunkten? Bei welcher Kraft?
+3. Wie könnte man die Abweichung verkleinern?
+
+<Loesung>
+
+1. $k = \dfrac{3{,}55\,\mathrm{V} - 0{,}10\,\mathrm{V}}{80\,\mathrm{N}} = 0{,}0431\,\mathrm{V/N}$, $d = 0{,}10\,\mathrm{V}$ → $U_\mathrm{lin}(F) = 0{,}0431\,\mathrm{V/N} \cdot F + 0{,}10\,\mathrm{V}$
+2. $U_\mathrm{lin}$: 20 N → 0,96 V (−0,09 V), 40 N → 1,83 V (−0,11 V), 60 N → 2,69 V (−0,09 V).
+   Größte Abweichung ≈ 0,11 V bei 40 N – in der Mitte, wo die Kurve am weitesten von der Sekante entfernt ist.
+3. Nur im tatsächlich genutzten Bereich linearisieren, den Bereich in mehrere Abschnitte teilen (stückweise linear) oder im Mikrocontroller
+   mit einer Tabelle bzw. einem Polynom 2. Ordnung rechnen.
+
+</Loesung>

@@ -1,12 +1,36 @@
 ---
 title: Sensoren
-description: "Temperatur-, Licht-, Druck- und Positionssensoren und ihre Auswerteschaltungen."
+description: "Aktive und passive Sensoren, Kaltleiter (PTC), Heißleiter (NTC), Varistor (VDR), Fotowiderstand (LDR), Widerstandsthermometer Pt100, Thermoelement, Piezo-Aufnehmer, Dehnungsmessstreifen und Hall-Sensor – Funktion, Kennlinien, Berechnung und Auswahl."
+sidebar:
+  label: Übersicht
 ---
 
-:::note[In Arbeit]
-Dieser Themenbereich wird gerade erstellt. Schau bald wieder vorbei!
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Ein Sensor ist das „Sinnesorgan“ einer Schaltung: Er wandelt Temperatur, Licht, Kraft oder Magnetfeld in ein elektrisches Signal. In einem
+modernen Auto stecken über hundert davon, in jedem Smartphone ein Dutzend. Hier lernst du die wichtigsten Sensoren der Elektrotechnik kennen –
+vom einfachen Heißleiter bis zum Hall-Sensor.
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- aktive und passive Sensoren unterscheiden und Sensoren nach ihrem Wirkprinzip einteilen,
+- die Kennlinien von **PTC**, **NTC**, **VDR** und **LDR** zeichnen, erklären und Einsatzgebiete nennen,
+- NTC-Widerstände mit der B-Gleichung berechnen und in einem Spannungsteiler auswerten,
+- **Pt100**, **Thermoelement**, **Piezo-Aufnehmer**, **Dehnungsmessstreifen** und **Hall-Sensor** erklären und einfache Berechnungen durchführen,
+- für eine Anwendung den passenden Sensor auswählen und die Wahl begründen.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="Einteilung, PTC, NTC, VDR, LDR, Pt100, Thermoelement, Piezo, DMS, Hall-Sensor" href="/sensoren/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="NTC, PTC, Spannungsteiler, Pt100, Thermoelement, DMS, Piezo, Hall" href="/sensoren/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Sensorauswahl, Einschaltstrombegrenzung, Überspannungsschutz, Küchenwaage, Fahrradtacho" href="/sensoren/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen über Sensoren" href="/sensoren/quiz/" />
+</CardGrid>
+
+:::note[Im Schulbuch]
+Die Temperaturabhängigkeit von Widerständen ($\alpha_{20}$, $\beta_{20}$) und die nichtlinearen Widerstände (PTC, NTC, VDR, LDR, MDR) findest du auch im
+Schulbuch **Grundlagen der Elektrotechnik 1**. Übungen zur Temperaturabhängigkeit: [Leiterwiderstand und Temperatur](/grundlagen/leiterwiderstand/).
 :::
-
-**Geplante Inhalte:** Temperatur-, Licht-, Druck- und Positionssensoren und ihre Auswerteschaltungen.
-
-Wie bei allen Themenbereichen wird es **Theorie**, **Rechenbeispiele**, **Praxisbeispiele** und ein **Quiz** geben.

@@ -1,0 +1,134 @@
+titel: Grundlagen der Messtechnik
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Was bedeutet Messen?
+    optionen:
+      - text: Eine Größe durch Vergleich mit einer bekannten Vergleichsgröße (Einheit) quantitativ erfassen
+        richtig: true
+      - text: Eine Größe möglichst genau schätzen
+      - text: Ein Messgerät auf null stellen
+      - text: Einen Messwert in eine Tabelle eintragen
+    erklaerung: Das Ergebnis ist immer Zahlenwert mal Einheit, z. B. 10 V.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche der folgenden Einheiten sind SI-Basiseinheiten?
+    optionen:
+      - text: Ampere
+        richtig: true
+      - text: Kelvin
+        richtig: true
+      - text: Kilogramm
+        richtig: true
+      - text: Volt
+    erklaerung: 'Die sieben Basiseinheiten sind m, kg, s, A, K, mol und cd. Das Volt ist abgeleitet: 1 V = 1 kg·m²/(A·s³).'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was ist der Unterschied zwischen Messbereich und Anzeigebereich?
+    optionen:
+      - text: Im Messbereich werden die festgelegten Fehlergrenzen eingehalten, der Anzeigebereich umfasst alle darstellbaren Werte.
+        richtig: true
+      - text: Es gibt keinen Unterschied.
+      - text: Der Messbereich ist immer größer als der Anzeigebereich.
+      - text: Der Anzeigebereich gilt nur für analoge Geräte.
+    erklaerung: Ein Gerät kann Werte anzeigen, für die seine Genauigkeit nicht garantiert ist.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was versteht man unter Drift?
+    optionen:
+      - text: Die Anzeige ändert sich über die Zeit, obwohl die Messgröße konstant bleibt.
+        richtig: true
+      - text: Die Anzeige springt bei Erschütterung.
+      - text: Bei steigender und fallender Messgröße ergeben sich unterschiedliche Werte.
+      - text: Die Kennlinie ist gekrümmt.
+    erklaerung: Ursachen sind z. B. Erwärmung oder Alterung. Unterschiedliche Werte bei steigender und fallender Größe nennt man Hysterese.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Ordne richtig zu – was ist Kalibrieren?
+    optionen:
+      - text: Die Messabweichung durch Vergleich mit einer Referenz feststellen, ohne das Gerät zu verändern
+        richtig: true
+      - text: Das Gerät so einstellen, dass die Abweichung möglichst klein wird
+      - text: Die amtliche Prüfung durch die Eichbehörde
+      - text: Das Gerät nach dem Einschalten aufwärmen lassen
+    erklaerung: Einstellen ist Justieren, die amtliche Prüfung ist Eichen.
+
+  - typ: mc
+    stufe: standard
+    frage: Welches Messverfahren ist ein Kompensationsverfahren?
+    optionen:
+      - text: Balkenwaage – das Gewicht wird durch Gegengewichte ins Gleichgewicht gebracht
+        richtig: true
+      - text: Federwaage
+      - text: Zeigerinstrument mit Drehspule
+      - text: Leistungsberechnung aus Spannung und Strom
+    erklaerung: Beim Kompensationsverfahren stellt ein Gegensignal ein Gleichgewicht her (Nullabgleich), z. B. auch die abgeglichene Messbrücke.
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Aufgaben übernimmt die Signalverarbeitung in einer Messkette?
+    optionen:
+      - text: verstärken und filtern
+        richtig: true
+      - text: linearisieren und A/D-wandeln
+        richtig: true
+      - text: Störgrößen kompensieren
+        richtig: true
+      - text: die Messgröße erzeugen
+    erklaerung: Die Messgröße kommt aus dem Prozess. Der Sensor wandelt sie in ein Signal, die Signalverarbeitung bereitet es auf.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Sensor liefert bei 20 °C eine Spannung von 1,0 V und bei 40 °C eine von 2,0 V. Wie groß ist die Empfindlichkeit in mV/°C?'
+    loesung: 50
+    einheit: mV/°C
+    erklaerung: '$E = \Delta U / \Delta \vartheta = 1{,}0\,\mathrm{V} / 20\,\mathrm{K} = 50\,\mathrm{mV/K}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein linearer Drucksensor liefert 1,0 V bei 0 bar und 5,0 V bei 10 bar. Wie groß ist der Druck bei 3,4 V?'
+    loesung: 6
+    einheit: bar
+    erklaerung: '$E = 4\,\mathrm{V}/10\,\mathrm{bar} = 0{,}4\,\mathrm{V/bar}$ → $p = (3{,}4 - 1{,}0)\,\mathrm{V} / 0{,}4\,\mathrm{V/bar} = 6\,\mathrm{bar}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Linearisiere eine Kennlinie durch die Punkte (30 °C | 8,0 kΩ) und (40 °C | 5,4 kΩ). Wie groß ist der Achsenabschnitt d in kΩ?'
+    loesung: 15.8
+    einheit: kΩ
+    erklaerung: '$k = (5{,}4 - 8{,}0)\,\mathrm{k\Omega}/10\,°\mathrm{C} = -0{,}26\,\mathrm{k\Omega/°C}$ → $d = 8{,}0 - (-0{,}26 \cdot 30) = 15{,}8\,\mathrm{k\Omega}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Was gilt für die Empfindlichkeit eines Sensors mit gekrümmter Kennlinie?
+    optionen:
+      - text: Sie hängt vom Arbeitspunkt ab.
+        richtig: true
+      - text: Sie ist überall gleich.
+      - text: Sie ist immer null.
+      - text: Man kann sie nicht berechnen.
+    erklaerung: Die Empfindlichkeit ist die Steigung der Kennlinie – bei einer Kurve ändert sie sich von Punkt zu Punkt.
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein Gerät zeigt bei der Kalibrierung 2,04 V statt 2,00 V an (konstanter Offset). Später zeigt es 3,71 V. Wie groß ist der berichtigte Wert?'
+    loesung: 3.67
+    einheit: V
+    toleranz: 0.005
+    toleranzArt: absolut
+    erklaerung: '$F = +0{,}04\,\mathrm{V}$, Korrektur $K = -0{,}04\,\mathrm{V}$ → $3{,}71\,\mathrm{V} - 0{,}04\,\mathrm{V} = 3{,}67\,\mathrm{V}$'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Welche Messgeräte müssen in Österreich geeicht sein?
+    optionen:
+      - text: Messgeräte im geschäftlichen Verkehr, z. B. Stromzähler, Zapfsäulen und Ladenwaagen
+        richtig: true
+      - text: Alle Multimeter im Schullabor
+      - text: Nur Oszilloskope
+      - text: Keine – Eichen ist freiwillig
+    erklaerung: Wo nach Messwerten abgerechnet wird, schreibt das Gesetz die Eichung vor. Laborgeräte werden kalibriert.

@@ -1,0 +1,162 @@
+---
+title: Theorie – Signalkennwerte
+description: "Wechsel-, Gleich- und Mischgrößen, Periodendauer, Frequenz, Kreisfrequenz, Wellenlänge, Sinusgröße mit Nullphasenwinkel, Scheitelwert, Spitze-Spitze-Wert, arithmetischer Mittelwert, Gleichrichtwert, Effektivwert, Scheitelfaktor, Formfaktor, Mischgrößen, PWM-Signale, Einweggleichrichtung, Messgeräte mit Mittelwert- und Effektivwertmessung."
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Sinus from '../../../assets/mtrs/sinus-kennwerte.svg';
+import Misch from '../../../assets/mtrs/mischspannung.svg';
+
+## 1 · Gleich-, Wechsel- und Mischgrößen
+
+- **Gleichgröße** (DC, *direct current*): zeitlich konstant, z. B. eine Batterie.
+- **Wechselgröße** (AC, *alternating current*): ändert periodisch Betrag und Richtung, ihr **Mittelwert ist null**. Kennzeichnung oft mit ~ (z. B. $u_\sim$).
+- **Mischgröße**: Gleichanteil + Wechselanteil, z. B. die Spannung hinter einem Gleichrichter mit Brummen.
+
+Wechselspannung hat in der Energietechnik große **Vorteile**: Sie lässt sich mit Transformatoren einfach umspannen (hohe Spannung für die
+Übertragung, kleine Ströme, geringe Verluste), und viele Maschinen arbeiten direkt damit. **Nachteile**: Die Berechnung ist aufwendiger, und
+hochfrequente Anteile können elektromagnetische Störungen verursachen.
+
+## 2 · Zeitkennwerte
+
+Eine **periodische** Größe wiederholt sich nach der **Periodendauer** $T$: $f(t) = f(t + n \cdot T)$.
+
+$$
+f = \frac{1}{T}
+\qquad
+\omega = 2\pi f = \frac{2\pi}{T}
+\qquad
+\lambda = \frac{c}{f}
+$$
+
+| Größe | Einheit | Bedeutung |
+| --- | --- | --- |
+| Periodendauer $T$ | s | Dauer einer vollen Schwingung |
+| Frequenz $f$ | Hz = 1/s | Schwingungen pro Sekunde |
+| Kreisfrequenz $\omega$ | 1/s (rad/s) | Winkelgeschwindigkeit des rotierenden Zeigers |
+| Wellenlänge $\lambda$ | m | Strecke, die eine Welle in einer Periode zurücklegt ($c \approx 3 \cdot 10^{8}\,\mathrm{m/s}$) |
+
+## 3 · Sinusförmige Größen
+
+Eine Sinusgröße entsteht als Projektion eines **gleichförmig rotierenden Zeigers**:
+
+$$
+u(t) = \hat{u} \cdot \sin(\omega t + \varphi_u)
+\qquad
+i(t) = \hat{\imath} \cdot \sin(\omega t + \varphi_i)
+$$
+
+$\varphi_u$, $\varphi_i$ sind die **Nullphasenwinkel**. Die **Phasenverschiebung** zwischen Spannung und Strom ist $\varphi = \varphi_u - \varphi_i$.
+Ist $\varphi > 0$, **eilt die Spannung voraus**. Zeitlich entspricht das $\Delta t = \dfrac{\varphi}{360°} \cdot T$.
+
+## 4 · Amplitudenkennwerte
+
+<Abbildung bild={Sinus} unterschrift="Kennwerte einer Sinusspannung: Scheitelwert, Spitze-Spitze-Wert, Effektivwert und Gleichrichtwert" />
+
+### Scheitelwert und Spitze-Spitze-Wert
+
+- **Scheitelwert** (Spitzenwert, Maximalwert) $\hat{u}$: der größte Augenblickswert innerhalb einer Periode.
+- **Spitze-Spitze-Wert** $U_\mathrm{ss}$ (engl. $U_\mathrm{pp}$, *peak-to-peak*): Abstand zwischen größtem und kleinstem Wert. Beim symmetrischen Signal
+  $U_\mathrm{ss} = 2\hat{u}$.
+
+### Arithmetischer Mittelwert (Gleichanteil)
+
+Der arithmetische Mittelwert entspricht dem Gleichstrom, der in einer Periode **dieselbe Ladung** transportiert:
+
+$$
+\bar{u} = \frac{1}{T} \int_0^T u(t)\,\mathrm{d}t
+\qquad
+\text{bei abschnittsweise konstanten Signalen:}\quad \bar{u} = \frac{U_1 t_1 + U_2 t_2 + \ldots}{T}
+$$
+
+Man addiert die Flächen über der Zeitachse (positiv) und darunter (negativ) und teilt durch $T$. Bei einer **reinen Wechselgröße** heben sich die
+Flächen auf: $\bar{u} = 0$. Ein Drehspulinstrument und ein Multimeter in Stellung **DC** zeigen den arithmetischen Mittelwert.
+
+### Gleichrichtwert
+
+Der **Gleichrichtwert** ist der Mittelwert des **Betrags** – man klappt die negativen Flächen nach oben:
+
+$$
+\overline{\lvert u \rvert} = \frac{1}{T} \int_0^T \lvert u(t) \rvert\,\mathrm{d}t
+$$
+
+### Effektivwert
+
+Der **Effektivwert** $U$ (engl. *RMS – root mean square*) ist der Wert einer Gleichspannung, die in einem Widerstand **dieselbe Wärmeleistung**
+erzeugt:
+
+$$
+U = \sqrt{\frac{1}{T} \int_0^T u^2(t)\,\mathrm{d}t}
+\qquad
+\text{abschnittsweise konstant:}\quad U = \sqrt{\frac{U_1^2 t_1 + U_2^2 t_2 + \ldots}{T}}
+$$
+
+Rechenweg = Name: **quadrieren** (square) → **mitteln** (mean) → **Wurzel ziehen** (root). Ein Wechselstrom mit $I = 2\,\mathrm{A}$ erwärmt einen
+Widerstand genauso wie ein Gleichstrom von 2 A. Der Effektivwert ist **nie negativ**, und ohne Index ($U$, $I$) ist immer der Effektivwert gemeint.
+
+## 5 · Kennwerte wichtiger Kurvenformen
+
+| Kurvenform (symmetrisch, ohne Gleichanteil) | $\overline{\lvert u \rvert}$ | $U$ | Scheitelfaktor $k_\mathrm{s}$ | Formfaktor $k_\mathrm{f}$ |
+| --- | --- | --- | --- | --- |
+| **Sinus** | $\dfrac{2}{\pi}\hat{u} \approx 0{,}637\,\hat{u}$ | $\dfrac{\hat{u}}{\sqrt{2}} \approx 0{,}707\,\hat{u}$ | $\sqrt{2} \approx 1{,}414$ | $\dfrac{\pi}{2\sqrt{2}} \approx 1{,}111$ |
+| **Rechteck** | $\hat{u}$ | $\hat{u}$ | 1 | 1 |
+| **Dreieck** | $\dfrac{\hat{u}}{2}$ | $\dfrac{\hat{u}}{\sqrt{3}} \approx 0{,}577\,\hat{u}$ | $\sqrt{3} \approx 1{,}732$ | $\dfrac{2}{\sqrt{3}} \approx 1{,}155$ |
+
+**Scheitelfaktor** (*crest factor*) und **Formfaktor**:
+
+$$
+k_\mathrm{s} = \frac{\hat{u}}{U}
+\qquad\qquad
+k_\mathrm{f} = \frac{U}{\overline{\lvert u \rvert}}
+$$
+
+- Der **Scheitelfaktor** sagt, wie „spitz“ ein Signal ist. Messgeräte geben an, bis zu welchem Scheitelfaktor sie richtig messen (z. B. 3) –
+  bei schmalen Impulsen ist er sehr groß.
+- Der **Formfaktor** wird in der Messtechnik gebraucht: Einfache Multimeter richten gleich und messen den **Gleichrichtwert**. Die Anzeige wird mit
+  1,111 multipliziert – das ergibt den Effektivwert, aber **nur bei Sinus**.
+
+## 6 · Mischgrößen
+
+<Abbildung bild={Misch} unterschrift="Mischspannung: Gleichanteil (Mittelwert) mit überlagertem Wechselanteil" />
+
+Eine Mischspannung $u(t) = U_\mathrm{DC} + \hat{u}_\sim \sin(\omega t)$ hat
+
+- den **arithmetischen Mittelwert** $\bar{u} = U_\mathrm{DC}$ (der Wechselanteil mittelt sich weg),
+- den **Effektivwert** aus der Summe der Leistungen von Gleich- und Wechselanteil:
+
+$$
+U = \sqrt{U_\mathrm{DC}^2 + U_\sim^2}
+\qquad\text{mit dem Effektivwert des Wechselanteils } U_\sim \;(\text{beim Sinus } \hat{u}_\sim/\sqrt{2})
+$$
+
+Achtung: Die Effektivwerte werden **quadratisch** addiert, nicht einfach!
+
+### PWM-Signal
+
+Ein Rechteck, das zwischen $0$ und $\hat{u}$ schaltet, mit dem **Tastgrad** $D = t_\mathrm{ein}/T$:
+
+$$
+\bar{u} = D \cdot \hat{u}
+\qquad\qquad
+U = \sqrt{D} \cdot \hat{u}
+$$
+
+Ein Motor oder eine LED reagiert (wegen Trägheit bzw. Auge) auf den **Mittelwert**, ein Heizwiderstand auf den **Effektivwert** – deshalb ist die Leistung
+in einem Widerstand bei PWM größer, als man aus dem Mittelwert schätzen würde.
+
+### Einweggleichgerichteter Sinus
+
+Nur die positiven Halbwellen bleiben übrig: $\bar{u} = \hat{u}/\pi \approx 0{,}318\,\hat{u}$ und $U = \hat{u}/2$.
+
+## 7 · Was zeigt das Messgerät?
+
+| Messgerät / Einstellung | zeigt an | richtig bei |
+| --- | --- | --- |
+| Drehspulinstrument, Multimeter **DC** | arithmetischen Mittelwert $\bar{u}$ | allen Signalformen |
+| einfaches Multimeter **AC** (Gleichrichtwert × 1,111) | „Effektivwert“ | **nur Sinus** |
+| **True-RMS**-Multimeter | echten Effektivwert (bis zu Bandbreite und Scheitelfaktor) | allen Signalformen |
+| Dreheisenmesswerk | echten Effektivwert | allen Signalformen (niedrige Frequenz) |
+| Oszilloskop | Kurvenform; Messfunktionen für $\hat{u}$, $U_\mathrm{ss}$, Mittelwert, RMS | allen Signalformen |
+
+Viele True-RMS-Geräte messen in Stellung AC nur den **Wechselanteil**; für den Gesamteffektivwert einer Mischgröße braucht man die Stellung „AC+DC“
+oder rechnet $\sqrt{U_\mathrm{DC}^2 + U_\mathrm{AC}^2}$.

@@ -1,0 +1,110 @@
+---
+title: Praxisbeispiele – Sensoren
+description: Sensor für Kühlschrank, Pizzaofen und Heizungsrohr auswählen, NTC als Einschaltstrombegrenzer, Varistor im Netzfilter, Küchenwaage mit DMS, Fahrradtacho mit Hall-Sensor, Pt100 in Zweileiterschaltung, Smartphone-Sensoren.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Den passenden Temperatursensor wählen
+
+Wähle für jede Anwendung einen Sensor und begründe:
+
+1. Temperaturregelung eines Kühlschranks
+2. Temperaturanzeige eines Pizzaofens (bis 450 °C)
+3. Wärmemengenzähler einer Heizung (Vor- und Rücklauf sollen auf 0,1 K genau verglichen werden)
+4. Überhitzungsschutz in der Wicklung eines Lüftermotors
+
+<Loesung>
+
+1. **NTC** – billig, im Bereich 0 … 10 °C sehr empfindlich, die Genauigkeit reicht völlig.
+2. **Thermoelement Typ K** – NTC und Pt100 (in einfacher Ausführung) halten so hohe Temperaturen nicht aus bzw. sind teurer; das Thermoelement ist robust und
+   klein.
+3. **Pt100 oder Pt1000 als gepaartes Fühlerpaar** – genau, langzeitstabil, genormt. Bei Wärmemengenzählern sind sie vorgeschrieben.
+4. **PTC** – er ändert seinen Widerstand an der Nenntemperatur sprunghaft und kann direkt eine Abschaltung auslösen.
+
+</Loesung>
+
+## Warum knallt es beim Einschalten nicht?
+
+Ein 500-W-Netzteil hat hinter dem Gleichrichter einen großen Elko. In Reihe zum Netzeingang sitzt ein scheibenförmiges Bauteil, beschriftet „NTC 5D-15“.
+
+1. Wozu dient es?
+2. Warum ist das nach einem kurzen Aus- und Wiedereinschalten problematisch?
+
+<Loesung>
+
+1. Es ist ein **NTC als Einschaltstrombegrenzer**: Kalt hat er ca. 5 Ω und begrenzt den Ladestrom des leeren Elkos (sonst wären es hunderte Ampere –
+   Sicherung löst aus, Schalter verschweißt). Im Betrieb erwärmt er sich durch den Strom, sein Widerstand sinkt auf einen Bruchteil, und die Verluste werden klein.
+2. Nach dem Ausschalten ist der NTC noch **heiß und niederohmig**. Beim sofortigen Wiedereinschalten begrenzt er kaum. Größere Geräte überbrücken den NTC
+   deshalb nach dem Hochlaufen mit einem Relais und lassen ihn abkühlen.
+
+</Loesung>
+
+## Varistor im Netzfilter
+
+In einer Überspannungs-Steckdosenleiste sitzen zwischen L und N sowie zwischen L/N und PE scheibenförmige **Varistoren** (z. B. 275 V AC).
+
+1. Wie schützen sie die Geräte?
+2. Warum muss eine Sicherung davor sitzen?
+3. Warum sollte man solche Leisten nach einem Gewitter mit Blitzeinschlag in der Nähe tauschen?
+
+<Loesung>
+
+1. Bei normaler Netzspannung sind sie hochohmig. Eine kurze Überspannungsspitze bringt sie in den steilen Teil der Kennlinie – sie werden niederohmig und
+   **begrenzen** die Spannung, indem sie den Impulsstrom ableiten.
+2. Bei dauerhafter Überspannung oder Alterung kann der Varistor durchlegieren (Kurzschluss) und überhitzen – die Sicherung (oft eine Thermosicherung direkt am
+   Varistor) trennt ihn dann ab.
+3. Jeder große Impuls **altert** den Varistor (die Ansprechspannung sinkt, der Leckstrom steigt). Viele Leisten haben eine Kontrollleuchte, die anzeigt, ob der
+   Schutz noch wirkt.
+
+</Loesung>
+
+## Messkette einer Küchenwaage
+
+Eine Küchenwaage hat eine Wägezelle mit vier DMS (Vollbrücke, 1 kΩ, Ausgang 1 mV/V bei 5 kg). Sie wird mit 3,3 V versorgt, ein 24-Bit-A/D-Umsetzer
+wertet aus.
+
+1. Welche Brückenspannung entsteht bei 5 kg und bei 1 g?
+2. Warum braucht man einen so hochauflösenden A/D-Umsetzer?
+
+<Loesung>
+
+1. 1 mV/V bedeutet: 1 mV Ausgangsspannung pro Volt Speisespannung bei Nennlast → bei 3,3 V und 5 kg: **3,3 mV**. Bei 1 g:
+   $3{,}3\,\mathrm{mV} \cdot 1/5000 = 0{,}66\,\mathrm{\mu V}$.
+2. Um 1 g sicher aufzulösen, braucht man Schritte von unter 1 µV. Mit einem Verstärker (z. B. 128-fach) und einem 24-Bit-Umsetzer ist das möglich. Ein
+   10-Bit-Umsetzer im Mikrocontroller (3,2 mV pro Stufe) würde nicht einmal die 5 kg auflösen.
+
+</Loesung>
+
+## Fahrradtacho mit Hall-Sensor
+
+Am Fahrrad sitzt ein Magnet an einer Speiche, am Rahmen ein Hall-Schalter. Der Radumfang beträgt 2,10 m. Der Tacho misst zwischen zwei Impulsen 0,30 s.
+
+1. Wie schnell fährt das Rad?
+2. Warum nimmt man einen Hall-Sensor statt eines mechanischen Kontakts?
+
+<Loesung>
+
+1. $v = \dfrac{2{,}10\,\mathrm{m}}{0{,}30\,\mathrm{s}} = 7{,}0\,\mathrm{m/s} = 25{,}2\,\mathrm{km/h}$
+2. **Berührungslos** – kein Verschleiß, kein Prellen, wasser- und schmutzunempfindlich, auch bei hohen Drehzahlen zuverlässig. (Ältere Tachos verwenden einen
+   Reedkontakt, der ebenfalls berührungslos schaltet, aber mechanisch empfindlicher ist.)
+
+</Loesung>
+
+## Pt100 mit langen Zuleitungen
+
+Ein Pt100 sitzt in 15 m Entfernung und ist in **Zweileiterschaltung** mit Kupferleitung (0,5 mm², $\rho = 0{,}0178\,\Omega\,\mathrm{mm^2/m}$) angeschlossen.
+
+1. Wie groß ist der Widerstand der Zuleitungen?
+2. Welchen Temperaturfehler verursacht er?
+3. Wie vermeidet man ihn?
+
+<Loesung>
+
+1. Hin- und Rückleiter: $R_\mathrm{L} = 0{,}0178 \cdot \dfrac{2 \cdot 15\,\mathrm{m}}{0{,}5\,\mathrm{mm^2}}\,\Omega \approx 1{,}07\,\Omega$
+2. $1{,}07\,\Omega / 0{,}385\,\Omega/\mathrm{K} \approx 2{,}8\,\mathrm{K}$ zu viel – und dieser Fehler ändert sich mit der Temperatur der Leitung.
+3. **Vierleiterschaltung**: Über zwei Leitungen fließt der Messstrom, über zwei weitere wird die Spannung **direkt am Sensor** stromlos gemessen – die
+   Zuleitungswiderstände gehen nicht ein. Alternativ: **Dreileiterschaltung** (Kompensation in der Brücke), Pt1000 (Fehler zehnmal kleiner) oder ein
+   Messumformer direkt am Sensor (4 … 20 mA).
+
+</Loesung>

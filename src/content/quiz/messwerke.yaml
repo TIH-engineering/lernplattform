@@ -1,0 +1,113 @@
+titel: Messwerke und Messbereiche
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie hängt der Zeigerausschlag eines Drehspulmesswerks vom Strom ab?
+    optionen:
+      - text: proportional zum Strom (lineare Skala)
+        richtig: true
+      - text: proportional zum Quadrat des Stroms
+      - text: umgekehrt proportional zum Strom
+      - text: gar nicht – nur von der Spannung
+    erklaerung: '$M = B \cdot I \cdot N \cdot A$ im gleichmäßigen radialen Feld, Gegenmoment der Feder $c \cdot \alpha$ → $\alpha \sim I$.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welches Messwerk zeigt bei Wechselstrom direkt den Effektivwert an?
+    optionen:
+      - text: Dreheisenmesswerk
+        richtig: true
+      - text: Drehspulmesswerk ohne Gleichrichter
+      - text: Drehspulmesswerk mit Gleichrichter bei Rechtecksignal
+      - text: keines
+    erklaerung: Beim Dreheisen gilt α ~ I², gemittelt ergibt das den Effektivwert. Das Drehspulwerk zeigt den Mittelwert.
+
+  - typ: mc
+    stufe: standard
+    frage: 'Ein Drehspulgerät zeigt 0 V, ein Dreheisengerät 15 V an derselben Spannung. Was liegt an?'
+    optionen:
+      - text: Eine reine Wechselspannung mit 15 V Effektivwert
+        richtig: true
+      - text: Eine Gleichspannung von 15 V
+      - text: Gar keine Spannung – das Dreheisengerät ist defekt
+      - text: Eine Gleichspannung von 0 V mit 15 V Störung
+    erklaerung: Der arithmetische Mittelwert einer reinen Wechselspannung ist null – das zeigt das Drehspulgerät.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welcher Zeigerverlauf ist bei einem Messwerk anzustreben?
+    optionen:
+      - text: Schnelles Erreichen des Endwerts mit höchstens kleinem Überschwingen
+        richtig: true
+      - text: Langes Schwingen um den Endwert
+      - text: Sehr langsames Heranschleichen an den Endwert
+      - text: Möglichst großes Überschwingen
+    erklaerung: Zu schwache Dämpfung → Pendeln, zu starke → Kriechen. Beides verlängert die Wartezeit bis zum Ablesen.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie wird ein Strommesser angeschlossen, und wie groß sollte sein Innenwiderstand sein?
+    optionen:
+      - text: In Reihe, möglichst klein
+        richtig: true
+      - text: Parallel, möglichst groß
+      - text: In Reihe, möglichst groß
+      - text: Parallel, möglichst klein
+    erklaerung: Spannungsmesser werden parallel angeschlossen und sollen einen möglichst großen Innenwiderstand haben.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Voltmeter-Modul hat 1 V Messbereich und 10 kΩ Innenwiderstand. Welcher Vorwiderstand ist für den 50-V-Bereich nötig (in kΩ)?'
+    loesung: 490
+    einheit: kΩ
+    erklaerung: '$R_\mathrm{V} = R_\mathrm{i} \cdot (n - 1) = 10\,\mathrm{k\Omega} \cdot (50 - 1) = 490\,\mathrm{k\Omega}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Strommesser hat bei 1 A Vollausschlag und 50 mΩ Innenwiderstand. Wie groß muss der Shunt für 10 A sein (in mΩ)?'
+    loesung: 5.556
+    einheit: mΩ
+    erklaerung: '$R_\mathrm{N} = R_\mathrm{i}/(n - 1) = 50\,\mathrm{m\Omega}/9 \approx 5{,}56\,\mathrm{m\Omega}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein analoges Vielfachmessgerät hat 20 kΩ/V. Wie groß ist sein Eingangswiderstand im 30-V-Bereich (in kΩ)?'
+    loesung: 600
+    einheit: kΩ
+    erklaerung: '$R_\mathrm{e} = 20\,\mathrm{k\Omega/V} \cdot 30\,\mathrm{V} = 600\,\mathrm{k\Omega}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Bei der spannungsrichtigen Messung ist der berechnete Widerstand U/I …
+    optionen:
+      - text: zu klein, weil das Amperemeter auch den Voltmeterstrom misst
+        richtig: true
+      - text: zu groß, weil das Voltmeter auch die Spannung am Amperemeter misst
+      - text: immer exakt richtig
+      - text: zu groß, weil das Voltmeter einen Strom liefert
+    erklaerung: Gut für kleine Widerstände. Die stromrichtige Messung liefert zu große Werte und eignet sich für große Widerstände.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Stromrichtig gemessen: U = 10 V, I = 30 mA, R_A = 10 Ω. Wie groß ist der kompensierte Widerstand?'
+    loesung: 323.3
+    einheit: Ω
+    erklaerung: '$R_\mathrm{x} = U/I - R_\mathrm{A} = 333{,}3\,\Omega - 10\,\Omega = 323{,}3\,\Omega$; unkompensiert wäre der Fehler +3,1 %.'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Amperemeter 10 Ω, Voltmeter 1 MΩ. Wie groß ist der Grenzwiderstand, ab dem stromrichtig gemessen werden sollte (in kΩ)?'
+    loesung: 3.162
+    einheit: kΩ
+    erklaerung: '$R_\mathrm{g} = \sqrt{R_\mathrm{A} \cdot R_\mathrm{V}} = \sqrt{10 \cdot 10^{6}}\,\Omega \approx 3{,}16\,\mathrm{k\Omega}$'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum misst man Widerstände mit dem Multimeter nur im spannungslosen Zustand?
+    optionen:
+      - text: Weil das Ohmmeter selbst einen Messstrom einspeist und fremde Spannungen das Ergebnis verfälschen oder das Gerät beschädigen
+        richtig: true
+      - text: Weil Widerstände unter Spannung keinen Widerstand haben
+      - text: Weil das Multimeter sonst zu langsam misst
+      - text: Das ist nicht nötig.
+    erklaerung: Außerdem verfälschen parallele Pfade in der Schaltung die Messung – Bauteil möglichst auslöten.

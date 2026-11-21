@@ -1,0 +1,35 @@
+---
+title: Messfehler und Messunsicherheit
+description: "Ursachen von Messfehlern, absoluter und relativer Fehler, systematische und zufällige Fehler, Mittelwert, Varianz, Standardabweichung, Normalverteilung, Vertrauensbereich, Genauigkeitsklassen und Fehlerfortpflanzung."
+sidebar:
+  label: Übersicht
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Kein Messwert ist exakt. Jedes Messgerät, jede Umgebung und jede Ablesung bringt kleine Abweichungen mit sich. Gute Technikerinnen und
+Techniker wissen, **wie groß** diese Abweichungen sein können, und geben jedes Ergebnis mit seiner **Unsicherheit** an – sonst ist es wertlos.
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- Ursachen von Messfehlern nennen und absoluten und relativen Fehler berechnen,
+- systematische und zufällige Fehler unterscheiden und wissen, wie man mit ihnen umgeht,
+- Mittelwert, Varianz und Standardabweichung einer Messreihe berechnen,
+- mit der **Normalverteilung** den Bereich eines Einzelmesswerts und mit dem **Vertrauensfaktor** den Vertrauensbereich des Mittelwerts angeben,
+- **Genauigkeitsklassen** auswerten und das passende Messgerät auswählen,
+- die **Fehlerfortpflanzung** bei Summen, Differenzen, Produkten und Quotienten berechnen.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="Fehlerarten, Statistik, Normalverteilung, Vertrauensbereich, Klassen, Fehlerfortpflanzung" href="/messfehler/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="Fehler, Genauigkeitsklasse, Messreihe auswerten, Fehlerfortpflanzung" href="/messfehler/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Körpergrößen der Klasse, Gerät auswählen, Differenzmessung, Messkategorien" href="/messfehler/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen" href="/messfehler/quiz/" />
+</CardGrid>
+
+:::tip[Voraussetzungen]
+[Grundlagen der Messtechnik](/messtechnik/) – Begriffe, Kennlinie, Kalibrieren.
+:::
