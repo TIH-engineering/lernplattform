@@ -67,9 +67,24 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
 
 ### Grundlagen der Elektrotechnik (1./2. Jahrgang)
 
-- Nur **Praxisbeispiele** und **Quiz**, jeweils mit Verweis auf das Schulbuch
-  (Kapitelangabe). Buchtitel ist noch offen → Platzhalter „Schulbuch, Kapitel …“.
-- **Keine Inhalte aus dem Schulbuch übernehmen** (kein Text, keine Abbildungen, keine Aufgaben).
+- Schulbücher: **Grundlagen der Elektrotechnik 1 und 2** (GET1, GET2), H. Deimel u. a. (digital über digi4school).
+  Zweiter Autor: Schreibweise noch vom Lehrer zu bestätigen – bis dahin „H. Deimel u. a.“ schreiben.
+  Zusätzlich Übungsbuch **Lindner, Elektro-Aufgaben Bd. 1/2** (nur Aufgabennummern nennen).
+- **Keine eigene Theorie** – pro Thema: Übersicht (Schulbuchkapitel, testrelevante Beispiel-/Aufgabennummern,
+  „Das solltest du können“, kurze Formeltabelle), **Rechenbeispiele**, **Praxisbeispiele**, **Quiz**.
+- 14 Themen in `src/content/docs/grundlagen/<thema>/`, Liste in `astro.config.mjs` (`grundlagenThemen`).
+  Quizdateien: `src/content/quiz/grundlagen-<thema>.yaml`.
+- Unbekannte GET2-Kapitelnummern stehen als „Kapitel …“ – nachtragen, sobald bekannt.
+- **Keine Inhalte aus dem Schulbuch oder dem Lindner übernehmen** (kein Text, keine Abbildungen, keine Aufgaben).
+- Quelle für Stoffumfang und Niveau: `Quellen/HWE/` (Tests, Teststofflisten, Jahresplanung).
+  Dort liegen auch **Notenlisten und Scans mit Schülerdaten – niemals lesen, verwenden oder veröffentlichen.**
+  Aufgaben aus Tests nicht 1:1 übernehmen, sondern mit eigenen Zahlenwerten neu stellen.
+
+### Quizzes
+
+- Antworten werden beim Bauen **automatisch gemischt**; bei Fragen mit genau einer richtigen Antwort wird die
+  richtige Position gleichmäßig auf 1./2./3./4. verteilt. In der YAML-Datei darf die richtige Antwort daher
+  immer zuerst stehen. `mischen: false` hält die Reihenfolge fest (z. B. bei „alle oben genannten“).
 
 ## Grafiken
 

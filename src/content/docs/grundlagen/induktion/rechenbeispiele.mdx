@@ -1,0 +1,182 @@
+---
+title: Rechenbeispiele – Induktion und Transformator
+description: Rechenbeispiele zu Kraft auf Leiter, Bewegungsinduktion, Induktionsgesetz, Flussverlauf, sinusförmigem Fluss, Selbstinduktion, Gegeninduktivität und Transformator.
+---
+
+import Stufe from '../../../../components/Stufe.astro';
+import Loesung from '../../../../components/Loesung.astro';
+import Abbildung from '../../../../components/Abbildung.astro';
+import Trafo from '../../../../assets/grundlagen/transformator.svg';
+
+## Kraft auf einen Leiter
+
+<Stufe wert="grundlagen" />
+
+Ein Leiter von $20\,\mathrm{cm}$ Länge liegt senkrecht in einem Magnetfeld mit $B = 1{,}2\,\mathrm{T}$ und führt $15\,\mathrm{A}$.
+Wie groß ist die Kraft?
+
+<Loesung>
+
+$$
+F = B \cdot I \cdot l = 1{,}2\,\mathrm{T} \cdot 15\,\mathrm{A} \cdot 0{,}2\,\mathrm{m} = 3{,}6\,\mathrm{N}
+$$
+
+(Einheitencheck: $1\,\mathrm{T} \cdot \mathrm{A} \cdot \mathrm{m} = 1\,\dfrac{\mathrm{Vs}}{\mathrm{m^2}} \cdot \mathrm{A} \cdot \mathrm{m} = 1\,\dfrac{\mathrm{Ws}}{\mathrm{m}} = 1\,\mathrm{N}$)
+Auf diesem Prinzip beruht jeder Elektromotor.
+
+</Loesung>
+
+## Bewegungsinduktion
+
+<Stufe wert="grundlagen" />
+
+Ein Leiterstab der Länge $25\,\mathrm{cm}$ wird mit $5\,\mathrm{m/s}$ senkrecht durch ein Magnetfeld mit $0{,}8\,\mathrm{T}$ bewegt.
+Welche Spannung wird induziert?
+
+<Loesung>
+
+$$
+u = B \cdot l \cdot v = 0{,}8\,\mathrm{T} \cdot 0{,}25\,\mathrm{m} \cdot 5\,\mathrm{m/s} = 1\,\mathrm{V}
+$$
+
+Das ist das Prinzip des Generators: Bewegung im Magnetfeld erzeugt Spannung.
+
+</Loesung>
+
+## Induktionsgesetz
+
+<Stufe wert="grundlagen" />
+
+Der Fluss durch eine Spule mit 250 Windungen ändert sich gleichmäßig in $10\,\mathrm{ms}$ um $2\,\mathrm{mWb}$.
+Wie groß ist die induzierte Spannung?
+
+<Loesung>
+
+$$
+|u_\mathrm{i}| = N \cdot \frac{\Delta \Phi}{\Delta t} = 250 \cdot \frac{2 \cdot 10^{-3}\,\mathrm{Wb}}{10 \cdot 10^{-3}\,\mathrm{s}} = 50\,\mathrm{V}
+$$
+
+</Loesung>
+
+## Induzierte Spannung aus dem Flussverlauf
+
+<Stufe wert="standard" />
+
+Durch eine Spule mit $N = 200$ Windungen ändert sich der Fluss so:
+
+| Zeitabschnitt | 0 … 4 ms | 4 … 8 ms | 8 … 10 ms |
+| --- | --- | --- | --- |
+| Fluss | steigt linear von 0 auf 3 mWb | bleibt bei 3 mWb | fällt linear auf 0 |
+
+Berechne die induzierte Spannung in jedem Abschnitt und skizziere ihren Verlauf.
+
+<Loesung>
+
+Die Spannung ist proportional zur **Steigung** des Flusses ($u_\mathrm{i} = -N \cdot \Delta\Phi / \Delta t$):
+
+| Abschnitt | $\Delta\Phi / \Delta t$ | $u_\mathrm{i}$ |
+| --- | --- | --- |
+| 0 … 4 ms | $+3\,\mathrm{mWb} / 4\,\mathrm{ms} = 0{,}75\,\mathrm{Wb/s}$ | $-150\,\mathrm{V}$ |
+| 4 … 8 ms | 0 | 0 V |
+| 8 … 10 ms | $-3\,\mathrm{mWb} / 2\,\mathrm{ms} = -1{,}5\,\mathrm{Wb/s}$ | $+300\,\mathrm{V}$ |
+
+Der Spannungsverlauf besteht aus **Rechtecken**: Wo sich der Fluss schnell ändert, ist die Spannung groß; wo er konstant ist, ist sie null.
+Das Vorzeichen (Lenzsche Regel): Die induzierte Spannung wirkt ihrer Ursache, der Flussänderung, entgegen.
+
+</Loesung>
+
+## Sinusförmiger Fluss
+
+<Stufe wert="standard" />
+
+In einer Spule mit $N = 400$ Windungen ändert sich der Fluss sinusförmig mit $\hat{\Phi} = 1{,}5\,\mathrm{mWb}$ und $f = 50\,\mathrm{Hz}$.
+Berechne Spitzenwert und Effektivwert der induzierten Spannung.
+
+<Loesung>
+
+$\omega = 2\pi f \approx 314{,}2\,\mathrm{s^{-1}}$
+
+$$
+\hat{u} = N \cdot \omega \cdot \hat{\Phi} = 400 \cdot 314{,}2\,\mathrm{s^{-1}} \cdot 1{,}5 \cdot 10^{-3}\,\mathrm{Wb} \approx 188{,}5\,\mathrm{V}
+\qquad
+U = \frac{\hat{u}}{\sqrt{2}} \approx 133{,}3\,\mathrm{V}
+$$
+
+Kurzform (Transformatorhauptgleichung): $U = 4{,}44 \cdot f \cdot N \cdot \hat{\Phi} = 4{,}44 \cdot 50 \cdot 400 \cdot 1{,}5 \cdot 10^{-3}\,\mathrm{V} \approx 133\,\mathrm{V}$ ✔
+
+</Loesung>
+
+## Selbstinduktion beim Abschalten
+
+<Stufe wert="standard" />
+
+Durch eine Relaisspule mit $L = 0{,}5\,\mathrm{H}$ fließen $2\,\mathrm{A}$. Der Strom wird in $5\,\mathrm{ms}$ auf null abgeschaltet.
+Welche Spannung entsteht an der Spule? Welche Energie war gespeichert?
+
+<Loesung>
+
+$$
+|u_\mathrm{L}| = L \cdot \frac{\Delta i}{\Delta t} = 0{,}5\,\mathrm{H} \cdot \frac{2\,\mathrm{A}}{5 \cdot 10^{-3}\,\mathrm{s}} = 200\,\mathrm{V}
+\qquad
+W = \tfrac12 L I^2 = \tfrac12 \cdot 0{,}5\,\mathrm{H} \cdot (2\,\mathrm{A})^2 = 1\,\mathrm{J}
+$$
+
+Je schneller abgeschaltet wird, desto höher die Spannung! Sie kann den Schalttransistor zerstören.
+Abhilfe: eine **Freilaufdiode** parallel zur Spule (siehe Praxisbeispiele).
+
+</Loesung>
+
+## Gegeninduktivität
+
+<Stufe wert="vertiefung" />
+
+Zwei Spulen mit $L_1 = 40\,\mathrm{mH}$ und $L_2 = 10\,\mathrm{mH}$ sind mit dem Kopplungsgrad $k = 0{,}9$ gekoppelt.
+Wie groß ist die Gegeninduktivität? Welche Spannung induziert ein Strom in Spule 1, der sich mit $100\,\mathrm{A/s}$ ändert, in Spule 2?
+
+<Loesung>
+
+$$
+M = k \sqrt{L_1 L_2} = 0{,}9 \cdot \sqrt{40 \cdot 10^{-3} \cdot 10 \cdot 10^{-3}}\,\mathrm{H} = 0{,}9 \cdot 20\,\mathrm{mH} = 18\,\mathrm{mH}
+$$
+
+$$
+u_2 = M \cdot \frac{\Delta i_1}{\Delta t} = 18 \cdot 10^{-3}\,\mathrm{H} \cdot 100\,\mathrm{A/s} = 1{,}8\,\mathrm{V}
+$$
+
+$k = 1$ wäre eine perfekte Kopplung (jede Feldlinie von Spule 1 durchsetzt auch Spule 2), $k = 0$ gar keine.
+
+</Loesung>
+
+## Idealer Transformator
+
+<Stufe wert="standard" />
+
+<Abbildung bild={Trafo} unterschrift="Transformator mit Last" />
+
+Ein idealer Transformator hat $N_1 = 1150$ und $N_2 = 60$ Windungen und liegt an $U_1 = 230\,\mathrm{V}$.
+Sekundärseitig ist ein Widerstand $R_\mathrm{L} = 6\,\Omega$ angeschlossen.
+Berechne $\ddot{u}$, $U_2$, $I_2$, $P_2$, $I_1$ und den auf die Primärseite transformierten Widerstand.
+
+<Loesung>
+
+$$
+\ddot{u} = \frac{N_1}{N_2} = \frac{1150}{60} \approx 19{,}17
+\qquad
+U_2 = \frac{U_1}{\ddot{u}} = 12\,\mathrm{V}
+\qquad
+I_2 = \frac{U_2}{R_\mathrm{L}} = 2\,\mathrm{A}
+\qquad
+P_2 = U_2 I_2 = 24\,\mathrm{W}
+$$
+
+Beim idealen Transformator gilt $P_1 = P_2$:
+
+$$
+I_1 = \frac{I_2}{\ddot{u}} \approx 104\,\mathrm{mA}
+\qquad
+R_1' = \ddot{u}^2 \cdot R_\mathrm{L} \approx 2204\,\Omega
+$$
+
+Probe: $230\,\mathrm{V} / 2204\,\Omega \approx 104\,\mathrm{mA}$ ✔ – von der Netzseite aus „sieht“ der 6-Ω-Widerstand aus wie 2,2 kΩ.
+
+</Loesung>

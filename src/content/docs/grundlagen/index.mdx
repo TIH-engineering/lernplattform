@@ -1,19 +1,51 @@
 ---
 title: Grundlagen der Elektrotechnik
-description: "Praxisbeispiele und Quizzes zu den Grundlagen der Elektrotechnik – passend zum Schulbuch."
+description: "Rechenbeispiele, Praxisbeispiele und Quizzes zu den Grundlagen der Elektrotechnik – passend zu den Schulbüchern GET1 und GET2."
 ---
 
-:::note[In Arbeit]
-Dieser Bereich wird gerade erstellt.
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+:::note[Die Theorie steht im Schulbuch]
+Für die Grundlagen verwenden wir die Schulbücher **Grundlagen der Elektrotechnik 1** und **2** (H. Deimel u. a.),
+die du über **digi4school** auch digital nutzen kannst. Hier findest du **zusätzlich** dazu:
+
+- **Rechenbeispiele** mit ausführlichem Lösungsweg – im Stil der Tests
+- **Praxisbeispiele** – wo dir die Grundlagen in Technik und Alltag begegnen
+- **Quizzes** – zum Überprüfen, ob du ein Kapitel verstanden hast
+
+Bei jedem Thema steht, welches Kapitel im Schulbuch dazu passt (GET1 = Band 1, GET2 = Band 2) und
+welche Aufgaben im Lindner (*Elektro-Aufgaben*, Band 1) sich zum Üben eignen.
 :::
 
-Die Theorie und die Übungsaufgaben zu den Grundlagen findest du in deinem **Schulbuch**.
-Hier gibt es **zusätzlich** dazu:
+## So lernst du am besten
 
-- **Praxisbeispiele** – wo dir die Grundlagen im Alltag und in der Werkstätte begegnen
-- **Quizzes** – zum Überprüfen, ob du das jeweilige Kapitel verstanden hast
+1. **Kapitel im Schulbuch lesen** und die Beispiele dort nachvollziehen.
+2. **Rechenbeispiele** hier zuerst selbst rechnen, dann die Lösung aufklappen.
+3. **Quiz** machen – bei Fehlern die Erklärung lesen und im Buch nachschlagen.
+4. Für Tests: eigene **Formelsammlung** schreiben (nur Formeln mit Einheiten).
 
-Bei jedem Beispiel steht, welches Kapitel im Schulbuch dazu passt (Schulbuch, Kapitel …).
+:::tip[Tipps für Rechenaufgaben]
+- Formel zuerst allgemein anschreiben, dann Zahlenwerte **mit Einheiten** einsetzen.
+- Einheitenvorsätze vorher in Zehnerpotenzen umwandeln (z. B. $4{,}7\,\mathrm{k\Omega} = 4{,}7 \cdot 10^{3}\,\Omega$).
+- Ergebnis **unterstreichen** und auf Plausibilität prüfen: Kann das stimmen?
+- Bei Schaltungen: immer eine **Probe** machen (Knotenregel, Maschenregel).
+:::
 
-**Geplante Kapitel:** Spannung, Strom und Widerstand · Ohmsches Gesetz · Reihen- und Parallelschaltung ·
-Kirchhoff'sche Regeln · Leistung und Energie · Spannungsquellen · Kondensator · Spule · Wechselstrom.
+## Themen
+
+<CardGrid>
+	<LinkCard title="1 · Grundbegriffe, Strom und Spannung" description="SI-Einheiten, Ladung, Strom, Stromdichte, Potenzial, Zählpfeile" href="/grundlagen/grundbegriffe/" />
+	<LinkCard title="2 · Ohmsches Gesetz und Quellen" description="Widerstand, Leitwert, ideale und reale Quellen" href="/grundlagen/ohmsches-gesetz/" />
+	<LinkCard title="3 · Leiterwiderstand und Temperatur" description="Spezifischer Widerstand, Temperaturkoeffizient, NTC und PTC" href="/grundlagen/leiterwiderstand/" />
+	<LinkCard title="4 · Reihen- und Parallelschaltung" description="Kirchhoff, Spannungs- und Stromteiler, gemischte Schaltungen" href="/grundlagen/schaltungen/" />
+	<LinkCard title="5 · Netzwerke und Ersatzquellen" description="Gleichungssysteme, Ersatzspannungsquelle, Stern-Dreieck, Leistungsanpassung" href="/grundlagen/netzwerke/" />
+	<LinkCard title="6 · Energie, Leistung, Wirkungsgrad" description="Arbeit, Leistung, Energiekosten, Gesamtwirkungsgrad" href="/grundlagen/energie-leistung/" />
+	<LinkCard title="7 · Batterien und Akkus" description="Kapazität, C-Rate, Ladeverfahren, Akkutypen" href="/grundlagen/akkus/" />
+	<LinkCard title="8 · Elektrisches Feld und Kondensator" description="Feldstärke, Kapazität, Kondensatorschaltungen, Energie, Laden" href="/grundlagen/kondensator/" />
+	<LinkCard title="9 · Magnetisches Feld" description="Feldstärke, Flussdichte, Durchflutung, magnetischer Kreis, Hysterese" href="/grundlagen/magnetfeld/" />
+	<LinkCard title="10 · Induktion und Transformator" description="Induktionsgesetz, Lenz, Induktivität, Kraft auf Leiter, Transformator" href="/grundlagen/induktion/" />
+	<LinkCard title="11 · Wechselgrößen und Blindwiderstände" description="Frequenz, Effektivwert, Zeiger, Phasenverschiebung, XL und XC" href="/grundlagen/wechselstrom/" />
+	<LinkCard title="12 · Komplexe Wechselstromrechnung" description="Komplexe Zahlen, Impedanz, Admittanz, Schaltungen" href="/grundlagen/komplexe-rechnung/" />
+	<LinkCard title="13 · Leistung bei Wechselstrom" description="Wirk-, Blind- und Scheinleistung, Leistungsfaktor, Kompensation" href="/grundlagen/wechselstromleistung/" />
+	<LinkCard title="14 · Resonanz und Filter" description="Reihen- und Parallelschwingkreis, Güte, Bandbreite, RC-Filter" href="/grundlagen/resonanz-filter/" />
+</CardGrid>

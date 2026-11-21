@@ -1,0 +1,76 @@
+---
+title: Praxisbeispiele – Resonanz und Filter
+description: Sender wählen beim Radio, Resonanz als Gefahr, Frequenzweiche und Filter in der Messtechnik mit Simulation.
+---
+
+import Loesung from '../../../../components/Loesung.astro';
+
+## Einen Radiosender einstellen
+
+In einem einfachen Mittelwellenradio wird der Sender mit einem Drehkondensator (30 pF … 300 pF) und einer Spule mit $250\,\mu\mathrm{H}$ gewählt.
+
+1. Welcher Frequenzbereich kann eingestellt werden?
+2. Warum braucht ein Radio einen Schwingkreis mit **hoher Güte**?
+
+<Loesung>
+
+1. $f_\mathrm{min} = \dfrac{1}{2\pi\sqrt{250\,\mu\mathrm{H} \cdot 300\,\mathrm{pF}}} \approx 581\,\mathrm{kHz}$ ·
+   $f_\mathrm{max} = \dfrac{1}{2\pi\sqrt{250\,\mu\mathrm{H} \cdot 30\,\mathrm{pF}}} \approx 1{,}84\,\mathrm{MHz}$
+   – das deckt das Mittelwellenband ab.
+2. Eine hohe Güte bedeutet eine **kleine Bandbreite**: Nur der gewünschte Sender wird hervorgehoben, Nachbarsender werden
+   unterdrückt (Trennschärfe). Ist die Bandbreite zu klein, werden aber hohe Töne des Senders abgeschnitten – ein Kompromiss.
+
+</Loesung>
+
+## Wenn Resonanz gefährlich wird
+
+1. Warum dürfen Soldaten nicht im Gleichschritt über eine Brücke marschieren?
+2. Im Reihenschwingkreis aus dem Rechenbeispiel lagen an L und C jeweils 10 V bei nur 1 V Eingangsspannung.
+   Was bedeutet das für die Auswahl der Bauteile?
+3. Wo tritt in elektrischen Netzen unerwünschte Resonanz auf?
+
+<Loesung>
+
+1. Trifft der Schritttakt die Eigenfrequenz der Brücke, schaukelt sich die Schwingung auf (mechanische Resonanz) – im Extremfall bis zum Einsturz.
+2. Der Kondensator muss für die **Resonanzspannung** ausgelegt sein, nicht nur für die Eingangsspannung. Bei hoher Güte können
+   das ein Vielfaches der Betriebsspannung sein!
+3. Kompensationskondensatoren bilden mit den Induktivitäten der Transformatoren Schwingkreise. Trifft eine Oberschwingung
+   (z. B. durch Netzteile) deren Resonanzfrequenz, entstehen hohe Ströme und Spannungen. Deshalb verwendet man verdrosselte Kompensationsanlagen.
+
+</Loesung>
+
+## Frequenzweiche einer Lautsprecherbox
+
+Eine einfache 2-Wege-Box hat einen Tieftöner und einen Hochtöner (beide 8 Ω). Der Hochtöner bekommt einen Kondensator in Reihe,
+der Tieftöner eine Spule. Die Trennfrequenz soll 3 kHz sein.
+
+1. Welche Filterart entsteht beim Hochtöner, welche beim Tieftöner?
+2. Berechne den Kondensator für den Hochtöner ($X_\mathrm{C} = R$ bei der Trennfrequenz).
+3. Berechne die Spule für den Tieftöner ($X_\mathrm{L} = R$ bei der Trennfrequenz).
+
+<Loesung>
+
+1. Hochtöner: **Hochpass** (C sperrt tiefe Frequenzen) · Tieftöner: **Tiefpass** (L sperrt hohe Frequenzen)
+2. $C = \dfrac{1}{2\pi f R} = \dfrac{1}{2\pi \cdot 3000 \cdot 8}\,\mathrm{F} \approx 6{,}6\,\mu\mathrm{F}$
+3. $L = \dfrac{R}{2\pi f} = \dfrac{8}{2\pi \cdot 3000}\,\mathrm{H} \approx 0{,}42\,\mathrm{mH}$
+
+Solche Filter 1. Ordnung fallen mit 6 dB pro Oktave (20 dB pro Dekade) ab. Bessere Weichen verwenden Filter höherer Ordnung.
+
+</Loesung>
+
+## Filter in LTspice untersuchen
+
+Baue den RC-Tiefpass aus den Rechenbeispielen ($R = 1\,\mathrm{k\Omega}$, $C = 100\,\mathrm{nF}$) in LTspice auf.
+
+1. Simuliere mit `.ac dec 50 10 100k` und zeichne $V(\mathrm{out})$. Lies die Grenzfrequenz bei −3 dB ab.
+2. Wie steil fällt die Kurve oberhalb der Grenzfrequenz ab?
+3. Schalte zwei gleiche RC-Glieder hintereinander. Was ändert sich?
+
+<Loesung>
+
+1. Bei etwa 1,59 kHz ist der Pegel auf −3 dB gefallen, die Phase beträgt −45°.
+2. Mit −20 dB pro Dekade (ein Zehntel der Spannung pro Zehnfacher der Frequenz).
+3. Die Steilheit verdoppelt sich auf −40 dB/Dekade. Aber: Die −3-dB-Frequenz sinkt, weil das zweite RC-Glied das erste
+   **belastet** (belasteter Spannungsteiler!). Abhilfe: Entkopplung durch einen Operationsverstärker als Puffer.
+
+</Loesung>

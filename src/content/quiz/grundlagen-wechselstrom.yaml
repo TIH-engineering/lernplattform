@@ -1,0 +1,98 @@
+titel: Wechselgrößen und Blindwiderstände
+fragen:
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Signal hat die Periodendauer $2{,}5\,\mathrm{ms}$. Wie groß ist die Frequenz?'
+    loesung: 400
+    einheit: Hz
+    erklaerung: '$f = 1/T = 1 / 0{,}0025\,\mathrm{s} = 400\,\mathrm{Hz}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welchen Wert beschreibt die Angabe „230 V“ bei der Netzspannung?
+    optionen:
+      - text: Den Effektivwert
+        richtig: true
+      - text: Den Scheitelwert
+      - text: Den Spitze-Spitze-Wert
+      - text: Den arithmetischen Mittelwert
+    erklaerung: 'Bei Wechselgrößen gibt man üblicherweise den Effektivwert an. Der Scheitelwert ist $\sqrt{2} \cdot 230\,\mathrm{V} \approx 325\,\mathrm{V}$, der Mittelwert eines Sinus ist null.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Eine Sinusspannung hat den Scheitelwert $17\,\mathrm{V}$. Wie groß ist der Effektivwert?'
+    loesung: 12.02
+    einheit: V
+    erklaerung: '$U = \hat{u} / \sqrt{2} = 17\,\mathrm{V} / 1{,}414 \approx 12{,}0\,\mathrm{V}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Zwei 50-Hz-Signale sind um $5\,\mathrm{ms}$ gegeneinander verschoben. Wie groß ist die Phasenverschiebung in Grad?'
+    loesung: 90
+    einheit: °
+    erklaerung: '$\varphi = \Delta t / T \cdot 360° = 5/20 \cdot 360° = 90°$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie verhalten sich Strom und Spannung an einer idealen Spule?
+    optionen:
+      - text: Der Strom eilt der Spannung um 90° nach.
+        richtig: true
+      - text: Der Strom eilt der Spannung um 90° vor.
+      - text: Strom und Spannung sind in Phase.
+      - text: Der Strom eilt der Spannung um 180° nach.
+    erklaerung: Die Spule wehrt sich gegen Stromänderungen – der Strom „kommt zu spät“. Beim Kondensator eilt der Strom vor.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist der Blindwiderstand einer Spule mit $L = 100\,\mathrm{mH}$ bei $50\,\mathrm{Hz}$?'
+    loesung: 31.42
+    einheit: Ω
+    erklaerung: '$X_\mathrm{L} = 2\pi f L = 2\pi \cdot 50 \cdot 0{,}1\,\Omega \approx 31{,}4\,\Omega$'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist der Blindwiderstand eines Kondensators mit $1\,\mu\mathrm{F}$ bei $1\,\mathrm{kHz}$?'
+    loesung: 159.2
+    einheit: Ω
+    erklaerung: '$X_\mathrm{C} = 1/(2\pi f C) = 1/(2\pi \cdot 1000 \cdot 10^{-6})\,\Omega \approx 159\,\Omega$'
+
+  - typ: mc
+    stufe: standard
+    frage: Die Frequenz wird verdoppelt. Wie ändern sich die Blindwiderstände von Spule und Kondensator?
+    optionen:
+      - text: X_L verdoppelt sich, X_C halbiert sich.
+        richtig: true
+      - text: X_L halbiert sich, X_C verdoppelt sich.
+      - text: Beide verdoppeln sich.
+      - text: Beide bleiben gleich.
+    erklaerung: '$X_\mathrm{L} = \omega L \sim f$, $X_\mathrm{C} = 1/(\omega C) \sim 1/f$.'
+
+  - typ: mc
+    stufe: standard
+    frage: Wie verhält sich ein idealer Kondensator bei Gleichspannung (nach dem Aufladen)?
+    optionen:
+      - text: Wie eine Unterbrechung (sperrt)
+        richtig: true
+      - text: Wie ein Kurzschluss
+      - text: Wie ein ohmscher Widerstand
+      - text: Wie eine Spannungsquelle mit wechselnder Polarität
+    erklaerung: 'Bei $f = 0$ ist $X_\mathrm{C} \to \infty$. Nach dem Aufladen fließt kein Strom mehr. Eine ideale Spule ist bei Gleichstrom dagegen ein Kurzschluss.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Eine Sinusspannung ($f = 50\,\mathrm{Hz}$, Nullphasenwinkel 0) hat den Scheitelwert $325\,\mathrm{V}$. Wie groß ist der Augenblickswert $2\,\mathrm{ms}$ nach dem Nulldurchgang?'
+    loesung: 191.0
+    einheit: V
+    erklaerung: '$u = \hat{u} \sin(\omega t) = 325\,\mathrm{V} \cdot \sin(2\pi \cdot 50 \cdot 0{,}002) = 325\,\mathrm{V} \cdot \sin 36° \approx 191\,\mathrm{V}$'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum zeigen einfache Multimeter bei nicht sinusförmigen Strömen oft falsche Werte an?
+    optionen:
+      - text: Sie messen den Gleichrichtwert und rechnen mit dem Formfaktor 1,11, der nur für Sinus gilt.
+        richtig: true
+      - text: Sie können grundsätzlich keine Wechselströme messen.
+      - text: Sie messen den Scheitelwert statt des Effektivwerts.
+      - text: Der Innenwiderstand ist bei Wechselstrom zu klein.
+    erklaerung: Für beliebige Signalformen braucht man ein True-RMS-Messgerät, das den echten Effektivwert bestimmt.

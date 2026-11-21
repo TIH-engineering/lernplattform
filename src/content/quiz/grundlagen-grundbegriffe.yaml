@@ -1,0 +1,127 @@
+# Quiz: Grundbegriffe, Strom und Spannung (Aufbau siehe leistungselektronik.yaml)
+titel: Grundbegriffe, Strom und Spannung
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche der folgenden Einheiten sind SI-Basiseinheiten?
+    optionen:
+      - text: Ampere
+        richtig: true
+      - text: Volt
+      - text: Kelvin
+        richtig: true
+      - text: Watt
+      - text: Sekunde
+        richtig: true
+      - text: Ohm
+    erklaerung: >-
+      Die sieben SI-Basiseinheiten sind Meter, Kilogramm, Sekunde, Ampere, Kelvin, Mol und Candela.
+      Volt, Watt und Ohm sind **abgeleitete** Einheiten (z. B. $1\,\mathrm{V} = 1\,\mathrm{W/A}$).
+
+  - typ: mc
+    stufe: grundlagen
+    frage: 'Wie viel sind $4{,}7\,\mathrm{k\Omega}$?'
+    optionen:
+      - text: '$4700\,\Omega$'
+        richtig: true
+      - text: '$470\,\Omega$'
+      - text: '$4{,}7 \cdot 10^{6}\,\Omega$'
+      - text: '$0{,}0047\,\Omega$'
+    erklaerung: 'k (Kilo) bedeutet $10^{3}$: $4{,}7\,\mathrm{k\Omega} = 4{,}7 \cdot 10^{3}\,\Omega = 4700\,\Omega$.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Rechne um: $0{,}25\,\mu\mathrm{A}$ = ? nA'
+    loesung: 250
+    einheit: nA
+    toleranz: 0
+    erklaerung: '$1\,\mu\mathrm{A} = 1000\,\mathrm{nA}$, also $0{,}25\,\mu\mathrm{A} = 250\,\mathrm{nA}$.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Strom von $200\,\mathrm{mA}$ fließt 5 Minuten lang. Welche Ladung fließt dabei?'
+    loesung: 60
+    einheit: C
+    erklaerung: '$Q = I \cdot t = 0{,}2\,\mathrm{A} \cdot 300\,\mathrm{s} = 60\,\mathrm{C}$ (Minuten zuerst in Sekunden umrechnen!).'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Wie viele Elementarladungen ergeben zusammen eine Ladung von $1\,\mathrm{C}$? Gib das Ergebnis in der Form „6,24e18“ ein.'
+    loesung: 6.242e18
+    einheit: ''
+    toleranz: 1
+    erklaerung: '$N = Q / e = 1\,\mathrm{C} / (1{,}602 \cdot 10^{-19}\,\mathrm{C}) \approx 6{,}24 \cdot 10^{18}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie ist die technische Stromrichtung festgelegt?
+    optionen:
+      - text: Vom Pluspol durch den Verbraucher zum Minuspol
+        richtig: true
+      - text: Vom Minuspol durch den Verbraucher zum Pluspol
+      - text: In Bewegungsrichtung der Elektronen
+      - text: Sie hängt vom Leitermaterial ab
+    erklaerung: >-
+      Die technische Stromrichtung wurde festgelegt, bevor man die Elektronen kannte: von + nach −.
+      Die Elektronen bewegen sich tatsächlich in die **Gegenrichtung** (physikalische Stromrichtung).
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Draht mit $2{,}5\,\mathrm{mm^2}$ Querschnitt führt $16\,\mathrm{A}$. Wie groß ist die Stromdichte?'
+    loesung: 6.4
+    einheit: A/mm²
+    erklaerung: '$J = I / A = 16\,\mathrm{A} / 2{,}5\,\mathrm{mm^2} = 6{,}4\,\mathrm{A/mm^2}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Zwei Drähte führen denselben Strom. Draht A hat 1 mm², Draht B hat 2 mm² Querschnitt. Welche Aussage stimmt?
+    optionen:
+      - text: Draht A hat die doppelte Stromdichte und erwärmt sich stärker.
+        richtig: true
+      - text: Draht B hat die doppelte Stromdichte und erwärmt sich stärker.
+      - text: Beide haben dieselbe Stromdichte, weil der Strom gleich ist.
+      - text: Die Stromdichte hängt nur vom Material ab.
+    erklaerung: 'Bei gleichem Strom gilt $J = I/A$: halber Querschnitt → doppelte Stromdichte → mehr Erwärmung.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Punkt A liegt auf $\varphi_\mathrm{A} = 3\,\mathrm{V}$, Punkt B auf $\varphi_\mathrm{B} = -6\,\mathrm{V}$. Wie groß ist $U_\mathrm{AB}$?'
+    loesung: 9
+    einheit: V
+    toleranz: 0
+    erklaerung: '$U_\mathrm{AB} = \varphi_\mathrm{A} - \varphi_\mathrm{B} = 3\,\mathrm{V} - (-6\,\mathrm{V}) = 9\,\mathrm{V}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Ladungsträger transportieren den Strom in einem Elektrolyten (z. B. in einem Akku)?
+    optionen:
+      - text: Positive und negative Ionen
+        richtig: true
+      - text: Nur freie Elektronen
+      - text: Elektronen und Löcher
+      - text: Photonen
+    erklaerung: In Elektrolyten wandern Ionen – dabei wird auch Stoff transportiert. Elektronen und Löcher sind typisch für Halbleiter.
+
+  - typ: mc
+    stufe: standard
+    frage: Was versteht man unter dem Verbraucher-Zählpfeilsystem?
+    optionen:
+      - text: Am Verbraucher zeigen Spannungs- und Strompfeil in dieselbe Richtung.
+        richtig: true
+      - text: Am Verbraucher zeigen Spannungs- und Strompfeil in entgegengesetzte Richtungen.
+      - text: Der Strompfeil zeigt immer vom Minus- zum Pluspol.
+      - text: Spannungspfeile werden nur an Quellen eingezeichnet.
+    erklaerung: >-
+      Im Verbraucher-Zählpfeilsystem gilt: Zeigen Strom- und Spannungspfeil gleich, ist $P = U \cdot I > 0$ aufgenommene Leistung.
+      Eine Quelle ergibt dann eine negative Leistung – sie gibt Energie ab.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Die Elektronen in einem Kupferdraht bewegen sich nur mit etwa 0,5 mm/s. Warum leuchtet eine Lampe trotzdem sofort nach dem Einschalten?
+    optionen:
+      - text: Weil sich das elektrische Feld fast mit Lichtgeschwindigkeit ausbreitet und alle Elektronen gleichzeitig anschiebt.
+        richtig: true
+      - text: Weil die Elektronen beim Einschalten kurz auf Lichtgeschwindigkeit beschleunigt werden.
+      - text: Weil die Lampe Elektronen in Reserve gespeichert hat.
+      - text: Weil der Strom zuerst durch die Luft zur Lampe springt.
+    erklaerung: Der Leiter ist schon voller freier Elektronen. Das Feld setzt sie praktisch gleichzeitig in Bewegung – wie Wasser in einem vollen Schlauch.

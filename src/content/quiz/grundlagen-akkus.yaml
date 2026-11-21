@@ -1,0 +1,100 @@
+titel: Batterien und Akkus
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Was ist der grundlegende Unterschied zwischen einer Batterie (Primärzelle) und einem Akku (Sekundärzelle)?
+    optionen:
+      - text: Ein Akku ist wiederaufladbar, eine Primärzelle nicht.
+        richtig: true
+      - text: Eine Batterie liefert Wechselstrom, ein Akku Gleichstrom.
+      - text: Ein Akku hat immer eine höhere Spannung.
+      - text: Eine Batterie enthält keinen Elektrolyten.
+    erklaerung: Bei Akkus ist die chemische Reaktion umkehrbar – durch Laden wird elektrische Energie wieder chemisch gespeichert.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Akku hat $2500\,\mathrm{mAh}$. Wie lange kann er einen Verbraucher mit $500\,\mathrm{mA}$ versorgen?'
+    loesung: 5
+    einheit: h
+    erklaerung: '$t = Q / I = 2500\,\mathrm{mAh} / 500\,\mathrm{mA} = 5\,\mathrm{h}$ (theoretisch)'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was beschreibt die Einheit Wh im Unterschied zu Ah?
+    optionen:
+      - text: Wh beschreibt die gespeicherte Energie, Ah die gespeicherte Ladung.
+        richtig: true
+      - text: Wh beschreibt die Ladung, Ah die Energie.
+      - text: Beide bedeuten dasselbe.
+      - text: Wh beschreibt die maximale Leistung des Akkus.
+    erklaerung: '$W = U \cdot Q$ – erst mit der Spannung wird aus der Ladung (Ah) eine Energie (Wh).'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Akku mit $1{,}5\,\mathrm{Ah}$ wird mit 2C entladen. Wie groß ist der Entladestrom?'
+    loesung: 3
+    einheit: A
+    erklaerung: '2C bedeutet den doppelten Wert der Kapazität als Strom: $2 \cdot 1{,}5\,\mathrm{A} = 3\,\mathrm{A}$ (Akku nach ca. 30 min leer).'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Akku mit $12\,\mathrm{V}$ Nennspannung und $2\,\mathrm{Ah}$ – welche Energie speichert er?'
+    loesung: 24
+    einheit: Wh
+    erklaerung: '$W = 12\,\mathrm{V} \cdot 2\,\mathrm{Ah} = 24\,\mathrm{Wh}$'
+
+  - typ: mc
+    stufe: standard
+    frage: 'Ein Akkupack hat die Bezeichnung 4s2p aus Zellen mit 3,6 V und 3 Ah. Welche Werte hat das Pack?'
+    optionen:
+      - text: 14,4 V und 6 Ah
+        richtig: true
+      - text: 7,2 V und 12 Ah
+      - text: 14,4 V und 3 Ah
+      - text: 28,8 V und 6 Ah
+    erklaerung: '4s = 4 Zellen in Reihe → $4 \cdot 3{,}6\,\mathrm{V} = 14{,}4\,\mathrm{V}$; 2p = 2 Stränge parallel → $2 \cdot 3\,\mathrm{Ah} = 6\,\mathrm{Ah}$.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Ladephasen hat ein Lithium-Ionen-Akku typischerweise?
+    optionen:
+      - text: Erst Konstantstrom (CC), dann Konstantspannung (CV)
+        richtig: true
+      - text: Erst Konstantspannung (CV), dann Konstantstrom (CC)
+      - text: Nur Konstantstrom bis zum Ende
+      - text: Impulsladung mit Wechselstrom
+    erklaerung: In der CC-Phase steigt die Spannung bis zur Ladeschlussspannung, danach wird sie konstant gehalten und der Strom sinkt.
+
+  - typ: mc
+    stufe: standard
+    frage: Warum ist eine Tiefentladung für Lithium-Akkus besonders schädlich?
+    optionen:
+      - text: Weil die Zellen bei zu niedriger Spannung dauerhaft geschädigt werden
+        richtig: true
+      - text: Weil sie dabei einen Memory-Effekt entwickeln
+      - text: Weil sie sich dann nicht mehr selbst entladen
+      - text: Weil die Spannung dabei über 4,2 V steigt
+    erklaerung: Unter der Entladeschlussspannung finden chemische Veränderungen statt, die Kapazität kostet und die Zelle beim späteren Laden gefährlich machen kann.
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Vorteile hat ein Bleiakku gegenüber einem Lithium-Ionen-Akku?
+    optionen:
+      - text: Er ist günstiger und robust.
+        richtig: true
+      - text: Er kann sehr hohe Startströme liefern und verträgt Kälte gut.
+        richtig: true
+      - text: Er hat eine höhere Energiedichte.
+      - text: Er ist leichter.
+    erklaerung: Bleiakkus sind günstig und robust, aber schwer und haben eine geringe Energiedichte – darum stecken sie im Auto als Starterbatterie, aber nicht im Handy.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Was bedeutet „Balancing“ bei einem Akkupack mit Zellen in Reihe?
+    optionen:
+      - text: Die Spannungen der einzelnen Zellen werden angeglichen, damit keine Zelle überladen wird.
+        richtig: true
+      - text: Der Akku wird gleichmäßig warm gehalten.
+      - text: Der Ladestrom wird auf alle parallelen Stränge verteilt.
+      - text: Die Last wird gleichmäßig auf zwei Akkus verteilt.
+    erklaerung: Zellen sind nie exakt gleich. Ohne Balancing würde die „beste“ Zelle beim Laden zuerst überladen und die schwächste beim Entladen tiefentladen.

@@ -1,0 +1,91 @@
+titel: Ohmsches Gesetz und Quellen
+fragen:
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'An einem Widerstand von $470\,\Omega$ liegen $12\,\mathrm{V}$. Wie groß ist der Strom?'
+    loesung: 25.53
+    einheit: mA
+    erklaerung: '$I = U/R = 12\,\mathrm{V} / 470\,\Omega \approx 25{,}5\,\mathrm{mA}$'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Durch einen Widerstand fließen $3\,\mathrm{mA}$, an ihm liegen $6{,}6\,\mathrm{V}$. Wie groß ist der Widerstand?'
+    loesung: 2.2
+    einheit: kΩ
+    erklaerung: '$R = U/I = 6{,}6\,\mathrm{V} / 3\,\mathrm{mA} = 2200\,\Omega = 2{,}2\,\mathrm{k\Omega}$'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist der Leitwert eines Widerstands von $250\,\Omega$?'
+    loesung: 4
+    einheit: mS
+    erklaerung: '$G = 1/R = 1/250\,\Omega = 0{,}004\,\mathrm{S} = 4\,\mathrm{mS}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie sieht die Kennlinie (U-I-Diagramm) eines ohmschen Widerstands aus?
+    optionen:
+      - text: Eine Gerade durch den Ursprung
+        richtig: true
+      - text: Eine waagrechte Gerade
+      - text: Eine Parabel
+      - text: Eine Kurve, die immer flacher wird
+    erklaerung: Beim ohmschen Widerstand ist $I \sim U$ – die Widerstandsgerade geht durch den Ursprung. Je steiler sie im I-U-Diagramm ist, desto kleiner ist $R$.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was ist eine ideale Spannungsquelle?
+    optionen:
+      - text: Eine Quelle, deren Spannung unabhängig vom entnommenen Strom immer gleich bleibt
+        richtig: true
+      - text: Eine Quelle, die immer denselben Strom liefert, egal welche Last angeschlossen ist
+      - text: Eine Quelle mit sehr großem Innenwiderstand
+      - text: Eine Quelle, die nur im Leerlauf funktioniert
+    erklaerung: 'Die ideale Spannungsquelle hat $R_\mathrm{i} = 0$. Eine **ideale Stromquelle** liefert dagegen immer denselben Strom ($R_\mathrm{i} \to \infty$).'
+
+  - typ: mc
+    stufe: standard
+    frage: Was passiert mit der Klemmenspannung einer realen Spannungsquelle, wenn der Laststrom steigt?
+    optionen:
+      - text: Sie sinkt, weil am Innenwiderstand mehr Spannung abfällt.
+        richtig: true
+      - text: Sie steigt, weil mehr Strom fließt.
+      - text: Sie bleibt gleich.
+      - text: Sie wird negativ.
+    erklaerung: '$U_\mathrm{Kl} = U_\mathrm{q} - R_\mathrm{i} \cdot I$ – je größer der Strom, desto größer der Spannungsabfall am Innenwiderstand.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Eine Quelle hat $U_\mathrm{q} = 24\,\mathrm{V}$ und $R_\mathrm{i} = 0{,}2\,\Omega$. Wie groß ist die Klemmenspannung bei $5\,\mathrm{A}$?'
+    loesung: 23
+    einheit: V
+    erklaerung: '$U_\mathrm{Kl} = 24\,\mathrm{V} - 0{,}2\,\Omega \cdot 5\,\mathrm{A} = 23\,\mathrm{V}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Eine Batterie hat im Leerlauf $1{,}5\,\mathrm{V}$, ihr Kurzschlussstrom beträgt $6\,\mathrm{A}$. Wie groß ist der Innenwiderstand?'
+    loesung: 0.25
+    einheit: Ω
+    erklaerung: '$R_\mathrm{i} = U_\mathrm{q} / I_\mathrm{k} = 1{,}5\,\mathrm{V} / 6\,\mathrm{A} = 0{,}25\,\Omega$'
+
+  - typ: mc
+    stufe: standard
+    frage: 'Eine reale Spannungsquelle ($U_\mathrm{q} = 10\,\mathrm{V}$, $R_\mathrm{i} = 5\,\Omega$) soll in eine gleichwertige Stromquelle umgewandelt werden. Welche Werte hat die Stromquelle?'
+    optionen:
+      - text: '$I_\mathrm{q} = 2\,\mathrm{A}$, $R_\mathrm{i} = 5\,\Omega$ parallel'
+        richtig: true
+      - text: '$I_\mathrm{q} = 50\,\mathrm{A}$, $R_\mathrm{i} = 5\,\Omega$ parallel'
+      - text: '$I_\mathrm{q} = 2\,\mathrm{A}$, $R_\mathrm{i} = 0{,}2\,\Omega$ parallel'
+      - text: '$I_\mathrm{q} = 0{,}5\,\mathrm{A}$, $R_\mathrm{i} = 5\,\Omega$ in Reihe'
+    erklaerung: 'Es gilt $I_\mathrm{q} = U_\mathrm{q}/R_\mathrm{i} = 2\,\mathrm{A}$ (= Kurzschlussstrom), der Innenwiderstand bleibt gleich, liegt aber **parallel** zur Stromquelle.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: An einer alten Batterie misst du ohne Last fast die volle Spannung, unter Last bricht sie stark ein. Was ist die Ursache?
+    optionen:
+      - text: Der Innenwiderstand ist stark gestiegen.
+        richtig: true
+      - text: Die Quellenspannung ist auf null gefallen.
+      - text: Der Lastwiderstand ist zu groß.
+      - text: Das Multimeter misst ohne Last falsch.
+    erklaerung: Im Leerlauf fließt kein Strom, also fällt am Innenwiderstand nichts ab – man sieht fast $U_\mathrm{q}$. Erst unter Last zeigt sich der große Innenwiderstand.

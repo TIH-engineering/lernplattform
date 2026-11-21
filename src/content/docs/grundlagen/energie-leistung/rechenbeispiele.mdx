@@ -1,0 +1,150 @@
+---
+title: Rechenbeispiele – Energie, Leistung, Wirkungsgrad
+description: Rechenbeispiele zu Energiekosten, Leistung am Widerstand, Belastbarkeit, Hubleistung, Gesamtwirkungsgrad, Wasserkocher und Übertragungsverlusten.
+---
+
+import Stufe from '../../../../components/Stufe.astro';
+import Loesung from '../../../../components/Loesung.astro';
+
+## Energiekosten eines Routers
+
+<Stufe wert="grundlagen" />
+
+Ein WLAN-Router nimmt dauernd $12\,\mathrm{W}$ auf und läuft das ganze Jahr. Welche Energie braucht er pro Jahr,
+und was kostet das bei $0{,}25\,\text{€}/\mathrm{kWh}$?
+
+<Loesung>
+
+$t = 365 \cdot 24\,\mathrm{h} = 8760\,\mathrm{h}$
+
+$$
+W = P \cdot t = 12\,\mathrm{W} \cdot 8760\,\mathrm{h} = 105\,120\,\mathrm{Wh} \approx 105{,}1\,\mathrm{kWh}
+\qquad
+K = 105{,}1\,\mathrm{kWh} \cdot 0{,}25\,\text{€}/\mathrm{kWh} \approx 26{,}28\,\text{€}
+$$
+
+</Loesung>
+
+## Leistung am Widerstand
+
+<Stufe wert="grundlagen" />
+
+An einem Widerstand von $1\,\mathrm{k\Omega}$ liegen $24\,\mathrm{V}$. a) Welche Leistung wird in Wärme umgesetzt?
+b) Welche Leistung ist es bei halber Spannung?
+
+<Loesung>
+
+a) $P = \dfrac{U^2}{R} = \dfrac{(24\,\mathrm{V})^2}{1000\,\Omega} = 0{,}576\,\mathrm{W}$
+
+b) $P = \dfrac{(12\,\mathrm{V})^2}{1000\,\Omega} = 0{,}144\,\mathrm{W}$ – **halbe Spannung, ein Viertel der Leistung**, weil $P \sim U^2$.
+
+</Loesung>
+
+## Belastbarkeit eines Widerstands
+
+<Stufe wert="standard" />
+
+Ein Widerstand $470\,\Omega$ darf mit höchstens $0{,}25\,\mathrm{W}$ belastet werden.
+Welche Spannung und welcher Strom sind höchstens zulässig?
+
+<Loesung>
+
+$$
+P = \frac{U^2}{R} \;\Rightarrow\; U_\mathrm{max} = \sqrt{P \cdot R} = \sqrt{0{,}25\,\mathrm{W} \cdot 470\,\Omega} \approx 10{,}8\,\mathrm{V}
+$$
+
+$$
+P = I^2 R \;\Rightarrow\; I_\mathrm{max} = \sqrt{\frac{P}{R}} = \sqrt{\frac{0{,}25\,\mathrm{W}}{470\,\Omega}} \approx 23{,}1\,\mathrm{mA}
+$$
+
+Probe: $10{,}8\,\mathrm{V} \cdot 23{,}1\,\mathrm{mA} \approx 0{,}25\,\mathrm{W}$ ✔
+
+</Loesung>
+
+## Wirkungsgrad eines Aufzugs
+
+<Stufe wert="standard" />
+
+Ein Aufzug hebt eine Last von $800\,\mathrm{kg}$ in $20\,\mathrm{s}$ um $12\,\mathrm{m}$ mit konstanter Geschwindigkeit.
+Der Motor nimmt dabei $6\,\mathrm{kW}$ auf. Wie groß ist der Gesamtwirkungsgrad?
+
+**Gegeben:** $m = 800\,\mathrm{kg}$, $h = 12\,\mathrm{m}$, $t = 20\,\mathrm{s}$, $P_\mathrm{zu} = 6\,\mathrm{kW}$, $g = 9{,}81\,\mathrm{m/s^2}$
+
+**Gesucht:** $\eta$
+
+<Loesung>
+
+$$
+P_\mathrm{ab} = \frac{m \cdot g \cdot h}{t} = \frac{800\,\mathrm{kg} \cdot 9{,}81\,\mathrm{m/s^2} \cdot 12\,\mathrm{m}}{20\,\mathrm{s}} \approx 4709\,\mathrm{W}
+\qquad
+\eta = \frac{P_\mathrm{ab}}{P_\mathrm{zu}} = \frac{4709\,\mathrm{W}}{6000\,\mathrm{W}} \approx 78{,}5\,\%
+$$
+
+</Loesung>
+
+## Pumpe mit Gesamtwirkungsgrad
+
+<Stufe wert="standard" />
+
+Ein Motor ($\eta_\mathrm{M} = 90\,\%$) treibt eine Pumpe ($\eta_\mathrm{P} = 70\,\%$) an, die Wasser $50\,\mathrm{m}$ hoch fördert.
+Der Motor nimmt $5{,}5\,\mathrm{kW}$ auf. Wie viele Kubikmeter Wasser werden pro Stunde gefördert?
+($1\,\mathrm{m^3}$ Wasser $= 1000\,\mathrm{kg}$)
+
+<Loesung>
+
+Gesamtwirkungsgrad: $\eta_\mathrm{ges} = \eta_\mathrm{M} \cdot \eta_\mathrm{P} = 0{,}9 \cdot 0{,}7 = 0{,}63$
+
+Nutzleistung: $P_\mathrm{ab} = 0{,}63 \cdot 5500\,\mathrm{W} = 3465\,\mathrm{W}$
+
+Aus $P = \dfrac{m \cdot g \cdot h}{t}$ folgt die Masse pro Sekunde:
+
+$$
+\frac{m}{t} = \frac{P_\mathrm{ab}}{g \cdot h} = \frac{3465\,\mathrm{W}}{9{,}81\,\mathrm{m/s^2} \cdot 50\,\mathrm{m}} \approx 7{,}06\,\frac{\mathrm{kg}}{\mathrm{s}}
+$$
+
+Pro Stunde: $7{,}06\,\mathrm{kg/s} \cdot 3600\,\mathrm{s} \approx 25\,430\,\mathrm{kg} \approx 25{,}4\,\mathrm{m^3}$
+
+</Loesung>
+
+## Wasserkocher
+
+<Stufe wert="vertiefung" />
+
+Ein Wasserkocher ($2000\,\mathrm{W}$, Wirkungsgrad $90\,\%$) erhitzt $1{,}5\,\mathrm{l}$ Wasser von $15\,°\mathrm{C}$ auf $100\,°\mathrm{C}$
+($c = 4{,}19\,\mathrm{kJ/(kg\,K)}$). Wie lange dauert das, und was kostet es bei $0{,}25\,\text{€}/\mathrm{kWh}$?
+
+<Loesung>
+
+Nötige Wärme: $Q = m \cdot c \cdot \Delta\vartheta = 1{,}5\,\mathrm{kg} \cdot 4190\,\mathrm{J/(kg\,K)} \cdot 85\,\mathrm{K} \approx 534\,\mathrm{kJ}$
+
+Nutzbare Heizleistung: $0{,}9 \cdot 2000\,\mathrm{W} = 1800\,\mathrm{W}$
+
+$$
+t = \frac{Q}{P_\mathrm{ab}} = \frac{534\,225\,\mathrm{J}}{1800\,\mathrm{W}} \approx 297\,\mathrm{s} \approx 4{,}9\,\mathrm{min}
+$$
+
+Elektrische Energie: $W = \dfrac{Q}{\eta} \approx 593{,}6\,\mathrm{kJ} \approx 0{,}165\,\mathrm{kWh}$ → Kosten $\approx 4{,}1$ Cent.
+
+</Loesung>
+
+## Warum Hochspannung?
+
+<Stufe wert="standard" />
+
+Eine Leistung von $10\,\mathrm{kW}$ soll über eine Leitung mit $0{,}5\,\Omega$ Widerstand übertragen werden.
+Berechne die Leitungsverluste bei einer Übertragungsspannung von $230\,\mathrm{V}$, $400\,\mathrm{V}$ und $2300\,\mathrm{V}$.
+
+<Loesung>
+
+$I = P / U$ und $P_\mathrm{V} = I^2 \cdot R$:
+
+| $U$ | $I$ | $P_\mathrm{V}$ | Anteil |
+| --- | --- | --- | --- |
+| 230 V | 43,5 A | 945 W | 9,5 % |
+| 400 V | 25 A | 313 W | 3,1 % |
+| 2300 V | 4,35 A | 9,5 W | 0,09 % |
+
+**Zehnfache Spannung → ein Zehntel des Stroms → ein Hundertstel der Verluste** ($P_\mathrm{V} \sim I^2$).
+Darum wird elektrische Energie über weite Strecken mit Hochspannung (110 kV … 380 kV) übertragen.
+
+</Loesung>

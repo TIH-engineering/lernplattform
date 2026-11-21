@@ -41,6 +41,42 @@ const thema = (label, ordner, { theorieOrdner = false, zusatz = [] } = {}) => ({
 	],
 });
 
+// Grundlagen der Elektrotechnik: Theorie steht im Schulbuch, daher pro Thema nur
+// Übersicht, Rechenbeispiele, Praxisbeispiele und Quiz. Ordner: src/content/docs/grundlagen/<ordner>/
+const grundlagenThemen = [
+	['Grundbegriffe, Strom und Spannung', 'grundbegriffe'],
+	['Ohmsches Gesetz und Quellen', 'ohmsches-gesetz'],
+	['Leiterwiderstand und Temperatur', 'leiterwiderstand'],
+	['Reihen- und Parallelschaltung', 'schaltungen'],
+	['Netzwerke und Ersatzquellen', 'netzwerke'],
+	['Energie, Leistung, Wirkungsgrad', 'energie-leistung'],
+	['Batterien und Akkus', 'akkus'],
+	['Elektrisches Feld und Kondensator', 'kondensator'],
+	['Magnetisches Feld', 'magnetfeld'],
+	['Induktion und Transformator', 'induktion'],
+	['Wechselgrößen und Blindwiderstände', 'wechselstrom'],
+	['Komplexe Wechselstromrechnung', 'komplexe-rechnung'],
+	['Leistung bei Wechselstrom', 'wechselstromleistung'],
+	['Resonanz und Filter', 'resonanz-filter'],
+];
+const grundlagen = {
+	label: 'Grundlagen der Elektrotechnik',
+	collapsed: true,
+	items: [
+		{ label: 'Übersicht', slug: 'grundlagen' },
+		...grundlagenThemen.map(([label, ordner], i) => ({
+			label: `${i + 1} · ${label}`,
+			collapsed: true,
+			items: [
+				{ label: 'Übersicht', slug: `grundlagen/${ordner}` },
+				{ label: 'Rechenbeispiele', slug: `grundlagen/${ordner}/rechenbeispiele` },
+				{ label: 'Praxisbeispiele', slug: `grundlagen/${ordner}/praxisbeispiele` },
+				{ label: 'Quiz', slug: `grundlagen/${ordner}/quiz` },
+			],
+		})),
+	],
+};
+
 // Ein Themenbereich, der noch leer ist: nur ein Link auf die Platzhalterseite.
 /** @param {string} label @param {string} ordner */
 const leer = (label, ordner) => ({ label, slug: ordner, badge: inArbeit });
@@ -52,7 +88,8 @@ export default defineConfig({
 	markdown: {
 		processor: unified({
 			remarkPlugins: [remarkMath],
-			rehypePlugins: [rehypeKatex, rehypeKatexSuche, [rehypeBasisLinks, { basis: BASIS }]],
+			// strict: 'ignore' → Sonderzeichen wie € in Formeln ohne Warnung erlauben
+			rehypePlugins: [[rehypeKatex, { strict: 'ignore' }], rehypeKatexSuche, [rehypeBasisLinks, { basis: BASIS }]],
 		}),
 	},
 	integrations: [
@@ -68,11 +105,7 @@ export default defineConfig({
 			sidebar: [
 				{ label: 'Startseite', slug: 'index' },
 				{ label: 'So benutzt du diese Seite', slug: 'hinweise' },
-				{
-					label: 'Grundlagen der Elektrotechnik',
-					badge: inArbeit,
-					items: [{ label: 'Übersicht', slug: 'grundlagen' }],
-				},
+				grundlagen,
 				leer('Transistoren', 'transistoren'),
 				leer('Operationsverstärker', 'operationsverstaerker'),
 				leer('Filter', 'filter'),

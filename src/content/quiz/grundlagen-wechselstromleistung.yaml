@@ -1,0 +1,96 @@
+titel: Leistung bei Wechselstrom
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Was beschreibt die Wirkleistung?
+    optionen:
+      - text: Den Anteil der Leistung, der tatsächlich in Wärme, Licht oder mechanische Arbeit umgesetzt wird
+        richtig: true
+      - text: Die Leistung, die zwischen Quelle und Verbraucher hin- und herpendelt
+      - text: Das Produkt aus Effektivwerten von Spannung und Strom
+      - text: Die Leistung, die nur in Spulen auftritt
+    erklaerung: 'Die Wirkleistung $P$ (in W) wird verbraucht. Die Blindleistung $Q$ (in var) pendelt hin und her, die Scheinleistung $S = U \cdot I$ (in VA) ist die geometrische Summe.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Gerät nimmt an $230\,\mathrm{V}$ $10\,\mathrm{A}$ bei $\cos\varphi = 0{,}8$ auf. Wie groß ist die Wirkleistung?'
+    loesung: 1840
+    einheit: W
+    erklaerung: '$P = U I \cos\varphi = 230 \cdot 10 \cdot 0{,}8\,\mathrm{W} = 1840\,\mathrm{W}$ ($S = 2300\,\mathrm{VA}$)'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Verbraucher hat $P = 500\,\mathrm{W}$ und $Q = 300\,\mathrm{var}$. Wie groß ist die Scheinleistung?'
+    loesung: 583.1
+    einheit: VA
+    erklaerung: '$S = \sqrt{P^2 + Q^2} = \sqrt{500^2 + 300^2}\,\mathrm{VA} \approx 583\,\mathrm{VA}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: In welcher Einheit wird die Blindleistung angegeben?
+    optionen:
+      - text: var
+        richtig: true
+      - text: W
+      - text: VA
+      - text: kWh
+    erklaerung: 'var steht für „Volt-Ampere reaktiv“. Die Einheiten sind physikalisch gleich (V · A), die Namen zeigen aber, welche Leistung gemeint ist.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Motor hat $P = 3\,\mathrm{kW}$ und $\cos\varphi = 0{,}75$ an $230\,\mathrm{V}$. Wie groß ist der Strom?'
+    loesung: 17.39
+    einheit: A
+    erklaerung: '$I = P / (U \cos\varphi) = 3000 / (230 \cdot 0{,}75)\,\mathrm{A} \approx 17{,}4\,\mathrm{A}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Was passiert, wenn man zu einem induktiven Verbraucher einen passenden Kondensator parallel schaltet?
+    optionen:
+      - text: Der Netzstrom sinkt, die Wirkleistung des Verbrauchers bleibt gleich.
+        richtig: true
+      - text: Die Wirkleistung des Verbrauchers sinkt.
+      - text: Der Strom durch den Verbraucher selbst sinkt.
+      - text: Der Leistungsfaktor wird schlechter.
+    erklaerung: Der Kondensator liefert die induktive Blindleistung „vor Ort“. Das Netz muss nur noch die Wirkleistung (und den Rest-Blindstrom) liefern.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Verbraucher hat $P = 1\,\mathrm{kW}$ bei $\cos\varphi = 0{,}6$ (induktiv). Welche Blindleistung muss ein Kondensator liefern, damit $\cos\varphi = 1$ wird?'
+    loesung: 1333
+    einheit: var
+    erklaerung: '$Q = P \tan(\arccos 0{,}6) = 1000 \cdot \tfrac{0{,}8}{0{,}6}\,\mathrm{var} \approx 1333\,\mathrm{var}$'
+
+  - typ: mc
+    stufe: standard
+    frage: 'Wie berechnet man die komplexe Scheinleistung richtig?'
+    optionen:
+      - text: '$\underline{S} = \underline{U} \cdot \underline{I}^*$ (mit konjugiert komplexem Strom)'
+        richtig: true
+      - text: '$\underline{S} = \underline{U} \cdot \underline{I}$'
+      - text: '$\underline{S} = \underline{U}^* \cdot \underline{I}^*$'
+      - text: '$\underline{S} = \underline{U} / \underline{I}$'
+    erklaerung: 'Nur mit $\underline{I}^*$ ergibt sich der Winkel $\varphi = \varphi_u - \varphi_i$, und damit das richtige Vorzeichen der Blindleistung.'
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Leistungen einzelner Bauteile darf man zur Gesamtleistung einfach addieren?
+    optionen:
+      - text: Die Wirkleistungen
+        richtig: true
+      - text: Die Blindleistungen (mit Vorzeichen)
+        richtig: true
+      - text: Die Scheinleistungen
+      - text: Keine – man muss immer komplex rechnen
+    erklaerung: 'Wirk- und Blindleistungen addieren sich (induktiv +, kapazitiv −). Scheinleistungen sind Beträge von Zeigern mit verschiedenen Winkeln – sie addieren sich nicht.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum hat ein einfaches Netzteil mit Gleichrichter und Ladeelko einen schlechten Leistungsfaktor?
+    optionen:
+      - text: Weil der Strom nur in kurzen Impulsen an den Spannungsspitzen fließt
+        richtig: true
+      - text: Weil der Elko eine große induktive Blindleistung erzeugt
+      - text: Weil der Gleichrichter Wirkleistung zurück ins Netz speist
+      - text: Weil die Netzfrequenz zu niedrig ist
+    erklaerung: Der nicht sinusförmige Strom verursacht Verzerrungsblindleistung. Eine aktive PFC-Schaltung formt den Strom sinusförmig.

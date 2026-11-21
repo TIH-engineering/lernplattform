@@ -111,7 +111,10 @@ function speichere(name, breite, hoehe, titel, inhalt) {
 		`fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ` +
 		`font-family="inherit" font-size="15" role="img" aria-label="${titel}" class="schaltbild">` +
 		`<title>${titel}</title>${inhalt}</svg>\n`;
-	writeFileSync(new URL(name, ZIEL), svg);
+	// Name ohne Ordner → leistungselektronik/, sonst z. B. 'grundlagen/kirchhoff.svg' → src/assets/grundlagen/
+	const ziel = name.includes('/') ? new URL('../src/assets/' + name, import.meta.url) : new URL(name, ZIEL);
+	mkdirSync(new URL('.', ziel), { recursive: true });
+	writeFileSync(ziel, svg);
 	console.log('geschrieben:', name);
 }
 
@@ -335,5 +338,220 @@ function eingang(x, oben, unten) {
 		text(20, 185, '12 V', 'start') + pfeil(62, 180, 110, 180) + box(110, 160, 90, 40, 'Schalter') +
 		pfeil(200, 180, 240, 180) + box(240, 160, 90, 40, 'L + C') + pfeil(330, 180, 380, 180) + text(388, 185, '3,3 V', 'start') +
 		text(155, 155, 'PWM', 'middle', 'font-size="12"'),
+	);
+}
+
+// =====================================================================
+// GRUNDLAGEN DER ELEKTROTECHNIK  →  src/assets/grundlagen/
+// =====================================================================
+
+/** Wechselspannungsquelle (Kreis mit Sinus), senkrecht zwischen oben und unten */
+const wquelle = (x, oben, unten) => {
+	const m = (oben + unten) / 2;
+	return strich(x, oben, x, m - 18) + strich(x, m + 18, x, unten) + `<circle cx="${x}" cy="${m}" r="18"/>` +
+		`<path d="M${x - 11},${m} q5.5,-12 11,0 t11,0"/>`;
+};
+/** Gleichspannungsquelle senkrecht (+ oben) mit Zählpfeil und Beschriftung */
+function gquelle(x, oben, unten, name, index, seite = 'links') {
+	const m = (oben + unten) / 2;
+	const px = seite === 'links' ? x - 32 : x + 32;
+	return quelle(x, unten, x, oben) + text(x + 8, oben + 30, '+', 'start') +
+		pfeil(px, m - 30, px, m + 30) +
+		text(seite === 'links' ? px - 8 : px + 8, m + 5, sym(name, index), seite === 'links' ? 'end' : 'start');
+}
+/** Bauteil-Beschriftung neben senkrechtem Bauteil */
+const neben = (x, y, name, index, seite = 'rechts') =>
+	text(seite === 'rechts' ? x + 16 : x - 16, y + 5, sym(name, index), seite === 'rechts' ? 'start' : 'end');
+/** Beschriftung über waagrechtem Bauteil */
+const ueber = (x, y, name, index) => text(x, y - 14, sym(name, index));
+
+// ---------- G1) Zwei Quellen – Kirchhoff ----------
+{
+	const o = 40, u = 200;
+	speichere('grundlagen/kirchhoff.svg', 520, 240, 'Netzwerk mit zwei Spannungsquellen und drei Widerständen',
+		gquelle(70, o, u, 'U', 'q1', 'links') +
+		draht([70, o], [100, o]) + widerstand(100, o, 180, o) + ueber(140, o, 'R', '1') +
+		draht([180, o], [260, o]) + stromspitze(215, o, 'r') + text(212, o - 10, sym('I', '1')) +
+		punkt(260, o) + widerstand(260, o, 260, u) + neben(260, 120, 'R', '3', 'links') +
+		stromspitze(260, 75, 'u') + text(272, 80, sym('I', '3'), 'start') +
+		pfeil(292, 90, 292, 150) + text(300, 125, sym('U', '3'), 'start') +
+		draht([260, o], [340, o]) + stromspitze(305, o, 'l') + text(308, o - 10, sym('I', '2')) +
+		widerstand(340, o, 420, o) + ueber(380, o, 'R', '2') + draht([420, o], [450, o]) +
+		gquelle(450, o, u, 'U', 'q2', 'rechts') +
+		draht([70, u], [450, u]) + punkt(260, u),
+	);
+}
+
+// ---------- G2) Brückenschaltung ----------
+{
+	const A = [250, 40], B = [250, 260], C = [150, 150], D = [350, 150];
+	speichere('grundlagen/bruecke.svg', 470, 300, 'Brückenschaltung mit fünf Widerständen zwischen den Punkten A, B, C und D',
+		gquelle(50, 40, 260, 'U', '', 'rechts') +
+		draht([50, 40], A) + draht([50, 260], B) + punkt(...A) + punkt(...B) + punkt(...C) + punkt(...D) +
+		widerstand(A[0], A[1], C[0], C[1]) + text(178, 88, sym('R', 'AC'), 'end') +
+		widerstand(A[0], A[1], D[0], D[1]) + text(322, 88, sym('R', 'AD'), 'start') +
+		widerstand(C[0], C[1], B[0], B[1]) + text(178, 222, sym('R', 'CB'), 'end') +
+		widerstand(D[0], D[1], B[0], B[1]) + text(322, 222, sym('R', 'DB'), 'start') +
+		widerstand(C[0], C[1], D[0], D[1]) + text(250, 130, sym('R', 'CD')) +
+		text(250, 30, 'A') + text(250, 285, 'B') + text(132, 155, 'C', 'end') + text(368, 155, 'D', 'start') +
+		stromspitze(150, 40, 'r') + text(150, 30, sym('I')),
+	);
+}
+
+// ---------- G3) Gemischte Schaltung: R1 + (R2 ∥ (R3 + R4)) ----------
+{
+	const o = 40, u = 220;
+	speichere('grundlagen/gemischt.svg', 520, 250, 'Gemischte Schaltung: R1 in Reihe mit R2 parallel zur Reihenschaltung aus R3 und R4',
+		gquelle(60, o, u, 'U', 'q', 'links') +
+		draht([60, o], [90, o]) + widerstand(90, o, 170, o) + ueber(130, o, 'R', '1') +
+		stromspitze(80, o, 'r') + text(80, o - 10, sym('I')) +
+		draht([170, o], [400, o]) + punkt(250, o) + punkt(250, u) +
+		widerstand(250, o, 250, u) + neben(250, 130, 'R', '2') + stromspitze(250, 62, 'u') + text(238, 66, sym('I', '2'), 'end') +
+		widerstand(400, o, 400, 130) + neben(400, 85, 'R', '3') +
+		widerstand(400, 130, 400, u) + neben(400, 175, 'R', '4') + stromspitze(400, 62, 'u') + text(388, 66, sym('I', '3'), 'end') +
+		draht([60, u], [400, u]),
+	);
+}
+
+// ---------- G4) Belasteter Spannungsteiler ----------
+{
+	const o = 40, u = 220;
+	speichere('grundlagen/spannungsteiler.svg', 440, 250, 'Belasteter Spannungsteiler aus R1 und R2 mit Lastwiderstand RL',
+		gquelle(60, o, u, 'U', '', 'links') +
+		draht([60, o], [200, o]) + widerstand(200, o, 200, 130) + neben(200, 85, 'R', '1', 'links') +
+		widerstand(200, 130, 200, u) + neben(200, 175, 'R', '2', 'links') + punkt(200, 130) +
+		draht([200, 130], [330, 130]) + `<circle cx="330" cy="130" r="4"/>` +
+		widerstand(330, 134, 330, u) + neben(330, 177, 'R', 'L') +
+		pfeil(380, 145, 380, 205) + text(388, 180, sym('U', '2'), 'start') +
+		draht([60, u], [330, u]) + punkt(200, u),
+	);
+}
+
+// ---------- G5) Reale Spannungsquelle mit Last ----------
+{
+	const o = 40, u = 200;
+	speichere('grundlagen/reale-quelle.svg', 440, 230, 'Ersatzschaltung einer realen Spannungsquelle mit Innenwiderstand und Lastwiderstand',
+		`<rect x="20" y="20" width="200" height="200" rx="8" stroke-dasharray="6 5" stroke-width="1.5"/>` +
+		text(120, 215, 'reale Quelle', 'middle', 'font-size="12"') +
+		gquelle(80, o, u, 'U', 'q', 'links') +
+		draht([80, o], [110, o]) + widerstand(110, o, 190, o) + text(150, o + 28, sym('R', 'i')) +
+		draht([190, o], [340, o]) + `<circle cx="240" cy="${o}" r="4" fill="var(--sl-color-bg, #fff)"/>` +
+		`<circle cx="240" cy="${u}" r="4" fill="var(--sl-color-bg, #fff)"/>` +
+		stromspitze(290, o, 'r') + text(290, o - 10, sym('I')) +
+		widerstand(340, o, 340, u) + neben(340, 120, 'R', 'L') +
+		pfeil(270, 70, 270, 170) + text(262, 125, sym('U', 'Kl'), 'end') +
+		draht([80, u], [340, u]),
+	);
+}
+
+// ---------- G6) Gemischte Kondensatorschaltung: (C1 ∥ C2) in Reihe mit C3 ----------
+{
+	const o = 40, u = 200;
+	speichere('grundlagen/kondensatoren-gemischt.svg', 460, 230, 'Kondensatoren C1 und C2 parallel, in Reihe mit C3',
+		gquelle(60, o, u, 'U', '', 'links') +
+		draht([60, o], [140, o]) + punkt(140, o) + punkt(260, o) +
+		kondensator(140, o, 260, o) + text(200, o - 20, sym('C', '1')) +
+		draht([140, o], [140, 100]) + kondensator(140, 100, 260, 100) + draht([260, 100], [260, o]) + text(200, 132, sym('C', '2')) +
+		pfeil(150, 150, 250, 150) + text(200, 170, sym('U', '12')) +
+		draht([260, o], [340, o]) + kondensator(340, o, 340, u) + neben(340, 120, 'C', '3') +
+		pfeil(385, 80, 385, 160) + text(393, 125, sym('U', '3'), 'start') +
+		draht([60, u], [340, u]),
+	);
+}
+
+// ---------- G7) RC-Glied: Laden über einen Widerstand ----------
+{
+	const o = 40, u = 190;
+	speichere('grundlagen/rc-laden.svg', 440, 220, 'Kondensator wird über einen Widerstand geladen',
+		gquelle(60, o, u, 'U', 'q', 'links') +
+		draht([60, o], [100, o]) + schalter(100, o, 160, o) + text(130, o - 22, sym('S')) +
+		draht([160, o], [190, o]) + widerstand(190, o, 270, o) + ueber(230, o, 'R') +
+		draht([270, o], [330, o]) + stromspitze(305, o, 'r') + text(305, o - 10, sym('i') + '(' + sym('t') + ')') +
+		kondensator(330, o, 330, u) + neben(330, 115, 'C', '', 'links') +
+		pfeil(375, 80, 375, 150) + text(383, 120, sym('u', 'C') + '(' + sym('t') + ')', 'start') +
+		draht([60, u], [330, u]),
+	);
+}
+
+// ---------- G8) Reihenschaltung R, L, C an Wechselspannung ----------
+{
+	const o = 40, u = 200;
+	speichere('grundlagen/rlc-reihe.svg', 560, 240, 'Reihenschaltung aus Widerstand, Spule und Kondensator an Wechselspannung',
+		wquelle(60, o, u) + pfeil(28, 90, 28, 150) + text(20, 125, sym('U'), 'end') +
+		draht([60, o], [100, o]) + stromspitze(90, o, 'r') + text(88, o - 10, sym('I')) +
+		widerstand(100, o, 200, o) + ueber(150, o, 'R') + pfeil(115, o + 28, 185, o + 28) + text(150, o + 48, sym('U', 'R')) +
+		draht([200, o], [230, o]) + spule(230, o, 330, o) + text(280, o - 16, sym('L')) +
+		pfeil(245, o + 28, 315, o + 28) + text(280, o + 48, sym('U', 'L')) +
+		draht([330, o], [400, o], [400, 95]) + kondensator(400, 95, 400, 145) + neben(400, 125, 'C', '', 'rechts') +
+		pfeil(440, 100, 440, 150) + text(448, 130, sym('U', 'C'), 'start') +
+		draht([400, 145], [400, u], [60, u]),
+	);
+}
+
+// ---------- G9) Parallelschaltung R, L, C an Wechselspannung ----------
+{
+	const o = 40, u = 200;
+	speichere('grundlagen/rlc-parallel.svg', 520, 240, 'Parallelschaltung aus Widerstand, Spule und Kondensator an Wechselspannung',
+		wquelle(60, o, u) + pfeil(28, 90, 28, 150) + text(20, 125, sym('U'), 'end') +
+		draht([60, o], [420, o]) + draht([60, u], [420, u]) + stromspitze(110, o, 'r') + text(110, o - 10, sym('I')) +
+		punkt(180, o) + punkt(300, o) + punkt(180, u) + punkt(300, u) +
+		widerstand(180, o, 180, u) + neben(180, 120, 'R') + stromspitze(180, 64, 'u') + text(168, 68, sym('I', 'R'), 'end') +
+		spule(300, o, 300, u) + neben(300, 120, 'L', '', 'links') + stromspitze(300, 64, 'u') + text(312, 68, sym('I', 'L'), 'start') +
+		draht([420, o], [420, 95]) + kondensator(420, 95, 420, 145) + draht([420, 145], [420, u]) + neben(420, 120, 'C') +
+		stromspitze(420, 64, 'u') + text(432, 68, sym('I', 'C'), 'start'),
+	);
+}
+
+// ---------- G10) RC-Tiefpass ----------
+{
+	const o = 40, u = 180;
+	speichere('grundlagen/rc-tiefpass.svg', 480, 210, 'RC-Tiefpass: Eingangsspannung über R, Ausgangsspannung am Kondensator',
+		`<circle cx="40" cy="${o}" r="4"/><circle cx="40" cy="${u}" r="4"/>` + pfeil(40, o + 20, 40, u - 20) +
+		text(30, (o + u) / 2 + 5, sym('U', 'e'), 'end') +
+		draht([44, o], [120, o]) + widerstand(120, o, 220, o) + ueber(170, o, 'R') + draht([220, o], [400, o]) + punkt(300, o) +
+		kondensator(300, o, 300, u) + neben(300, (o + u) / 2, 'C') + punkt(300, u) +
+		`<circle cx="404" cy="${o}" r="4"/><circle cx="404" cy="${u}" r="4"/>` + pfeil(404, o + 20, 404, u - 20) +
+		text(414, (o + u) / 2 + 5, sym('U', 'a'), 'start') + draht([44, u], [400, u]),
+	);
+}
+
+// ---------- G11) Idealer Transformator mit Last ----------
+{
+	const o = 40, u = 180;
+	speichere('grundlagen/transformator.svg', 480, 210, 'Transformator mit Primärwicklung N1, Sekundärwicklung N2 und Lastwiderstand',
+		wquelle(50, o, u) + pfeil(20, 80, 20, 140) + text(14, 115, sym('U', '1'), 'end') +
+		draht([50, o], [170, o]) + stromspitze(110, o, 'r') + text(110, o - 10, sym('I', '1')) +
+		spule(170, o, 170, u) + text(158, 115, sym('N', '1'), 'end') + draht([50, u], [170, u]) +
+		strich(202, 45, 202, 175, 'stroke-width="2.5"') + strich(208, 45, 208, 175, 'stroke-width="2.5"') +
+		spule(240, u, 240, o) + text(252, 115, sym('N', '2'), 'start') +
+		draht([240, o], [380, o]) + stromspitze(320, o, 'r') + text(320, o - 10, sym('I', '2')) +
+		widerstand(380, o, 380, u) + neben(380, 110, 'R', 'L') + draht([240, u], [380, u]) +
+		pfeil(425, 80, 425, 140) + text(433, 115, sym('U', '2'), 'start'),
+	);
+}
+
+// ---------- G12) R1 in Reihe mit ((R2 + L) parallel C) an Wechselspannung ----------
+{
+	const o = 40, u = 220;
+	speichere('grundlagen/rlc-gemischt.svg', 520, 250, 'Wechselstromschaltung: R1 in Reihe mit der Parallelschaltung aus (R2 + L) und C',
+		wquelle(60, o, u) + pfeil(28, 100, 28, 160) + text(20, 135, sym('U'), 'end') +
+		draht([60, o], [90, o]) + widerstand(90, o, 170, o) + ueber(130, o, 'R', '1') + stromspitze(82, o, 'r') + text(80, o - 10, sym('I')) +
+		draht([170, o], [400, o]) + punkt(260, o) + punkt(260, u) +
+		widerstand(260, o, 260, 130) + neben(260, 85, 'R', '2', 'links') + spule(260, 130, 260, u) + neben(260, 175, 'L', '', 'links') +
+		stromspitze(260, 60, 'u') + text(272, 64, sym('I', 'RL'), 'start') +
+		draht([400, o], [400, 105]) + kondensator(400, 105, 400, 155) + draht([400, 155], [400, u]) + neben(400, 130, 'C') +
+		stromspitze(400, 60, 'u') + text(412, 64, sym('I', 'C'), 'start') +
+		draht([60, u], [400, u]),
+	);
+}
+
+// ---------- G13) Realer Parallelschwingkreis: (R + L) parallel C ----------
+{
+	const o = 40, u = 220;
+	speichere('grundlagen/parallelschwingkreis-real.svg', 420, 250, 'Realer Parallelschwingkreis: Spule mit Wicklungswiderstand R parallel zu C',
+		wquelle(60, o, u) + pfeil(28, 100, 28, 160) + text(20, 135, sym('U'), 'end') +
+		draht([60, o], [300, o]) + draht([60, u], [300, u]) + punkt(170, o) + punkt(170, u) + stromspitze(110, o, 'r') + text(110, o - 10, sym('I')) +
+		widerstand(170, o, 170, 130) + neben(170, 85, 'R', '', 'links') + spule(170, 130, 170, u) + neben(170, 175, 'L', '', 'links') +
+		draht([300, o], [300, 105]) + kondensator(300, 105, 300, 155) + draht([300, 155], [300, u]) + neben(300, 130, 'C'),
 	);
 }

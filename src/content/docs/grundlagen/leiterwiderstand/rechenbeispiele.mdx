@@ -1,0 +1,175 @@
+---
+title: Rechenbeispiele – Leiterwiderstand und Temperatur
+description: Rechenbeispiele zu Leitungswiderstand, Leiterbahnen, Querschnittswahl, Temperaturkoeffizient, Einschaltstrom und NTC.
+---
+
+import Stufe from '../../../../components/Stufe.astro';
+import Loesung from '../../../../components/Loesung.astro';
+
+## Spannungsfall an einer Zuleitung
+
+<Stufe wert="grundlagen" />
+
+Ein Gerät mit $16\,\mathrm{A}$ ist über eine $25\,\mathrm{m}$ lange Kupferleitung ($1{,}5\,\mathrm{mm^2}$,
+$\rho = 0{,}0179\,\Omega\,\mathrm{mm^2/m}$) angeschlossen. Berechne den Widerstand der Leitung (Hin- **und** Rückleiter!),
+den Spannungsfall in Prozent von $230\,\mathrm{V}$ und die Verlustleistung in der Leitung.
+
+**Gegeben:** $l = 2 \cdot 25\,\mathrm{m} = 50\,\mathrm{m}$, $A = 1{,}5\,\mathrm{mm^2}$, $I = 16\,\mathrm{A}$
+
+**Gesucht:** $R_\mathrm{L}$, $\Delta U$ in %, $P_\mathrm{V}$
+
+<Loesung>
+
+$$
+R_\mathrm{L} = \frac{\rho \cdot l}{A} = \frac{0{,}0179\,\Omega\,\mathrm{mm^2/m} \cdot 50\,\mathrm{m}}{1{,}5\,\mathrm{mm^2}} \approx 0{,}597\,\Omega
+$$
+
+$$
+\Delta U = R_\mathrm{L} \cdot I \approx 0{,}597\,\Omega \cdot 16\,\mathrm{A} \approx 9{,}55\,\mathrm{V} \;\hat{=}\; \frac{9{,}55}{230} \approx 4{,}2\,\%
+\qquad
+P_\mathrm{V} = I^2 \cdot R_\mathrm{L} \approx 153\,\mathrm{W}
+$$
+
+Die Leitung „verheizt“ 153 W – deshalb sind für lange Leitungen größere Querschnitte vorgeschrieben.
+
+</Loesung>
+
+## Widerstand einer Leiterbahn
+
+<Stufe wert="standard" />
+
+Eine Leiterbahn auf einer Platine ist $80\,\mathrm{mm}$ lang, $0{,}4\,\mathrm{mm}$ breit und die Kupferschicht ist $35\,\mu\mathrm{m}$ dick
+($\rho = 0{,}0179\,\Omega\,\mathrm{mm^2/m}$). Es fließen $1{,}5\,\mathrm{A}$.
+Berechne Widerstand, Spannungsfall und Verlustleistung.
+
+<Loesung>
+
+Querschnitt (Rechteck): $A = b \cdot h = 0{,}4\,\mathrm{mm} \cdot 0{,}035\,\mathrm{mm} = 0{,}014\,\mathrm{mm^2}$
+
+$$
+R = \frac{\rho \cdot l}{A} = \frac{0{,}0179\,\Omega\,\mathrm{mm^2/m} \cdot 0{,}08\,\mathrm{m}}{0{,}014\,\mathrm{mm^2}} \approx 0{,}102\,\Omega
+$$
+
+$$
+U = R \cdot I \approx 0{,}153\,\mathrm{V}
+\qquad
+P = I^2 \cdot R \approx 0{,}23\,\mathrm{W}
+$$
+
+Achtung: Die Länge muss in **Metern** eingesetzt werden, weil $\rho$ in $\Omega\,\mathrm{mm^2/m}$ angegeben ist.
+
+</Loesung>
+
+## Querschnitt auswählen
+
+<Stufe wert="standard" />
+
+Eine $120\,\mathrm{m}$ lange Aluminiumleitung ($\rho = 0{,}0282\,\Omega\,\mathrm{mm^2/m}$, Länge = gesamte Leiterlänge)
+darf höchstens $0{,}5\,\Omega$ haben. Welcher Mindestquerschnitt ist nötig? Wähle aus der Normreihe
+$\ldots, 4, 6, 10, 16\,\mathrm{mm^2}$ und berechne den tatsächlichen Widerstand.
+
+<Loesung>
+
+$$
+A_\mathrm{min} = \frac{\rho \cdot l}{R_\mathrm{max}} = \frac{0{,}0282\,\Omega\,\mathrm{mm^2/m} \cdot 120\,\mathrm{m}}{0{,}5\,\Omega} \approx 6{,}77\,\mathrm{mm^2}
+$$
+
+Gewählt wird der **nächstgrößere** Normquerschnitt: $A = 10\,\mathrm{mm^2}$ (6 mm² wäre zu klein!).
+
+$$
+R = \frac{0{,}0282 \cdot 120}{10}\,\Omega \approx 0{,}338\,\Omega
+$$
+
+</Loesung>
+
+## Widerstand bei Betriebstemperatur
+
+<Stufe wert="grundlagen" />
+
+Die Kupferwicklung eines Motors hat bei $20\,°\mathrm{C}$ einen Widerstand von $12\,\Omega$
+($\alpha_{20} = 0{,}0039\,\mathrm{K^{-1}}$). Wie groß ist der Widerstand bei $75\,°\mathrm{C}$?
+
+<Loesung>
+
+$\Delta\vartheta = 75\,°\mathrm{C} - 20\,°\mathrm{C} = 55\,\mathrm{K}$
+
+$$
+R_{75} = R_{20} \cdot (1 + \alpha_{20} \cdot \Delta\vartheta) = 12\,\Omega \cdot (1 + 0{,}0039\,\mathrm{K^{-1}} \cdot 55\,\mathrm{K}) \approx 14{,}57\,\Omega
+$$
+
+</Loesung>
+
+## Wicklungstemperatur messen
+
+<Stufe wert="standard" />
+
+Die Kupferwicklung eines Motors ($\alpha_{20} = 0{,}0039\,\mathrm{K^{-1}}$) hat im kalten Zustand bei $20\,°\mathrm{C}$ einen
+Widerstand von $4{,}8\,\Omega$. Nach einer Stunde Betrieb misst man $5{,}9\,\Omega$. Wie warm ist die Wicklung?
+
+<Loesung>
+
+$$
+\Delta\vartheta = \frac{R_\vartheta / R_{20} - 1}{\alpha_{20}} = \frac{5{,}9 / 4{,}8 - 1}{0{,}0039\,\mathrm{K^{-1}}} \approx 58{,}8\,\mathrm{K}
+\qquad
+\vartheta = 20\,°\mathrm{C} + 58{,}8\,\mathrm{K} \approx 78{,}8\,°\mathrm{C}
+$$
+
+So misst man die Temperatur von Wicklungen, in die man kein Thermometer stecken kann – die **Widerstandsmethode**.
+
+</Loesung>
+
+## Einschaltstrom einer Ventilspule
+
+<Stufe wert="standard" />
+
+Die Kupferwicklung eines Magnetventils nimmt an $24\,\mathrm{V}$ im warmen Zustand ($60\,°\mathrm{C}$) $40\,\mathrm{mA}$ auf
+($\alpha_{20} = 0{,}0039\,\mathrm{K^{-1}}$). Berechne den Warmwiderstand, den Kaltwiderstand bei $20\,°\mathrm{C}$ und den Einschaltstrom.
+
+<Loesung>
+
+Warmwiderstand: $R_{60} = \dfrac{24\,\mathrm{V}}{0{,}04\,\mathrm{A}} = 600\,\Omega$
+
+Kaltwiderstand ($\Delta\vartheta = 40\,\mathrm{K}$):
+
+$$
+R_{20} = \frac{R_{60}}{1 + \alpha_{20} \cdot \Delta\vartheta} = \frac{600\,\Omega}{1 + 0{,}0039 \cdot 40} \approx 519\,\Omega
+$$
+
+Einschaltstrom (Spule ist noch kalt): $I_\mathrm{E} = \dfrac{24\,\mathrm{V}}{519\,\Omega} \approx 46{,}2\,\mathrm{mA}$
+
+Der Strom ist beim Einschalten also rund 16 % größer als im Betrieb.
+
+</Loesung>
+
+## Kennlinie eines NTC-Temperatursensors
+
+<Stufe wert="vertiefung" />
+
+Ein NTC hat bei $25\,°\mathrm{C}$ den Widerstand $R_{25} = 10\,\mathrm{k\Omega}$ und den B-Wert $B = 3950\,\mathrm{K}$.
+Sein Widerstand folgt näherungsweise
+
+$$
+R(T) = R_{25} \cdot \mathrm{e}^{\,B \left(\frac{1}{T} - \frac{1}{T_{25}}\right)}
+\qquad (T \text{ in Kelvin, } T_{25} = 298{,}15\,\mathrm{K})
+$$
+
+Berechne den Widerstand bei $0\,°\mathrm{C}$ und bei $50\,°\mathrm{C}$. Was fällt dir auf?
+
+<Loesung>
+
+$0\,°\mathrm{C}$: $T = 273{,}15\,\mathrm{K}$
+
+$$
+R = 10\,\mathrm{k\Omega} \cdot \mathrm{e}^{\,3950 \cdot \left(\frac{1}{273{,}15} - \frac{1}{298{,}15}\right)} = 10\,\mathrm{k\Omega} \cdot \mathrm{e}^{1{,}213} \approx 33{,}6\,\mathrm{k\Omega}
+$$
+
+$50\,°\mathrm{C}$: $T = 323{,}15\,\mathrm{K}$
+
+$$
+R = 10\,\mathrm{k\Omega} \cdot \mathrm{e}^{\,3950 \cdot \left(\frac{1}{323{,}15} - \frac{1}{298{,}15}\right)} = 10\,\mathrm{k\Omega} \cdot \mathrm{e}^{-1{,}025} \approx 3{,}59\,\mathrm{k\Omega}
+$$
+
+Der Widerstand **sinkt** mit steigender Temperatur (Heißleiter), und zwar sehr stark und **nicht linear** – zwischen
+0 °C und 50 °C ändert er sich fast um den Faktor 10. Darum ist ein NTC ein empfindlicher Temperatursensor.
+
+</Loesung>

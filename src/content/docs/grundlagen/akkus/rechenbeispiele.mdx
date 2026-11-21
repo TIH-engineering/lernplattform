@@ -1,0 +1,122 @@
+---
+title: Rechenbeispiele – Batterien und Akkus
+description: Rechenbeispiele zu Laufzeit, Energieinhalt, C-Rate, Akkupacks, Powerbank und Spannungseinbruch unter Last.
+---
+
+import Stufe from '../../../../components/Stufe.astro';
+import Loesung from '../../../../components/Loesung.astro';
+
+## Laufzeit
+
+<Stufe wert="grundlagen" />
+
+Ein Akku hat $3000\,\mathrm{mAh}$. Wie lange kann er (theoretisch) einen Verbraucher mit $250\,\mathrm{mA}$ versorgen?
+
+<Loesung>
+
+$$
+t = \frac{Q}{I} = \frac{3000\,\mathrm{mAh}}{250\,\mathrm{mA}} = 12\,\mathrm{h}
+$$
+
+In der Praxis ist die nutzbare Kapazität kleiner – sie hängt von Temperatur, Entladestrom, Alter und Entladeschlussspannung ab.
+
+</Loesung>
+
+## Ah oder Wh?
+
+<Stufe wert="grundlagen" />
+
+a) Ein Handy-Akku hat $3{,}7\,\mathrm{V}$ Nennspannung und $3000\,\mathrm{mAh}$. Welche Energie speichert er?
+b) Im Flugzeug sind Powerbanks bis $100\,\mathrm{Wh}$ ohne Genehmigung erlaubt. Darf eine Powerbank mit
+$20\,000\,\mathrm{mAh}$ (Zellspannung $3{,}7\,\mathrm{V}$) mit?
+
+<Loesung>
+
+a) $W = U \cdot Q = 3{,}7\,\mathrm{V} \cdot 3\,\mathrm{Ah} = 11{,}1\,\mathrm{Wh}$
+
+b) $W = 3{,}7\,\mathrm{V} \cdot 20\,\mathrm{Ah} = 74\,\mathrm{Wh} < 100\,\mathrm{Wh}$ → ja.
+
+**Merke:** Ah sagt nur, wie viel **Ladung** gespeichert ist. Erst mit der Spannung ergibt sich die **Energie** in Wh.
+Zwei Akkus mit gleichen mAh, aber unterschiedlicher Spannung speichern verschieden viel Energie.
+
+</Loesung>
+
+## C-Rate
+
+<Stufe wert="grundlagen" />
+
+a) Ein Akku mit $2\,\mathrm{Ah}$ wird mit 1C entladen. Wie groß ist der Strom?
+b) Ein Modellbau-LiPo mit $2200\,\mathrm{mAh}$ ist mit „20C“ angegeben. Welchen Strom darf man maximal entnehmen?
+c) Wie lange dauert es theoretisch, einen Akku mit 0,5C voll zu laden?
+
+<Loesung>
+
+a) 1C bedeutet: in einer Stunde voll entladen → $I = 2\,\mathrm{A}$
+
+b) $I_\mathrm{max} = 20 \cdot 2{,}2\,\mathrm{A} = 44\,\mathrm{A}$
+
+c) Bei 0,5C fließt der halbe Nennstrom → $t = 1\,\mathrm{h} / 0{,}5 = 2\,\mathrm{h}$.
+(In der Praxis etwas länger, weil am Ende in der CV-Phase der Strom sinkt.)
+
+</Loesung>
+
+## Akkupack für ein E-Bike
+
+<Stufe wert="standard" />
+
+Ein E-Bike-Akku besteht aus Li-Ionen-Zellen mit je $3{,}6\,\mathrm{V}$ und $3{,}5\,\mathrm{Ah}$ in der Anordnung **10s4p**
+(10 in Reihe, 4 parallel). Berechne Nennspannung, Kapazität, Energieinhalt und die Anzahl der Zellen.
+
+<Loesung>
+
+- Spannung: 10 Zellen in Reihe → $U = 10 \cdot 3{,}6\,\mathrm{V} = 36\,\mathrm{V}$
+- Kapazität: 4 Stränge parallel → $Q = 4 \cdot 3{,}5\,\mathrm{Ah} = 14\,\mathrm{Ah}$
+- Energie: $W = 36\,\mathrm{V} \cdot 14\,\mathrm{Ah} = 504\,\mathrm{Wh}$
+- Zellen: $10 \cdot 4 = 40$
+
+Probe: $40 \text{ Zellen} \cdot 3{,}6\,\mathrm{V} \cdot 3{,}5\,\mathrm{Ah} = 504\,\mathrm{Wh}$ ✔ – die Energie hängt nur von der Zahl der Zellen ab.
+
+</Loesung>
+
+## Wie oft lädt die Powerbank mein Handy?
+
+<Stufe wert="standard" />
+
+Eine Powerbank hat $10\,000\,\mathrm{mAh}$ bei $3{,}7\,\mathrm{V}$ Zellspannung. Sie gibt $5\,\mathrm{V}$ über USB ab,
+der Wandler hat einen Wirkungsgrad von $85\,\%$. Ein Handy-Akku hat $3000\,\mathrm{mAh}$ bei $3{,}85\,\mathrm{V}$.
+Wie oft kann man das Handy (theoretisch) voll laden? Warum steht auf der Powerbank „10 000 mAh“, obwohl sie bei 5 V viel weniger liefert?
+
+<Loesung>
+
+Energie in der Powerbank: $W = 3{,}7\,\mathrm{V} \cdot 10\,\mathrm{Ah} = 37\,\mathrm{Wh}$ · nutzbar: $0{,}85 \cdot 37\,\mathrm{Wh} \approx 31{,}5\,\mathrm{Wh}$
+
+Bei 5 V entspricht das nur noch $31{,}5\,\mathrm{Wh} / 5\,\mathrm{V} = 6{,}29\,\mathrm{Ah}$.
+
+Handy-Akku: $3{,}85\,\mathrm{V} \cdot 3\,\mathrm{Ah} = 11{,}55\,\mathrm{Wh}$ → $\dfrac{31{,}5}{11{,}55} \approx 2{,}7$ Ladungen
+(ohne die Ladeverluste im Handy – real eher 2-mal).
+
+Die mAh-Angabe bezieht sich auf die **Zellspannung** 3,7 V. Deshalb ist der Vergleich in **Wh** ehrlicher.
+
+</Loesung>
+
+## Spannungseinbruch unter Last
+
+<Stufe wert="vertiefung" />
+
+Ein 3S-LiPo-Akku (3 Zellen in Reihe, je $3{,}7\,\mathrm{V}$) hat pro Zelle einen Innenwiderstand von $5\,\mathrm{m\Omega}$.
+Ein Drohnenmotor zieht $40\,\mathrm{A}$. Wie stark bricht die Spannung ein, und welche Verlustleistung entsteht im Akku?
+
+<Loesung>
+
+$R_\mathrm{i,ges} = 3 \cdot 5\,\mathrm{m\Omega} = 15\,\mathrm{m\Omega}$
+
+$$
+\Delta U = R_\mathrm{i} \cdot I = 0{,}015\,\Omega \cdot 40\,\mathrm{A} = 0{,}6\,\mathrm{V}
+\qquad
+P_\mathrm{V} = I^2 \cdot R_\mathrm{i} = (40\,\mathrm{A})^2 \cdot 0{,}015\,\Omega = 24\,\mathrm{W}
+$$
+
+Statt 11,1 V liegen nur noch 10,5 V am Motor, und der Akku wird mit 24 W aufgeheizt.
+Hohe Ströme lassen Akkus schneller altern – deshalb gibt es die C-Rate als Grenze.
+
+</Loesung>

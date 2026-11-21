@@ -1,0 +1,153 @@
+---
+title: Rechenbeispiele – Wechselgrößen und Blindwiderstände
+description: Rechenbeispiele zu Frequenz, Effektivwert, Augenblickswert, Phasenverschiebung, induktivem und kapazitivem Blindwiderstand.
+---
+
+import Stufe from '../../../../components/Stufe.astro';
+import Loesung from '../../../../components/Loesung.astro';
+
+## Periodendauer, Frequenz, Kreisfrequenz
+
+<Stufe wert="grundlagen" />
+
+a) Ein Signal hat die Periodendauer $20\,\mathrm{ms}$. Berechne $f$ und $\omega$.
+b) Welche Periodendauer hat ein 1-kHz-Ton?
+
+<Loesung>
+
+a) $f = \dfrac{1}{T} = \dfrac{1}{0{,}02\,\mathrm{s}} = 50\,\mathrm{Hz}$ · $\omega = 2\pi f \approx 314{,}2\,\mathrm{s^{-1}}$
+
+b) $T = \dfrac{1}{1000\,\mathrm{Hz}} = 1\,\mathrm{ms}$
+
+</Loesung>
+
+## Scheitelwert und Effektivwert
+
+<Stufe wert="grundlagen" />
+
+Die Netzspannung hat den Effektivwert $230\,\mathrm{V}$. Berechne Scheitelwert und Spitze-Spitze-Wert.
+
+<Loesung>
+
+$$
+\hat{u} = \sqrt{2} \cdot U = \sqrt{2} \cdot 230\,\mathrm{V} \approx 325\,\mathrm{V}
+\qquad
+U_\mathrm{ss} = 2\,\hat{u} \approx 651\,\mathrm{V}
+$$
+
+Der Effektivwert ist der Wert, der in einem Widerstand dieselbe Wärme erzeugt wie eine gleich große Gleichspannung.
+Isolierungen müssen aber den **Scheitelwert** aushalten!
+
+</Loesung>
+
+## Scheitelwert aus einem Augenblickswert
+
+<Stufe wert="standard" />
+
+Eine sinusförmige Spannung mit $f = 100\,\mathrm{Hz}$ (Nullphasenwinkel 0) hat $1{,}5\,\mathrm{ms}$ nach dem Nulldurchgang den
+Augenblickswert $95\,\mathrm{V}$. Berechne den Scheitelwert und den Effektivwert.
+
+<Loesung>
+
+$T = 10\,\mathrm{ms}$, der Winkel zum Zeitpunkt $t$ ist $\alpha = \dfrac{t}{T} \cdot 360° = \dfrac{1{,}5}{10} \cdot 360° = 54°$
+
+$$
+u(t) = \hat{u} \cdot \sin\alpha \;\Rightarrow\; \hat{u} = \frac{u(t)}{\sin\alpha} = \frac{95\,\mathrm{V}}{\sin 54°} = \frac{95\,\mathrm{V}}{0{,}809} \approx 117{,}4\,\mathrm{V}
+\qquad
+U = \frac{\hat{u}}{\sqrt{2}} \approx 83{,}0\,\mathrm{V}
+$$
+
+Achtung: Taschenrechner auf **DEG** stellen – oder im Bogenmaß rechnen: $\omega t = 2\pi \cdot 100 \cdot 0{,}0015 \approx 0{,}942$.
+
+</Loesung>
+
+## Phasenverschiebung am Oszilloskop
+
+<Stufe wert="grundlagen" />
+
+Auf dem Oszilloskop siehst du Spannung und Strom (über einen Messwiderstand) einer 50-Hz-Schaltung. Der Nulldurchgang
+des Stroms liegt $2\,\mathrm{ms}$ **vor** dem der Spannung. Wie groß ist die Phasenverschiebung? Ist die Schaltung induktiv oder kapazitiv?
+
+<Loesung>
+
+$$
+\varphi = \frac{\Delta t}{T} \cdot 360° = \frac{2\,\mathrm{ms}}{20\,\mathrm{ms}} \cdot 360° = 36°
+$$
+
+Der Strom **eilt vor** → die Schaltung verhält sich **kapazitiv**.
+
+</Loesung>
+
+## Induktiver Blindwiderstand
+
+<Stufe wert="grundlagen" />
+
+Berechne für eine Spule mit $L = 60\,\mathrm{mH}$ den Blindwiderstand $X_\mathrm{L}$ und den Blindleitwert $B_\mathrm{L}$ bei
+$50$, $100$, $500$ und $1000\,\mathrm{Hz}$. Skizziere $X_\mathrm{L}(f)$.
+
+<Loesung>
+
+$X_\mathrm{L} = 2\pi f L$, $B_\mathrm{L} = 1 / X_\mathrm{L}$:
+
+| $f$ in Hz | 50 | 100 | 500 | 1000 |
+| --- | --- | --- | --- | --- |
+| $X_\mathrm{L}$ in Ω | 18,85 | 37,70 | 188,5 | 377,0 |
+| $B_\mathrm{L}$ in mS | 53,05 | 26,53 | 5,31 | 2,65 |
+
+$X_\mathrm{L}$ wächst **linear** mit der Frequenz (Gerade durch den Ursprung), $B_\mathrm{L}$ fällt hyperbelförmig.
+Bei Gleichstrom ($f = 0$) ist die ideale Spule ein Kurzschluss.
+
+</Loesung>
+
+## Kapazitiver Blindwiderstand
+
+<Stufe wert="grundlagen" />
+
+Wie groß ist der Blindwiderstand eines Kondensators mit $10\,\mu\mathrm{F}$ bei $50\,\mathrm{Hz}$ und bei $1\,\mathrm{kHz}$?
+
+<Loesung>
+
+$$
+X_\mathrm{C} = \frac{1}{2\pi f C} = \frac{1}{2\pi \cdot 50\,\mathrm{Hz} \cdot 10 \cdot 10^{-6}\,\mathrm{F}} \approx 318{,}3\,\Omega
+\qquad
+X_\mathrm{C}(1\,\mathrm{kHz}) \approx 15{,}9\,\Omega
+$$
+
+20-fache Frequenz → ein Zwanzigstel des Blindwiderstands. Bei Gleichstrom sperrt der Kondensator ($X_\mathrm{C} \to \infty$).
+
+</Loesung>
+
+## Spule an Wechsel- und Gleichspannung
+
+<Stufe wert="standard" />
+
+a) Eine (ideale) Drosselspule mit $L = 0{,}8\,\mathrm{H}$ liegt an $230\,\mathrm{V}$, $50\,\mathrm{Hz}$. Welcher Strom fließt?
+b) Dieselbe Spule hat einen Wicklungswiderstand von $10\,\Omega$. Welcher Strom fließt an $12\,\mathrm{V}$ Gleichspannung?
+
+<Loesung>
+
+a) $X_\mathrm{L} = 2\pi \cdot 50 \cdot 0{,}8\,\Omega \approx 251{,}3\,\Omega$ → $I = \dfrac{230\,\mathrm{V}}{251{,}3\,\Omega} \approx 0{,}92\,\mathrm{A}$
+
+b) Bei Gleichstrom wirkt nur der ohmsche Widerstand: $I = \dfrac{12\,\mathrm{V}}{10\,\Omega} = 1{,}2\,\mathrm{A}$
+
+Obwohl die Gleichspannung 20-mal kleiner ist, fließt mehr Strom! An 230 V Gleichspannung wären es 23 A – die Spule würde verbrennen.
+
+</Loesung>
+
+## Gleichrichtwert und Formfaktor
+
+<Stufe wert="vertiefung" />
+
+Ein Drehspul-Messgerät zeigt bei Wechselstrom den **Gleichrichtwert** $|\bar{u}| = \dfrac{2}{\pi} \hat{u}$ an.
+Wie groß ist der Formfaktor $F = U / |\bar{u}|$ für Sinus? Was folgt daraus für Messgeräte?
+
+<Loesung>
+
+$$
+F = \frac{U}{|\bar{u}|} = \frac{\hat{u}/\sqrt{2}}{2\hat{u}/\pi} = \frac{\pi}{2\sqrt{2}} \approx 1{,}11
+$$
+
+Einfache Messgeräte messen den Gleichrichtwert und multiplizieren mit 1,11. Das stimmt aber **nur für Sinus**!
+Für Rechteck-, Dreieck- oder verzerrte Signale braucht man ein Messgerät mit „**True RMS**“ (echter Effektivwert).
+
+</Loesung>

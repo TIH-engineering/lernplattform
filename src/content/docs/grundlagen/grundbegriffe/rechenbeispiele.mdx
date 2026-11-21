@@ -1,0 +1,153 @@
+---
+title: Rechenbeispiele – Grundbegriffe
+description: Rechenbeispiele zu Einheiten, Ladung, Strom, Elementarladungen, Stromdichte und Potenzial.
+---
+
+import Stufe from '../../../../components/Stufe.astro';
+import Loesung from '../../../../components/Loesung.astro';
+
+Rechne zuerst selbst, dann klapp die Lösung auf. Konstante: $e = 1{,}602 \cdot 10^{-19}\,\mathrm{C}$.
+
+## Einheiten umrechnen
+
+<Stufe wert="grundlagen" />
+
+Rechne um und gib das Ergebnis mit Zehnerpotenz **und** mit passendem Einheitenvorsatz an:
+
+a) $0{,}047\,\mathrm{A}$ b) $3\,300\,000\,\Omega$ c) $0{,}000\,0022\,\mathrm{F}$ d) $5\,\mathrm{MWs}$ in $\mathrm{kWh}$ e) $72\,\mathrm{km/h}$ in $\mathrm{m/s}$
+
+<Loesung>
+
+a) $0{,}047\,\mathrm{A} = 47 \cdot 10^{-3}\,\mathrm{A} = 47\,\mathrm{mA}$
+
+b) $3\,300\,000\,\Omega = 3{,}3 \cdot 10^{6}\,\Omega = 3{,}3\,\mathrm{M\Omega}$
+
+c) $0{,}000\,0022\,\mathrm{F} = 2{,}2 \cdot 10^{-6}\,\mathrm{F} = 2{,}2\,\mu\mathrm{F}$
+
+d) $1\,\mathrm{kWh} = 1000\,\mathrm{W} \cdot 3600\,\mathrm{s} = 3{,}6 \cdot 10^{6}\,\mathrm{Ws}$, also
+$5\,\mathrm{MWs} = \dfrac{5 \cdot 10^{6}\,\mathrm{Ws}}{3{,}6 \cdot 10^{6}\,\mathrm{Ws/kWh}} \approx 1{,}39\,\mathrm{kWh}$
+
+e) $72\,\dfrac{\mathrm{km}}{\mathrm{h}} = 72 \cdot \dfrac{1000\,\mathrm{m}}{3600\,\mathrm{s}} = 20\,\dfrac{\mathrm{m}}{\mathrm{s}}$ (Merkregel: durch 3,6 teilen)
+
+</Loesung>
+
+## Ladung und Elementarladungen
+
+<Stufe wert="grundlagen" />
+
+Durch einen Leiter fließt eine Stunde lang ein konstanter Strom von $5\,\mu\mathrm{A}$.
+a) Welche Ladung fließt durch den Leiter? b) Wie viele Elektronen sind das?
+
+**Gegeben:** $I = 5\,\mu\mathrm{A}$, $t = 1\,\mathrm{h} = 3600\,\mathrm{s}$
+
+**Gesucht:** $Q$, $N$
+
+<Loesung>
+
+a) $Q = I \cdot t = 5 \cdot 10^{-6}\,\mathrm{A} \cdot 3600\,\mathrm{s} = 0{,}018\,\mathrm{C} = 18\,\mathrm{mC}$
+
+b) $N = \dfrac{Q}{e} = \dfrac{0{,}018\,\mathrm{C}}{1{,}602 \cdot 10^{-19}\,\mathrm{C}} \approx 1{,}12 \cdot 10^{17}$ Elektronen
+
+Schon ein winziger Strom bedeutet eine riesige Anzahl von Elektronen!
+
+</Loesung>
+
+## Strom aus Ladung und Zeit
+
+<Stufe wert="grundlagen" />
+
+Eine Ladung von $0{,}45\,\mathrm{C}$ fließt in 3 Minuten gleichmäßig durch einen Leiter.
+Wie groß ist der Strom? Wie viele Elementarladungen sind beteiligt?
+
+**Gegeben:** $Q = 0{,}45\,\mathrm{C}$, $t = 3\,\mathrm{min} = 180\,\mathrm{s}$
+
+**Gesucht:** $I$, $N$
+
+<Loesung>
+
+$$
+I = \frac{Q}{t} = \frac{0{,}45\,\mathrm{C}}{180\,\mathrm{s}} = 2{,}5 \cdot 10^{-3}\,\mathrm{A} = 2{,}5\,\mathrm{mA}
+\qquad
+N = \frac{Q}{e} = \frac{0{,}45\,\mathrm{C}}{1{,}602 \cdot 10^{-19}\,\mathrm{C}} \approx 2{,}81 \cdot 10^{18}
+$$
+
+</Loesung>
+
+## Stromdichte
+
+<Stufe wert="standard" />
+
+a) Ein Kupferdraht mit $d = 0{,}8\,\mathrm{mm}$ Durchmesser führt $1{,}5\,\mathrm{A}$. Berechne die Stromdichte.
+
+b) Ein Strom von $10\,\mathrm{A}$ soll eine Stromdichte von $6\,\mathrm{A/mm^2}$ nicht überschreiten.
+Welche der Querschnitte $1{,}5\,\mathrm{mm^2}$, $2{,}5\,\mathrm{mm^2}$ und $4\,\mathrm{mm^2}$ sind geeignet?
+
+<Loesung>
+
+a) Querschnitt: $A = \dfrac{d^2 \pi}{4} = \dfrac{(0{,}8\,\mathrm{mm})^2 \cdot \pi}{4} \approx 0{,}503\,\mathrm{mm^2}$
+
+$$
+J = \frac{I}{A} = \frac{1{,}5\,\mathrm{A}}{0{,}503\,\mathrm{mm^2}} \approx 2{,}98\,\frac{\mathrm{A}}{\mathrm{mm^2}}
+$$
+
+b) $J = I / A$ für jeden Querschnitt:
+
+| $A$ | $J$ | geeignet? |
+| --- | --- | --- |
+| $1{,}5\,\mathrm{mm^2}$ | $6{,}67\,\mathrm{A/mm^2}$ | nein |
+| $2{,}5\,\mathrm{mm^2}$ | $4{,}0\,\mathrm{A/mm^2}$ | ja |
+| $4\,\mathrm{mm^2}$ | $2{,}5\,\mathrm{A/mm^2}$ | ja |
+
+**Antwortsatz:** Geeignet sind die Querschnitte 2,5 mm² und 4 mm². Der dünnste Draht (1,5 mm²) hätte die
+größte Stromdichte und würde sich am stärksten erwärmen.
+
+</Loesung>
+
+## Potenzial und Spannung
+
+<Stufe wert="standard" />
+
+In einer Schaltung werden gegenüber Masse folgende Potenziale gemessen:
+$\varphi_\mathrm{A} = +12\,\mathrm{V}$, $\varphi_\mathrm{B} = +5\,\mathrm{V}$, $\varphi_\mathrm{C} = -3\,\mathrm{V}$.
+Berechne $U_\mathrm{AB}$, $U_\mathrm{BC}$ und $U_\mathrm{CA}$. Was ergibt die Summe der drei Spannungen?
+
+<Loesung>
+
+$$
+U_\mathrm{AB} = \varphi_\mathrm{A} - \varphi_\mathrm{B} = 12\,\mathrm{V} - 5\,\mathrm{V} = 7\,\mathrm{V}
+$$
+$$
+U_\mathrm{BC} = \varphi_\mathrm{B} - \varphi_\mathrm{C} = 5\,\mathrm{V} - (-3\,\mathrm{V}) = 8\,\mathrm{V}
+$$
+$$
+U_\mathrm{CA} = \varphi_\mathrm{C} - \varphi_\mathrm{A} = -3\,\mathrm{V} - 12\,\mathrm{V} = -15\,\mathrm{V}
+$$
+
+Summe: $7\,\mathrm{V} + 8\,\mathrm{V} - 15\,\mathrm{V} = 0$. Das ist kein Zufall: Läuft man einmal im Kreis
+(A → B → C → A), ist die Summe der Spannungen immer null – das ist bereits die **Maschenregel**.
+
+</Loesung>
+
+## Wie schnell sind Elektronen?
+
+<Stufe wert="vertiefung" />
+
+Ein Kupferleiter mit $A = 1{,}5\,\mathrm{mm^2}$ führt $10\,\mathrm{A}$. Kupfer hat etwa
+$n = 8{,}5 \cdot 10^{28}$ freie Elektronen pro Kubikmeter.
+Berechne die mittlere Driftgeschwindigkeit $v = \dfrac{I}{n \cdot e \cdot A}$ der Elektronen.
+Wie lange braucht ein Elektron für 1 m Leitung? Warum leuchtet die Lampe trotzdem sofort?
+
+<Loesung>
+
+$$
+v = \frac{I}{n \cdot e \cdot A} = \frac{10\,\mathrm{A}}{8{,}5 \cdot 10^{28}\,\mathrm{m^{-3}} \cdot 1{,}602 \cdot 10^{-19}\,\mathrm{C} \cdot 1{,}5 \cdot 10^{-6}\,\mathrm{m^2}}
+\approx 4{,}9 \cdot 10^{-4}\,\frac{\mathrm{m}}{\mathrm{s}} \approx 0{,}49\,\frac{\mathrm{mm}}{\mathrm{s}}
+$$
+
+Für 1 m braucht ein Elektron $t = 1\,\mathrm{m} / v \approx 2040\,\mathrm{s} \approx 34\,\mathrm{min}$.
+
+Die Lampe leuchtet trotzdem sofort, weil sich das **elektrische Feld** (der „Anstoß“) fast mit Lichtgeschwindigkeit
+im Leiter ausbreitet. Alle Elektronen im Leiter setzen sich praktisch gleichzeitig in Bewegung – wie Wasser in
+einem vollen Schlauch: Dreht man auf, kommt vorne sofort Wasser heraus, obwohl das „neue“ Wasser noch lange unterwegs ist.
+
+</Loesung>

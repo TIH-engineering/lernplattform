@@ -1,0 +1,79 @@
+---
+title: Praxisbeispiele – Induktion und Transformator
+description: Freilaufdiode am Relais, Induktionskochfeld, kabelloses Laden, Fahrraddynamo und Wirbelstrombremse.
+---
+
+import Loesung from '../../../../components/Loesung.astro';
+
+## Freilaufdiode am Relais
+
+Ein Mikrocontroller schaltet über einen Transistor ein 12-V-Relais. Parallel zur Relaisspule ist eine Diode in **Sperrrichtung** geschaltet.
+
+1. Was passiert beim Abschalten ohne diese Diode?
+2. Wie hilft die Diode?
+3. Warum schaltet das Relais mit Freilaufdiode etwas langsamer ab?
+
+<Loesung>
+
+1. Die Spule will ihren Strom beibehalten (Selbstinduktion). Beim schnellen Abschalten entsteht eine sehr hohe
+   Spannungsspitze ($u = L \cdot \Delta i / \Delta t$), oft mehrere 100 V. Sie kann den Transistor zerstören.
+2. Im Betrieb sperrt die Diode. Beim Abschalten polt sich die Spulenspannung um – jetzt leitet die Diode und der Spulenstrom
+   kann über sie langsam abklingen. Die Spannung bleibt auf etwa 0,7 V über der Versorgung begrenzt.
+3. Der Strom (und damit das Magnetfeld) klingt langsamer ab, der Anker fällt später ab.
+
+</Loesung>
+
+## Induktionskochfeld
+
+Unter der Glaskeramik eines Induktionskochfelds liegt eine flache Spule, durch die ein Wechselstrom mit 20–50 kHz fließt.
+
+1. Warum wird der Topfboden heiß, die Glasplatte aber kaum?
+2. Warum funktioniert ein Aluminium- oder Glastopf nicht (gut)?
+3. Warum verwendet man eine so hohe Frequenz?
+
+<Loesung>
+
+1. Das Wechselfeld induziert im metallischen Topfboden **Wirbelströme**, die ihn durch $I^2 R$ erwärmen. Dazu kommen
+   Ummagnetisierungsverluste im ferromagnetischen Boden. Glas ist ein Isolator – dort fließt kein Strom.
+2. Glas leitet nicht. Aluminium leitet zu gut und ist nicht ferromagnetisch – der Topf erwärmt sich kaum.
+   Geeignet sind ferromagnetische Töpfe (Magnettest!).
+3. Die induzierte Spannung ist proportional zur Änderungsgeschwindigkeit des Flusses ($u \sim \omega$). Außerdem liegt die
+   Frequenz über dem Hörbereich, damit das Kochfeld nicht brummt.
+
+</Loesung>
+
+## Kabelloses Laden
+
+Ein Smartphone wird auf eine Qi-Ladestation gelegt.
+
+1. Welche Bauteile bilden hier einen Transformator?
+2. Warum muss das Handy genau auf der Ladeschale liegen?
+3. Warum wird das Handy beim kabellosen Laden wärmer als beim Laden mit Kabel?
+
+<Loesung>
+
+1. Die Sendespule in der Ladestation ist die Primärwicklung, die Empfangsspule im Handy die Sekundärwicklung – ein
+   Transformator **ohne gemeinsamen Eisenkern**.
+2. Nur wenn die Spulen übereinanderliegen, durchsetzt ein großer Teil des Flusses beide Spulen. Der **Kopplungsgrad**
+   $k$ sinkt stark mit dem Abstand und Versatz.
+3. Wegen der schwachen Kopplung ist der Wirkungsgrad kleiner (typisch 70–80 %). Die Verluste werden zu Wärme,
+   außerdem können Wirbelströme in Metallteilen entstehen.
+
+</Loesung>
+
+## Fahrraddynamo
+
+Ein Nabendynamo liefert bei 15 km/h etwa 6 V und 0,5 A.
+
+1. Welches Induktionsprinzip nutzt der Dynamo?
+2. Warum tritt man mit eingeschaltetem Licht schwerer (Lenzsche Regel)?
+3. Welche Leistung gibt der Dynamo ab?
+
+<Loesung>
+
+1. **Bewegungsinduktion** bzw. ein sich drehender Magnet, der den Fluss durch feste Spulen ändert (Generatorprinzip).
+2. Der induzierte Strom erzeugt ein eigenes Magnetfeld, das der Drehung **entgegenwirkt** (Lenzsche Regel). Ohne Last fließt
+   kein Strom – dann bremst der Dynamo kaum.
+3. $P = U \cdot I = 6\,\mathrm{V} \cdot 0{,}5\,\mathrm{A} = 3\,\mathrm{W}$ – die musst du zusätzlich (plus Verluste) treten.
+
+</Loesung>

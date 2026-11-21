@@ -1,0 +1,66 @@
+---
+title: Praxisbeispiele – Komplexe Wechselstromrechnung
+description: Impedanz eines Lautsprechers, Vorschaltdrossel einer Leuchtstofflampe und Überprüfung mit der AC-Simulation.
+---
+
+import Loesung from '../../../../components/Loesung.astro';
+
+## Ein Lautsprecher ist kein ohmscher Widerstand
+
+Auf einem Lautsprecher steht „8 Ω“. Mit einem Multimeter misst du aber nur **6,2 Ω**.
+Ein einfaches Modell: Schwingspule = Widerstand $R = 6{,}2\,\Omega$ in Reihe mit $L = 0{,}5\,\mathrm{mH}$.
+
+1. Warum zeigt das Multimeter weniger als 8 Ω?
+2. Berechne den Betrag der Impedanz bei 100 Hz, 1 kHz und 10 kHz.
+3. Was bedeutet das für einen Hochtonlautsprecher an derselben Frequenzweiche?
+
+<Loesung>
+
+1. Das Multimeter misst mit **Gleichstrom** – es sieht nur den Drahtwiderstand der Schwingspule. Die Nennimpedanz 8 Ω ist ein
+   typischer Wert im Betrieb mit Wechselstrom.
+2. $\underline{Z} = R + \mathrm{j}\omega L$:
+   - 100 Hz: $X_\mathrm{L} = 0{,}31\,\Omega$ → $Z \approx 6{,}21\,\Omega$
+   - 1 kHz: $X_\mathrm{L} = 3{,}14\,\Omega$ → $Z \approx 6{,}95\,\Omega$
+   - 10 kHz: $X_\mathrm{L} = 31{,}4\,\Omega$ → $Z \approx 32{,}0\,\Omega$
+3. Bei hohen Frequenzen steigt die Impedanz stark. Frequenzweichen müssen das berücksichtigen, sonst stimmt die Trennfrequenz nicht.
+   (Ein echter Lautsprecher hat zusätzlich eine Resonanzspitze bei tiefen Frequenzen.)
+
+</Loesung>
+
+## Vorschaltdrossel einer Leuchtstofflampe
+
+Ältere Leuchtstofflampen haben eine Drossel in Reihe. Im Betrieb liegen an der Lampe ca. **100 V** (wie ein ohmscher Widerstand),
+die Netzspannung beträgt **230 V**, der Strom **0,43 A**.
+
+1. Zeichne das Zeigerdiagramm der Spannungen (Lampe = ohmsch, Drossel = ideal induktiv).
+2. Wie groß ist die Spannung an der Drossel? Warum nicht einfach 130 V?
+3. Wie groß ist die Induktivität der Drossel?
+
+<Loesung>
+
+1. $\underline{U}_\mathrm{Lampe}$ in Phase mit dem Strom, $\underline{U}_\mathrm{Drossel}$ 90° voreilend – sie bilden ein rechtwinkeliges Dreieck mit $\underline{U}$ als Hypotenuse.
+2. $U_\mathrm{D} = \sqrt{230^2 - 100^2}\,\mathrm{V} \approx 207\,\mathrm{V}$. Die Spannungen sind um 90° verschoben – man muss sie **geometrisch** addieren.
+3. $X_\mathrm{L} = \dfrac{207\,\mathrm{V}}{0{,}43\,\mathrm{A}} \approx 482\,\Omega$ → $L = \dfrac{X_\mathrm{L}}{2\pi \cdot 50\,\mathrm{Hz}} \approx 1{,}53\,\mathrm{H}$
+
+Warum eine Drossel statt eines Vorwiderstands? Ein Widerstand würde $130\,\mathrm{V} \cdot 0{,}43\,\mathrm{A} \approx 56\,\mathrm{W}$ verheizen – die
+Drossel verbraucht (fast) keine Wirkleistung.
+
+</Loesung>
+
+## Kontrolle mit der Simulation
+
+Überprüfe das [gemischte Rechenbeispiel](/grundlagen/komplexe-rechnung/rechenbeispiele/#gemischte-schaltung) mit LTspice:
+
+1. Baue die Schaltung auf, wähle als Quelle eine Sinusspannung mit Amplitude $325\,\mathrm{V}$ (= Scheitelwert von 230 V) und 50 Hz.
+2. Simuliere mit `.tran 0 200m 100m` und miss den Scheitelwert des Gesamtstroms und des Kondensatorstroms.
+3. Rechne die Scheitelwerte in Effektivwerte um und vergleiche mit der Rechnung.
+
+<Loesung>
+
+Erwartete Scheitelwerte: $\hat{i} = \sqrt{2} \cdot 1{,}303\,\mathrm{A} \approx 1{,}84\,\mathrm{A}$ und
+$\hat{i}_\mathrm{C} = \sqrt{2} \cdot 0{,}561\,\mathrm{A} \approx 0{,}79\,\mathrm{A}$.
+Die Phasenverschiebung kannst du als Zeitversatz der Nulldurchgänge ablesen: $8{,}34°$ entsprechen bei 50 Hz etwa $0{,}46\,\mathrm{ms}$.
+
+Tipp: Mit `.ac` (Frequenzanalyse) zeigt LTspice Betrag und Phase direkt an – das ist genau die komplexe Rechnung.
+
+</Loesung>

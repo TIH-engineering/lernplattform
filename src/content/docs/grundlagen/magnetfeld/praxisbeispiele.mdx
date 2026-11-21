@@ -1,0 +1,78 @@
+---
+title: Praxisbeispiele – Magnetisches Feld
+description: Kompass neben einer Leitung, weich- und hartmagnetische Werkstoffe, Hallsensor und Reedkontakt, Stromzange.
+---
+
+import Loesung from '../../../../components/Loesung.astro';
+
+## Versuch: Kompass neben einer Leitung
+
+Lege einen Kompass unter eine gerade Leitung, durch die ein Gleichstrom fließt (Labornetzgerät, Strombegrenzung 10 A).
+
+1. Was passiert mit der Kompassnadel beim Einschalten? Was passiert beim Umpolen?
+2. In welchem Abstand ist das Feld eines 10-A-Leiters genauso stark wie das Erdmagnetfeld ($B \approx 48\,\mu\mathrm{T}$)?
+3. Warum zeigen Kompasse in der Nähe von Stromleitungen im Auto oder Flugzeug falsch an?
+
+<Loesung>
+
+1. Die Nadel dreht sich und stellt sich tangential zu den kreisförmigen Feldlinien um den Leiter ein (Rechte-Hand-Regel).
+   Beim Umpolen dreht sie sich in die Gegenrichtung.
+2. $r = \dfrac{\mu_0 I}{2\pi B} = \dfrac{4\pi \cdot 10^{-7} \cdot 10}{2\pi \cdot 48 \cdot 10^{-6}}\,\mathrm{m} \approx 4{,}2\,\mathrm{cm}$
+3. Ströme in Leitungen erzeugen Felder, die sich dem schwachen Erdfeld überlagern. Deshalb werden Kompasse
+   „kompensiert“ und Leitungen paarweise (Hin- und Rückleiter nebeneinander) verlegt – dann heben sich die Felder fast auf.
+
+</Loesung>
+
+## Weich- oder hartmagnetisch?
+
+Ordne zu, ob ein **weichmagnetischer** (schmale Hystereseschleife, kleine Koerzitivfeldstärke) oder ein **hartmagnetischer**
+Werkstoff (breite Schleife, große Koerzitivfeldstärke) verwendet wird:
+
+a) Kern eines Transformators b) Magnet im Lautsprecher c) Kern eines Relais d) Kühlschrankmagnet e) Festplatten-Speicherschicht
+
+<Loesung>
+
+| Anwendung | Werkstoff | Warum? |
+| --- | --- | --- |
+| a) Transformator | weich | wird 50-mal pro Sekunde ummagnetisiert – die Fläche der Hystereseschleife ist Verlustenergie |
+| b) Lautsprecher | hart | Dauermagnet: soll seine Magnetisierung behalten |
+| c) Relais | weich | Anker soll nach dem Abschalten sofort abfallen (kleine Remanenz) |
+| d) Kühlschrankmagnet | hart | Dauermagnet |
+| e) Festplatte | hart | Information soll gespeichert bleiben, darf sich aber gezielt ummagnetisieren lassen |
+
+</Loesung>
+
+## Sensoren, die Magnetfelder erkennen
+
+Ein Fahrradtacho erkennt jede Radumdrehung mit einem Magneten an der Speiche und einem Sensor an der Gabel.
+Smartphones haben einen Hallsensor als elektronischen Kompass.
+
+1. Wie funktioniert ein **Reedkontakt**?
+2. Was misst ein **Hallsensor**?
+3. Der Radumfang ist 2,1 m, der Sensor meldet 3 Impulse pro Sekunde. Wie schnell fährst du?
+
+<Loesung>
+
+1. Zwei ferromagnetische Kontaktzungen in einem Glasröhrchen werden im Magnetfeld magnetisiert, ziehen sich an und schließen den Kontakt.
+2. Ein Hallsensor liefert eine Spannung proportional zur **Flussdichte** $B$ senkrecht zum Sensor. Ursache ist die Lorentzkraft
+   auf die bewegten Ladungsträger.
+3. $v = 3 \cdot 2{,}1\,\mathrm{m/s} = 6{,}3\,\mathrm{m/s} \approx 22{,}7\,\mathrm{km/h}$
+
+</Loesung>
+
+## Stromzange: messen ohne Auftrennen
+
+Mit einer Stromzange kann man den Strom in einer Leitung messen, ohne sie aufzutrennen.
+
+1. Welches Prinzip nutzt die Stromzange?
+2. Warum zeigt die Stromzange **null** an, wenn man sie um ein ganzes Netzkabel (Außenleiter und Neutralleiter) legt?
+
+<Loesung>
+
+1. Der Strom erzeugt ein Magnetfeld um den Leiter. Der Eisenkern der Zange führt den Fluss, ein Sensor (Hallsensor oder
+   bei Wechselstrom eine Wicklung) misst ihn. Nach dem Durchflutungssatz ist der Fluss proportional zum umschlossenen Strom.
+2. Hin- und Rückstrom sind gleich groß, aber entgegengesetzt: Die umschlossene Durchflutung ist null.
+   Genau dieses Prinzip nutzt der **Fehlerstromschutzschalter (FI)**: Fließt Strom über einen Menschen zur Erde ab,
+   ist die Summe nicht mehr null – er schaltet ab.
+
+</Loesung>

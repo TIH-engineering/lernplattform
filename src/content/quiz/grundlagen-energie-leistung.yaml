@@ -1,0 +1,84 @@
+titel: Energie, Leistung, Wirkungsgrad
+fragen:
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Wasserkocher mit $2000\,\mathrm{W}$ läuft 3 Minuten. Welche elektrische Energie nimmt er auf?'
+    loesung: 0.1
+    einheit: kWh
+    erklaerung: '$W = P \cdot t = 2\,\mathrm{kW} \cdot 0{,}05\,\mathrm{h} = 0{,}1\,\mathrm{kWh}$ (3 min = 0,05 h)'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie viele Joule (Ws) sind $1\,\mathrm{kWh}$? Gib das Ergebnis in MJ an.'
+    loesung: 3.6
+    einheit: MJ
+    toleranz: 0
+    erklaerung: '$1\,\mathrm{kWh} = 1000\,\mathrm{W} \cdot 3600\,\mathrm{s} = 3{,}6 \cdot 10^{6}\,\mathrm{Ws} = 3{,}6\,\mathrm{MJ}$'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Durch einen Widerstand von $50\,\Omega$ fließen $0{,}2\,\mathrm{A}$. Welche Leistung wird umgesetzt?'
+    loesung: 2
+    einheit: W
+    erklaerung: '$P = I^2 \cdot R = (0{,}2\,\mathrm{A})^2 \cdot 50\,\Omega = 2\,\mathrm{W}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Die Spannung an einem ohmschen Widerstand wird verdoppelt. Wie ändert sich die umgesetzte Leistung?
+    optionen:
+      - text: Sie vervierfacht sich.
+        richtig: true
+      - text: Sie verdoppelt sich.
+      - text: Sie bleibt gleich.
+      - text: Sie halbiert sich.
+    erklaerung: '$P = U^2 / R$ – doppelte Spannung bedeutet doppelten Strom, beides zusammen ergibt die vierfache Leistung.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Motor nimmt $2{,}5\,\mathrm{kW}$ auf und gibt $2{,}1\,\mathrm{kW}$ mechanische Leistung ab. Wie groß ist sein Wirkungsgrad?'
+    loesung: 84
+    einheit: '%'
+    erklaerung: '$\eta = P_\mathrm{ab} / P_\mathrm{zu} = 2{,}1 / 2{,}5 = 0{,}84 = 84\,\%$. Die Verlustleistung beträgt 400 W.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Drei Teilsysteme mit $\eta_1 = 95\,\%$, $\eta_2 = 80\,\%$ und $\eta_3 = 90\,\%$ sind hintereinandergeschaltet. Wie groß ist der Gesamtwirkungsgrad?'
+    loesung: 68.4
+    einheit: '%'
+    erklaerung: '$\eta_\mathrm{ges} = 0{,}95 \cdot 0{,}8 \cdot 0{,}9 = 0{,}684 = 68{,}4\,\%$ – immer kleiner als der schlechteste Einzelwirkungsgrad.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Warum wird elektrische Energie über große Entfernungen mit sehr hoher Spannung übertragen?
+    optionen:
+      - text: Um bei gleicher Leistung den Strom und damit die Leitungsverluste zu verringern
+        richtig: true
+      - text: Um die Frequenz zu erhöhen
+      - text: Um den Leitungswiderstand zu verringern
+      - text: Weil hohe Spannung weniger gefährlich ist
+    erklaerung: 'Bei gleicher Leistung $P = U \cdot I$ sinkt der Strom mit steigender Spannung. Die Verluste $P_\mathrm{V} = I^2 R$ sinken quadratisch.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Kran hebt $500\,\mathrm{kg}$ in $10\,\mathrm{s}$ um $6\,\mathrm{m}$. Welche mechanische Leistung ist dafür nötig? ($g = 9{,}81\,\mathrm{m/s^2}$)'
+    loesung: 2943
+    einheit: W
+    erklaerung: '$P = m g h / t = 500 \cdot 9{,}81 \cdot 6 / 10\,\mathrm{W} \approx 2943\,\mathrm{W}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Welcher Strom darf höchstens durch einen Widerstand von $100\,\Omega$ mit $0{,}5\,\mathrm{W}$ Belastbarkeit fließen?'
+    loesung: 70.71
+    einheit: mA
+    erklaerung: '$I_\mathrm{max} = \sqrt{P/R} = \sqrt{0{,}5\,\mathrm{W} / 100\,\Omega} \approx 70{,}7\,\mathrm{mA}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum erwärmt sich ein Elektromotor besonders unter Belastung?
+    optionen:
+      - text: Wegen der Kupferverluste ($I^2 R$) in der Wicklung und der Reibung
+        richtig: true
+      - text: Weil die Versorgungsspannung unter Last steigt
+      - text: Weil das Magnetfeld unter Last verschwindet
+      - text: Weil Motoren unter Last Wechselstrom erzeugen
+    erklaerung: Unter Last fließt mehr Strom – die Verluste in der Wicklung steigen quadratisch mit dem Strom.

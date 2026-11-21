@@ -1,0 +1,44 @@
+---
+title: Netzwerke und Ersatzquellen
+description: "Netzwerkanalyse mit Kirchhoff-Gleichungen, Überlagerungssatz, Ersatzspannungs- und Ersatzstromquelle, Stern-Dreieck-Umwandlung und Leistungsanpassung."
+---
+
+:::note[Im Schulbuch]
+**GET1, Kapitel 5** (Analyse von Gleichstromnetzwerken, Gleichungssysteme) und **Kapitel 6**
+(Widerstandsnetzwerke, Ersatzspannungs- und Ersatzstromquelle, Stern-Dreieck-Umwandlung).
+
+**Besonders testrelevant:**
+- Widerstandsnetzwerke: GET1 Beispiele 5.14–5.15, Aufgaben 5.1–5.2 · Lindner Bd. 1: Nr. 325
+- Ersatzquellen: GET1 Aufgaben 6.7–6.10 · für den Test zu Kapitel 6 und 7 empfohlen: Lindner Bd. 1: Nr. 344, 346, 348–354
+:::
+
+## Das solltest du können
+
+- für ein Netzwerk alle nötigen Knoten- und Maschengleichungen aufstellen und das Gleichungssystem lösen
+- den Überlagerungssatz (Superposition) anwenden
+- für zwei Klemmen A–B die **Ersatzspannungsquelle** bestimmen: Leerlaufspannung $U_0$ und Innenwiderstand $R_\mathrm{i}$
+- Spannungs- und Stromquellen ineinander umwandeln
+- das Vorgehen bei der Stern-Dreieck-Umwandlung erklären und anwenden
+- die Bedingung für Leistungsanpassung kennen und den Wirkungsgrad dabei angeben
+
+## Wichtige Zusammenhänge
+
+**Anzahl der Gleichungen:** Bei $k$ Knoten und $z$ Zweigen braucht man $k - 1$ Knotengleichungen und
+$z - (k - 1)$ Maschengleichungen.
+
+**Ersatzspannungsquelle (Thévenin):**
+1. Last entfernen, **Leerlaufspannung** $U_0$ an den Klemmen berechnen.
+2. Alle Spannungsquellen durch **Kurzschluss**, alle Stromquellen durch **Unterbrechung** ersetzen und den
+   Widerstand zwischen den Klemmen berechnen → $R_\mathrm{i}$.
+3. Last wieder anschließen: $I_\mathrm{L} = \dfrac{U_0}{R_\mathrm{i} + R_\mathrm{L}}$
+
+**Dreieck → Stern:** $R_1 = \dfrac{R_{12} \cdot R_{31}}{R_{12} + R_{23} + R_{31}}$ (und zyklisch weiter)
+
+**Leistungsanpassung:** maximale Leistung an der Last bei $R_\mathrm{L} = R_\mathrm{i}$, dann ist
+$P_\mathrm{max} = \dfrac{U_0^2}{4 R_\mathrm{i}}$ und $\eta = 50\,\%$.
+
+## Weiter zu
+
+- [Rechenbeispiele](/grundlagen/netzwerke/rechenbeispiele/)
+- [Praxisbeispiele](/grundlagen/netzwerke/praxisbeispiele/)
+- [Quiz](/grundlagen/netzwerke/quiz/)

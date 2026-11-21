@@ -1,0 +1,65 @@
+---
+title: Praxisbeispiele – Ohmsches Gesetz und Quellen
+description: Innenwiderstand einer Batterie messen, Licht wird beim Starten dunkler, Labornetzgerät mit Strombegrenzung.
+---
+
+import Loesung from '../../../../components/Loesung.astro';
+
+## Versuch: Innenwiderstand einer Batterie bestimmen
+
+**Material:** 9-V-Block (oder 1,5-V-Zelle), Multimeter, Lastwiderstand (z. B. 47 Ω, mind. 2 W), Leitungen.
+
+1. Miss die Spannung der Batterie **ohne Last** (Leerlaufspannung $U_0$).
+2. Schließe den Lastwiderstand an und miss sofort die **Klemmenspannung** $U_\mathrm{Kl}$.
+3. Berechne $I = U_\mathrm{Kl} / R_\mathrm{L}$ und $R_\mathrm{i} = (U_0 - U_\mathrm{Kl}) / I$.
+4. Wiederhole die Messung mit einer **alten** Batterie. Was stellst du fest?
+
+<Loesung>
+
+Eine neue Alkali-Zelle hat einen kleinen Innenwiderstand (einige 0,1 Ω pro Zelle), ein 9-V-Block einige Ohm.
+Bei einer **alten** Batterie ist die Leerlaufspannung oft noch fast normal – aber der **Innenwiderstand ist viel größer**.
+Unter Last bricht die Spannung dann stark ein.
+
+Darum sagt eine Spannungsmessung ohne Last wenig über den Zustand einer Batterie aus.
+Batterietester messen deshalb **unter Last**.
+
+Hinweis: Den Lastwiderstand nur kurz anschließen – er wird warm ($P = U^2/R \approx 1{,}7\,\mathrm{W}$ bei 9 V und 47 Ω).
+
+</Loesung>
+
+## Warum wird das Licht beim Starten dunkler?
+
+Bei älteren Autos wird das Licht kurz dunkler, wenn man den Motor startet.
+
+1. Erkläre die Beobachtung mit der Ersatzschaltung einer realen Spannungsquelle.
+2. Warum ist der Effekt im Winter stärker?
+
+<Loesung>
+
+1. Der Anlasser zieht einen sehr großen Strom (einige 100 A). Am Innenwiderstand der Batterie (und an den Leitungen)
+   fällt dadurch eine große Spannung ab: $U_\mathrm{Kl} = U_\mathrm{q} - R_\mathrm{i} \cdot I$.
+   Alle anderen Verbraucher – auch die Lampen – bekommen kurz eine kleinere Spannung.
+2. Bei Kälte laufen die chemischen Vorgänge in der Batterie langsamer ab: Der **Innenwiderstand steigt**.
+   Gleichzeitig braucht der Anlasser wegen des zähen Motoröls mehr Strom. Beides vergrößert den Spannungseinbruch.
+
+</Loesung>
+
+## Labornetzgerät: Spannungs- oder Stromquelle?
+
+Ein Labornetzgerät hat zwei Drehknöpfe: **Voltage** und **Current**. Du stellst 12 V und eine Strombegrenzung von 0,5 A ein.
+
+1. Du schließt einen Widerstand von 100 Ω an. Welche Spannung und welcher Strom stellen sich ein? Welche Anzeige (CV oder CC) leuchtet?
+2. Jetzt schließt du 10 Ω an. Was passiert?
+3. Was passiert bei einem Kurzschluss?
+
+<Loesung>
+
+1. $I = 12\,\mathrm{V}/100\,\Omega = 0{,}12\,\mathrm{A} < 0{,}5\,\mathrm{A}$ → das Netzgerät arbeitet als **Spannungsquelle**
+   (CV = *constant voltage*): 12 V, 0,12 A.
+2. Bei 12 V würden $1{,}2\,\mathrm{A}$ fließen – mehr als erlaubt. Das Netzgerät wechselt in die **Strombegrenzung**
+   (CC = *constant current*) und verhält sich wie eine **Stromquelle**: $I = 0{,}5\,\mathrm{A}$, $U = 0{,}5\,\mathrm{A} \cdot 10\,\Omega = 5\,\mathrm{V}$.
+3. Es fließen 0,5 A bei fast 0 V. Das Netzgerät und die Schaltung sind geschützt.
+
+**Merke:** Stelle die Strombegrenzung beim Aufbau neuer Schaltungen **immer** passend ein – sie schützt deine Bauteile!
+
+</Loesung>

@@ -1,0 +1,191 @@
+---
+title: Rechenbeispiele – Komplexe Wechselstromrechnung
+description: Rechenbeispiele zu komplexen Zahlen, RL-Reihenschaltung, RC-Parallelschaltung mit Admittanz, Umwandlung Reihe–Parallel und gemischter Schaltung.
+---
+
+import Stufe from '../../../../components/Stufe.astro';
+import Loesung from '../../../../components/Loesung.astro';
+import Abbildung from '../../../../components/Abbildung.astro';
+import RLCGemischt from '../../../../assets/grundlagen/rlc-gemischt.svg';
+
+## Umrechnen
+
+<Stufe wert="grundlagen" />
+
+a) Schreibe $\underline{Z} = (30 + \mathrm{j}40)\,\Omega$ in Versorform.
+b) Schreibe $\underline{U} = 100\,\mathrm{V} \angle -30°$ in kartesischer Form.
+
+<Loesung>
+
+a) $Z = \sqrt{30^2 + 40^2}\,\Omega = 50\,\Omega$ · $\varphi = \arctan\dfrac{40}{30} \approx 53{,}13°$ → $\underline{Z} = 50\,\Omega \angle 53{,}13°$
+
+b) $\underline{U} = 100 \cos(-30°) + \mathrm{j} \cdot 100 \sin(-30°) = (86{,}6 - \mathrm{j}50)\,\mathrm{V}$
+
+</Loesung>
+
+## Rechnen mit komplexen Zahlen
+
+<Stufe wert="grundlagen" />
+
+Gegeben: $\underline{Z}_1 = 3 + \mathrm{j}4$, $\underline{Z}_2 = 6 - \mathrm{j}8$. Berechne $\underline{Z}_1 + \underline{Z}_2$,
+$\underline{Z}_1 \cdot \underline{Z}_2$ und $\underline{Z}_1 / \underline{Z}_2$.
+
+<Loesung>
+
+**Summe** (kartesisch): $\underline{Z}_1 + \underline{Z}_2 = 9 - \mathrm{j}4$
+
+**Produkt** (ausmultiplizieren, $\mathrm{j}^2 = -1$):
+$(3 + \mathrm{j}4)(6 - \mathrm{j}8) = 18 - \mathrm{j}24 + \mathrm{j}24 - \mathrm{j}^2 32 = 18 + 32 = 50$
+
+**Quotient** (Versorform): $\underline{Z}_1 = 5 \angle 53{,}13°$, $\underline{Z}_2 = 10 \angle -53{,}13°$
+
+$$
+\frac{\underline{Z}_1}{\underline{Z}_2} = \frac{5}{10} \angle (53{,}13° - (-53{,}13°)) = 0{,}5 \angle 106{,}26° = -0{,}14 + \mathrm{j}0{,}48
+$$
+
+Probe Produkt in Versorform: $5 \cdot 10 \angle (53{,}13° - 53{,}13°) = 50 \angle 0°$ ✔
+
+</Loesung>
+
+## RL-Reihenschaltung
+
+<Stufe wert="standard" />
+
+Ein Widerstand $R = 100\,\Omega$ und eine Spule $L = 0{,}5\,\mathrm{H}$ liegen in Reihe an $\underline{U} = 230\,\mathrm{V} \angle 0°$, $50\,\mathrm{Hz}$.
+Berechne $\underline{Z}$, $\underline{I}$, $\underline{U}_\mathrm{R}$ und $\underline{U}_\mathrm{L}$. Zeichne das Zeigerdiagramm.
+
+<Loesung>
+
+$X_\mathrm{L} = \omega L = 2\pi \cdot 50 \cdot 0{,}5\,\Omega \approx 157{,}1\,\Omega$
+
+$$
+\underline{Z} = R + \mathrm{j}X_\mathrm{L} = (100 + \mathrm{j}157{,}1)\,\Omega = 186{,}2\,\Omega \angle 57{,}52°
+$$
+
+$$
+\underline{I} = \frac{\underline{U}}{\underline{Z}} = \frac{230\,\mathrm{V} \angle 0°}{186{,}2\,\Omega \angle 57{,}52°} \approx 1{,}235\,\mathrm{A} \angle -57{,}52°
+$$
+
+$$
+\underline{U}_\mathrm{R} = R \cdot \underline{I} \approx 123{,}5\,\mathrm{V} \angle -57{,}52°
+\qquad
+\underline{U}_\mathrm{L} = \mathrm{j}X_\mathrm{L} \cdot \underline{I} \approx 194{,}0\,\mathrm{V} \angle 32{,}48°
+$$
+
+**Zeigerdiagramm:** $\underline{U}_\mathrm{R}$ liegt in Phase mit $\underline{I}$, $\underline{U}_\mathrm{L}$ steht 90° davor.
+Beide Zeiger zusammen (Spitze an Ende) ergeben $\underline{U}$ – das **Spannungsdreieck**.
+
+**Achtung:** $123{,}5\,\mathrm{V} + 194{,}0\,\mathrm{V} = 317{,}5\,\mathrm{V} \neq 230\,\mathrm{V}$! Beträge darf man nicht einfach addieren –
+nur die Zeiger: $\sqrt{123{,}5^2 + 194{,}0^2} \approx 230\,\mathrm{V}$ ✔
+
+</Loesung>
+
+## RC-Parallelschaltung mit Admittanzen
+
+<Stufe wert="standard" />
+
+$R = 1\,\mathrm{k\Omega}$ und $C = 1\,\mu\mathrm{F}$ liegen parallel an $U = 10\,\mathrm{V}$, $f = 200\,\mathrm{Hz}$.
+Berechne die Admittanz, die Impedanz und den Gesamtstrom.
+
+<Loesung>
+
+Bei Parallelschaltungen rechnet man am einfachsten mit **Leitwerten**:
+
+$G = \dfrac{1}{R} = 1\,\mathrm{mS}$ · $B_\mathrm{C} = \omega C = 2\pi \cdot 200 \cdot 10^{-6}\,\mathrm{S} \approx 1{,}257\,\mathrm{mS}$
+
+$$
+\underline{Y} = G + \mathrm{j}B_\mathrm{C} = (1 + \mathrm{j}1{,}257)\,\mathrm{mS} \approx 1{,}606\,\mathrm{mS} \angle 51{,}49°
+$$
+
+$$
+\underline{Z} = \frac{1}{\underline{Y}} \approx 622{,}7\,\Omega \angle -51{,}49°
+\qquad
+I = U \cdot Y = 10\,\mathrm{V} \cdot 1{,}606\,\mathrm{mS} \approx 16{,}06\,\mathrm{mA}
+$$
+
+Der Strom eilt der Spannung um 51,49° vor (kapazitiv). Teilströme: $I_\mathrm{R} = 10\,\mathrm{mA}$, $I_\mathrm{C} = 12{,}57\,\mathrm{mA}$ –
+ihre **Zeigersumme** ergibt 16,06 mA.
+
+</Loesung>
+
+## Umwandlung Reihe – Parallel
+
+<Stufe wert="standard" />
+
+Eine Impedanz $\underline{Z} = 150\,\Omega \angle -40°$ bei $50\,\mathrm{Hz}$ soll als Reihenschaltung und als gleichwertige
+Parallelschaltung aus Widerstand und Kondensator dargestellt werden. Berechne jeweils $R$ und $C$.
+
+<Loesung>
+
+**Reihenschaltung:** $\underline{Z} = 150 \cos(-40°) + \mathrm{j} \cdot 150 \sin(-40°) = (114{,}9 - \mathrm{j}96{,}42)\,\Omega$
+
+$$
+R_\mathrm{R} = 114{,}9\,\Omega
+\qquad
+C_\mathrm{R} = \frac{1}{\omega X_\mathrm{C}} = \frac{1}{2\pi \cdot 50 \cdot 96{,}42}\,\mathrm{F} \approx 33{,}0\,\mu\mathrm{F}
+$$
+
+**Parallelschaltung:** $\underline{Y} = \dfrac{1}{\underline{Z}} = 6{,}667\,\mathrm{mS} \angle 40° = (5{,}107 + \mathrm{j}4{,}285)\,\mathrm{mS}$
+
+$$
+R_\mathrm{P} = \frac{1}{G} = \frac{1}{5{,}107\,\mathrm{mS}} \approx 195{,}8\,\Omega
+\qquad
+C_\mathrm{P} = \frac{B}{\omega} = \frac{4{,}285 \cdot 10^{-3}\,\mathrm{S}}{2\pi \cdot 50\,\mathrm{Hz}} \approx 13{,}6\,\mu\mathrm{F}
+$$
+
+**Wichtig:** $R_\mathrm{P} \neq R_\mathrm{R}$! Beide Schaltungen verhalten sich **nur bei 50 Hz** gleich.
+
+</Loesung>
+
+## Gemischte Schaltung
+
+<Stufe wert="vertiefung" />
+
+<Abbildung bild={RLCGemischt} unterschrift="R1 in Reihe mit (R2 + L) parallel C" />
+
+Werte: $\underline{U} = 230\,\mathrm{V} \angle 0°$, $f = 50\,\mathrm{Hz}$, $R_1 = 40\,\Omega$, $R_2 = 100\,\Omega$, $L = 0{,}2\,\mathrm{H}$, $C = 10\,\mu\mathrm{F}$.
+
+a) Berechne die Gesamtimpedanz (kartesisch und Versorform).
+b) Berechne alle Ströme und Spannungen.
+c) Mache die Probe für den Gesamtstrom.
+
+<Loesung>
+
+$X_\mathrm{L} = \omega L \approx 62{,}83\,\Omega$ · $X_\mathrm{C} = \dfrac{1}{\omega C} \approx 318{,}3\,\Omega$
+
+**a)** Zweig 1: $\underline{Z}_\mathrm{RL} = (100 + \mathrm{j}62{,}83)\,\Omega$ · Zweig 2: $\underline{Z}_\mathrm{C} = -\mathrm{j}318{,}3\,\Omega$
+
+$$
+\underline{Z}_\mathrm{p} = \frac{\underline{Z}_\mathrm{RL} \cdot \underline{Z}_\mathrm{C}}{\underline{Z}_\mathrm{RL} + \underline{Z}_\mathrm{C}} \approx (134{,}6 + \mathrm{j}25{,}59)\,\Omega = 137{,}0\,\Omega \angle 10{,}77°
+$$
+
+$$
+\underline{Z} = R_1 + \underline{Z}_\mathrm{p} \approx (174{,}6 + \mathrm{j}25{,}59)\,\Omega = 176{,}5\,\Omega \angle 8{,}34°
+$$
+
+**b)**
+$$
+\underline{I} = \frac{\underline{U}}{\underline{Z}} \approx 1{,}303\,\mathrm{A} \angle -8{,}34°
+\qquad
+\underline{U}_{R1} = R_1 \underline{I} \approx 52{,}1\,\mathrm{V} \angle -8{,}34°
+$$
+$$
+\underline{U}_\mathrm{p} = \underline{Z}_\mathrm{p} \underline{I} \approx 178{,}6\,\mathrm{V} \angle 2{,}43°
+$$
+$$
+\underline{I}_\mathrm{RL} = \frac{\underline{U}_\mathrm{p}}{\underline{Z}_\mathrm{RL}} \approx 1{,}512\,\mathrm{A} \angle -29{,}72°
+\qquad
+\underline{I}_\mathrm{C} = \frac{\underline{U}_\mathrm{p}}{\underline{Z}_\mathrm{C}} \approx 0{,}561\,\mathrm{A} \angle 92{,}43°
+$$
+$$
+\underline{U}_{R2} = R_2 \underline{I}_\mathrm{RL} \approx 151{,}2\,\mathrm{V} \angle -29{,}72°
+\qquad
+\underline{U}_\mathrm{L} = \mathrm{j}X_\mathrm{L} \underline{I}_\mathrm{RL} \approx 95{,}0\,\mathrm{V} \angle 60{,}28°
+$$
+
+**c)** $\underline{I}_\mathrm{RL} + \underline{I}_\mathrm{C} \approx 1{,}303\,\mathrm{A} \angle -8{,}34° = \underline{I}$ ✔
+
+Bemerkenswert: Der Strom im Spulenzweig (1,51 A) ist **größer** als der Gesamtstrom (1,30 A) – der Kondensatorstrom
+kompensiert einen Teil des induktiven Blindstroms. Das ist das Prinzip der Blindleistungskompensation.
+
+</Loesung>

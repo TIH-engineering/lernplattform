@@ -1,0 +1,98 @@
+titel: Induktion und Transformator
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Was besagt die Lenzsche Regel?
+    optionen:
+      - text: Der induzierte Strom ist so gerichtet, dass er seiner Ursache entgegenwirkt.
+        richtig: true
+      - text: Der induzierte Strom verstärkt immer die Flussänderung.
+      - text: Die induzierte Spannung ist unabhängig von der Windungszahl.
+      - text: In einem ruhenden Leiter kann keine Spannung induziert werden.
+    erklaerung: Ohne diese Gegenwirkung würde Energie „aus dem Nichts“ entstehen. Deshalb bremst ein belasteter Generator.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Der Fluss durch eine Spule mit 500 Windungen ändert sich in $20\,\mathrm{ms}$ gleichmäßig um $0{,}4\,\mathrm{mWb}$. Wie groß ist der Betrag der induzierten Spannung?'
+    loesung: 10
+    einheit: V
+    erklaerung: '$|u| = N \cdot \Delta\Phi / \Delta t = 500 \cdot 0{,}4 \cdot 10^{-3} / 0{,}02\,\mathrm{V} = 10\,\mathrm{V}$'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein $0{,}5\,\mathrm{m}$ langer Leiter mit $10\,\mathrm{A}$ steht senkrecht in einem Feld mit $B = 0{,}4\,\mathrm{T}$. Wie groß ist die Kraft?'
+    loesung: 2
+    einheit: N
+    erklaerung: '$F = B I l = 0{,}4\,\mathrm{T} \cdot 10\,\mathrm{A} \cdot 0{,}5\,\mathrm{m} = 2\,\mathrm{N}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Warum kann ein Transformator nicht mit Gleichspannung betrieben werden?
+    optionen:
+      - text: Weil nur ein sich änderndes Magnetfeld eine Spannung induziert
+        richtig: true
+      - text: Weil Gleichspannung gefährlicher ist
+      - text: Weil der Eisenkern Gleichstrom nicht leitet
+      - text: Weil Gleichstrom keine Leistung überträgt
+    erklaerung: 'Bei Gleichstrom ist der Fluss konstant: $\Delta\Phi / \Delta t = 0$ → keine Spannung auf der Sekundärseite. Die Primärwicklung wäre nur ein kleiner Widerstand – fast ein Kurzschluss!'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein idealer Transformator hat $N_1 = 2000$ und $N_2 = 100$ Windungen und liegt an $230\,\mathrm{V}$. Wie groß ist $U_2$?'
+    loesung: 11.5
+    einheit: V
+    erklaerung: '$U_2 = U_1 \cdot N_2 / N_1 = 230\,\mathrm{V} / 20 = 11{,}5\,\mathrm{V}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Die Sekundärwicklung eines idealen Transformators hat weniger Windungen als die Primärwicklung. Was gilt?
+    optionen:
+      - text: Die Sekundärspannung ist kleiner, der Sekundärstrom größer als auf der Primärseite.
+        richtig: true
+      - text: Spannung und Strom sind sekundärseitig beide kleiner.
+      - text: Die Sekundärspannung ist größer, der Strom kleiner.
+      - text: Spannung und Strom sind auf beiden Seiten gleich.
+    erklaerung: 'Beim idealen Trafo bleibt die Leistung gleich: $U_1 I_1 = U_2 I_2$. Was an Spannung verloren geht, wird an Strom gewonnen.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Lautsprecher mit $8\,\Omega$ hängt an einem Übertrager mit $\ddot{u} = N_1/N_2 = 5$. Welchen Widerstand „sieht“ die Primärseite?'
+    loesung: 200
+    einheit: Ω
+    erklaerung: '$R_1'' = \ddot{u}^2 \cdot R_2 = 25 \cdot 8\,\Omega = 200\,\Omega$ – so passt man Lasten an (Widerstandstransformation).'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Eine Spule mit $L = 200\,\mathrm{mH}$ führt $3\,\mathrm{A}$. Welche Energie speichert ihr Magnetfeld?'
+    loesung: 0.9
+    einheit: J
+    erklaerung: '$W = \tfrac12 L I^2 = 0{,}5 \cdot 0{,}2\,\mathrm{H} \cdot 9\,\mathrm{A^2} = 0{,}9\,\mathrm{J}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Welchen Effektivwert hat die induzierte Spannung in einer Spule mit $N = 100$ bei sinusförmigem Fluss mit $\hat{\Phi} = 2\,\mathrm{mWb}$ und $f = 50\,\mathrm{Hz}$?'
+    loesung: 44.4
+    einheit: V
+    erklaerung: '$U = 4{,}44 \cdot f \cdot N \cdot \hat{\Phi} = 4{,}44 \cdot 50 \cdot 100 \cdot 0{,}002\,\mathrm{V} = 44{,}4\,\mathrm{V}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Welcher Effekt wird bei einer Freilaufdiode an einer Relaisspule genutzt bzw. entschärft?
+    optionen:
+      - text: Die Selbstinduktionsspannung beim Abschalten
+        richtig: true
+      - text: Die Lorentzkraft auf den Relaisanker
+      - text: Der Skin-Effekt in der Wicklung
+      - text: Die Hysterese des Eisenkerns
+    erklaerung: Beim Abschalten will die Spule ihren Strom beibehalten. Ohne Freilaufdiode entsteht eine gefährliche Spannungsspitze.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum bestehen Transformatorkerne aus vielen dünnen, gegeneinander isolierten Blechen?
+    optionen:
+      - text: Um Wirbelströme und damit Verluste klein zu halten
+        richtig: true
+      - text: Um die Induktivität zu verringern
+      - text: Weil dünne Bleche billiger als massives Eisen sind
+      - text: Um den Kern leichter zu machen
+    erklaerung: Im massiven Eisen würde das Wechselfeld große Wirbelströme induzieren, die den Kern erhitzen. Die Isolation zwischen den Blechen unterbricht ihre Strombahnen.

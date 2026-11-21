@@ -1,0 +1,48 @@
+---
+title: Leiterwiderstand und Temperatur
+description: "Leiterwiderstand, spezifischer Widerstand und Leitfähigkeit, Temperaturkoeffizient, Kaltleiter (PTC) und Heißleiter (NTC)."
+---
+
+:::note[Im Schulbuch]
+**GET1, Kapitel 4** – Leiterwiderstand, spezifischer Widerstand und Leitfähigkeit, Temperaturabhängigkeit,
+Kaltleiter (PTC) und Heißleiter (NTC).
+
+**Besonders testrelevant:** GET1 Beispiele 4.7–4.9 und Aufgaben 4.6–4.10 ·
+Lindner Bd. 1: Nr. 26–31, 33, 35, 40, 44
+:::
+
+## Das solltest du können
+
+- den Widerstand eines Leiters aus Länge, Querschnitt und Material berechnen und jede Größe daraus umstellen
+- spezifischen Widerstand und Leitfähigkeit ineinander umrechnen: $\gamma = 1/\rho$
+- Widerstände bei anderer Temperatur berechnen und aus Widerstandswerten die Temperatur bestimmen
+- erklären, warum Metalle beim Erwärmen hochohmiger werden
+- Kaltleiter (PTC) und Heißleiter (NTC) beschreiben und typische Anwendungen nennen
+
+## Wichtige Zusammenhänge
+
+| Größe | Formel |
+| --- | --- |
+| Leiterwiderstand | $R = \dfrac{\rho \cdot l}{A} = \dfrac{l}{\gamma \cdot A}$ |
+| Querschnitt eines Runddrahts | $A = \dfrac{d^2 \pi}{4}$ |
+| Widerstand bei der Temperatur $\vartheta$ | $R_\vartheta = R_{20} \cdot (1 + \alpha_{20} \cdot \Delta\vartheta)$ mit $\Delta\vartheta = \vartheta - 20\,°\mathrm{C}$ |
+| Temperaturdifferenz | $\Delta\vartheta = \dfrac{R_\vartheta / R_{20} - 1}{\alpha_{20}}$ |
+
+Typische Werte bei 20 °C (je nach Tabelle leicht unterschiedlich):
+
+| Material | $\rho$ in $\Omega\,\mathrm{mm^2/m}$ | $\alpha_{20}$ in $1/\mathrm{K}$ |
+| --- | --- | --- |
+| Kupfer | 0,0178 … 0,0179 | 0,0039 … 0,004 |
+| Aluminium | 0,028 | 0,004 |
+| Konstantan | 0,49 | ≈ 0 (darum für Präzisionswiderstände) |
+
+:::caution
+Die lineare Formel mit $\alpha_{20}$ gilt nur für **mäßige** Temperaturänderungen (etwa bis 200 °C).
+Für glühende Drähte (Glühlampe) ist sie zu ungenau.
+:::
+
+## Weiter zu
+
+- [Rechenbeispiele](/grundlagen/leiterwiderstand/rechenbeispiele/)
+- [Praxisbeispiele](/grundlagen/leiterwiderstand/praxisbeispiele/)
+- [Quiz](/grundlagen/leiterwiderstand/quiz/)

@@ -1,0 +1,113 @@
+titel: Elektrisches Feld und Kondensator
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Wo ist bei einer Spitze-Platte-Anordnung die elektrische Feldstärke am größten?
+    optionen:
+      - text: An der Spitze, weil dort die Feldlinien am dichtesten sind
+        richtig: true
+      - text: An der Platte, weil sie die größere Fläche hat
+      - text: Genau in der Mitte zwischen Spitze und Platte
+      - text: Überall gleich – das Feld ist homogen
+    erklaerung: Das Feld einer Spitze-Platte-Anordnung ist **inhomogen**. Die Feldliniendichte zeigt die Feldstärke an.
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Größen bestimmen die Feldstärke zwischen den Platten eines idealen Plattenkondensators?
+    optionen:
+      - text: Spannung und Plattenabstand
+        richtig: true
+      - text: Strom und Widerstand
+      - text: Frequenz und Kapazität
+      - text: Plattenfläche und Ladezeit
+    erklaerung: '$E = U / d$ – das Feld ist homogen und hängt nur von der Spannung und dem Abstand ab.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist die Kapazität eines Plattenkondensators in Luft mit $A = 100\,\mathrm{cm^2}$ und $d = 1\,\mathrm{mm}$? ($\varepsilon_0 = 8{,}85 \cdot 10^{-12}\,\mathrm{F/m}$)'
+    loesung: 88.5
+    einheit: pF
+    erklaerung: '$C = \varepsilon_0 A / d = 8{,}85 \cdot 10^{-12} \cdot 0{,}01 / 0{,}001\,\mathrm{F} = 88{,}5\,\mathrm{pF}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Der Plattenabstand eines Plattenkondensators wird halbiert (alles andere bleibt gleich). Was passiert mit der Kapazität?
+    optionen:
+      - text: Sie verdoppelt sich.
+        richtig: true
+      - text: Sie halbiert sich.
+      - text: Sie vervierfacht sich.
+      - text: Sie bleibt gleich.
+    erklaerung: '$C = \varepsilon_0 \varepsilon_\mathrm{r} A / d$ – die Kapazität ist umgekehrt proportional zum Abstand.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist die Ersatzkapazität von $2{,}2\,\mu\mathrm{F}$ und $4{,}7\,\mu\mathrm{F}$ parallel?'
+    loesung: 6.9
+    einheit: µF
+    erklaerung: 'Parallel addieren sich die Kapazitäten: $2{,}2 + 4{,}7 = 6{,}9\,\mu\mathrm{F}$ (die Plattenfläche wird größer).'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist die Ersatzkapazität von zwei Kondensatoren mit je $1\,\mu\mathrm{F}$ in Reihe?'
+    loesung: 0.5
+    einheit: µF
+    erklaerung: '$C = \dfrac{C_1 C_2}{C_1 + C_2} = 0{,}5\,\mu\mathrm{F}$ – in Reihe wird die Kapazität kleiner (wie bei parallelen Widerständen).'
+
+  - typ: mc
+    stufe: standard
+    frage: Was ist bei einer Reihenschaltung von Kondensatoren für alle Kondensatoren gleich?
+    optionen:
+      - text: Die Ladung
+        richtig: true
+      - text: Die Spannung
+      - text: Die Kapazität
+      - text: Die gespeicherte Energie
+    erklaerung: Es fließt überall derselbe Ladestrom, also trägt jeder Kondensator dieselbe Ladung. Der kleinste Kondensator bekommt die größte Spannung.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Welche Energie speichert ein Kondensator mit $100\,\mu\mathrm{F}$ bei $50\,\mathrm{V}$?'
+    loesung: 0.125
+    einheit: J
+    erklaerung: '$W = \tfrac12 C U^2 = 0{,}5 \cdot 100 \cdot 10^{-6} \cdot 2500\,\mathrm{J} = 0{,}125\,\mathrm{J}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Kondensator mit $100\,\mu\mathrm{F}$ wird über $1\,\mathrm{k\Omega}$ geladen. Wie groß ist die Zeitkonstante?'
+    loesung: 0.1
+    einheit: s
+    erklaerung: '$\tau = R C = 1000\,\Omega \cdot 100 \cdot 10^{-6}\,\mathrm{F} = 0{,}1\,\mathrm{s}$; nach etwa $5\tau = 0{,}5\,\mathrm{s}$ ist er praktisch voll.'
+
+  - typ: mc
+    stufe: standard
+    frage: Auf wie viel Prozent der Ladespannung ist ein Kondensator nach einer Zeitkonstante τ geladen?
+    optionen:
+      - text: ca. 63 %
+        richtig: true
+      - text: ca. 37 %
+      - text: 50 %
+      - text: ca. 99 %
+    erklaerung: '$1 - \mathrm{e}^{-1} \approx 0{,}63$. Der Strom ist nach $1\tau$ dagegen auf 37 % gesunken.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Ein geladener Kondensator wird von der Quelle getrennt. Danach wird der Plattenabstand vergrößert. Was passiert?
+    optionen:
+      - text: Die Ladung bleibt gleich, die Spannung steigt.
+        richtig: true
+      - text: Die Spannung bleibt gleich, die Ladung sinkt.
+      - text: Ladung und Spannung sinken beide.
+      - text: Nichts – Kapazität und Spannung bleiben gleich.
+    erklaerung: 'Ohne Quelle kann keine Ladung zu- oder abfließen. Die Kapazität sinkt, also steigt $U = Q/C$. (Man muss Arbeit verrichten, um die Platten auseinanderzuziehen.)'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: 'Warum ist bei einem Koaxialkabel die Feldstärke am Innenleiter am größten?'
+    optionen:
+      - text: Weil das Feld radial verläuft und die Feldlinien am dünnen Innenleiter am dichtesten sind
+        richtig: true
+      - text: Weil am Innenleiter der Strom fließt
+      - text: Weil der Außenleiter geerdet ist und dort kein Feld entsteht
+      - text: Weil das Dielektrikum innen dicker ist
+    erklaerung: 'Die Feldstärke nimmt mit $1/r$ nach außen ab: $E(r) = \dfrac{U}{r \cdot \ln(D/d)}$. Am Innenleiter beginnt deshalb ein Durchschlag.'

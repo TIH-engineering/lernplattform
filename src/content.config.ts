@@ -25,6 +25,8 @@ const multipleChoice = z.object({
 		.array(z.object({ text: z.string(), richtig: z.boolean().default(false) }))
 		.min(2)
 		.refine((o) => o.some((x) => x.richtig), 'Mindestens eine Option muss richtig: true haben.'),
+	/** Antworten beim Bauen mischen (Standard). false z. B. bei „alle oben genannten“ */
+	mischen: z.boolean().default(true),
 });
 
 /** Zahleneingabe mit Toleranz */

@@ -1,0 +1,71 @@
+---
+title: Praxisbeispiele – Grundbegriffe
+description: Grundbegriffe im Alltag – Typenschild eines Ladegeräts, Zählpfeile an der Autobatterie und Leitungsvorgänge in Technik und Natur.
+---
+
+import Loesung from '../../../../components/Loesung.astro';
+
+## Das Typenschild eines Handy-Ladegeräts
+
+Auf einem USB-Ladegerät steht: **Output: 5 V ⎓ 2 A**.
+
+1. Was bedeutet das Zeichen ⎓?
+2. Welche Ladung liefert das Ladegerät in einer Stunde bei vollem Strom? Wie viele Elektronen sind das?
+3. Auf einem Akku steht **3000 mAh**. Erkläre, warum mAh eine Einheit der **Ladung** ist.
+
+<Loesung>
+
+1. ⎓ steht für **Gleichstrom** (DC). Wechselstrom (AC) wird mit ~ gekennzeichnet.
+2. $Q = I \cdot t = 2\,\mathrm{A} \cdot 3600\,\mathrm{s} = 7200\,\mathrm{C}$ → $N = Q/e \approx 4{,}5 \cdot 10^{22}$ Elektronen.
+3. mAh ist „Strom mal Zeit“, also genau $Q = I \cdot t$: $3000\,\mathrm{mAh} = 3\,\mathrm{A} \cdot 3600\,\mathrm{s} = 10\,800\,\mathrm{C}$.
+
+</Loesung>
+
+## Zählpfeile an der Autobatterie
+
+Eine Autobatterie (12 V) versorgt bei stehendem Motor das Radio. Später, bei laufendem Motor, lädt die Lichtmaschine die Batterie.
+
+1. Zeichne für beide Fälle die Batterie mit Spannungs- und Strompfeil im **Verbraucher-Zählpfeilsystem** (Strom- und
+   Spannungspfeil gleich gerichtet).
+2. In welchem Fall ist die Leistung $P = U \cdot I$ der Batterie positiv, in welchem negativ? Was bedeutet das Vorzeichen?
+
+<Loesung>
+
+1. Beim Verbraucher-Zählpfeilsystem zeigen Spannungs- und Strompfeil an einem Bauteil in **dieselbe Richtung**.
+   - **Radio betreiben:** Der Strom fließt aus dem Pluspol heraus – entgegen dem Spannungspfeil an der Batterie.
+     Mit dem Verbraucher-Pfeilsystem wird $I$ daher **negativ**.
+   - **Laden:** Der Strom fließt in den Pluspol hinein – $I$ ist **positiv**.
+2. Beim Laden ist $P > 0$: Die Batterie **nimmt** Leistung auf (sie ist Verbraucher).
+   Beim Entladen ist $P < 0$: Die Batterie **gibt** Leistung ab (sie ist Erzeuger).
+   Das Vorzeichen verrät also, in welche Richtung die Energie fließt.
+
+</Loesung>
+
+## Wer transportiert hier den Strom?
+
+Ordne jedem Beispiel den Leitungsmechanismus zu (Metall, Halbleiter, Elektrolyt, Gas) und nenne die Ladungsträger:
+
+| Beispiel |
+| --- |
+| a) Kupferleitung in der Hausinstallation |
+| b) Akku beim Laden (im Inneren) |
+| c) Blitz bei einem Gewitter |
+| d) Temperatursensor auf einer Platine |
+| e) Verchromen einer Felge (Galvanik) |
+| f) Leuchtstoffröhre / Glimmlampe |
+
+<Loesung>
+
+| Beispiel | Leitungsmechanismus | Ladungsträger |
+| --- | --- | --- |
+| a) Kupferleitung | Metall | freie Elektronen |
+| b) Akku innen | Elektrolyt | positive und negative Ionen |
+| c) Blitz | Gas (Stoßionisation) | Elektronen und Ionen |
+| d) Temperatursensor | Halbleiter | Elektronen und Löcher (Defektelektronen) |
+| e) Galvanik | Elektrolyt | Ionen – Metallionen werden an der Felge abgeschieden |
+| f) Leuchtstoffröhre | Gas | Elektronen und Ionen; das Gas leuchtet durch Anregung |
+
+Merke: Nur beim Elektrolyten wird mit dem Strom auch **Stoff transportiert** – darum verändern sich Elektroden
+beim Laden und Entladen eines Akkus.
+
+</Loesung>

@@ -1,0 +1,228 @@
+---
+title: Rechenbeispiele – Reihen- und Parallelschaltung
+description: Rechenbeispiele zu Reihen- und Parallelschaltung, Spannungs- und Stromteiler, LED-Vorwiderstand, gemischten Schaltungen und Messbereichserweiterung.
+---
+
+import Stufe from '../../../../components/Stufe.astro';
+import Loesung from '../../../../components/Loesung.astro';
+import Abbildung from '../../../../components/Abbildung.astro';
+import Gemischt from '../../../../assets/grundlagen/gemischt.svg';
+import Spannungsteiler from '../../../../assets/grundlagen/spannungsteiler.svg';
+
+## Reihenschaltung
+
+<Stufe wert="grundlagen" />
+
+Drei Widerstände $R_1 = 220\,\Omega$, $R_2 = 330\,\Omega$ und $R_3 = 470\,\Omega$ liegen in Reihe an $U = 12\,\mathrm{V}$.
+Berechne den Ersatzwiderstand, den Strom und alle Teilspannungen. Mache die Probe.
+
+<Loesung>
+
+$$
+R_\mathrm{ges} = 220\,\Omega + 330\,\Omega + 470\,\Omega = 1020\,\Omega
+\qquad
+I = \frac{U}{R_\mathrm{ges}} = \frac{12\,\mathrm{V}}{1020\,\Omega} \approx 11{,}76\,\mathrm{mA}
+$$
+
+$$
+U_1 = R_1 \cdot I \approx 2{,}59\,\mathrm{V}
+\qquad
+U_2 = R_2 \cdot I \approx 3{,}88\,\mathrm{V}
+\qquad
+U_3 = R_3 \cdot I \approx 5{,}53\,\mathrm{V}
+$$
+
+**Probe (Maschenregel):** $2{,}59 + 3{,}88 + 5{,}53 = 12{,}00\,\mathrm{V}$ ✔
+Der größte Widerstand hat die größte Teilspannung.
+
+</Loesung>
+
+## Parallelschaltung
+
+<Stufe wert="grundlagen" />
+
+$R_1 = 1\,\mathrm{k\Omega}$, $R_2 = 2{,}2\,\mathrm{k\Omega}$ und $R_3 = 4{,}7\,\mathrm{k\Omega}$ liegen parallel an $24\,\mathrm{V}$.
+Berechne alle Zweigströme, den Gesamtstrom und den Ersatzwiderstand.
+
+<Loesung>
+
+Alle Widerstände haben dieselbe Spannung:
+
+$$
+I_1 = \frac{24\,\mathrm{V}}{1\,\mathrm{k\Omega}} = 24\,\mathrm{mA}
+\qquad
+I_2 = \frac{24\,\mathrm{V}}{2{,}2\,\mathrm{k\Omega}} \approx 10{,}91\,\mathrm{mA}
+\qquad
+I_3 = \frac{24\,\mathrm{V}}{4{,}7\,\mathrm{k\Omega}} \approx 5{,}11\,\mathrm{mA}
+$$
+
+$$
+I = I_1 + I_2 + I_3 \approx 40{,}02\,\mathrm{mA}
+\qquad
+R_\mathrm{ges} = \frac{U}{I} \approx 599{,}8\,\Omega
+$$
+
+**Probe:** $\dfrac{1}{R_\mathrm{ges}} = \dfrac{1}{1000} + \dfrac{1}{2200} + \dfrac{1}{4700} \Rightarrow R_\mathrm{ges} \approx 599{,}8\,\Omega$ ✔
+(kleiner als der kleinste Einzelwiderstand).
+
+</Loesung>
+
+## Stromteiler
+
+<Stufe wert="grundlagen" />
+
+Ein Strom von $60\,\mathrm{mA}$ teilt sich auf zwei parallele Widerstände $R_2 = 200\,\Omega$ und $R_3 = 300\,\Omega$ auf.
+Berechne $I_2$ und $I_3$ mit der Stromteilerregel.
+
+<Loesung>
+
+Der Strom durch einen Zweig ist proportional zum **anderen** Widerstand:
+
+$$
+I_2 = I \cdot \frac{R_3}{R_2 + R_3} = 60\,\mathrm{mA} \cdot \frac{300}{500} = 36\,\mathrm{mA}
+\qquad
+I_3 = I \cdot \frac{R_2}{R_2 + R_3} = 60\,\mathrm{mA} \cdot \frac{200}{500} = 24\,\mathrm{mA}
+$$
+
+Probe: $36 + 24 = 60\,\mathrm{mA}$ ✔ – der **kleinere** Widerstand führt den **größeren** Strom.
+
+</Loesung>
+
+## Gemischte Schaltung
+
+<Stufe wert="standard" />
+
+<Abbildung bild={Gemischt} unterschrift="R1 in Reihe mit der Parallelschaltung aus R2 und (R3 + R4)" />
+
+Werte: $U_\mathrm{q} = 10\,\mathrm{V}$, $R_1 = 150\,\Omega$, $R_2 = 680\,\Omega$, $R_3 = 220\,\Omega$, $R_4 = 330\,\Omega$.
+
+a) Berechne den Ersatzwiderstand und den Strom $I$.
+b) Berechne $I_2$ und $I_3$ mit der Stromteilerregel und mache die Probe für $I$.
+c) Berechne $U_1$, $U_2$, $U_3$ und $U_4$ und mache die Probe für $U_\mathrm{q}$.
+
+<Loesung>
+
+**a)** Von innen nach außen zusammenfassen:
+
+$$
+R_{34} = R_3 + R_4 = 550\,\Omega
+\qquad
+R_{234} = \frac{R_2 \cdot R_{34}}{R_2 + R_{34}} = \frac{680 \cdot 550}{1230}\,\Omega \approx 304{,}1\,\Omega
+$$
+
+$$
+R_\mathrm{ges} = R_1 + R_{234} \approx 454{,}1\,\Omega
+\qquad
+I = \frac{U_\mathrm{q}}{R_\mathrm{ges}} \approx 22{,}02\,\mathrm{mA}
+$$
+
+**b)**
+$$
+I_2 = I \cdot \frac{R_{34}}{R_2 + R_{34}} \approx 22{,}02\,\mathrm{mA} \cdot \frac{550}{1230} \approx 9{,}85\,\mathrm{mA}
+\qquad
+I_3 = I \cdot \frac{R_2}{R_2 + R_{34}} \approx 12{,}18\,\mathrm{mA}
+$$
+
+Probe: $9{,}85 + 12{,}18 = 22{,}03\,\mathrm{mA} \approx I$ ✔ (Rundung)
+
+**c)**
+$$
+U_1 = R_1 \cdot I \approx 3{,}30\,\mathrm{V}
+\qquad
+U_2 = R_2 \cdot I_2 \approx 6{,}70\,\mathrm{V}
+$$
+$$
+U_3 = R_3 \cdot I_3 \approx 2{,}68\,\mathrm{V}
+\qquad
+U_4 = R_4 \cdot I_3 \approx 4{,}02\,\mathrm{V}
+$$
+
+Probe: $U_1 + U_2 = 3{,}30 + 6{,}70 = 10\,\mathrm{V}$ ✔ und $U_3 + U_4 = 6{,}70\,\mathrm{V} = U_2$ ✔ (parallele Zweige haben dieselbe Spannung)
+
+</Loesung>
+
+## Belasteter Spannungsteiler
+
+<Stufe wert="standard" />
+
+<Abbildung bild={Spannungsteiler} unterschrift="Spannungsteiler mit Lastwiderstand" />
+
+Aus $U = 12\,\mathrm{V}$ sollen im Leerlauf $U_2 = 5\,\mathrm{V}$ entstehen; $R_2 = 10\,\mathrm{k\Omega}$ ist vorgegeben.
+
+a) Wie groß muss $R_1$ sein?
+b) Nun wird ein Lastwiderstand $R_\mathrm{L} = 10\,\mathrm{k\Omega}$ angeschlossen. Wie groß ist $U_2$ jetzt?
+
+<Loesung>
+
+**a)** Im Leerlauf fließt durch $R_1$ und $R_2$ derselbe Strom: $I = 5\,\mathrm{V} / 10\,\mathrm{k\Omega} = 0{,}5\,\mathrm{mA}$
+
+$$
+R_1 = \frac{U - U_2}{I} = \frac{7\,\mathrm{V}}{0{,}5\,\mathrm{mA}} = 14\,\mathrm{k\Omega}
+$$
+
+**b)** $R_2$ und $R_\mathrm{L}$ liegen jetzt parallel: $R_{2\mathrm{L}} = 10\,\mathrm{k\Omega} \parallel 10\,\mathrm{k\Omega} = 5\,\mathrm{k\Omega}$
+
+$$
+U_2 = U \cdot \frac{R_{2\mathrm{L}}}{R_1 + R_{2\mathrm{L}}} = 12\,\mathrm{V} \cdot \frac{5}{19} \approx 3{,}16\,\mathrm{V}
+$$
+
+Die Spannung bricht stark ein! **Faustregel:** Ein Spannungsteiler ist nur dann „steif“, wenn der Laststrom klein
+gegenüber dem Querstrom ist ($R_\mathrm{L} \gg R_2$, z. B. mindestens zehnmal so groß).
+
+</Loesung>
+
+## LED-Vorwiderstand
+
+<Stufe wert="standard" />
+
+Eine rote LED ($U_\mathrm{F} = 2{,}0\,\mathrm{V}$, $I_\mathrm{F} = 10\,\mathrm{mA}$) soll an $5\,\mathrm{V}$ betrieben werden.
+Berechne den Vorwiderstand, wähle einen Normwert aus der E12-Reihe (…, 270, 330, 390 …) und berechne den
+tatsächlichen Strom sowie die Leistung im Widerstand.
+
+<Loesung>
+
+Am Widerstand liegt die Differenz: $U_\mathrm{R} = 5\,\mathrm{V} - 2\,\mathrm{V} = 3\,\mathrm{V}$
+
+$$
+R_\mathrm{V} = \frac{U_\mathrm{R}}{I_\mathrm{F}} = \frac{3\,\mathrm{V}}{10\,\mathrm{mA}} = 300\,\Omega
+$$
+
+Gewählt: $330\,\Omega$ (der nächstgrößere Wert, damit die LED nicht überlastet wird).
+
+$$
+I = \frac{3\,\mathrm{V}}{330\,\Omega} \approx 9{,}1\,\mathrm{mA}
+\qquad
+P_\mathrm{R} = U_\mathrm{R} \cdot I \approx 27\,\mathrm{mW}
+$$
+
+Ein normaler 1/4-W-Widerstand reicht locker.
+
+</Loesung>
+
+## Messbereichserweiterung
+
+<Stufe wert="vertiefung" />
+
+Ein Messwerk zeigt bei $1\,\mathrm{mA}$ Vollausschlag und hat den Innenwiderstand $R_\mathrm{M} = 100\,\Omega$.
+
+a) Welcher Vorwiderstand macht daraus einen Spannungsmesser für $10\,\mathrm{V}$?
+b) Welcher Parallelwiderstand (Shunt) macht daraus einen Strommesser für $1\,\mathrm{A}$?
+
+<Loesung>
+
+**a)** Bei 10 V darf nur 1 mA fließen: $R_\mathrm{ges} = 10\,\mathrm{V} / 1\,\mathrm{mA} = 10\,\mathrm{k\Omega}$
+
+$$
+R_\mathrm{V} = R_\mathrm{ges} - R_\mathrm{M} = 10\,000\,\Omega - 100\,\Omega = 9900\,\Omega
+$$
+
+**b)** Durch das Messwerk darf nur 1 mA fließen, der Rest ($999\,\mathrm{mA}$) muss durch den Shunt.
+Beide haben dieselbe Spannung $U_\mathrm{M} = 100\,\Omega \cdot 1\,\mathrm{mA} = 0{,}1\,\mathrm{V}$:
+
+$$
+R_\mathrm{P} = \frac{0{,}1\,\mathrm{V}}{0{,}999\,\mathrm{A}} \approx 0{,}1001\,\Omega
+$$
+
+**Erkenntnis:** Ein guter Spannungsmesser hat einen sehr **großen**, ein guter Strommesser einen sehr **kleinen** Innenwiderstand.
+
+</Loesung>

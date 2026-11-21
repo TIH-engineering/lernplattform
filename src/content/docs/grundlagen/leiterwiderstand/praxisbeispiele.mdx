@@ -1,0 +1,78 @@
+---
+title: Praxisbeispiele – Leiterwiderstand und Temperatur
+description: Kabeltrommel, Leiterbahnbreite auf Platinen, NTC als Temperatursensor und Einschaltstrombegrenzer, PTC als rückstellende Sicherung.
+---
+
+import Loesung from '../../../../components/Loesung.astro';
+
+## Die Kabeltrommel
+
+Auf einer Kabeltrommel steht: **„Aufgerollt max. 1000 W, abgerollt max. 3500 W“**.
+
+1. Warum darf man abgerollt mehr Leistung entnehmen? Der Widerstand der Leitung ist doch gleich!
+2. Die Trommel hat 50 m Leitung mit 1,5 mm² Kupfer. Wie groß ist die Verlustleistung in der Leitung bei 3500 W an 230 V?
+
+<Loesung>
+
+1. Der **Widerstand** und damit die Verlustleistung in der Leitung sind gleich. Aufgerollt kann die Wärme aber
+   **nicht abgeführt** werden – die Windungen heizen sich gegenseitig auf. Die Isolierung kann schmelzen und es droht ein Brand.
+2. $I = 3500\,\mathrm{W} / 230\,\mathrm{V} \approx 15{,}2\,\mathrm{A}$.
+   Leiterlänge (hin und zurück): 100 m → $R = 0{,}0179 \cdot 100 / 1{,}5\,\Omega \approx 1{,}19\,\Omega$.
+   $P_\mathrm{V} = I^2 R \approx 276\,\mathrm{W}$ – so viel wie ein kleiner Heizlüfter, eingewickelt in Kunststoff!
+
+</Loesung>
+
+## Wie breit muss eine Leiterbahn sein?
+
+Beim Platinenentwurf wird die Leiterbahnbreite nach dem Strom gewählt. Standard ist eine Kupferschicht von 35 µm.
+
+1. Eine Leiterbahn soll 2 A führen. Eine Faustregel sagt: bei 35 µm etwa **1 mm Breite pro 2 A** (Außenlage, ca. 10 K Erwärmung).
+   Berechne den Widerstand pro 10 cm Länge und die Verlustleistung.
+2. Warum führt man Versorgungsleitungen auf Platinen oft als große **Kupferflächen** aus?
+
+<Loesung>
+
+1. $A = 1\,\mathrm{mm} \cdot 0{,}035\,\mathrm{mm} = 0{,}035\,\mathrm{mm^2}$;
+   $R = 0{,}0179 \cdot 0{,}1 / 0{,}035\,\Omega \approx 51\,\mathrm{m\Omega}$;
+   $P = (2\,\mathrm{A})^2 \cdot 0{,}051\,\Omega \approx 0{,}2\,\mathrm{W}$ pro 10 cm.
+2. Größere Flächen bedeuten einen kleinen Widerstand (weniger Spannungsfall und Erwärmung) und sie verteilen die Wärme.
+   Außerdem verbessern Masseflächen die elektromagnetische Verträglichkeit.
+
+</Loesung>
+
+## NTC: Sensor und Einschaltstrombegrenzer
+
+Ein NTC (Heißleiter) begegnet dir in zwei ganz unterschiedlichen Rollen:
+
+- **Temperatursensor:** z. B. im Akku-Pack eines E-Bikes oder Laptops, in der Waschmaschine, im 3D-Drucker.
+- **Einschaltstrombegrenzer:** in Netzteilen in Reihe zum Netzeingang.
+
+1. Wie funktioniert der NTC als Einschaltstrombegrenzer? Warum braucht man ihn überhaupt?
+2. Warum muss man nach dem Ausschalten eines solchen Netzteils kurz warten, bevor der Schutz wieder voll wirkt?
+
+<Loesung>
+
+1. Beim Einschalten ist der Siebkondensator im Netzteil leer und würde einen sehr großen Ladestrom ziehen
+   (Sicherung löst aus, Kontakte verschweißen). Der **kalte** NTC ist hochohmig und begrenzt diesen Strom.
+   Im Betrieb erwärmt er sich durch den Strom, wird **niederohmig** und verursacht kaum noch Verluste.
+2. Der NTC muss erst **abkühlen**, um wieder hochohmig zu werden. Schaltet man sofort wieder ein, ist er noch heiß
+   und begrenzt den Einschaltstrom kaum.
+
+</Loesung>
+
+## PTC als „Sicherung, die sich selbst zurückstellt“
+
+In USB-Anschlüssen oder Spielzeug findet man oft eine **Polyfuse** (rückstellende Sicherung, ein PTC-Bauteil).
+
+1. Erkläre die Funktion bei einem Kurzschluss.
+2. Was ist der Vorteil gegenüber einer Schmelzsicherung, was der Nachteil?
+
+<Loesung>
+
+1. Im Normalbetrieb ist der PTC (Kaltleiter) niederohmig. Bei Überstrom erwärmt er sich; ab einer bestimmten
+   Temperatur steigt sein Widerstand **sprunghaft** stark an und begrenzt den Strom auf einen kleinen Wert.
+   Nach Beseitigung des Fehlers und Abkühlen wird er wieder niederohmig.
+2. **Vorteil:** Sie muss nicht getauscht werden. **Nachteil:** Sie trennt nicht vollständig (ein kleiner Reststrom fließt)
+   und reagiert langsamer als eine flinke Schmelzsicherung.
+
+</Loesung>

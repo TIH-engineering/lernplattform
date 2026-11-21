@@ -1,0 +1,81 @@
+---
+title: Praxisbeispiele – Batterien und Akkus
+description: Ladekurve eines Li-Ionen-Akkus, Akku schonen, Akkutypen im Vergleich, Batteriemanagement (BMS).
+---
+
+import Loesung from '../../../../components/Loesung.astro';
+
+## Wie ein Handy-Akku geladen wird (CC/CV)
+
+Lithium-Ionen-Akkus werden nach dem **CC/CV-Verfahren** geladen. Für eine Zelle (Ladeschlussspannung 4,2 V) gilt:
+
+| Phase | Was passiert? |
+| --- | --- |
+| **CC** (*constant current*) | Konstanter Strom (z. B. 0,5C … 1C), die Spannung steigt langsam bis 4,2 V. In dieser Phase werden ca. 70–80 % geladen. |
+| **CV** (*constant voltage*) | Die Spannung wird auf 4,2 V gehalten, der Strom sinkt immer weiter. |
+| **Ende** | Unterschreitet der Strom einen kleinen Wert (z. B. 0,05C), wird abgeschaltet. |
+
+1. Warum lädt ein Handy von 0 % auf 50 % viel schneller als von 80 % auf 100 %?
+2. Warum muss die Ladeschlussspannung bei Lithium-Akkus genau eingehalten werden?
+
+<Loesung>
+
+1. Bis etwa 80 % läuft die **CC-Phase** mit vollem Strom. Danach folgt die **CV-Phase**, in der der Strom immer kleiner wird –
+   die letzten Prozent dauern deshalb lange.
+2. Schon eine kleine Überspannung (Überladung) schädigt die Zelle dauerhaft und kann zu Erwärmung, Gasbildung und
+   im schlimmsten Fall zu einem **Brand** führen (*thermal runaway*).
+
+</Loesung>
+
+## Den Akku schonen
+
+Ein Li-Ionen-Akku verliert mit der Zeit Kapazität. Welche der folgenden Tipps sind sinnvoll? Begründe.
+
+a) Akku möglichst zwischen 20 % und 80 % halten.
+b) Akku regelmäßig ganz leer machen, damit er „sein Gedächtnis“ verliert.
+c) Handy nicht in der prallen Sonne oder im heißen Auto laden.
+d) Akku für längere Lagerung halb geladen aufbewahren.
+
+<Loesung>
+
+- **a) sinnvoll:** Hohe Spannung (voll) und sehr niedrige Spannung (leer) belasten die Zelle am stärksten.
+- **b) falsch:** Den „Memory-Effekt“ gibt es bei NiCd-Akkus, nicht bei Li-Ionen. Eine **Tiefentladung** schädigt Li-Ionen-Zellen sogar dauerhaft.
+- **c) sinnvoll:** Hitze beschleunigt die Alterung stark.
+- **d) sinnvoll:** Etwa 40–60 % sind ideal. Volle Akkus altern bei Lagerung schneller, leere könnten durch Selbstentladung tiefentladen werden.
+
+</Loesung>
+
+## Akkutypen im Vergleich
+
+Ordne zu: **Bleiakku**, **NiMH**, **Lithium-Ionen**.
+
+1. In einem Auto (Starterbatterie)
+2. Wiederaufladbare AA-Zellen für Fernbedienung und Spielzeug
+3. Smartphone, Laptop, E-Bike
+4. Welcher Typ hat die höchste, welcher die niedrigste Energiedichte (Wh/kg)?
+
+<Loesung>
+
+1. **Bleiakku** – günstig, robust, liefert sehr hohe Ströme, verträgt Kälte; aber schwer und mit geringer Energiedichte.
+2. **NiMH** – 1,2 V pro Zelle, ersetzt 1,5-V-Batterien; relativ hohe Selbstentladung.
+3. **Lithium-Ionen** – hohe Energiedichte, geringe Selbstentladung, kein Memory-Effekt; braucht aber ein BMS.
+4. Höchste Energiedichte: Lithium-Ionen (ca. 150–250 Wh/kg); niedrigste: Blei (ca. 30–40 Wh/kg).
+
+</Loesung>
+
+## Wozu braucht ein Akkupack ein BMS?
+
+In jedem Lithium-Akkupack (E-Bike, Laptop, Akkuschrauber) steckt eine Elektronik: das **Batteriemanagementsystem (BMS)**.
+
+Nenne mindestens vier Aufgaben des BMS.
+
+<Loesung>
+
+- Schutz vor **Überladung** (Zellspannung > 4,2 V)
+- Schutz vor **Tiefentladung** (Zellspannung zu niedrig)
+- Schutz vor **Überstrom und Kurzschluss**
+- **Temperaturüberwachung** (z. B. mit NTC-Sensoren), kein Laden bei Frost
+- **Balancing:** gleicht die Spannungen der in Reihe geschalteten Zellen an, damit keine Zelle überladen wird
+- Ladezustandsanzeige (State of Charge)
+
+</Loesung>

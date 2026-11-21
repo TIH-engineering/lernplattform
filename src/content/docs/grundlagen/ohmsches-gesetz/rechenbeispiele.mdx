@@ -1,0 +1,151 @@
+---
+title: Rechenbeispiele – Ohmsches Gesetz und Quellen
+description: Rechenbeispiele zu ohmschem Gesetz, Leitwert, Widerstandsgerade sowie realen Spannungs- und Stromquellen.
+---
+
+import Stufe from '../../../../components/Stufe.astro';
+import Loesung from '../../../../components/Loesung.astro';
+import Abbildung from '../../../../components/Abbildung.astro';
+import RealeQuelle from '../../../../assets/grundlagen/reale-quelle.svg';
+
+## Ohmsches Gesetz und Leitwert
+
+<Stufe wert="grundlagen" />
+
+Ein Heizwiderstand hat $R = 52{,}9\,\Omega$ und liegt an $230\,\mathrm{V}$. Berechne den Strom und den Leitwert.
+
+**Gegeben:** $U = 230\,\mathrm{V}$, $R = 52{,}9\,\Omega$
+
+**Gesucht:** $I$, $G$
+
+<Loesung>
+
+$$
+I = \frac{U}{R} = \frac{230\,\mathrm{V}}{52{,}9\,\Omega} \approx 4{,}35\,\mathrm{A}
+\qquad
+G = \frac{1}{R} = \frac{1}{52{,}9\,\Omega} \approx 0{,}0189\,\mathrm{S} = 18{,}9\,\mathrm{mS}
+$$
+
+</Loesung>
+
+## Widerstand aus einer Messreihe
+
+<Stufe wert="grundlagen" />
+
+An einem Widerstand wurden folgende Werte gemessen:
+
+| $U$ in V | 0 | 2 | 4 | 6 |
+| --- | --- | --- | --- | --- |
+| $I$ in mA | 0 | 4 | 8 | 12 |
+
+a) Ist der Widerstand linear? b) Berechne $R$. c) Welcher Strom fließt bei $9\,\mathrm{V}$?
+
+<Loesung>
+
+a) Ja: Doppelte Spannung ergibt doppelten Strom – die Punkte liegen auf einer **Geraden durch den Ursprung**
+(Widerstandsgerade).
+
+b) $R = \dfrac{U}{I} = \dfrac{6\,\mathrm{V}}{12 \cdot 10^{-3}\,\mathrm{A}} = 500\,\Omega$ (jedes Wertepaar ergibt dasselbe).
+
+c) $I = \dfrac{9\,\mathrm{V}}{500\,\Omega} = 18\,\mathrm{mA}$
+
+</Loesung>
+
+## Autobatterie beim Starten
+
+<Stufe wert="standard" />
+
+<Abbildung bild={RealeQuelle} unterschrift="Reale Spannungsquelle: ideale Quelle mit Innenwiderstand" />
+
+Eine Autobatterie hat die Quellenspannung $U_\mathrm{q} = 12{,}6\,\mathrm{V}$ und den Innenwiderstand
+$R_\mathrm{i} = 10\,\mathrm{m\Omega}$. Der Anlasser zieht beim Starten $200\,\mathrm{A}$.
+
+a) Wie groß ist die Klemmenspannung beim Starten? b) Wie groß wäre der Kurzschlussstrom?
+
+**Gegeben:** $U_\mathrm{q} = 12{,}6\,\mathrm{V}$, $R_\mathrm{i} = 0{,}01\,\Omega$, $I = 200\,\mathrm{A}$
+
+**Gesucht:** $U_\mathrm{Kl}$, $I_\mathrm{k}$
+
+<Loesung>
+
+a) Am Innenwiderstand fällt $U_\mathrm{i} = R_\mathrm{i} \cdot I = 0{,}01\,\Omega \cdot 200\,\mathrm{A} = 2\,\mathrm{V}$ ab:
+
+$$
+U_\mathrm{Kl} = U_\mathrm{q} - R_\mathrm{i} \cdot I = 12{,}6\,\mathrm{V} - 2\,\mathrm{V} = 10{,}6\,\mathrm{V}
+$$
+
+b) $I_\mathrm{k} = \dfrac{U_\mathrm{q}}{R_\mathrm{i}} = \dfrac{12{,}6\,\mathrm{V}}{0{,}01\,\Omega} = 1260\,\mathrm{A}$ –
+deshalb ist ein Kurzschluss an einer Autobatterie so gefährlich (Funken, Brand, schmelzendes Werkzeug)!
+
+</Loesung>
+
+## Innenwiderstand messen
+
+<Stufe wert="standard" />
+
+An einem 9-V-Block misst du im Leerlauf $9{,}0\,\mathrm{V}$. Schließt du einen Widerstand von $100\,\Omega$ an,
+sinkt die Spannung auf $8{,}6\,\mathrm{V}$. Wie groß ist der Innenwiderstand?
+
+**Gegeben:** $U_0 = U_\mathrm{q} = 9{,}0\,\mathrm{V}$, $U_\mathrm{Kl} = 8{,}6\,\mathrm{V}$, $R_\mathrm{L} = 100\,\Omega$
+
+**Gesucht:** $R_\mathrm{i}$
+
+<Loesung>
+
+Strom durch die Last: $I = \dfrac{U_\mathrm{Kl}}{R_\mathrm{L}} = \dfrac{8{,}6\,\mathrm{V}}{100\,\Omega} = 86\,\mathrm{mA}$
+
+Die fehlenden $0{,}4\,\mathrm{V}$ fallen am Innenwiderstand ab:
+
+$$
+R_\mathrm{i} = \frac{U_\mathrm{q} - U_\mathrm{Kl}}{I} = \frac{0{,}4\,\mathrm{V}}{0{,}086\,\mathrm{A}} \approx 4{,}65\,\Omega
+$$
+
+</Loesung>
+
+## Reale Stromquelle
+
+<Stufe wert="standard" />
+
+Eine reale Stromquelle hat $I_\mathrm{q} = 20\,\mathrm{mA}$ und einen parallelen Innenwiderstand $R_\mathrm{i} = 10\,\mathrm{k\Omega}$.
+Sie speist einen Lastwiderstand $R_\mathrm{L} = 500\,\Omega$.
+
+a) Welcher Strom fließt durch die Last und welche Spannung liegt an ihr?
+b) Gib die gleichwertige (äquivalente) Spannungsquelle an.
+
+<Loesung>
+
+a) Der Quellenstrom teilt sich auf $R_\mathrm{i}$ und $R_\mathrm{L}$ auf (Stromteiler):
+
+$$
+I_\mathrm{L} = I_\mathrm{q} \cdot \frac{R_\mathrm{i}}{R_\mathrm{i} + R_\mathrm{L}} = 20\,\mathrm{mA} \cdot \frac{10\,000\,\Omega}{10\,500\,\Omega} \approx 19{,}05\,\mathrm{mA}
+\qquad
+U_\mathrm{L} = R_\mathrm{L} \cdot I_\mathrm{L} \approx 9{,}52\,\mathrm{V}
+$$
+
+b) $U_\mathrm{q} = I_\mathrm{q} \cdot R_\mathrm{i} = 20\,\mathrm{mA} \cdot 10\,\mathrm{k\Omega} = 200\,\mathrm{V}$ mit $R_\mathrm{i} = 10\,\mathrm{k\Omega}$ in Reihe.
+Probe: $I_\mathrm{L} = \dfrac{200\,\mathrm{V}}{10{,}5\,\mathrm{k\Omega}} \approx 19{,}05\,\mathrm{mA}$ ✔
+
+</Loesung>
+
+## Mindest-Lastwiderstand
+
+<Stufe wert="vertiefung" />
+
+Ein Netzteil kann als Spannungsquelle mit $U_\mathrm{q} = 5\,\mathrm{V}$ und $R_\mathrm{i} = 0{,}5\,\Omega$ betrachtet werden.
+Die Klemmenspannung darf nicht unter $4{,}5\,\mathrm{V}$ (90 % von $U_\mathrm{q}$) sinken.
+Wie klein darf der Lastwiderstand höchstens werden, und welcher Strom fließt dann?
+
+<Loesung>
+
+Bei $U_\mathrm{Kl} = 4{,}5\,\mathrm{V}$ fallen am Innenwiderstand $0{,}5\,\mathrm{V}$ ab:
+
+$$
+I_\mathrm{max} = \frac{0{,}5\,\mathrm{V}}{0{,}5\,\Omega} = 1\,\mathrm{A}
+\qquad
+R_\mathrm{L,min} = \frac{U_\mathrm{Kl}}{I_\mathrm{max}} = \frac{4{,}5\,\mathrm{V}}{1\,\mathrm{A}} = 4{,}5\,\Omega
+$$
+
+Allgemein gilt beim Spannungsteiler aus $R_\mathrm{i}$ und $R_\mathrm{L}$:
+$\dfrac{U_\mathrm{Kl}}{U_\mathrm{q}} = \dfrac{R_\mathrm{L}}{R_\mathrm{i} + R_\mathrm{L}} = 0{,}9 \Rightarrow R_\mathrm{L} = 9 \cdot R_\mathrm{i} = 4{,}5\,\Omega$ ✔
+
+</Loesung>

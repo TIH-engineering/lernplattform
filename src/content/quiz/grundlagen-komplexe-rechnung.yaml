@@ -1,0 +1,93 @@
+titel: Komplexe Wechselstromrechnung
+fragen:
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist der Betrag von $\underline{Z} = (6 + \mathrm{j}8)\,\Omega$?'
+    loesung: 10
+    einheit: Ω
+    erklaerung: '$Z = \sqrt{6^2 + 8^2}\,\Omega = 10\,\Omega$'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist der Winkel von $\underline{Z} = (50 - \mathrm{j}50)\,\Omega$ in Grad?'
+    loesung: -45
+    einheit: °
+    toleranz: 0.5
+    toleranzArt: absolut
+    erklaerung: '$\varphi = \arctan(-50/50) = -45°$ – negativer Imaginärteil bedeutet kapazitives Verhalten.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Impedanz hat eine ideale Spule?
+    optionen:
+      - text: '$\mathrm{j}\omega L$'
+        richtig: true
+      - text: '$-\mathrm{j}\omega L$'
+      - text: '$\dfrac{1}{\mathrm{j}\omega L}$'
+      - text: '$\omega L$ (rein reell)'
+    erklaerung: 'Die Spule hat einen positiven Imaginärteil: $\underline{Z}_\mathrm{L} = \mathrm{j}\omega L = \omega L \angle 90°$. Der Kondensator hat $\underline{Z}_\mathrm{C} = -\mathrm{j}/(\omega C)$.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie multipliziert man zwei komplexe Zahlen in Versorform?
+    optionen:
+      - text: Beträge multiplizieren, Winkel addieren
+        richtig: true
+      - text: Beträge addieren, Winkel multiplizieren
+      - text: Beträge multiplizieren, Winkel multiplizieren
+      - text: Real- und Imaginärteile getrennt multiplizieren
+    erklaerung: 'Beispiel: $2 \angle 30° \cdot 3 \angle 20° = 6 \angle 50°$. Beim Dividieren werden die Beträge dividiert und die Winkel subtrahiert.'
+
+  - typ: mc
+    stufe: standard
+    frage: 'Was ist das Ergebnis von $\dfrac{1}{\mathrm{j}}$?'
+    optionen:
+      - text: '$-\mathrm{j}$'
+        richtig: true
+      - text: '$\mathrm{j}$'
+      - text: '$1$'
+      - text: '$-1$'
+    erklaerung: 'Erweitern mit $\mathrm{j}$: $\dfrac{1}{\mathrm{j}} = \dfrac{\mathrm{j}}{\mathrm{j}^2} = \dfrac{\mathrm{j}}{-1} = -\mathrm{j}$. Darum ist $\dfrac{1}{\mathrm{j}\omega C} = -\mathrm{j}\dfrac{1}{\omega C}$.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Widerstand $R = 40\,\Omega$ und eine Spule mit $X_\mathrm{L} = 30\,\Omega$ liegen in Reihe an $100\,\mathrm{V}$. Wie groß ist der Strom?'
+    loesung: 2
+    einheit: A
+    erklaerung: '$Z = \sqrt{40^2 + 30^2}\,\Omega = 50\,\Omega$ → $I = 100\,\mathrm{V} / 50\,\Omega = 2\,\mathrm{A}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'In einer RL-Reihenschaltung liegen am Widerstand $60\,\mathrm{V}$ und an der Spule $80\,\mathrm{V}$. Wie groß ist die Gesamtspannung?'
+    loesung: 100
+    einheit: V
+    erklaerung: 'Die Spannungen sind um 90° verschoben: $U = \sqrt{60^2 + 80^2}\,\mathrm{V} = 100\,\mathrm{V}$ (nicht 140 V!).'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum rechnet man bei Parallelschaltungen bevorzugt mit Admittanzen?
+    optionen:
+      - text: Weil sich die Admittanzen paralleler Zweige einfach addieren
+        richtig: true
+      - text: Weil Admittanzen immer reell sind
+      - text: Weil Impedanzen bei Parallelschaltung nicht definiert sind
+      - text: Weil Admittanzen keine Einheit haben
+    erklaerung: '$\underline{Y}_\mathrm{ges} = \underline{Y}_1 + \underline{Y}_2 + \ldots$ – genau wie Leitwerte bei Gleichstrom.'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Eine Reihenschaltung $\underline{Z} = (30 + \mathrm{j}40)\,\Omega$ soll in eine gleichwertige Parallelschaltung umgewandelt werden. Wie groß ist der Parallelwiderstand $R_\mathrm{P}$?'
+    loesung: 83.33
+    einheit: Ω
+    erklaerung: '$\underline{Y} = 1/\underline{Z} = (30 - \mathrm{j}40)/2500\,\mathrm{S} = (12 - \mathrm{j}16)\,\mathrm{mS}$ → $R_\mathrm{P} = 1/G = 1/12\,\mathrm{mS} \approx 83{,}3\,\Omega$ (und $X_\mathrm{P} = 62{,}5\,\Omega$).'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Eine Reihenschaltung aus R und L wird in eine gleichwertige Parallelschaltung umgerechnet. Was gilt?
+    optionen:
+      - text: Die Schaltungen sind nur bei der Frequenz gleichwertig, für die umgerechnet wurde.
+        richtig: true
+      - text: Die Schaltungen sind bei allen Frequenzen gleichwertig.
+      - text: R und L bleiben gleich, nur die Anordnung ändert sich.
+      - text: Eine Umrechnung ist nur bei Gleichstrom möglich.
+    erklaerung: Weil die Blindwiderstände von der Frequenz abhängen, ändert sich bei einer anderen Frequenz das Verhältnis von Real- und Imaginärteil unterschiedlich.

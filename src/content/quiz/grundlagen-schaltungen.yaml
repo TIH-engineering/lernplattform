@@ -1,0 +1,99 @@
+titel: Reihen- und Parallelschaltung
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie lautet die Knotenregel (1. Kirchhoffsches Gesetz)?
+    optionen:
+      - text: Die Summe der zufließenden Ströme ist gleich der Summe der abfließenden Ströme.
+        richtig: true
+      - text: Die Summe aller Spannungen in einer Masche ist null.
+      - text: In einem Knoten ist die Spannung immer null.
+      - text: Der Strom teilt sich immer gleichmäßig auf alle Zweige auf.
+    erklaerung: In einem Knoten geht keine Ladung verloren. Die Maschenregel (2. Gesetz) besagt, dass die Summe aller Spannungen in einer geschlossenen Masche null ist.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist der Ersatzwiderstand von $R_1 = 330\,\Omega$ und $R_2 = 680\,\Omega$ in Reihe?'
+    loesung: 1010
+    einheit: Ω
+    toleranz: 0
+    erklaerung: '$R_\mathrm{ges} = 330\,\Omega + 680\,\Omega = 1010\,\Omega$'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist der Ersatzwiderstand von $R_1 = 300\,\Omega$ und $R_2 = 600\,\Omega$ parallel?'
+    loesung: 200
+    einheit: Ω
+    erklaerung: '$R_\mathrm{ges} = \dfrac{300 \cdot 600}{300 + 600}\,\Omega = 200\,\Omega$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was gilt für den Ersatzwiderstand einer Parallelschaltung?
+    optionen:
+      - text: Er ist immer kleiner als der kleinste Einzelwiderstand.
+        richtig: true
+      - text: Er ist immer größer als der größte Einzelwiderstand.
+      - text: Er ist der Mittelwert aller Einzelwiderstände.
+      - text: Er ist gleich dem größten Einzelwiderstand.
+    erklaerung: Jeder zusätzliche Zweig eröffnet dem Strom einen weiteren Weg – der Gesamtwiderstand sinkt.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Spannungsteiler aus $R_1 = 3\,\mathrm{k\Omega}$ und $R_2 = 1\,\mathrm{k\Omega}$ liegt an $20\,\mathrm{V}$. Wie groß ist die Spannung an $R_2$ (unbelastet)?'
+    loesung: 5
+    einheit: V
+    erklaerung: '$U_2 = U \cdot R_2 / (R_1 + R_2) = 20\,\mathrm{V} \cdot 1/4 = 5\,\mathrm{V}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Strom von $90\,\mathrm{mA}$ teilt sich auf $R_1 = 100\,\Omega$ und $R_2 = 200\,\Omega$ (parallel) auf. Wie groß ist der Strom durch $R_1$?'
+    loesung: 60
+    einheit: mA
+    erklaerung: '$I_1 = I \cdot R_2 / (R_1 + R_2) = 90\,\mathrm{mA} \cdot 200/300 = 60\,\mathrm{mA}$ – der kleinere Widerstand führt den größeren Strom.'
+
+  - typ: mc
+    stufe: standard
+    frage: An einen unbelasteten Spannungsteiler wird ein Lastwiderstand angeschlossen. Was passiert mit der Ausgangsspannung?
+    optionen:
+      - text: Sie sinkt, weil der Lastwiderstand parallel zum unteren Widerstand liegt.
+        richtig: true
+      - text: Sie steigt, weil mehr Strom fließt.
+      - text: Sie bleibt gleich, weil sich die Eingangsspannung nicht ändert.
+      - text: Sie wird null.
+    erklaerung: Die Parallelschaltung aus R2 und RL ist kleiner als R2 allein – damit wird auch ihr Anteil an der Gesamtspannung kleiner.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Eine blaue LED ($U_\mathrm{F} = 3{,}0\,\mathrm{V}$) soll mit $15\,\mathrm{mA}$ an $12\,\mathrm{V}$ betrieben werden. Wie groß muss der Vorwiderstand sein?'
+    loesung: 600
+    einheit: Ω
+    erklaerung: '$R_\mathrm{V} = (12\,\mathrm{V} - 3\,\mathrm{V}) / 15\,\mathrm{mA} = 600\,\Omega$ → Normwert 680 Ω (E12).'
+
+  - typ: mc
+    stufe: standard
+    frage: In einer Reihenschaltung aus 100 Ω, 200 Ω und 300 Ω – an welchem Widerstand fällt die größte Spannung ab?
+    optionen:
+      - text: An 300 Ω
+        richtig: true
+      - text: An 100 Ω
+      - text: An 200 Ω
+      - text: An allen gleich viel
+    erklaerung: In der Reihenschaltung fließt überall derselbe Strom, also gilt $U \sim R$.
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein Messwerk ($1\,\mathrm{mA}$ Vollausschlag, $R_\mathrm{M} = 50\,\Omega$) soll zum Spannungsmesser für $5\,\mathrm{V}$ werden. Wie groß ist der Vorwiderstand?'
+    loesung: 4950
+    einheit: Ω
+    erklaerung: '$R_\mathrm{ges} = 5\,\mathrm{V} / 1\,\mathrm{mA} = 5000\,\Omega$ → $R_\mathrm{V} = 5000\,\Omega - 50\,\Omega = 4950\,\Omega$'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum zeigt ein Multimeter mit 10 MΩ Innenwiderstand an einem Spannungsteiler aus zwei 1-MΩ-Widerständen zu wenig an?
+    optionen:
+      - text: Weil das Messgerät parallel zum gemessenen Widerstand liegt und ihn verkleinert.
+        richtig: true
+      - text: Weil das Messgerät in Reihe liegt und Spannung „verbraucht“.
+      - text: Weil 10 MΩ für Spannungsmessung zu klein ist und das Gerät defekt ist.
+      - text: Weil Multimeter grundsätzlich 5 % zu wenig anzeigen.
+    erklaerung: Spannungsmesser werden parallel angeschlossen. Bei hochohmigen Schaltungen verändert der Innenwiderstand des Messgeräts die Schaltung merklich.

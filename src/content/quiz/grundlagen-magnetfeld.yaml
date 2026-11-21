@@ -1,0 +1,109 @@
+titel: Magnetisches Feld
+fragen:
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist die Feldstärke im Abstand $4\,\mathrm{cm}$ von einem langen geraden Leiter mit $8\,\mathrm{A}$?'
+    loesung: 31.83
+    einheit: A/m
+    erklaerung: '$H = I / (2\pi r) = 8\,\mathrm{A} / (2\pi \cdot 0{,}04\,\mathrm{m}) \approx 31{,}8\,\mathrm{A/m}$'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Eine Ringspule hat $N = 300$ Windungen und eine mittlere Feldlinienlänge von $20\,\mathrm{cm}$. Es fließen $0{,}5\,\mathrm{A}$. Wie groß ist die Feldstärke?'
+    loesung: 750
+    einheit: A/m
+    erklaerung: '$H = N I / l = 300 \cdot 0{,}5\,\mathrm{A} / 0{,}2\,\mathrm{m} = 750\,\mathrm{A/m}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Wie groß ist die Flussdichte in einem Kern mit $\mu_\mathrm{r} = 1000$ bei $H = 750\,\mathrm{A/m}$?'
+    loesung: 0.9425
+    einheit: T
+    erklaerung: '$B = \mu_0 \mu_\mathrm{r} H = 4\pi \cdot 10^{-7} \cdot 1000 \cdot 750\,\mathrm{T} \approx 0{,}94\,\mathrm{T}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: In welcher Einheit wird die Durchflutung Θ angegeben?
+    optionen:
+      - text: Ampere (A)
+        richtig: true
+      - text: Tesla (T)
+      - text: Weber (Wb)
+      - text: Henry (H)
+    erklaerung: '$\Theta = N \cdot I$ – die Windungszahl hat keine Einheit, also bleibt Ampere (oft auch „Amperewindungen“ genannt). Tesla ist die Einheit der Flussdichte, Weber die des Flusses.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Aussagen über magnetische Feldlinien sind richtig?
+    optionen:
+      - text: Sie sind in sich geschlossen.
+        richtig: true
+      - text: Sie verlaufen außerhalb eines Stabmagneten vom Nord- zum Südpol.
+        richtig: true
+      - text: Sie können sich gegenseitig schneiden.
+      - text: Sie beginnen an positiven Ladungen.
+    erklaerung: Magnetische Feldlinien haben weder Anfang noch Ende. Elektrische Feldlinien beginnen an positiven Ladungen – das ist der wichtige Unterschied.
+
+  - typ: mc
+    stufe: standard
+    frage: Bei gleicher Spulengeometrie und gleichem Kern wird die Windungszahl verdoppelt. Wie ändert sich die Induktivität?
+    optionen:
+      - text: Sie vervierfacht sich.
+        richtig: true
+      - text: Sie verdoppelt sich.
+      - text: Sie bleibt gleich.
+      - text: Sie halbiert sich.
+    erklaerung: '$L = \mu_0 \mu_\mathrm{r} N^2 A / l$ – die Induktivität ist proportional zu $N^2$.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was gilt für diamagnetische Stoffe?
+    optionen:
+      - text: Ihre relative Permeabilität ist knapp kleiner als 1, sie schwächen ein äußeres Feld minimal.
+        richtig: true
+      - text: Ihre relative Permeabilität ist viel größer als 1.
+      - text: Sie bestehen aus Weiss'schen Bezirken.
+      - text: Sie sind besonders gut für Transformatorkerne geeignet.
+    erklaerung: Beispiele sind Kupfer, Wasser und Bismut. Paramagnetische Stoffe haben $\mu_\mathrm{r}$ knapp über 1, ferromagnetische $\mu_\mathrm{r} \gg 1$.
+
+  - typ: mc
+    stufe: standard
+    frage: Was versteht man unter der Remanenz?
+    optionen:
+      - text: Die Flussdichte, die nach dem Abschalten der Feldstärke (H = 0) im Material bleibt
+        richtig: true
+      - text: Die Feldstärke, die man braucht, um die Flussdichte auf null zu bringen
+      - text: Die maximale Flussdichte bei Sättigung
+      - text: Die relative Permeabilität bei kleiner Feldstärke
+    erklaerung: 'Die Remanenz $B_\mathrm{r}$ liegt auf der B-Achse der Hystereseschleife. Die Koerzitivfeldstärke $H_\mathrm{c}$ ist die Gegenfeldstärke, bei der $B = 0$ wird.'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum ist die relative Permeabilität eines Ferromagneten keine Konstante?
+    optionen:
+      - text: Weil sie von der Feldstärke und der Vorgeschichte (Hysterese, Sättigung) abhängt
+        richtig: true
+      - text: Weil sie sich mit der Windungszahl der Spule ändert
+      - text: Weil sie nur bei Wechselstrom definiert ist
+      - text: Doch – sie ist für jeden Ferromagneten eine feste Zahl.
+    erklaerung: Die Magnetisierungskennlinie B(H) ist gekrümmt. Nahe der Sättigung steigt B kaum noch, μr wird klein.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Ein Eisenkern bekommt einen kleinen Luftspalt. Was passiert bei gleichem Strom?
+    optionen:
+      - text: Der magnetische Widerstand steigt stark, Fluss und Induktivität sinken.
+        richtig: true
+      - text: Der Fluss steigt, weil Luft besser leitet.
+      - text: Es ändert sich praktisch nichts, weil der Spalt so klein ist.
+      - text: Der Fluss bleibt gleich, nur die Flussdichte im Spalt wird null.
+    erklaerung: 'Luft hat $\mu_\mathrm{r} = 1$ statt z. B. 2000. Schon ein Spalt von 0,5 mm kann mehr magnetische Spannung „verbrauchen“ als 20 cm Eisen.'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Eine Luftspule soll $L = 1\,\mathrm{mH}$ haben ($l = 18\,\mathrm{cm}$, $A = 2{,}5\,\mathrm{cm^2}$). Wie viele Windungen braucht sie (ganze Zahl, aufgerundet)?'
+    loesung: 757
+    einheit: ''
+    toleranz: 1
+    toleranzArt: absolut
+    erklaerung: '$N = \sqrt{L l / (\mu_0 A)} = \sqrt{10^{-3} \cdot 0{,}18 / (4\pi \cdot 10^{-7} \cdot 2{,}5 \cdot 10^{-4})} \approx 756{,}9$ → 757 Windungen.'

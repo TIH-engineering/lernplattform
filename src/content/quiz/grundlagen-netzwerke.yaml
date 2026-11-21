@@ -1,0 +1,91 @@
+titel: Netzwerke und Ersatzquellen
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Ein Netzwerk hat 3 Knoten und 5 Zweige. Wie viele unabhängige Knotengleichungen kannst du aufstellen?
+    optionen:
+      - text: '2'
+        richtig: true
+      - text: '3'
+      - text: '5'
+      - text: '1'
+    erklaerung: 'Bei $k$ Knoten gibt es $k - 1$ unabhängige Knotengleichungen. Dazu kommen $z - (k-1) = 5 - 2 = 3$ Maschengleichungen.'
+
+  - typ: mc
+    stufe: standard
+    frage: Bei der Berechnung eines Netzwerks erhältst du für einen Strom einen negativen Wert. Was bedeutet das?
+    optionen:
+      - text: Der Strom fließt entgegen der eingezeichneten Pfeilrichtung.
+        richtig: true
+      - text: Die Rechnung ist sicher falsch.
+      - text: In diesem Zweig fließt kein Strom.
+      - text: Der Widerstand in diesem Zweig ist negativ.
+    erklaerung: Die Pfeilrichtung wählt man am Anfang beliebig. Ein negatives Ergebnis zeigt nur, dass die tatsächliche Richtung umgekehrt ist.
+
+  - typ: mc
+    stufe: standard
+    frage: Wie bestimmt man den Innenwiderstand der Ersatzspannungsquelle?
+    optionen:
+      - text: Spannungsquellen kurzschließen, Stromquellen auftrennen, dann den Widerstand zwischen den Klemmen berechnen.
+        richtig: true
+      - text: Spannungsquellen auftrennen, Stromquellen kurzschließen, dann den Widerstand zwischen den Klemmen berechnen.
+      - text: Alle Widerstände addieren.
+      - text: Die Leerlaufspannung durch den Laststrom teilen.
+    erklaerung: Eine ideale Spannungsquelle hat den Innenwiderstand null (Kurzschluss), eine ideale Stromquelle einen unendlich großen (Unterbrechung).
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Eine Ersatzspannungsquelle hat $U_0 = 9\,\mathrm{V}$ und $R_\mathrm{i} = 3\,\Omega$. Welcher Strom fließt durch eine Last von $6\,\Omega$?'
+    loesung: 1
+    einheit: A
+    erklaerung: '$I = U_0 / (R_\mathrm{i} + R_\mathrm{L}) = 9\,\mathrm{V} / 9\,\Omega = 1\,\mathrm{A}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Spannungsteiler aus $R_1 = 6\,\mathrm{k\Omega}$ und $R_2 = 3\,\mathrm{k\Omega}$ liegt an $9\,\mathrm{V}$. Wie groß ist der Innenwiderstand der Ersatzspannungsquelle an den Klemmen von $R_2$?'
+    loesung: 2
+    einheit: kΩ
+    erklaerung: 'Quelle kurzschließen → $R_1$ und $R_2$ liegen parallel: $R_\mathrm{i} = 6 \cdot 3 / 9\,\mathrm{k\Omega} = 2\,\mathrm{k\Omega}$. Die Leerlaufspannung ist $U_0 = 9\,\mathrm{V} \cdot 3/9 = 3\,\mathrm{V}$.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Eine Spannungsquelle ($U_\mathrm{q} = 12\,\mathrm{V}$, $R_\mathrm{i} = 4\,\Omega$) wird in eine Stromquelle umgewandelt. Wie groß ist der Quellenstrom $I_\mathrm{q}$?'
+    loesung: 3
+    einheit: A
+    erklaerung: '$I_\mathrm{q} = U_\mathrm{q} / R_\mathrm{i} = 3\,\mathrm{A}$, der Innenwiderstand 4 Ω liegt parallel zur Stromquelle.'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein Dreieck aus $R_{12} = R_{23} = R_{31} = 30\,\Omega$ wird in einen Stern umgewandelt. Wie groß ist jeder Sternwiderstand?'
+    loesung: 10
+    einheit: Ω
+    erklaerung: 'Bei gleichen Widerständen gilt $R_\mathrm{Stern} = R_\mathrm{Dreieck} / 3 = 10\,\Omega$ (aus $R_1 = \dfrac{30 \cdot 30}{90}\,\Omega$).'
+
+  - typ: mc
+    stufe: standard
+    frage: Wann gibt eine Quelle die größtmögliche Leistung an einen Lastwiderstand ab?
+    optionen:
+      - text: Wenn der Lastwiderstand gleich dem Innenwiderstand ist
+        richtig: true
+      - text: Wenn der Lastwiderstand null ist (Kurzschluss)
+      - text: Wenn der Lastwiderstand unendlich groß ist (Leerlauf)
+      - text: Wenn der Lastwiderstand doppelt so groß wie der Innenwiderstand ist
+    erklaerung: Das ist die **Leistungsanpassung**. Im Kurzschluss ist die Spannung null, im Leerlauf der Strom – in beiden Fällen ist die Leistung null.
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Wie groß ist die maximale Leistung, die eine Quelle mit $U_0 = 10\,\mathrm{V}$ und $R_\mathrm{i} = 5\,\Omega$ an eine Last abgeben kann?'
+    loesung: 5
+    einheit: W
+    erklaerung: '$P_\mathrm{max} = U_0^2 / (4 R_\mathrm{i}) = 100 / 20\,\mathrm{W} = 5\,\mathrm{W}$ (bei $R_\mathrm{L} = 5\,\Omega$, Wirkungsgrad 50 %).'
+
+  - typ: mc
+    stufe: standard
+    frage: Wie geht man beim Überlagerungssatz vor?
+    optionen:
+      - text: Man lässt jede Quelle einzeln wirken (die anderen werden ersetzt) und addiert die Teilströme vorzeichenrichtig.
+        richtig: true
+      - text: Man addiert alle Quellenspannungen und teilt durch die Summe aller Widerstände.
+      - text: Man rechnet nur mit der größten Quelle.
+      - text: Man multipliziert die Teilströme der einzelnen Quellen.
+    erklaerung: Nicht wirkende Spannungsquellen werden kurzgeschlossen, Stromquellen aufgetrennt. Das Verfahren gilt nur für lineare Schaltungen.

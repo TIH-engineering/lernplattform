@@ -1,0 +1,107 @@
+titel: Resonanz und Filter
+fragen:
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist die Resonanzfrequenz eines Schwingkreises mit $L = 1\,\mathrm{mH}$ und $C = 1\,\mu\mathrm{F}$?'
+    loesung: 5033
+    einheit: Hz
+    erklaerung: '$f_0 = 1/(2\pi\sqrt{LC}) = 1/(2\pi\sqrt{10^{-9}})\,\mathrm{Hz} \approx 5033\,\mathrm{Hz}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was gilt beim Reihenschwingkreis im Resonanzfall?
+    optionen:
+      - text: Die Impedanz ist minimal und gleich R, der Strom ist maximal.
+        richtig: true
+      - text: Die Impedanz ist maximal, der Strom minimal.
+      - text: Die Spannungen an L und C sind null.
+      - text: Strom und Spannung sind um 90° verschoben.
+    erklaerung: 'Bei Resonanz heben sich $X_\mathrm{L}$ und $X_\mathrm{C}$ auf. Beim Parallelschwingkreis ist es umgekehrt: Die Impedanz ist maximal.'
+
+  - typ: mc
+    stufe: standard
+    frage: Bei welchem Schwingkreis tritt bei Resonanz eine Spannungsüberhöhung an L und C auf?
+    optionen:
+      - text: Beim Reihenschwingkreis
+        richtig: true
+      - text: Beim Parallelschwingkreis
+      - text: Bei beiden gleich
+      - text: Bei keinem
+    erklaerung: 'Im Reihenkreis fließt derselbe (große) Strom durch L und C: $U_\mathrm{L} = U_\mathrm{C} = Q \cdot U$. Im Parallelkreis tritt dagegen eine **Stromüberhöhung** auf.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Die Kapazität eines Schwingkreises wird vervierfacht. Wie ändert sich die Resonanzfrequenz?
+    optionen:
+      - text: Sie halbiert sich.
+        richtig: true
+      - text: Sie viertelt sich.
+      - text: Sie verdoppelt sich.
+      - text: Sie bleibt gleich.
+    erklaerung: '$f_0 \sim 1/\sqrt{C}$ – vierfache Kapazität ergibt $1/\sqrt{4} = 1/2$ der Frequenz.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Reihenschwingkreis hat $f_0 = 10\,\mathrm{kHz}$ und die Güte $Q = 25$. Wie groß ist die Bandbreite?'
+    loesung: 400
+    einheit: Hz
+    erklaerung: '$B = f_0 / Q = 10\,000\,\mathrm{Hz} / 25 = 400\,\mathrm{Hz}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Reihenschwingkreis mit $Q = 20$ liegt an $2\,\mathrm{V}$. Wie groß ist die Spannung am Kondensator bei Resonanz?'
+    loesung: 40
+    einheit: V
+    erklaerung: '$U_\mathrm{C} = Q \cdot U = 20 \cdot 2\,\mathrm{V} = 40\,\mathrm{V}$ – darauf muss der Kondensator ausgelegt sein!'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist die Grenzfrequenz eines RC-Tiefpasses mit $R = 10\,\mathrm{k\Omega}$ und $C = 10\,\mathrm{nF}$?'
+    loesung: 1592
+    einheit: Hz
+    erklaerung: '$f_\mathrm{g} = 1/(2\pi R C) = 1/(2\pi \cdot 10^{4} \cdot 10^{-8})\,\mathrm{Hz} \approx 1592\,\mathrm{Hz}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was gilt bei der Grenzfrequenz eines RC-Tiefpasses?
+    optionen:
+      - text: Die Ausgangsspannung ist auf 70,7 % (−3 dB) gesunken, die Phase beträgt −45°.
+        richtig: true
+      - text: Die Ausgangsspannung ist auf 50 % gesunken, die Phase beträgt −90°.
+      - text: Die Ausgangsspannung ist null.
+      - text: Die Ausgangsspannung ist maximal, die Phase 0°.
+    erklaerung: 'Bei $f_\mathrm{g}$ ist $X_\mathrm{C} = R$, also $U_\mathrm{a}/U_\mathrm{e} = 1/\sqrt{2}$. In dB: $20 \log_{10}(0{,}707) \approx -3\,\mathrm{dB}$.'
+
+  - typ: mc
+    stufe: standard
+    frage: Wie verläuft der Betragsgang eines RC-Tiefpasses im Bode-Diagramm weit oberhalb der Grenzfrequenz?
+    optionen:
+      - text: Er fällt mit 20 dB pro Dekade.
+        richtig: true
+      - text: Er fällt mit 3 dB pro Dekade.
+      - text: Er steigt mit 20 dB pro Dekade.
+      - text: Er bleibt bei −3 dB.
+    erklaerung: Ein Filter 1. Ordnung hat oberhalb der Grenzfrequenz eine Steigung von −20 dB/Dekade (−6 dB/Oktave).
+
+  - typ: mc
+    stufe: vertiefung
+    frage: 'Ein realer Parallelschwingkreis besteht aus einer Spule mit Wicklungswiderstand R parallel zu C. Wann tritt keine Resonanz auf?'
+    optionen:
+      - text: 'Wenn $R \geq \sqrt{L/C}$ ist'
+        richtig: true
+      - text: 'Wenn $R = 0$ ist'
+      - text: 'Wenn $L = C$ ist'
+      - text: Resonanz tritt immer auf.
+    erklaerung: 'Aus $\omega_0 = \sqrt{1/(LC) - R^2/L^2}$ folgt: Der Ausdruck unter der Wurzel muss positiv sein, also $R < \sqrt{L/C}$.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: In welchen Fällen ist Resonanz unerwünscht oder gefährlich?
+    optionen:
+      - text: Schwingungen von Brücken oder Maschinen
+        richtig: true
+      - text: Überspannungen an Kondensatoren in Netzen mit Oberschwingungen
+        richtig: true
+      - text: Senderwahl im Radio
+      - text: Erzeugung einer Taktfrequenz im Quarzoszillator
+    erklaerung: Beim Radio und beim Quarzoszillator wird Resonanz gezielt genutzt. Bei Bauwerken und in Energienetzen kann sie dagegen Schäden verursachen.

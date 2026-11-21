@@ -1,0 +1,43 @@
+---
+title: Komplexe Wechselstromrechnung
+description: "Komplexe Zahlen in kartesischer Form und Versorform, Rechenregeln, Impedanz und Admittanz, Reihen-, Parallel- und gemischte Schaltungen, Umwandlung Reihe – Parallel."
+---
+
+:::note[Im Schulbuch]
+**GET2**, Kapitel komplexe Wechselstromrechnung (Kapitel …): kartesische Form, Versorform, Exponentialform, konjugiert komplexe Zahl,
+Betrag, Inversion, Impedanz und Admittanz, Schaltungen von Wechselstromwiderständen, äquivalente Reihen- und Parallelschaltung.
+Übungsaufgaben auch im Lindner Bd. 2.
+:::
+
+## Das solltest du können
+
+- komplexe Zahlen zwischen kartesischer Form und Versorform umrechnen
+- addieren, subtrahieren, multiplizieren, dividieren und invertieren
+- Impedanzen und Admittanzen von R, L und C angeben
+- Reihen-, Parallel- und gemischte Schaltungen berechnen: alle Ströme und Spannungen nach Betrag und Phase
+- Zeigerdiagramme zeichnen und Proben (Knoten- und Maschenregel mit Zeigern) durchführen
+- eine Reihenschaltung in eine gleichwertige Parallelschaltung umrechnen (und umgekehrt)
+
+## Wichtige Zusammenhänge
+
+| | Formel |
+| --- | --- |
+| kartesisch ↔ Versorform | $\underline{Z} = R + \mathrm{j}X = Z \angle \varphi$ mit $Z = \sqrt{R^2 + X^2}$, $\varphi = \arctan\dfrac{X}{R}$ |
+| zurück | $R = Z \cos\varphi$, $X = Z \sin\varphi$ |
+| Multiplizieren / Dividieren | Beträge multiplizieren / dividieren, Winkel addieren / subtrahieren |
+| Addieren / Subtrahieren | in **kartesischer** Form |
+| Impedanzen | $\underline{Z}_\mathrm{R} = R$, $\underline{Z}_\mathrm{L} = \mathrm{j}\omega L$, $\underline{Z}_\mathrm{C} = \dfrac{1}{\mathrm{j}\omega C} = -\mathrm{j}\dfrac{1}{\omega C}$ |
+| Admittanz | $\underline{Y} = \dfrac{1}{\underline{Z}} = G + \mathrm{j}B$ |
+| Reihe / parallel | $\underline{Z} = \underline{Z}_1 + \underline{Z}_2$ · $\underline{Y} = \underline{Y}_1 + \underline{Y}_2$ |
+| ohmsches Gesetz | $\underline{U} = \underline{Z} \cdot \underline{I}$ |
+
+:::caution[Taschenrechner]
+Beim Umrechnen in die Versorform auf den **Quadranten** achten: Bei negativem Realteil liefert $\arctan$ einen falschen Winkel
+(± 180° korrigieren). Viele Taschenrechner haben eine eigene Funktion für Polar-Koordinaten (Pol/Rec).
+:::
+
+## Weiter zu
+
+- [Rechenbeispiele](/grundlagen/komplexe-rechnung/rechenbeispiele/)
+- [Praxisbeispiele](/grundlagen/komplexe-rechnung/praxisbeispiele/)
+- [Quiz](/grundlagen/komplexe-rechnung/quiz/)

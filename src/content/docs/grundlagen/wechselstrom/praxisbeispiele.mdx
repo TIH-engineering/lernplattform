@@ -1,0 +1,74 @@
+---
+title: Praxisbeispiele – Wechselgrößen und Blindwiderstände
+description: Oszilloskop-Bild ablesen, Netzspannung weltweit, True-RMS-Messgeräte und Kondensatornetzteil.
+---
+
+import Loesung from '../../../../components/Loesung.astro';
+
+## Ein Oszilloskop-Bild ablesen
+
+Auf dem Oszilloskop ist eine Sinusspannung zu sehen. Einstellungen: **2 V/Div** (vertikal), **0,5 ms/Div** (horizontal).
+Von Spitze zu Spitze sind es **6 Kästchen**, eine Periode ist **4 Kästchen** lang.
+
+Bestimme $U_\mathrm{ss}$, $\hat{u}$, $U$, $T$ und $f$.
+
+<Loesung>
+
+- $U_\mathrm{ss} = 6\,\mathrm{Div} \cdot 2\,\mathrm{V/Div} = 12\,\mathrm{V}$ → $\hat{u} = 6\,\mathrm{V}$ → $U = 6\,\mathrm{V}/\sqrt{2} \approx 4{,}24\,\mathrm{V}$
+- $T = 4\,\mathrm{Div} \cdot 0{,}5\,\mathrm{ms/Div} = 2\,\mathrm{ms}$ → $f = 500\,\mathrm{Hz}$
+
+Tipp: Moderne Oszilloskope zeigen diese Werte auch automatisch an („Measure“) – überprüfe sie trotzdem selbst.
+
+</Loesung>
+
+## Netzspannung weltweit
+
+| Region | Effektivwert | Frequenz |
+| --- | --- | --- |
+| Europa | 230 V | 50 Hz |
+| USA | 120 V | 60 Hz |
+| Japan | 100 V | 50 Hz (Osten) / 60 Hz (Westen) |
+
+1. Berechne für Europa und die USA Scheitelwert und Periodendauer.
+2. Ein Laptop-Netzteil trägt die Aufschrift „Input: 100–240 V ~ 50/60 Hz“. Was bedeutet das?
+
+<Loesung>
+
+1. Europa: $\hat{u} \approx 325\,\mathrm{V}$, $T = 20\,\mathrm{ms}$ · USA: $\hat{u} \approx 170\,\mathrm{V}$, $T \approx 16{,}7\,\mathrm{ms}$
+2. Das Netzteil funktioniert an allen Netzen der Welt (Weitbereichsnetzteil) – man braucht nur einen Steckeradapter.
+   Bei Geräten ohne diese Angabe (z. B. ein amerikanischer Föhn) würde 230 V das Gerät zerstören.
+
+</Loesung>
+
+## Warum „True RMS“?
+
+Du misst den Strom eines LED-Netzteils mit zwei Multimetern: Ein günstiges Gerät zeigt 0,8 A, ein True-RMS-Gerät 1,3 A.
+
+Welches Gerät hat recht, und warum unterscheiden sich die Anzeigen?
+
+<Loesung>
+
+Das **True-RMS-Gerät** hat recht. Netzteile ziehen den Strom oft in kurzen, hohen Impulsen (nicht sinusförmig).
+Das günstige Gerät misst den Gleichrichtwert und multipliziert mit dem Sinus-Formfaktor 1,11 – das ist nur für reine
+Sinusgrößen richtig. Bei Impulsen ist der Effektivwert viel größer als 1,11 mal der Gleichrichtwert.
+
+</Loesung>
+
+## Kondensatornetzteil
+
+Billige Geräte (z. B. Nachtlichter) versorgen LEDs direkt aus dem Netz über einen Kondensator in Reihe – ohne Transformator.
+
+1. Welcher Strom fließt (näherungsweise) durch einen $330\,\mathrm{nF}$-Kondensator an $230\,\mathrm{V}$, $50\,\mathrm{Hz}$?
+2. Warum nimmt man keinen Widerstand?
+3. Welche Gefahr besteht bei solchen Schaltungen?
+
+<Loesung>
+
+1. $X_\mathrm{C} = \dfrac{1}{2\pi \cdot 50 \cdot 330 \cdot 10^{-9}}\,\Omega \approx 9{,}65\,\mathrm{k\Omega}$ → $I \approx \dfrac{230\,\mathrm{V}}{9{,}65\,\mathrm{k\Omega}} \approx 24\,\mathrm{mA}$
+   (die LED-Spannung ist dagegen vernachlässigbar).
+2. Ein Blindwiderstand verbraucht **keine Wirkleistung** – er wird nicht warm. Ein Widerstand für denselben Strom würde
+   $P = I^2 R \approx 5{,}5\,\mathrm{W}$ verheizen.
+3. Die Schaltung ist **nicht galvanisch getrennt** – alle Teile können Netzspannung führen. Der Kondensator muss ein
+   zugelassener X-Kondensator sein. Solche Schaltungen gehören nicht in offene Bastelprojekte!
+
+</Loesung>

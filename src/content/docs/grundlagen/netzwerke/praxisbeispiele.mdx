@@ -1,0 +1,95 @@
+---
+title: Praxisbeispiele – Netzwerke und Ersatzquellen
+description: Körperdurchströmung beim Weidezaun als Widerstandsnetzwerk, Ausgleichsstrom zwischen zwei Akkus und Überprüfung per Simulation.
+---
+
+import Loesung from '../../../../components/Loesung.astro';
+
+## Körperdurchströmung am Weidezaun
+
+Eine Person A greift an einen Weidezaun (Impulsspannung 5000 V). Mit der anderen Hand hält sie Person B an der Hand.
+Person A trägt Sportschuhe, Person B ist barfuß.
+
+**Körpermodell:** jeder Arm 500 Ω, Rumpf 100 Ω, jedes Bein 500 Ω.
+**Übergänge zur Erde:** Sportschuh je 10 kΩ, barfuß je 100 Ω. Die Kontaktwiderstände an den Händen werden vernachlässigt.
+
+1. Zeichne das Widerstandsnetzwerk und fasse es schrittweise zusammen.
+2. Berechne die Ströme zu Beginn des Impulses durch beide Personen (Quelle als ideale 5-kV-Spannungsquelle).
+3. Der Weidezaun speichert die Impulsenergie von 5 J in einem Kondensator. Wie groß ist dessen Kapazität ($W = \tfrac12 C U^2$)?
+
+<Loesung>
+
+**1. Netzwerk:** Vom Zaun fließt der Strom durch den **Arm von A** (500 Ω) zum Rumpf von A (Knoten K).
+Von dort gibt es zwei Wege zur Erde:
+
+- **direkt durch A:** Rumpf 100 Ω + beide Beine mit Schuhen parallel: $100 + \dfrac{500 + 10\,000}{2} = 5350\,\Omega$
+- **über B:** zweiter Arm von A 500 Ω + Arm von B 500 Ω + Rumpf B 100 Ω + Beine barfuß parallel $\dfrac{500 + 100}{2}$:
+  $500 + 500 + 100 + 300 = 1400\,\Omega$
+
+Beide Wege parallel: $5350 \parallel 1400 \approx 1110\,\Omega$, dazu der erste Arm: $R_\mathrm{ges} \approx 1610\,\Omega$
+
+**2. Ströme:**
+
+$$
+I_\mathrm{ges} = \frac{5000\,\mathrm{V}}{1610\,\Omega} \approx 3{,}11\,\mathrm{A}
+\qquad
+U_\mathrm{K} = 5000\,\mathrm{V} - 500\,\Omega \cdot 3{,}11\,\mathrm{A} \approx 3447\,\mathrm{V}
+$$
+
+$$
+I_\mathrm{A,Erde} = \frac{3447\,\mathrm{V}}{5350\,\Omega} \approx 0{,}64\,\mathrm{A}
+\qquad
+I_\mathrm{B} = \frac{3447\,\mathrm{V}}{1400\,\Omega} \approx 2{,}46\,\mathrm{A}
+$$
+
+**Überraschung:** Durch die **barfüßige** Person B fließt fast viermal so viel Strom wie über die Beine von A –
+obwohl B den Zaun gar nicht berührt! Schuhe isolieren.
+
+**3.** $C = \dfrac{2 W}{U^2} = \dfrac{2 \cdot 5\,\mathrm{J}}{(5000\,\mathrm{V})^2} = 0{,}4\,\mu\mathrm{F}$
+
+:::caution[Modell, keine Realität]
+Die Ströme sind Idealwerte aus einem stark vereinfachten Modell. Echte Weidezaungeräte sind so gebaut, dass der Impuls
+nur Millisekunden dauert und die Energie begrenzt ist (Zeitkonstante hier: $\tau = R \cdot C \approx 0{,}64\,\mathrm{ms}$).
+Trotzdem gilt: Weidezäune und elektrische Anlagen sind kein Spielzeug!
+:::
+
+</Loesung>
+
+## Zwei Akkus parallel schalten
+
+Zwei 12-V-Bleiakkus sollen parallel geschaltet werden, um die Kapazität zu verdoppeln. Akku 1 ist voll ($U_\mathrm{q1} = 12{,}8\,\mathrm{V}$),
+Akku 2 ist fast leer ($U_\mathrm{q2} = 12{,}2\,\mathrm{V}$). Beide haben $R_\mathrm{i} = 20\,\mathrm{m\Omega}$.
+
+1. Welcher Ausgleichsstrom fließt im Moment des Zusammenschaltens (ohne Last)?
+2. Welche Spannung stellt sich an den Klemmen ein?
+3. Was folgt daraus für die Praxis?
+
+<Loesung>
+
+1. Der Kreis besteht aus beiden Quellen (gegeneinander) und beiden Innenwiderständen (Maschenregel):
+   $I = \dfrac{U_\mathrm{q1} - U_\mathrm{q2}}{R_\mathrm{i1} + R_\mathrm{i2}} = \dfrac{0{,}6\,\mathrm{V}}{0{,}04\,\Omega} = 15\,\mathrm{A}$
+2. $U_\mathrm{Kl} = U_\mathrm{q1} - R_\mathrm{i1} \cdot I = 12{,}8\,\mathrm{V} - 0{,}3\,\mathrm{V} = 12{,}5\,\mathrm{V}$ (genau in der Mitte).
+3. Akkus nur mit **gleichem Ladezustand** parallel schalten. Schon 0,6 V Unterschied erzeugen einen großen Strom,
+   der Akkus, Kabel und Klemmen belastet. Bei Lithium-Akkus ist das noch gefährlicher (Brandgefahr).
+
+</Loesung>
+
+## Rechnung mit der Simulation überprüfen
+
+Baue das Netzwerk aus den [Rechenbeispielen](/grundlagen/netzwerke/rechenbeispiele/#kirchhoff-gleichungssystem) in
+LTspice oder im Browser-Simulator [CircuitJS](https://www.falstad.com/circuit/circuitjs.html) nach.
+
+1. Stimmen die simulierten Ströme $I_1$, $I_2$, $I_3$ mit deiner Rechnung überein?
+2. Ersetze das Netzwerk links von A–B durch die Ersatzspannungsquelle ($U_0 = 8\,\mathrm{V}$, $R_\mathrm{i} \approx 1{,}333\,\Omega$).
+   Ändere $R_3$ auf 2 Ω und 20 Ω. Liefern Originalschaltung und Ersatzquelle denselben Strom durch $R_3$?
+
+<Loesung>
+
+1. Die Simulation liefert $I_1 \approx 1{,}364\,\mathrm{A}$, $I_2 \approx -0{,}273\,\mathrm{A}$ (fließt in Quelle 2 hinein) und $I_3 \approx 1{,}091\,\mathrm{A}$.
+2. Ja, für **jeden** Lastwiderstand:
+   - $R_3 = 2\,\Omega$: $I_3 = \dfrac{8}{1{,}333 + 2}\,\mathrm{A} = 2{,}4\,\mathrm{A}$
+   - $R_3 = 20\,\Omega$: $I_3 = \dfrac{8}{1{,}333 + 20}\,\mathrm{A} = 0{,}375\,\mathrm{A}$
+
+   Genau das ist der Sinn der Ersatzquelle: Von den Klemmen aus gesehen verhält sie sich exakt wie das Original.
+
+</Loesung>

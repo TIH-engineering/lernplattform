@@ -1,0 +1,82 @@
+---
+title: Praxisbeispiele – Elektrisches Feld und Kondensator
+description: Wo Kondensatoren eingesetzt werden, Kennzeichnung ablesen, Touchscreen, Elkos sicher entladen und Blitzableiter.
+---
+
+import Loesung from '../../../../components/Loesung.astro';
+
+## Wofür braucht man Kondensatoren?
+
+Ordne jede Anwendung der passenden Aufgabe zu: **Energie speichern**, **Spannung glätten/puffern**, **Gleichspannung sperren**,
+**Frequenzen trennen/bestimmen**, **Zeit erzeugen**, **Sensor**.
+
+1. Großer Elko nach dem Gleichrichter eines Netzteils
+2. 100-nF-Keramikkondensator direkt neben einem Mikrocontroller
+3. Kondensator im Kamerablitz
+4. Kondensator zwischen zwei Verstärkerstufen im Audioverstärker
+5. Kondensator in der Frequenzweiche einer Lautsprecherbox
+6. RC-Glied für die Einschaltverzögerung eines Treppenlicht-Schalters
+7. Touchscreen eines Smartphones
+
+<Loesung>
+
+1. **Glätten** – lädt sich in den Spannungsspitzen auf und liefert dazwischen Strom.
+2. **Puffern** („Abblockkondensator“) – fängt kurze Stromspitzen des Chips ab und hält die Versorgung stabil.
+3. **Energie speichern** – wird langsam geladen und gibt die Energie in Millisekunden ab.
+4. **Gleichspannung sperren** („Koppelkondensator“) – nur das Wechselsignal kommt durch.
+5. **Frequenzen trennen** – hohe Töne zum Hochtöner, tiefe werden gesperrt.
+6. **Zeit erzeugen** – die Zeitkonstante $\tau = RC$ bestimmt die Verzögerung.
+7. **Sensor** – der Finger verändert das elektrische Feld und damit die Kapazität an der berührten Stelle.
+
+</Loesung>
+
+## Kondensator-Aufdruck lesen
+
+Auf kleinen Keramikkondensatoren steht oft ein dreistelliger Code: zwei Ziffern + Anzahl der Nullen, Einheit **pF**.
+
+Bestimme die Kapazität: a) **104** b) **472** c) **220** d) Auf einem Elko steht „470 µF 16 V“. Was bedeutet die Spannungsangabe?
+
+<Loesung>
+
+a) $10 \cdot 10^{4}\,\mathrm{pF} = 100\,000\,\mathrm{pF} = 100\,\mathrm{nF}$
+
+b) $47 \cdot 10^{2}\,\mathrm{pF} = 4700\,\mathrm{pF} = 4{,}7\,\mathrm{nF}$
+
+c) $22 \cdot 10^{0}\,\mathrm{pF} = 22\,\mathrm{pF}$
+
+d) Die **Nennspannung**: Darüber kann das Dielektrikum durchschlagen. In der Praxis wählt man eine Reserve
+(z. B. 25 V für eine 12-V-Schaltung). Beim Elko auf die **Polung** achten – falsch herum eingebaut kann er platzen!
+
+</Loesung>
+
+## Achtung: geladene Kondensatoren
+
+In einem ausgesteckten Netzteil sitzt ein Elko mit $220\,\mu\mathrm{F}$, geladen auf $325\,\mathrm{V}$.
+
+1. Welche Energie ist gespeichert?
+2. Das Netzteil hat einen Entladewiderstand von $220\,\mathrm{k\Omega}$ parallel zum Elko. Nach welcher Zeit ist die Spannung
+   auf unter 1 % gefallen (≈ $5\tau$)?
+3. Was folgt daraus für Reparaturen?
+
+<Loesung>
+
+1. $W = \tfrac12 \cdot 220 \cdot 10^{-6}\,\mathrm{F} \cdot (325\,\mathrm{V})^2 \approx 11{,}6\,\mathrm{J}$ – genug für einen gefährlichen Schlag.
+2. $\tau = 220\,\mathrm{k\Omega} \cdot 220\,\mu\mathrm{F} = 48{,}4\,\mathrm{s}$ → $5\tau \approx 4$ Minuten.
+3. Auch **ausgesteckte** Geräte können noch gefährliche Spannungen führen. Vor Arbeiten: warten, Spannung messen,
+   ggf. über einen geeigneten Widerstand entladen. Arbeiten an Netzgeräten nur unter Aufsicht!
+
+</Loesung>
+
+## Spitzenwirkung: Blitzableiter und Gewitter
+
+1. Warum schlägt ein Blitz bevorzugt in Spitzen (Kirchturm, Baum, Blitzableiter) ein?
+2. Warum bist du in einem Auto bei Gewitter sicher (faradayscher Käfig)?
+
+<Loesung>
+
+1. An Spitzen und Kanten drängen sich die Feldlinien zusammen – die **Feldstärke ist dort am größten** (inhomogenes Feld).
+   Dort wird die Luft zuerst ionisiert und leitfähig. Der Blitzableiter bietet dem Blitz einen gezielten, gut leitenden Weg zur Erde.
+2. In einem geschlossenen Metallgehäuse ist das elektrische Feld im Inneren null – die Ladungen verteilen sich auf der Außenhaut.
+   Der Strom fließt über die Karosserie außen herum. (Ein Cabrio schützt nicht!)
+
+</Loesung>

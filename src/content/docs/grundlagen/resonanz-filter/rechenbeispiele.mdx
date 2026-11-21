@@ -1,0 +1,182 @@
+---
+title: Rechenbeispiele – Resonanz und Filter
+description: Rechenbeispiele zu Resonanzfrequenz, Reihen- und Parallelschwingkreis, Güte und Bandbreite, realem Parallelschwingkreis sowie RC-Tief- und Hochpass.
+---
+
+import Stufe from '../../../../components/Stufe.astro';
+import Loesung from '../../../../components/Loesung.astro';
+import Abbildung from '../../../../components/Abbildung.astro';
+import RLCReihe from '../../../../assets/grundlagen/rlc-reihe.svg';
+import RLCParallel from '../../../../assets/grundlagen/rlc-parallel.svg';
+import Realer from '../../../../assets/grundlagen/parallelschwingkreis-real.svg';
+import Tiefpass from '../../../../assets/grundlagen/rc-tiefpass.svg';
+
+## Resonanzfrequenz
+
+<Stufe wert="grundlagen" />
+
+Wie groß ist die Resonanzfrequenz eines Schwingkreises mit $L = 20\,\mathrm{mH}$ und $C = 50\,\mathrm{nF}$?
+
+<Loesung>
+
+$$
+f_0 = \frac{1}{2\pi\sqrt{LC}} = \frac{1}{2\pi\sqrt{20 \cdot 10^{-3}\,\mathrm{H} \cdot 50 \cdot 10^{-9}\,\mathrm{F}}} = \frac{1}{2\pi \cdot 3{,}162 \cdot 10^{-5}\,\mathrm{s}} \approx 5{,}03\,\mathrm{kHz}
+$$
+
+</Loesung>
+
+## Reihenschwingkreis
+
+<Stufe wert="standard" />
+
+<Abbildung bild={RLCReihe} unterschrift="Reihenschwingkreis" />
+
+$R = 10\,\Omega$, $L = 10\,\mathrm{mH}$, $C = 1\,\mu\mathrm{F}$, $U = 1\,\mathrm{V}$ (Effektivwert).
+
+a) Berechne $f_0$, den Strom und die Spannungen an L und C bei Resonanz.
+b) Berechne Güte und Bandbreite.
+
+<Loesung>
+
+**a)**
+$$
+f_0 = \frac{1}{2\pi\sqrt{10^{-2} \cdot 10^{-6}}}\,\mathrm{Hz} \approx 1592\,\mathrm{Hz}
+\qquad
+Z_0 = \sqrt{\frac{L}{C}} = \sqrt{\frac{10^{-2}}{10^{-6}}}\,\Omega = 100\,\Omega
+$$
+
+Bei Resonanz heben sich $X_\mathrm{L}$ und $X_\mathrm{C}$ auf – nur $R$ bleibt: $Z = R = 10\,\Omega$ (**minimal**).
+
+$$
+I_0 = \frac{U}{R} = 0{,}1\,\mathrm{A}
+\qquad
+U_\mathrm{L} = U_\mathrm{C} = I_0 \cdot Z_0 = 0{,}1\,\mathrm{A} \cdot 100\,\Omega = 10\,\mathrm{V}
+$$
+
+An L und C liegen jeweils **10 V**, obwohl nur 1 V angelegt ist – **Spannungsüberhöhung**! Die beiden Spannungen sind
+gegenphasig und heben sich in der Summe auf.
+
+**b)**
+$$
+Q = \frac{Z_0}{R} = 10
+\qquad
+B = \frac{f_0}{Q} \approx 159\,\mathrm{Hz}
+$$
+
+Die Grenzfrequenzen (Strom auf $I_0/\sqrt{2}$ gesunken) liegen bei $f_\mathrm{u} \approx 1514\,\mathrm{Hz}$ und $f_\mathrm{o} \approx 1673\,\mathrm{Hz}$.
+
+</Loesung>
+
+## Parallelschwingkreis
+
+<Stufe wert="standard" />
+
+<Abbildung bild={RLCParallel} unterschrift="Parallelschwingkreis (ideal, mit parallelem R)" />
+
+$R = 10\,\mathrm{k\Omega}$, $L = 1\,\mathrm{mH}$, $C = 100\,\mathrm{nF}$ liegen parallel an $U = 1\,\mathrm{V}$.
+Berechne $f_0$, den Gesamtstrom sowie die Ströme durch L und C bei Resonanz und die Güte.
+
+<Loesung>
+
+$$
+f_0 = \frac{1}{2\pi\sqrt{10^{-3} \cdot 10^{-7}}}\,\mathrm{Hz} \approx 15{,}92\,\mathrm{kHz}
+\qquad
+Z_0 = \sqrt{\frac{L}{C}} = 100\,\Omega
+$$
+
+Bei Resonanz heben sich die Blindleitwerte auf: $Z = R = 10\,\mathrm{k\Omega}$ (**maximal**).
+
+$$
+I = \frac{U}{R} = 0{,}1\,\mathrm{mA}
+\qquad
+I_\mathrm{L} = I_\mathrm{C} = \frac{U}{Z_0} = 10\,\mathrm{mA}
+\qquad
+Q = \frac{R}{Z_0} = 100
+$$
+
+Im Schwingkreis „pendeln“ 10 mA zwischen L und C, aus der Quelle kommen nur 0,1 mA – **Stromüberhöhung** um den Faktor 100.
+
+</Loesung>
+
+## RC-Tiefpass
+
+<Stufe wert="grundlagen" />
+
+<Abbildung bild={Tiefpass} unterschrift="RC-Tiefpass" />
+
+$R = 1\,\mathrm{k\Omega}$, $C = 100\,\mathrm{nF}$.
+
+a) Berechne die Grenzfrequenz.
+b) Wie groß sind $U_\mathrm{a}/U_\mathrm{e}$ und die Phase bei $f_\mathrm{g}$?
+c) Wie groß ist $U_\mathrm{a}/U_\mathrm{e}$ (auch in dB) bei $10 \cdot f_\mathrm{g}$?
+
+<Loesung>
+
+a) $f_\mathrm{g} = \dfrac{1}{2\pi R C} = \dfrac{1}{2\pi \cdot 10^{3} \cdot 10^{-7}}\,\mathrm{Hz} \approx 1592\,\mathrm{Hz}$
+
+b) Spannungsteiler: $\dfrac{\underline{U}_\mathrm{a}}{\underline{U}_\mathrm{e}} = \dfrac{1}{1 + \mathrm{j}\,f/f_\mathrm{g}}$.
+Bei $f = f_\mathrm{g}$: $\dfrac{1}{1 + \mathrm{j}} = \dfrac{1}{\sqrt{2}} \angle -45° \approx 0{,}707 \angle -45°$ → **−3 dB**
+
+c) $\left|\dfrac{U_\mathrm{a}}{U_\mathrm{e}}\right| = \dfrac{1}{\sqrt{1 + 10^2}} \approx 0{,}0995$ → $20 \log_{10}(0{,}0995) \approx -20\,\mathrm{dB}$
+
+Im **Bode-Diagramm**: bis $f_\mathrm{g}$ waagrecht (0 dB), danach fällt die Kurve mit **−20 dB pro Dekade**.
+Die Phase läuft von 0° über −45° (bei $f_\mathrm{g}$) gegen −90°.
+
+</Loesung>
+
+## Hochpass dimensionieren
+
+<Stufe wert="standard" />
+
+Ein RC-Hochpass soll tiefe Störungen (z. B. Trittschall) unterdrücken, die Grenzfrequenz soll bei etwa $100\,\mathrm{Hz}$ liegen.
+Der Kondensator hat $1\,\mu\mathrm{F}$. Berechne $R$, wähle einen Normwert (E12: …, 1,2 k, 1,5 k, 1,8 k …) und gib die
+tatsächliche Grenzfrequenz an.
+
+<Loesung>
+
+$$
+R = \frac{1}{2\pi f_\mathrm{g} C} = \frac{1}{2\pi \cdot 100\,\mathrm{Hz} \cdot 10^{-6}\,\mathrm{F}} \approx 1592\,\Omega
+$$
+
+Gewählt: $1{,}5\,\mathrm{k\Omega}$ → $f_\mathrm{g} = \dfrac{1}{2\pi \cdot 1500 \cdot 10^{-6}}\,\mathrm{Hz} \approx 106\,\mathrm{Hz}$
+(1,8 kΩ ergäbe 88 Hz – je nach Anforderung).
+
+</Loesung>
+
+## Realer Parallelschwingkreis
+
+<Stufe wert="vertiefung" />
+
+<Abbildung bild={Realer} unterschrift="Realer Parallelschwingkreis: Spule mit Wicklungswiderstand R" />
+
+Eine Spule ($L = 20\,\mathrm{mH}$, Wicklungswiderstand $R = 200\,\Omega$) liegt parallel zu $C = 50\,\mathrm{nF}$.
+
+a) Leite die Resonanzbedingung her und berechne $\omega_0$ und $f_0$.
+b) Für welche Werte von $R$ tritt keine Resonanz auf?
+c) Wie groß ist die Impedanz bei Resonanz?
+
+<Loesung>
+
+**a)** Admittanz der Schaltung:
+
+$$
+\underline{Y} = \frac{1}{R + \mathrm{j}\omega L} + \mathrm{j}\omega C = \frac{R - \mathrm{j}\omega L}{R^2 + \omega^2 L^2} + \mathrm{j}\omega C
+$$
+
+Resonanz, wenn der Imaginärteil null wird:
+
+$$
+\omega C = \frac{\omega L}{R^2 + \omega^2 L^2} \;\Rightarrow\; \omega_0 = \sqrt{\frac{1}{LC} - \frac{R^2}{L^2}}
+$$
+
+Einsetzen: $\dfrac{1}{LC} = 10^{9}\,\mathrm{s^{-2}}$, $\dfrac{R^2}{L^2} = 10^{8}\,\mathrm{s^{-2}}$ →
+$\omega_0 = \sqrt{9 \cdot 10^{8}}\,\mathrm{s^{-1}} = 30\,000\,\mathrm{s^{-1}}$ → $f_0 \approx 4775\,\mathrm{Hz}$
+
+(Ohne $R$ wären es $f_0 = 5033\,\mathrm{Hz}$ – der Wicklungswiderstand verschiebt die Resonanz nach unten.)
+
+**b)** Unter der Wurzel darf nichts Negatives stehen: $\dfrac{1}{LC} > \dfrac{R^2}{L^2} \Rightarrow R < \sqrt{\dfrac{L}{C}} \approx 632\,\Omega$.
+Für $R \geq 632\,\Omega$ gibt es **keine** Frequenz, bei der der Imaginärteil null wird – die Dämpfung ist zu groß.
+
+**c)** Bei Resonanz ist $\underline{Z}$ rein reell: $Z_0 = \dfrac{L}{R C} = \dfrac{20 \cdot 10^{-3}}{200 \cdot 50 \cdot 10^{-9}}\,\Omega = 2\,\mathrm{k\Omega}$
+
+</Loesung>

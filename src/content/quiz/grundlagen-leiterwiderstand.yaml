@@ -1,0 +1,107 @@
+titel: Leiterwiderstand und Temperatur
+fragen:
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Wie groß ist der Widerstand eines $100\,\mathrm{m}$ langen Kupferdrahts mit $0{,}75\,\mathrm{mm^2}$? ($\rho = 0{,}0179\,\Omega\,\mathrm{mm^2/m}$)'
+    loesung: 2.387
+    einheit: Ω
+    erklaerung: '$R = \rho \cdot l / A = 0{,}0179 \cdot 100 / 0{,}75\,\Omega \approx 2{,}39\,\Omega$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Ein Draht wird bei gleichem Material doppelt so lang und bekommt den doppelten Querschnitt. Wie ändert sich sein Widerstand?
+    optionen:
+      - text: Er bleibt gleich.
+        richtig: true
+      - text: Er verdoppelt sich.
+      - text: Er vervierfacht sich.
+      - text: Er halbiert sich.
+    erklaerung: '$R = \rho \cdot l / A$: Doppelte Länge verdoppelt $R$, doppelter Querschnitt halbiert ihn – beides hebt sich auf.'
+
+  - typ: mc
+    stufe: standard
+    frage: Der Durchmesser eines Runddrahts wird verdoppelt (gleiche Länge, gleiches Material). Wie ändert sich der Widerstand?
+    optionen:
+      - text: Er sinkt auf ein Viertel.
+        richtig: true
+      - text: Er halbiert sich.
+      - text: Er bleibt gleich.
+      - text: Er verdoppelt sich.
+    erklaerung: '$A = d^2 \pi / 4$ – doppelter Durchmesser bedeutet **vierfachen** Querschnitt, also ein Viertel des Widerstands.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Kupfer hat $\rho = 0{,}0179\,\Omega\,\mathrm{mm^2/m}$. Wie groß ist die Leitfähigkeit $\gamma$ (in $\mathrm{m/(\Omega\,mm^2)}$)?'
+    loesung: 55.87
+    einheit: m/(Ω·mm²)
+    erklaerung: '$\gamma = 1/\rho = 1 / 0{,}0179 \approx 55{,}9\,\mathrm{m/(\Omega\,mm^2)}$ (oft gerundet: 56)'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Warum steigt der Widerstand eines Metalls bei Erwärmung?
+    optionen:
+      - text: Die Atome im Gitter schwingen stärker und behindern die Elektronen.
+        richtig: true
+      - text: Es gibt bei höherer Temperatur weniger freie Elektronen.
+      - text: Das Metall dehnt sich aus und wird dadurch länger.
+      - text: Die Elektronen werden bei Wärme schwerer.
+    erklaerung: Metalle sind **Kaltleiter** (positiver Temperaturkoeffizient). Die stärkeren Gitterschwingungen führen zu mehr Zusammenstößen mit den Elektronen.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Kupferwiderstand hat bei $20\,°\mathrm{C}$ genau $100\,\Omega$ ($\alpha_{20} = 0{,}004\,\mathrm{K^{-1}}$). Wie groß ist er bei $70\,°\mathrm{C}$?'
+    loesung: 120
+    einheit: Ω
+    erklaerung: '$R_{70} = 100\,\Omega \cdot (1 + 0{,}004 \cdot 50) = 120\,\Omega$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Eine Kupferspule ($\alpha_{20} = 0{,}004\,\mathrm{K^{-1}}$) hat bei $20\,°\mathrm{C}$ $50\,\Omega$, im Betrieb $58\,\Omega$. Welche Temperatur hat sie?'
+    loesung: 60
+    einheit: °C
+    toleranz: 0.5
+    toleranzArt: absolut
+    erklaerung: '$\Delta\vartheta = (58/50 - 1) / 0{,}004\,\mathrm{K^{-1}} = 40\,\mathrm{K}$ → $\vartheta = 20\,°\mathrm{C} + 40\,\mathrm{K} = 60\,°\mathrm{C}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie verhält sich der Widerstand eines NTC-Widerstands (Heißleiter), wenn er erwärmt wird?
+    optionen:
+      - text: Er nimmt ab.
+        richtig: true
+      - text: Er nimmt zu.
+      - text: Er bleibt konstant.
+      - text: Er wird sofort unendlich groß.
+    erklaerung: NTC = *negative temperature coefficient*. Heißleiter leiten im heißen Zustand besser.
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Anwendungen passen zu einem NTC?
+    optionen:
+      - text: Temperaturmessung im Akku-Pack
+        richtig: true
+      - text: Begrenzung des Einschaltstroms in Netzteilen
+        richtig: true
+      - text: Rückstellende Sicherung bei Überstrom
+      - text: Präzisionsmesswiderstand mit temperaturunabhängigem Wert
+    erklaerung: Die rückstellende Sicherung ist ein **PTC** (Kaltleiter). Für temperaturunabhängige Präzisionswiderstände verwendet man Legierungen wie Konstantan (α ≈ 0).
+
+  - typ: mc
+    stufe: standard
+    frage: Warum ist der Einschaltstrom einer Kupferwicklung größer als der Strom im Betrieb?
+    optionen:
+      - text: Weil der Widerstand im kalten Zustand kleiner ist.
+        richtig: true
+      - text: Weil der Widerstand im kalten Zustand größer ist.
+      - text: Weil die Spannung beim Einschalten höher ist.
+      - text: Weil Kupfer ein Heißleiter ist.
+    erklaerung: Kupfer ist ein Kaltleiter – kalt ist sein Widerstand kleiner, also fließt beim Einschalten mehr Strom.
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein Strom von $10\,\mathrm{A}$ soll eine $40\,\mathrm{m}$ lange Doppelleitung (Hin- und Rückleiter, Kupfer, $\rho = 0{,}0179\,\Omega\,\mathrm{mm^2/m}$) durchfließen. Der Spannungsfall darf höchstens $3\,\mathrm{V}$ betragen. Welcher Mindestquerschnitt ist nötig?'
+    loesung: 4.773
+    einheit: mm²
+    erklaerung: >-
+      $R_\mathrm{max} = 3\,\mathrm{V} / 10\,\mathrm{A} = 0{,}3\,\Omega$; Leiterlänge $l = 80\,\mathrm{m}$:
+      $A = \rho \cdot l / R = 0{,}0179 \cdot 80 / 0{,}3\,\mathrm{mm^2} \approx 4{,}77\,\mathrm{mm^2}$ → gewählt wird 6 mm².

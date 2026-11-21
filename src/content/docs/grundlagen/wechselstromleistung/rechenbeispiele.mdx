@@ -1,0 +1,143 @@
+---
+title: Rechenbeispiele – Leistung bei Wechselstrom
+description: Rechenbeispiele zu Wirk-, Blind- und Scheinleistung, Motor mit Leistungsfaktor, Kompensation, komplexer Scheinleistung und Leistungsbilanz.
+---
+
+import Stufe from '../../../../components/Stufe.astro';
+import Loesung from '../../../../components/Loesung.astro';
+
+## Leistungsdreieck
+
+<Stufe wert="grundlagen" />
+
+Ein Verbraucher nimmt an $230\,\mathrm{V}$ einen Strom von $5\,\mathrm{A}$ auf, der Strom eilt der Spannung um $30°$ nach.
+Berechne $S$, $P$, $Q$ und den Leistungsfaktor.
+
+<Loesung>
+
+$$
+S = U \cdot I = 230\,\mathrm{V} \cdot 5\,\mathrm{A} = 1150\,\mathrm{VA}
+\qquad
+P = S \cos\varphi = 1150 \cdot \cos 30°\,\mathrm{W} \approx 996\,\mathrm{W}
+$$
+$$
+Q = S \sin\varphi = 1150 \cdot \sin 30°\,\mathrm{var} = 575\,\mathrm{var}
+\qquad
+\cos\varphi \approx 0{,}866
+$$
+
+Der Strom eilt nach → induktiv → $Q > 0$. Probe: $\sqrt{996^2 + 575^2} \approx 1150\,\mathrm{VA}$ ✔
+
+</Loesung>
+
+## Motor am Netz
+
+<Stufe wert="standard" />
+
+Ein Wechselstrommotor nimmt an $230\,\mathrm{V}$ die Wirkleistung $2\,\mathrm{kW}$ bei $\cos\varphi = 0{,}8$ auf.
+Berechne Schein- und Blindleistung und den Strom.
+
+<Loesung>
+
+$$
+S = \frac{P}{\cos\varphi} = \frac{2000\,\mathrm{W}}{0{,}8} = 2500\,\mathrm{VA}
+\qquad
+I = \frac{S}{U} = \frac{2500\,\mathrm{VA}}{230\,\mathrm{V}} \approx 10{,}87\,\mathrm{A}
+\qquad
+Q = \sqrt{S^2 - P^2} = 1500\,\mathrm{var}
+$$
+
+Mit $\cos\varphi = 1$ bräuchte der Motor für dieselbe Wirkleistung nur $8{,}7\,\mathrm{A}$ – der Blindstrom belastet die Leitungen zusätzlich.
+
+</Loesung>
+
+## Blindleistungskompensation
+
+<Stufe wert="standard" />
+
+Der Motor aus dem vorigen Beispiel soll durch einen parallelen Kondensator auf $\cos\varphi_2 = 0{,}95$ kompensiert werden ($50\,\mathrm{Hz}$).
+Berechne die nötige Blindleistung, die Kapazität und den neuen Netzstrom.
+
+<Loesung>
+
+Neue Blindleistung: $Q_2 = P \cdot \tan(\arccos 0{,}95) = 2000\,\mathrm{W} \cdot 0{,}3287 \approx 657\,\mathrm{var}$
+
+Der Kondensator muss die Differenz liefern: $Q_\mathrm{C} = Q_1 - Q_2 = 1500 - 657 \approx 843\,\mathrm{var}$
+
+$$
+Q_\mathrm{C} = \frac{U^2}{X_\mathrm{C}} = U^2 \omega C \;\Rightarrow\; C = \frac{Q_\mathrm{C}}{\omega U^2} = \frac{843\,\mathrm{var}}{314{,}2\,\mathrm{s^{-1}} \cdot (230\,\mathrm{V})^2} \approx 50{,}7\,\mu\mathrm{F}
+$$
+
+$$
+I_\mathrm{neu} = \frac{P}{U \cos\varphi_2} = \frac{2000\,\mathrm{W}}{230\,\mathrm{V} \cdot 0{,}95} \approx 9{,}15\,\mathrm{A}
+$$
+
+Der Netzstrom sinkt von 10,87 A auf 9,15 A – der **Motor selbst** merkt davon nichts, er bekommt weiterhin seinen Blindstrom,
+jetzt aber vom Kondensator statt aus dem Netz.
+
+</Loesung>
+
+## Komplexe Scheinleistung
+
+<Stufe wert="standard" />
+
+Berechne die komplexe Scheinleistung für $\underline{U} = 230\,\mathrm{V} \angle 0°$ und $\underline{I} = 4\,\mathrm{A} \angle -25°$.
+
+<Loesung>
+
+$\underline{I}^* = 4\,\mathrm{A} \angle +25°$ (konjugiert komplex: Vorzeichen des Winkels umdrehen)
+
+$$
+\underline{S} = \underline{U} \cdot \underline{I}^* = 920\,\mathrm{VA} \angle 25° = (833{,}8 + \mathrm{j}388{,}8)\,\mathrm{VA}
+$$
+
+Also $P = 833{,}8\,\mathrm{W}$ und $Q = 388{,}8\,\mathrm{var}$ (induktiv). Ohne das Konjugieren käme der falsche Winkel heraus!
+
+</Loesung>
+
+## Leistungen in der RL-Reihenschaltung
+
+<Stufe wert="standard" />
+
+In der [RL-Reihenschaltung](/grundlagen/komplexe-rechnung/rechenbeispiele/#rl-reihenschaltung) ($R = 100\,\Omega$, $X_\mathrm{L} = 157{,}1\,\Omega$,
+$U = 230\,\mathrm{V}$) fließen $1{,}235\,\mathrm{A}$. Berechne $P$, $Q$, $S$ und $\cos\varphi$.
+
+<Loesung>
+
+$$
+P = I^2 R \approx 152{,}6\,\mathrm{W}
+\qquad
+Q = I^2 X_\mathrm{L} \approx 239{,}6\,\mathrm{var}
+\qquad
+S = U \cdot I \approx 284{,}1\,\mathrm{VA}
+$$
+
+Probe: $\sqrt{152{,}6^2 + 239{,}6^2} \approx 284{,}1\,\mathrm{VA}$ ✔ · $\cos\varphi = P/S \approx 0{,}537$ (entspricht $\varphi = 57{,}5°$ ✔)
+
+</Loesung>
+
+## Leistungsbilanz einer gemischten Schaltung
+
+<Stufe wert="vertiefung" />
+
+Für die [gemischte Schaltung](/grundlagen/komplexe-rechnung/rechenbeispiele/#gemischte-schaltung) wurden berechnet:
+$\underline{I} = 1{,}303\,\mathrm{A} \angle -8{,}34°$, $I_\mathrm{RL} = 1{,}512\,\mathrm{A}$, $I_\mathrm{C} = 0{,}561\,\mathrm{A}$
+($R_1 = 40\,\Omega$, $R_2 = 100\,\Omega$, $X_\mathrm{L} = 62{,}83\,\Omega$, $X_\mathrm{C} = 318{,}3\,\Omega$, $U = 230\,\mathrm{V}$).
+
+Berechne alle Einzelleistungen und prüfe die Bilanz mit $\underline{S} = \underline{U} \cdot \underline{I}^*$.
+
+<Loesung>
+
+| Bauteil | Wirkleistung | Blindleistung |
+| --- | --- | --- |
+| $R_1$ | $I^2 R_1 \approx 67{,}9\,\mathrm{W}$ | – |
+| $R_2$ | $I_\mathrm{RL}^2 R_2 \approx 228{,}6\,\mathrm{W}$ | – |
+| $L$ | – | $I_\mathrm{RL}^2 X_\mathrm{L} \approx +143{,}7\,\mathrm{var}$ |
+| $C$ | – | $-I_\mathrm{C}^2 X_\mathrm{C} \approx -100{,}2\,\mathrm{var}$ |
+| **Summe** | **296,6 W** | **+43,5 var** |
+
+Probe: $\underline{S} = 230\,\mathrm{V} \angle 0° \cdot 1{,}303\,\mathrm{A} \angle +8{,}34° \approx 299{,}8\,\mathrm{VA} \angle 8{,}34° = (296{,}6 + \mathrm{j}43{,}5)\,\mathrm{VA}$ ✔
+
+Wirk- und Blindleistungen lassen sich addieren – die Scheinleistungen der Bauteile dagegen nicht.
+
+</Loesung>

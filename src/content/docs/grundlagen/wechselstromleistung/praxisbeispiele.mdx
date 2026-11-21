@@ -1,0 +1,68 @@
+---
+title: Praxisbeispiele – Leistung bei Wechselstrom
+description: Was der Stromzähler misst, Blindstromkompensation im Betrieb, Leuchtstofflampe mit Kompensationskondensator und Leistungsfaktor von Netzteilen.
+---
+
+import Loesung from '../../../../components/Loesung.astro';
+
+## Was zahlst du eigentlich?
+
+1. Welche Leistung misst der Stromzähler im Haushalt, und was wird verrechnet?
+2. Warum darf ein Energieversorger bei großen Betrieben auch die **Blindarbeit** verrechnen?
+
+<Loesung>
+
+1. Der Haushaltszähler misst die **Wirkarbeit** in kWh – nur sie wird in Wärme, Licht oder mechanische Arbeit umgesetzt und verrechnet.
+2. Blindleistung pendelt zwischen Netz und Verbraucher hin und her. Sie verrichtet keine Arbeit, aber der dazugehörige **Blindstrom**
+   fließt durch Generatoren, Transformatoren und Leitungen. Er erwärmt sie ($I^2 R$) und belegt ihre Kapazität.
+   Deshalb verlangen Netzbetreiber bei Betrieben einen Mindest-Leistungsfaktor (z. B. 0,9) – sonst wird die Blindarbeit verrechnet.
+
+</Loesung>
+
+## Kompensation in einem Betrieb
+
+Eine Werkstatt hat eine Wirkleistung von $40\,\mathrm{kW}$ bei $\cos\varphi = 0{,}7$ (viele Motoren). Der Leistungsfaktor soll auf $0{,}95$ verbessert werden.
+
+1. Wie viel Blindleistung muss die Kompensationsanlage liefern?
+2. Um wie viel Prozent sinkt die Scheinleistung (und damit der Strom)?
+
+<Loesung>
+
+1. $Q_1 = P \tan(\arccos 0{,}7) \approx 40{,}8\,\mathrm{kvar}$ · $Q_2 = P \tan(\arccos 0{,}95) \approx 13{,}1\,\mathrm{kvar}$ →
+   $Q_\mathrm{C} \approx 27{,}7\,\mathrm{kvar}$
+2. $S_1 = P / 0{,}7 \approx 57{,}1\,\mathrm{kVA}$, $S_2 = P / 0{,}95 \approx 42{,}1\,\mathrm{kVA}$ → **rund 26 % weniger** Scheinleistung und Strom.
+   Die Leitungsverluste ($\sim I^2$) sinken sogar um etwa 46 %.
+
+</Loesung>
+
+## Leuchtstofflampe mit Kompensationskondensator
+
+Eine Leuchtstofflampe mit Vorschaltdrossel nimmt an $230\,\mathrm{V}$ einen Strom von $0{,}43\,\mathrm{A}$ auf; die Wirkleistung beträgt $43\,\mathrm{W}$.
+
+1. Berechne $S$, $\cos\varphi$ und $Q$.
+2. Welcher Parallelkondensator kompensiert die Blindleistung vollständig?
+
+<Loesung>
+
+1. $S = 230 \cdot 0{,}43\,\mathrm{VA} \approx 98{,}9\,\mathrm{VA}$ · $\cos\varphi = 43/98{,}9 \approx 0{,}43$ · $Q = \sqrt{98{,}9^2 - 43^2} \approx 89\,\mathrm{var}$
+2. $C = \dfrac{Q}{\omega U^2} = \dfrac{89}{314{,}2 \cdot 230^2}\,\mathrm{F} \approx 5{,}4\,\mu\mathrm{F}$.
+   Genau so einen Kondensator findet man in vielen alten Leuchten (oft „4,5 µF“ oder „5 µF, 250 V ~“ beschriftet).
+
+</Loesung>
+
+## Leistungsfaktor bei Netzteilen
+
+Auf dem Typenschild eines PC-Netzteils steht „Active PFC“.
+
+1. Wofür steht PFC und warum ist es bei größeren Netzteilen vorgeschrieben?
+2. Warum hat ein einfaches Netzteil mit Gleichrichter und Elko einen schlechten Leistungsfaktor, obwohl kein Motor und keine Spule darin ist?
+
+<Loesung>
+
+1. **PFC = Power Factor Correction** (Leistungsfaktorkorrektur). Ab etwa 75 W schreiben EU-Normen vor, dass der Netzstrom
+   annähernd sinusförmig und in Phase mit der Spannung sein muss ($\cos\varphi \approx 1$).
+2. Der Elko wird nur kurz an den Spitzen der Netzspannung nachgeladen – der Strom fließt in schmalen, hohen **Impulsen**.
+   Er ist zwar fast in Phase, aber nicht sinusförmig. Auch das ergibt einen schlechten Leistungsfaktor (Verzerrungsblindleistung).
+   Eine aktive PFC-Schaltung (meist ein Hochsetzsteller) formt den Strom sinusförmig.
+
+</Loesung>

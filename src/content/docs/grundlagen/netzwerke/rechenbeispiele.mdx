@@ -1,0 +1,196 @@
+---
+title: Rechenbeispiele – Netzwerke und Ersatzquellen
+description: Rechenbeispiele zu Kirchhoff-Gleichungssystemen, Überlagerungssatz, Ersatzspannungsquelle, Quellenumwandlung, Stern-Dreieck und Leistungsanpassung.
+---
+
+import Stufe from '../../../../components/Stufe.astro';
+import Loesung from '../../../../components/Loesung.astro';
+import Abbildung from '../../../../components/Abbildung.astro';
+import Kirchhoff from '../../../../assets/grundlagen/kirchhoff.svg';
+import Bruecke from '../../../../assets/grundlagen/bruecke.svg';
+
+Die ersten drei Beispiele verwenden dieselbe Schaltung – so siehst du, dass alle Verfahren zum **gleichen Ergebnis** führen.
+
+<Abbildung bild={Kirchhoff} unterschrift="Netzwerk mit zwei Spannungsquellen" />
+
+Werte: $U_\mathrm{q1} = 12\,\mathrm{V}$, $U_\mathrm{q2} = 6\,\mathrm{V}$, $R_1 = 4\,\Omega$, $R_2 = 2\,\Omega$, $R_3 = 6\,\Omega$
+
+## Kirchhoff-Gleichungssystem
+
+<Stufe wert="standard" />
+
+Stelle alle nötigen Knoten- und Maschengleichungen auf und berechne $I_1$, $I_2$, $I_3$ und $U_3$.
+
+<Loesung>
+
+Die Schaltung hat 2 Knoten und 3 Zweige → **1 Knotengleichung** und **2 Maschengleichungen**.
+
+**Knoten (oben):** $I_1 + I_2 = I_3$
+
+**Masche links** (im Uhrzeigersinn): $-U_\mathrm{q1} + R_1 I_1 + R_3 I_3 = 0$ → $4 I_1 + 6 I_3 = 12$
+
+**Masche rechts:** $-U_\mathrm{q2} + R_2 I_2 + R_3 I_3 = 0$ → $2 I_2 + 6 I_3 = 6$
+
+Aus den Maschengleichungen: $I_1 = \dfrac{12 - 6 I_3}{4} = 3 - 1{,}5\,I_3$ und $I_2 = \dfrac{6 - 6 I_3}{2} = 3 - 3\,I_3$
+
+In die Knotengleichung einsetzen:
+
+$$
+(3 - 1{,}5\,I_3) + (3 - 3\,I_3) = I_3 \;\Rightarrow\; 6 = 5{,}5\,I_3 \;\Rightarrow\; I_3 \approx 1{,}091\,\mathrm{A}
+$$
+
+$$
+I_1 = 3 - 1{,}5 \cdot 1{,}091 \approx 1{,}364\,\mathrm{A}
+\qquad
+I_2 = 3 - 3 \cdot 1{,}091 \approx -0{,}273\,\mathrm{A}
+\qquad
+U_3 = R_3 I_3 \approx 6{,}55\,\mathrm{V}
+$$
+
+**Bedeutung des Minuszeichens:** $I_2$ fließt tatsächlich **entgegen** dem eingezeichneten Pfeil – also in den
+Pluspol von $U_\mathrm{q2}$ hinein. Quelle 2 wird **geladen** (z. B. ein Akku an einem Ladegerät).
+
+**Probe:** $1{,}364 + (-0{,}273) = 1{,}091\,\mathrm{A}$ ✔
+
+</Loesung>
+
+## Überlagerungssatz
+
+<Stufe wert="standard" />
+
+Berechne $I_3$ für dieselbe Schaltung mit dem Überlagerungssatz.
+
+<Loesung>
+
+**Nur Quelle 1** wirkt ($U_\mathrm{q2}$ kurzgeschlossen): $R_2 \parallel R_3 = \dfrac{2 \cdot 6}{8}\,\Omega = 1{,}5\,\Omega$
+
+$$
+I_1' = \frac{12\,\mathrm{V}}{4\,\Omega + 1{,}5\,\Omega} \approx 2{,}182\,\mathrm{A}
+\qquad
+I_3' = I_1' \cdot \frac{R_2}{R_2 + R_3} = 2{,}182 \cdot \frac{2}{8} \approx 0{,}545\,\mathrm{A}
+$$
+
+**Nur Quelle 2** wirkt ($U_\mathrm{q1}$ kurzgeschlossen): $R_1 \parallel R_3 = \dfrac{4 \cdot 6}{10}\,\Omega = 2{,}4\,\Omega$
+
+$$
+I_2'' = \frac{6\,\mathrm{V}}{2\,\Omega + 2{,}4\,\Omega} \approx 1{,}364\,\mathrm{A}
+\qquad
+I_3'' = I_2'' \cdot \frac{R_1}{R_1 + R_3} = 1{,}364 \cdot \frac{4}{10} \approx 0{,}545\,\mathrm{A}
+$$
+
+**Überlagern** (beide Teilströme fließen durch $R_3$ nach unten): $I_3 = I_3' + I_3'' \approx 1{,}091\,\mathrm{A}$ ✔
+
+</Loesung>
+
+## Ersatzspannungsquelle
+
+<Stufe wert="standard" />
+
+Betrachte $R_3$ als Last zwischen den Klemmen A (oben) und B (unten). Bestimme die Ersatzspannungsquelle
+für den Rest der Schaltung und berechne damit $I_3$.
+
+<Loesung>
+
+**1. Leerlaufspannung** ($R_3$ entfernt): Es bleibt ein Kreis aus beiden Quellen, $R_1$ und $R_2$.
+Der Strom im Kreis (von Quelle 1 nach Quelle 2):
+
+$$
+I = \frac{U_\mathrm{q1} - U_\mathrm{q2}}{R_1 + R_2} = \frac{6\,\mathrm{V}}{6\,\Omega} = 1\,\mathrm{A}
+\qquad
+U_0 = U_\mathrm{q1} - R_1 \cdot I = 12\,\mathrm{V} - 4\,\mathrm{V} = 8\,\mathrm{V}
+$$
+
+**2. Innenwiderstand** (beide Quellen kurzgeschlossen, von A–B aus gesehen):
+$R_\mathrm{i} = R_1 \parallel R_2 = \dfrac{4 \cdot 2}{6}\,\Omega \approx 1{,}333\,\Omega$
+
+**3. Last anschließen:**
+
+$$
+I_3 = \frac{U_0}{R_\mathrm{i} + R_3} = \frac{8\,\mathrm{V}}{1{,}333\,\Omega + 6\,\Omega} \approx 1{,}091\,\mathrm{A} \;\checkmark
+$$
+
+Vorteil: Möchte man $R_3$ verändern, muss man nicht das ganze Netzwerk neu berechnen.
+
+</Loesung>
+
+## Quellen umwandeln
+
+<Stufe wert="grundlagen" />
+
+Eine Spannungsquelle mit $U_\mathrm{q} = 9\,\mathrm{V}$ und $R_\mathrm{i} = 3\,\Omega$ soll in eine gleichwertige Stromquelle
+umgewandelt werden. Zeige, dass beide an einer Last von $6\,\Omega$ denselben Strom liefern.
+
+<Loesung>
+
+$$
+I_\mathrm{q} = \frac{U_\mathrm{q}}{R_\mathrm{i}} = \frac{9\,\mathrm{V}}{3\,\Omega} = 3\,\mathrm{A}, \quad R_\mathrm{i} = 3\,\Omega \text{ parallel}
+$$
+
+Spannungsquelle: $I_\mathrm{L} = \dfrac{9\,\mathrm{V}}{3\,\Omega + 6\,\Omega} = 1\,\mathrm{A}$
+
+Stromquelle (Stromteiler): $I_\mathrm{L} = 3\,\mathrm{A} \cdot \dfrac{3\,\Omega}{3\,\Omega + 6\,\Omega} = 1\,\mathrm{A}$ ✔
+
+</Loesung>
+
+## Brückenschaltung mit Dreieck-Stern-Umwandlung
+
+<Stufe wert="vertiefung" />
+
+<Abbildung bild={Bruecke} unterschrift="Brückenschaltung – keine reine Reihen- oder Parallelschaltung" />
+
+Werte: $U = 10\,\mathrm{V}$, $R_\mathrm{AC} = 10\,\Omega$, $R_\mathrm{AD} = 20\,\Omega$, $R_\mathrm{CD} = 30\,\Omega$,
+$R_\mathrm{CB} = 40\,\Omega$, $R_\mathrm{DB} = 50\,\Omega$. Berechne den Gesamtwiderstand und den Strom $I$.
+
+<Loesung>
+
+Kein Widerstand liegt hier einfach in Reihe oder parallel. Deshalb wandeln wir das **Dreieck A–C–D**
+($R_\mathrm{AC}$, $R_\mathrm{AD}$, $R_\mathrm{CD}$) in einen **Stern** mit Mittelpunkt S um:
+
+$$
+\Sigma = 10 + 20 + 30 = 60\,\Omega
+$$
+$$
+R_\mathrm{A} = \frac{R_\mathrm{AC} \cdot R_\mathrm{AD}}{\Sigma} = \frac{200}{60}\,\Omega \approx 3{,}333\,\Omega
+\quad
+R_\mathrm{C} = \frac{R_\mathrm{AC} \cdot R_\mathrm{CD}}{\Sigma} = 5\,\Omega
+\quad
+R_\mathrm{D} = \frac{R_\mathrm{AD} \cdot R_\mathrm{CD}}{\Sigma} = 10\,\Omega
+$$
+
+Jetzt ist die Schaltung einfach: $R_\mathrm{A}$ in Reihe mit zwei parallelen Zweigen
+$(R_\mathrm{C} + R_\mathrm{CB}) = 45\,\Omega$ und $(R_\mathrm{D} + R_\mathrm{DB}) = 60\,\Omega$:
+
+$$
+R_\mathrm{ges} = 3{,}333\,\Omega + \frac{45 \cdot 60}{105}\,\Omega \approx 3{,}333\,\Omega + 25{,}714\,\Omega \approx 29{,}05\,\Omega
+\qquad
+I = \frac{10\,\mathrm{V}}{29{,}05\,\Omega} \approx 0{,}344\,\mathrm{A}
+$$
+
+Tipp: Kontrolliere solche Ergebnisse mit einer Simulation (LTspice oder [CircuitJS](https://www.falstad.com/circuit/circuitjs.html)).
+
+</Loesung>
+
+## Leistungsanpassung
+
+<Stufe wert="vertiefung" />
+
+Eine Quelle hat $U_0 = 12\,\mathrm{V}$ und $R_\mathrm{i} = 4\,\Omega$. Berechne für $R_\mathrm{L} = 1, 2, 4, 8, 12\,\Omega$
+die Leistung an der Last und den Wirkungsgrad. Bei welchem $R_\mathrm{L}$ ist die Leistung maximal?
+
+<Loesung>
+
+$I = \dfrac{U_0}{R_\mathrm{i} + R_\mathrm{L}}$, $P_\mathrm{L} = I^2 \cdot R_\mathrm{L}$, $\eta = \dfrac{R_\mathrm{L}}{R_\mathrm{i} + R_\mathrm{L}}$
+
+| $R_\mathrm{L}$ in Ω | 1 | 2 | 4 | 8 | 12 |
+| --- | --- | --- | --- | --- | --- |
+| $I$ in A | 2,4 | 2,0 | 1,5 | 1,0 | 0,75 |
+| $P_\mathrm{L}$ in W | 5,76 | 8,0 | **9,0** | 8,0 | 6,75 |
+| $\eta$ | 20 % | 33 % | **50 %** | 67 % | 75 % |
+
+Die Leistung ist bei $R_\mathrm{L} = R_\mathrm{i} = 4\,\Omega$ maximal: $P_\mathrm{max} = \dfrac{U_0^2}{4 R_\mathrm{i}} = 9\,\mathrm{W}$ –
+aber dann wird die **Hälfte** der Leistung in der Quelle verheizt ($\eta = 50\,\%$).
+
+**Wann will man das?** In der Nachrichtentechnik (Antenne → Empfänger), wo die Leistung klein ist und möglichst viel davon ankommen soll.
+In der Energietechnik will man dagegen einen hohen Wirkungsgrad: $R_\mathrm{L} \gg R_\mathrm{i}$.
+
+</Loesung>

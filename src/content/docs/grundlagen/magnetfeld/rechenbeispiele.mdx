@@ -1,0 +1,154 @@
+---
+title: Rechenbeispiele – Magnetisches Feld
+description: Rechenbeispiele zu Feldstärke eines Leiters, Feldüberlagerung, Zylinderspule, Ringkernspule, Windungszahl und magnetischem Kreis mit Luftspalt.
+---
+
+import Stufe from '../../../../components/Stufe.astro';
+import Loesung from '../../../../components/Loesung.astro';
+
+Konstante: $\mu_0 = 4\pi \cdot 10^{-7}\,\mathrm{Vs/(Am)}$
+
+## Feld eines geraden Leiters
+
+<Stufe wert="grundlagen" />
+
+Ein langer gerader Leiter führt $25\,\mathrm{A}$. Berechne Feldstärke und Flussdichte (in Luft) im Abstand $5\,\mathrm{cm}$.
+
+<Loesung>
+
+$$
+H = \frac{I}{2\pi r} = \frac{25\,\mathrm{A}}{2\pi \cdot 0{,}05\,\mathrm{m}} \approx 79{,}6\,\frac{\mathrm{A}}{\mathrm{m}}
+\qquad
+B = \mu_0 H = 4\pi \cdot 10^{-7} \cdot 79{,}6\,\mathrm{T} = 100\,\mu\mathrm{T}
+$$
+
+Zum Vergleich: Das Erdmagnetfeld hat in Mitteleuropa etwa $48\,\mu\mathrm{T}$.
+
+</Loesung>
+
+## Überlagerung zweier Leiter
+
+<Stufe wert="standard" />
+
+Zwei lange parallele Leiter stehen senkrecht zur Zeichenebene. Der Punkt P liegt **zwischen** ihnen: $3\,\mathrm{cm}$ von Leiter 1
+($I_1 = 12\,\mathrm{A}$) und $6\,\mathrm{cm}$ von Leiter 2 ($I_2 = 9\,\mathrm{A}$).
+
+a) Beide Ströme fließen aus der Zeichenebene heraus (⊙). b) $I_2$ fließt in die Zeichenebene hinein (⊗).
+Berechne jeweils die resultierende Feldstärke in P.
+
+<Loesung>
+
+$$
+H_1 = \frac{12\,\mathrm{A}}{2\pi \cdot 0{,}03\,\mathrm{m}} \approx 63{,}7\,\frac{\mathrm{A}}{\mathrm{m}}
+\qquad
+H_2 = \frac{9\,\mathrm{A}}{2\pi \cdot 0{,}06\,\mathrm{m}} \approx 23{,}9\,\frac{\mathrm{A}}{\mathrm{m}}
+$$
+
+**a) gleiche Stromrichtung:** Mit der Rechte-Hand-Regel zeigen die beiden Felder **zwischen** den Leitern in
+**entgegengesetzte** Richtungen. Sie werden subtrahiert: $H = 63{,}7 - 23{,}9 \approx 39{,}8\,\mathrm{A/m}$ (in Richtung von $H_1$).
+
+**b) entgegengesetzte Stromrichtung:** Zwischen den Leitern zeigen beide Felder in **dieselbe** Richtung:
+$H = 63{,}7 + 23{,}9 \approx 87{,}5\,\mathrm{A/m}$.
+
+Tipp: Zeichne die Feldstärkezeiger in P immer ein (Tangente an die Feldlinie, Richtung nach der Rechte-Hand-Regel).
+
+</Loesung>
+
+## Lange Zylinderspule
+
+<Stufe wert="grundlagen" />
+
+Eine Luftspule hat $N = 600$ Windungen, die Länge $l = 15\,\mathrm{cm}$ und den Querschnitt $A = 2\,\mathrm{cm^2}$.
+Es fließen $0{,}5\,\mathrm{A}$. Berechne $H$, $B$, $\Phi$ und $L$.
+
+<Loesung>
+
+$$
+H = \frac{N I}{l} = \frac{600 \cdot 0{,}5\,\mathrm{A}}{0{,}15\,\mathrm{m}} = 2000\,\frac{\mathrm{A}}{\mathrm{m}}
+\qquad
+B = \mu_0 H \approx 2{,}51\,\mathrm{mT}
+$$
+
+$$
+\Phi = B \cdot A = 2{,}51 \cdot 10^{-3}\,\mathrm{T} \cdot 2 \cdot 10^{-4}\,\mathrm{m^2} \approx 0{,}503\,\mu\mathrm{Wb}
+\qquad
+L = \frac{N \Phi}{I} \approx 0{,}603\,\mathrm{mH}
+$$
+
+Probe: $L = \dfrac{\mu_0 N^2 A}{l} = \dfrac{4\pi \cdot 10^{-7} \cdot 600^2 \cdot 2 \cdot 10^{-4}}{0{,}15}\,\mathrm{H} \approx 0{,}603\,\mathrm{mH}$ ✔
+
+</Loesung>
+
+## Ringkernspule
+
+<Stufe wert="standard" />
+
+Eine Ringspule mit Eisenkern ($\mu_\mathrm{r} = 800$, konstant angenommen) hat $N = 250$ Windungen, einen mittleren
+Durchmesser von $6\,\mathrm{cm}$ und den Kernquerschnitt $1\,\mathrm{cm^2}$. Es fließen $0{,}4\,\mathrm{A}$.
+Berechne $H$, $B$, $\Phi$ und $L$.
+
+<Loesung>
+
+Mittlere Feldlinienlänge: $l_\mathrm{m} = \pi \cdot d_\mathrm{m} = \pi \cdot 0{,}06\,\mathrm{m} \approx 0{,}1885\,\mathrm{m}$
+
+$$
+H = \frac{N I}{l_\mathrm{m}} = \frac{100\,\mathrm{A}}{0{,}1885\,\mathrm{m}} \approx 530{,}5\,\frac{\mathrm{A}}{\mathrm{m}}
+\qquad
+B = \mu_0 \mu_\mathrm{r} H = 4\pi \cdot 10^{-7} \cdot 800 \cdot 530{,}5\,\mathrm{T} \approx 0{,}533\,\mathrm{T}
+$$
+
+$$
+\Phi = B \cdot A \approx 53{,}3\,\mu\mathrm{Wb}
+\qquad
+L = \frac{N \Phi}{I} = \frac{250 \cdot 53{,}3 \cdot 10^{-6}\,\mathrm{Wb}}{0{,}4\,\mathrm{A}} \approx 33{,}3\,\mathrm{mH}
+$$
+
+</Loesung>
+
+## Windungszahl berechnen
+
+<Stufe wert="standard" />
+
+Eine lange Luftspule soll $L = 2\,\mathrm{mH}$ haben. Länge $l = 12\,\mathrm{cm}$, Querschnitt $A = 3\,\mathrm{cm^2}$.
+Wie viele Windungen sind nötig?
+
+<Loesung>
+
+$$
+L = \frac{\mu_0 N^2 A}{l} \;\Rightarrow\; N = \sqrt{\frac{L \cdot l}{\mu_0 A}} = \sqrt{\frac{2 \cdot 10^{-3} \cdot 0{,}12}{4\pi \cdot 10^{-7} \cdot 3 \cdot 10^{-4}}} \approx 797{,}9
+$$
+
+Gewählt: **798 Windungen** (auf eine ganze Zahl aufrunden). Achtung: $L \sim N^2$ – doppelte Windungszahl ergibt vierfache Induktivität.
+
+</Loesung>
+
+## Magnetischer Kreis mit Luftspalt
+
+<Stufe wert="vertiefung" />
+
+Ein Eisenkern ($\mu_\mathrm{r} = 2000$, konstant angenommen) hat eine mittlere Eisenweglänge von $20\,\mathrm{cm}$, einen
+Luftspalt von $0{,}5\,\mathrm{mm}$ und überall den Querschnitt $4\,\mathrm{cm^2}$. Die Spule hat $N = 500$ Windungen.
+Welcher Strom ist für eine Flussdichte von $0{,}8\,\mathrm{T}$ nötig? Vergleiche die magnetischen Spannungen von Eisen und Luftspalt.
+
+<Loesung>
+
+Der Fluss ist überall gleich, bei gleichem Querschnitt also auch $B$ (Streuung vernachlässigt).
+
+**Eisen:** $H_\mathrm{Fe} = \dfrac{B}{\mu_0 \mu_\mathrm{r}} = \dfrac{0{,}8}{4\pi \cdot 10^{-7} \cdot 2000}\,\dfrac{\mathrm{A}}{\mathrm{m}} \approx 318\,\dfrac{\mathrm{A}}{\mathrm{m}}$
+→ $V_\mathrm{Fe} = H_\mathrm{Fe} \cdot l_\mathrm{Fe} \approx 63{,}7\,\mathrm{A}$
+
+**Luftspalt:** $H_\mathrm{L} = \dfrac{B}{\mu_0} \approx 636\,600\,\dfrac{\mathrm{A}}{\mathrm{m}}$
+→ $V_\mathrm{L} = H_\mathrm{L} \cdot \delta \approx 318{,}3\,\mathrm{A}$
+
+**Durchflutungssatz:**
+$$
+\Theta = V_\mathrm{Fe} + V_\mathrm{L} \approx 382\,\mathrm{A}
+\qquad
+I = \frac{\Theta}{N} = \frac{382\,\mathrm{A}}{500} \approx 0{,}76\,\mathrm{A}
+$$
+
+Obwohl der Luftspalt nur 0,5 mm lang ist (gegenüber 200 mm Eisen), braucht er **fünfmal** so viel Durchflutung wie das Eisen!
+Der Luftspalt bestimmt den magnetischen Kreis. (Gleiches Ergebnis mit magnetischen Widerständen:
+$R_\mathrm{m,Fe} \approx 1{,}99 \cdot 10^{5}\,\mathrm{H^{-1}}$, $R_\mathrm{m,L} \approx 9{,}95 \cdot 10^{5}\,\mathrm{H^{-1}}$, $\Phi = 0{,}32\,\mathrm{mWb}$.)
+
+</Loesung>

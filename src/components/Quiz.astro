@@ -13,7 +13,38 @@ interface Props {
 
 const eintrag = await getEntry('quiz', Astro.props.id);
 if (!eintrag) throw new Error(`Quiz "${Astro.props.id}" nicht gefunden (src/content/quiz/${Astro.props.id}.yaml)`);
-const { fragen } = eintrag.data;
+// Antwortmöglichkeiten mischen – damit die richtige Antwort nicht immer an derselben Stelle steht.
+// Das Mischen ist „zufällig, aber fest“: Es hängt nur vom Fragetext ab, die Reihenfolge
+// bleibt also bei jedem Bauen gleich (keine Überraschungen für Lehrende und Lernende).
+function zahlAusText(text: string): number {
+	let h = 2166136261;
+	for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 16777619);
+	return h >>> 0;
+}
+function mische<T>(liste: T[], startwert: number): T[] {
+	const a = [...liste];
+	let s = startwert || 1;
+	const zufall = () => ((s = Math.imul(s ^ (s >>> 15), 1 | s) + 0x6d2b79f5) >>> 0) / 4294967296;
+	for (let i = a.length - 1; i > 0; i--) {
+		const j = Math.floor(zufall() * (i + 1));
+		[a[i], a[j]] = [a[j], a[i]];
+	}
+	return a;
+}
+// Bei Fragen mit genau EINER richtigen Antwort wird die Position der richtigen Antwort
+// reihum gleichmäßig verteilt (1., 2., 3., 4. … in gemischter Reihenfolge).
+let ziele: number[] = [];
+const fragen = eintrag.data.fragen.map((f) => {
+	if (f.typ !== 'mc' || !f.mischen) return f;
+	const startwert = zahlAusText(f.frage);
+	const richtige = f.optionen.filter((o) => o.richtig);
+	if (richtige.length !== 1) return { ...f, optionen: mische(f.optionen, startwert) };
+	if (ziele.length === 0) ziele = mische([0, 1, 2, 3], startwert);
+	const ziel = ziele.shift()! % f.optionen.length;
+	const rest = mische(f.optionen.filter((o) => !o.richtig), startwert);
+	rest.splice(ziel, 0, richtige[0]);
+	return { ...f, optionen: rest };
+});
 
 const stufenText = { grundlagen: 'Grundlagen', standard: 'Standard', vertiefung: 'Vertiefung' } as const;
 const quizId = `quiz-${Astro.props.id}`;

@@ -1,0 +1,77 @@
+---
+title: Praxisbeispiele – Reihen- und Parallelschaltung
+description: Lichterkette, Batteriespannung mit dem Mikrocontroller messen, Verbraucher im Haushalt und Messfehler durch das Messgerät.
+---
+
+import Loesung from '../../../../components/Loesung.astro';
+
+## Die Lichterkette
+
+Eine alte Lichterkette hat 16 gleiche Lämpchen **in Reihe** an 230 V.
+
+1. Welche Spannung liegt an jedem Lämpchen?
+2. Ein Lämpchen brennt durch. Was passiert – und warum?
+3. Moderne LED-Lichterketten haben oft mehrere parallele Stränge. Welchen Vorteil hat das?
+
+<Loesung>
+
+1. $U = 230\,\mathrm{V} / 16 \approx 14{,}4\,\mathrm{V}$ pro Lämpchen (gleiche Widerstände → gleiche Teilspannungen).
+2. Der Stromkreis ist unterbrochen – **alle** Lämpchen gehen aus, weil in der Reihenschaltung durch alle Bauteile
+   derselbe Strom fließt. Außerdem liegen an der Unterbrechungsstelle nun die vollen 230 V! (Darum nie im Betrieb Lämpchen wechseln.)
+3. Fällt ein Strang aus, leuchten die anderen weiter. Außerdem kann jeder Strang mit kleinerer Spannung betrieben werden.
+
+</Loesung>
+
+## Batteriespannung mit dem Mikrocontroller messen
+
+Ein Mikrocontroller soll die Spannung eines 12-V-Akkus überwachen. Sein Analogeingang (ADC) verträgt aber höchstens **3,3 V**.
+Du verwendest einen Spannungsteiler mit $R_1 = 27\,\mathrm{k\Omega}$ (oben) und $R_2 = 10\,\mathrm{k\Omega}$ (unten).
+
+1. Welche Spannung liegt bei 12 V Akkuspannung am ADC? Bleibt sie unter 3,3 V?
+2. Wie groß ist der Querstrom durch den Teiler? Warum wählt man die Widerstände nicht 100-mal kleiner?
+3. Der ADC-Eingang hat einen Innenwiderstand von 1 MΩ. Verfälscht das die Messung?
+
+<Loesung>
+
+1. $U_\mathrm{ADC} = 12\,\mathrm{V} \cdot \dfrac{10}{37} \approx 3{,}24\,\mathrm{V}$ – knapp unter 3,3 V ✔.
+   (Bei einem voll geladenen Akku mit 13,8 V wären es 3,73 V – dann müsste man $R_1$ größer wählen!)
+2. $I = 12\,\mathrm{V} / 37\,\mathrm{k\Omega} \approx 0{,}32\,\mathrm{mA}$. Bei 100-mal kleineren Widerständen wären es 32 mA –
+   der Teiler würde den Akku dauernd unnötig entladen.
+3. 1 MΩ parallel zu 10 kΩ ergibt 9,9 kΩ – der Fehler beträgt etwa 1 %. Für eine Akkuüberwachung reicht das.
+   Das ist genau die Regel vom belasteten Spannungsteiler: $R_\mathrm{L} \gg R_2$.
+
+</Loesung>
+
+## Warum sind im Haushalt alle Geräte parallel?
+
+1. Begründe, warum Haushaltsgeräte parallel und nicht in Reihe ans Netz geschaltet werden.
+2. Ein Wasserkocher (2000 W), ein Toaster (900 W) und eine Lampe (60 W) laufen gleichzeitig an einem 16-A-Stromkreis.
+   Wie groß ist der Gesamtstrom? Löst die Sicherung aus?
+
+<Loesung>
+
+1. Bei der Parallelschaltung bekommt **jedes Gerät die volle Netzspannung** und kann unabhängig ein- und ausgeschaltet werden.
+   In Reihe würden sich die Spannungen aufteilen, und beim Ausschalten eines Geräts wären alle anderen auch aus.
+2. Die Ströme addieren sich (Knotenregel):
+   $I = \dfrac{2000 + 900 + 60}{230}\,\mathrm{A} \approx 12{,}9\,\mathrm{A}$ – unter 16 A, die Sicherung hält.
+   Mit einem zusätzlichen Heizlüfter (2000 W) wären es 21,6 A → die Sicherung löst aus.
+
+</Loesung>
+
+## Messfehler durch das Messgerät
+
+Du misst die Spannung an $R_2$ eines Spannungsteilers aus zwei Widerständen mit je $1\,\mathrm{M\Omega}$ an $10\,\mathrm{V}$.
+Erwartet: 5 V. Dein Multimeter hat einen Innenwiderstand von $10\,\mathrm{M\Omega}$. Was zeigt es an?
+
+<Loesung>
+
+Das Messgerät liegt parallel zu $R_2$: $R_2 \parallel R_\mathrm{M} = \dfrac{1 \cdot 10}{11}\,\mathrm{M\Omega} \approx 0{,}909\,\mathrm{M\Omega}$
+
+$$
+U_\mathrm{Anzeige} = 10\,\mathrm{V} \cdot \frac{0{,}909}{1 + 0{,}909} \approx 4{,}76\,\mathrm{V}
+$$
+
+Statt 5 V zeigt das Gerät 4,76 V – fast 5 % Fehler, obwohl das Messgerät „richtig“ misst.
+Bei hochohmigen Schaltungen beeinflusst das Messgerät die Schaltung!
+
+</Loesung>
