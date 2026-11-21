@@ -106,6 +106,18 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
 - Nach Änderungen an `src/content.config.ts` den Entwicklungsserver neu starten.
 - Herstellerlinks: nur verifizierte Produkt-URLs, sonst Herstellerseite + Teilenummer nennen.
 
+## Veröffentlichung
+
+- Online: **https://tih-engineering.github.io/lernplattform/**
+- Repository: https://github.com/TIH-engineering/lernplattform (öffentlich, Zweig `main`)
+- Jeder Push auf `main` baut und veröffentlicht automatisch (`.github/workflows/veroeffentlichen.yml`,
+  GitHub Pages mit Quelle „GitHub Actions“). Dauer ca. 1–2 Minuten.
+- Commits mit der GitHub-Ersatzadresse (`246109830+TIH-engineering@users.noreply.github.com`,
+  nur in diesem Repository eingestellt) – die private E-Mail-Adresse nie in Commits verwenden.
+- Unterordner `/lernplattform`: Links in Inhalten mit `/…` werden automatisch ergänzt
+  (`src/lib/basis-links.mjs`). Bei eigener Domain `SITE`/`BASIS` in `astro.config.mjs` anpassen.
+- Vor jedem Push `npm run build` lokal ausführen; `Quellen/` bleibt per `.gitignore` draußen.
+
 ## Befehle
 
 - `npm run dev` – lokale Vorschau auf http://localhost:4321
