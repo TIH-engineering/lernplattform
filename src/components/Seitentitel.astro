@@ -61,9 +61,11 @@ if (weg && weg.length > 0) {
 	}
 }
 const start = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+// Die Startseite bringt ihre eigene Hauptüberschrift mit (src/components/Startseite.astro)
+const istStartseite = (Astro.locals.starlightRoute as unknown as { id: string }).id === '';
 ---
 
-<Default />
+{!istStartseite && <Default />}
 {
 	navi && (
 		<nav class="ds-themennavi" aria-label={`Teile des Themas ${navi.thema}`}>

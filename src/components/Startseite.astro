@@ -1,0 +1,383 @@
+---
+// Oberer Teil der Startseite: Begrüßung mit Bild, fünf Fachbereichskarten und „So lernst du“.
+// Eingebunden in src/content/docs/index.mdx mit <Startseite />.
+// Die Karten springen zur ausführlichen Themenliste weiter unten auf derselben Seite (#grundlagen usw.).
+// Bilder: src/assets/startseite/ (Platzhalterbilder aus dem Startseitenkonzept des Lehrers).
+import { Image } from 'astro:assets';
+import Zeichen from './Zeichen.astro';
+import heldBild from '../assets/startseite/hero-elektronik-messtechnik.webp';
+import bildGrundlagen from '../assets/startseite/karte-grundlagen.webp';
+import bildElektronik from '../assets/startseite/karte-elektronik.webp';
+import bildEnergie from '../assets/startseite/karte-energietechnik.webp';
+import bildMess from '../assets/startseite/karte-messtechnik.webp';
+import bildProjekt from '../assets/startseite/karte-projektarbeit.webp';
+
+const basis = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+
+const bereiche = [
+	{
+		titel: 'Grundlagen der Elektrotechnik',
+		text: 'Übungen zu GET1 und GET2: vom ohmschen Gesetz bis zu Wechselstrom und Resonanz.',
+		anker: 'grundlagen',
+		bild: bildGrundlagen,
+		alt: 'Widerstand und Spule auf einem Schaltplan',
+	},
+	{
+		titel: 'Elektronik',
+		text: 'Dioden, Transistoren, Operationsverstärker, Filter und Oszillatoren.',
+		anker: 'elektronik',
+		bild: bildElektronik,
+		alt: 'Bestückte Leiterplatte mit integrierter Schaltung',
+	},
+	{
+		titel: 'Energietechnik',
+		text: 'Drehstrom und Leistungselektronik: Energie wandeln und verteilen.',
+		anker: 'energietechnik',
+		bild: bildEnergie,
+		alt: 'Ringkernspule, Elektrolytkondensatoren und Kühlkörper',
+	},
+	{
+		titel: 'Mess- und Regelungstechnik',
+		text: 'Messfehler, Sensoren, Messverstärker und Regelkreise in der Praxis.',
+		anker: 'mess-und-regelungstechnik',
+		bild: bildMess,
+		alt: 'Oszilloskop mit Rechtecksignal und ein Sensor',
+	},
+	{
+		titel: 'Projektarbeit',
+		text: 'Projekte planen, steuern und dokumentieren – mit Fallbeispielen.',
+		anker: 'projektarbeit',
+		bild: bildProjekt,
+		alt: 'Mikrocontroller-Platine mit Kabeln',
+	},
+];
+
+const lernwege = [
+	{ zeichen: 'buch', titel: 'Theorie', text: 'Verständliche Erklärungen mit eigenen Schaltplänen und Grafiken.' },
+	{ zeichen: 'formel', titel: 'Rechenbeispiele', text: 'In drei Stufen – zuerst selbst rechnen, dann die Lösung aufklappen.' },
+	{ zeichen: 'schaltung', titel: 'Praxisbeispiele', text: 'Echte Schaltungen, Bauteile und Messungen aus Werkstätte und Labor.' },
+	{ zeichen: 'pruefen', titel: 'Quiz', text: 'Wissen überprüfen – nach jeder Antwort gibt es eine Erklärung.' },
+] as const;
+---
+
+<div class="st not-content">
+	<section class="st-held" aria-labelledby="_top">
+		<div class="st-held__text">
+			<p class="st-dachzeile">HTL-Lernplattform</p>
+			<!-- id="_top": Starlight verlinkt „nach oben“ auf die Hauptüberschrift -->
+			<h1 id="_top">Technik verstehen.<br />Wissen anwenden.</h1>
+			<p class="st-held__satz">
+				Theorie, Rechenbeispiele, Praxis und Quiz zu Elektronik, Mess- und Regelungstechnik – kostenlos, ohne Anmeldung und
+				ohne Tracking.
+			</p>
+			<div class="st-knoepfe">
+				<a class="st-knopf st-knopf--voll" href={basis + 'grundlagen/'}>
+					<Zeichen name="buch" /> Grundlagen entdecken <span aria-hidden="true">→</span>
+				</a>
+				<a class="st-knopf" href={basis + 'hinweise/'}>
+					<Zeichen name="ziel" /> So funktioniert's
+				</a>
+			</div>
+		</div>
+		<div class="st-held__bild">
+			<Image src={heldBild} alt="" loading="eager" fetchpriority="high" />
+		</div>
+	</section>
+
+	<section aria-labelledby="st-bereiche">
+		<h2 class="st-h2" id="st-bereiche">Themen entdecken</h2>
+		<ul class="st-karten">
+			{
+				bereiche.map((b) => (
+					<li class="st-karte">
+						<Image src={b.bild} alt={b.alt} />
+						<div class="st-karte__inhalt">
+							<h3>
+								<a href={'#' + b.anker}>{b.titel}</a>
+							</h3>
+							<p>{b.text}</p>
+							<span class="st-karte__pfeil" aria-hidden="true">
+								→
+							</span>
+						</div>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<section class="st-lernen" aria-labelledby="st-lernen">
+		<h2 class="st-h2" id="st-lernen">So lernst du</h2>
+		<ul>
+			{
+				lernwege.map((l) => (
+					<li>
+						<span class="ds-symbol">
+							<Zeichen name={l.zeichen} />
+						</span>
+						<div>
+							<strong>{l.titel}</strong>
+							<span>{l.text}</span>
+						</div>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+</div>
+
+<style>
+	.st {
+		--st-rand: 0.75rem;
+	}
+
+	/* ---------- Begrüßung (Hero) ---------- */
+	.st-held {
+		display: grid;
+		overflow: hidden;
+		border: 1px solid var(--ds-linie);
+		border-radius: var(--ds-radius);
+		background: linear-gradient(135deg, var(--ds-flaeche) 0%, var(--ds-flaeche-2) 100%);
+		box-shadow: var(--ds-schatten);
+	}
+	.st-held__text {
+		padding: 2rem 1.25rem 1.75rem;
+	}
+	.st-dachzeile {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin: 0 0 0.75rem;
+		font-size: var(--sl-text-sm);
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ds-petrol-stark);
+	}
+	.st-dachzeile::before {
+		content: '';
+		width: 2.25rem;
+		height: 3px;
+		border-radius: 2px;
+		background: var(--ds-petrol);
+	}
+	.st-held h1 {
+		margin: 0;
+		font-size: clamp(2rem, 1.4rem + 1.8vw, 2.75rem);
+		font-weight: 800;
+		line-height: 1.08;
+		letter-spacing: -0.02em;
+		color: var(--sl-color-white);
+	}
+	.st-held__satz {
+		max-width: 34rem;
+		margin: 1rem 0 1.5rem;
+		font-size: var(--sl-text-lg);
+		line-height: 1.5;
+		color: var(--ds-text-leise);
+	}
+	.st-knoepfe {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+	.st-knopf {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		min-height: 2.75rem; /* mindestens 44 px Klickfläche */
+		padding: 0.5rem 1.1rem;
+		border: 1.5px solid var(--ds-petrol);
+		border-radius: var(--ds-radius-klein);
+		font-weight: 650;
+		color: var(--ds-petrol-stark);
+		text-decoration: none;
+		background: var(--ds-flaeche);
+	}
+	.st-knopf :global(svg) {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+	.st-knopf--voll {
+		color: #fff;
+		background: var(--ds-petrol);
+	}
+	:global(:root:not([data-theme='light'])) .st-knopf--voll {
+		color: #06262b; /* im Dunkelmodus ist das Petrol hell → dunkle Schrift */
+	}
+	.st-knopf:hover {
+		filter: brightness(1.08);
+		text-decoration: underline;
+	}
+	.st-held__bild {
+		aspect-ratio: 779 / 379;
+	}
+	.st-held__bild img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	@media (min-width: 56rem) {
+		.st-held {
+			grid-template-columns: 42fr 58fr;
+			min-height: 21rem;
+		}
+		.st-held__text {
+			align-self: center;
+			padding: 2.5rem 1rem 2.5rem 2.5rem;
+		}
+		.st-held__bild {
+			aspect-ratio: auto;
+			/* schräge Kante wie im Konzept */
+			clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
+		}
+	}
+
+	/* ---------- Überschriften ---------- */
+	.st-h2 {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin: 2.75rem 0 1.25rem;
+		font-size: var(--sl-text-2xl);
+		font-weight: 800;
+		color: var(--sl-color-white);
+	}
+	.st-h2::before {
+		content: '';
+		flex: none;
+		width: 2.25rem;
+		height: 4px;
+		border-radius: 2px;
+		background: var(--ds-petrol);
+	}
+
+	/* ---------- Fachbereichskarten ---------- */
+	.st-karten {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr));
+		gap: 1rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.st-karte {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		border: 1px solid var(--ds-linie);
+		border-radius: var(--ds-radius);
+		background: var(--ds-flaeche);
+		box-shadow: var(--ds-schatten);
+		transition: border-color 0.15s, transform 0.15s;
+	}
+	.st-karte:hover,
+	.st-karte:focus-within {
+		border-color: var(--ds-petrol);
+		transform: translateY(-2px);
+	}
+	.st-karte:focus-within {
+		outline: 3px solid var(--ds-petrol);
+		outline-offset: 2px;
+	}
+	.st-karte img {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 1.9;
+		object-fit: cover;
+		background: var(--ds-flaeche-2);
+	}
+	.st-karte__inhalt {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		gap: 0.4rem;
+		padding: 0.9rem 1rem 0.75rem;
+	}
+	.st-karte h3 {
+		margin: 0;
+		font-size: var(--sl-text-lg);
+		font-weight: 750;
+		line-height: 1.25;
+		hyphens: auto;
+		overflow-wrap: break-word;
+	}
+	.st-karte h3 a {
+		color: var(--sl-color-white);
+		text-decoration: none;
+	}
+	.st-karte h3 a:focus-visible {
+		outline: none; /* der Rahmen sitzt um die ganze Karte (focus-within) */
+	}
+	/* Die ganze Karte ist anklickbar */
+	.st-karte h3 a::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+	}
+	.st-karte p {
+		margin: 0;
+		font-size: var(--sl-text-sm);
+		line-height: 1.5;
+		color: var(--ds-text-leise);
+	}
+	.st-karte__pfeil {
+		margin-top: auto;
+		align-self: flex-end;
+		font-size: 1.35rem;
+		font-weight: 700;
+		line-height: 1;
+		color: var(--ds-petrol);
+	}
+
+	/* ---------- So lernst du ---------- */
+	.st-lernen {
+		margin-top: 2.75rem;
+		padding: 0.25rem 1.25rem 1.25rem;
+		border: 1px solid var(--ds-linie);
+		border-radius: var(--ds-radius);
+		background: var(--ds-ton-petrol);
+	}
+	.st-lernen .st-h2 {
+		margin: 1rem 0;
+	}
+	.st-lernen ul {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+		gap: 1rem 1.5rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.st-lernen li {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.75rem;
+	}
+	.st-lernen li .ds-symbol {
+		background: var(--ds-flaeche);
+	}
+	.st-lernen strong {
+		display: block;
+		color: var(--sl-color-white);
+	}
+	.st-lernen li span:not(.ds-symbol) {
+		display: block;
+		font-size: var(--sl-text-sm);
+		line-height: 1.45;
+		color: var(--ds-text-leise);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.st-karte {
+			transition: none;
+		}
+		.st-karte:hover,
+		.st-karte:focus-within {
+			transform: none;
+		}
+	}
+</style>

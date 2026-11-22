@@ -2,31 +2,16 @@
 title: Elektronik lernen
 description: "Lernplattform für Elektronik, Mess- und Regelungstechnik an der HTL."
 template: splash
-hero:
-  tagline: Theorie, Rechenbeispiele, Praxis und Quizzes zu Elektronik, Mess- und Regelungstechnik – frei zugänglich, ohne Anmeldung, ohne Tracking.
-  actions:
-    - text: Los geht's mit den Grundlagen
-      link: grundlagen/
-      icon: right-arrow
-    - text: So benutzt du diese Seite
-      link: hinweise/
-      icon: information
-      variant: minimal
 ---
 
 import { Badge } from '@astrojs/starlight/components';
 import Themenkarte from '../../components/Themenkarte.astro';
 import Zeichen from '../../components/Zeichen.astro';
+import Startseite from '../../components/Startseite.astro';
 
-## Schnellstart in drei Schritten
+<Startseite />
 
-<ol class="ds-schritte">
-	<li class="ds-karte"><strong>Thema auswählen</strong>Mit der <em>Übersicht</em> beginnen – dort stehen die Lernziele und was du vorher können solltest.</li>
-	<li class="ds-karte"><strong>Selbst rechnen</strong>Eine Aufgabe der Stufe <Badge text="Grundlagen" variant="success" /> lösen, erst dann die Lösung aufklappen und vergleichen.</li>
-	<li class="ds-karte"><strong>Mit dem Quiz kontrollieren</strong>Was falsch war, in der Theorie oder bei den Praxisbeispielen nachlesen und das Quiz wiederholen.</li>
-</ol>
-
-Typische Einstiege: [Grundlagen der Elektrotechnik](/grundlagen/) · [Messtechnik](/messtechnik/) · [Elektronik – Dioden](/dioden/)
+Die Aufgaben gibt es in drei Stufen: <Badge text="Grundlagen" variant="success" /> <Badge text="Standard" variant="caution" /> <Badge text="Vertiefung" variant="danger" /> · [So benutzt du diese Seite](/hinweise/)
 
 <div class="ds-bereich">
 	<span class="ds-symbol"><Zeichen name="buch" /></span>
@@ -107,17 +92,6 @@ Ergänzend dazu: [Programmierung in C](/programmierung/) – die Grundlagen für
 <div class="ds-raster">
 	<Themenkarte titel="Projektmanagement" symbol="projekt" href="/projektmanagement/" text="Ziele, Planung, Risiken, Qualität, Lasten- und Pflichtenheft – mit Fallbeispielen" teile={[['Theorie', 'theorie'], ['Fallbeispiele', 'fallbeispiele'], ['Quiz', 'quiz']]} />
 </div>
-
-## So ist jeder Themenbereich aufgebaut
-
-<div class="ds-raster">
-	<div class="ds-karte ds-thema"><div class="ds-thema__kopf"><span class="ds-symbol"><Zeichen name="buch" /></span><h3 class="ds-thema__titel">Theorie</h3></div><p class="ds-thema__text">Die wichtigsten Zusammenhänge mit Formeln und Schaltplänen.</p></div>
-	<div class="ds-karte ds-thema"><div class="ds-thema__kopf"><span class="ds-symbol"><Zeichen name="formel" /></span><h3 class="ds-thema__titel">Rechenbeispiele</h3></div><p class="ds-thema__text">Aufgaben in drei Stufen. Zuerst selbst rechnen, dann die Lösung aufklappen.</p></div>
-	<div class="ds-karte ds-thema"><div class="ds-thema__kopf"><span class="ds-symbol"><Zeichen name="schaltung" /></span><h3 class="ds-thema__titel">Praxisbeispiele</h3></div><p class="ds-thema__text">Echte Schaltungen, Bauteile und Messungen aus Werkstätte und Labor.</p></div>
-	<div class="ds-karte ds-thema"><div class="ds-thema__kopf"><span class="ds-symbol"><Zeichen name="pruefen" /></span><h3 class="ds-thema__titel">Quiz</h3></div><p class="ds-thema__text">Teste dein Wissen – nach jeder Antwort bekommst du eine Erklärung.</p></div>
-</div>
-
-Schwierigkeit: <Badge text="Grundlagen" variant="success" /> <Badge text="Standard" variant="caution" /> <Badge text="Vertiefung" variant="danger" />
 
 <footer class="ds-fuss">
 	Frei zugänglich, ohne Anmeldung, ohne Cookies und ohne Tracking ·

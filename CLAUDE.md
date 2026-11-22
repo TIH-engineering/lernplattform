@@ -123,6 +123,9 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
   noch Abbildungen aus Herstellerdatenblättern. Stattdessen selbst nachzeichnen oder
   auf das Datenblatt verlinken.
 - Keine Abbildungen aus fremden Büchern oder Webseiten.
+- Ausnahme Startseite (22.11.2026): Bilder aus dem Startseitenkonzept des Lehrers (`src/assets/startseite/*.webp`,
+  Platzhalter in geringer Auflösung) in `src/components/Startseite.astro` (Hero, fünf Bereichskarten, „So lernst du“).
+  Die Karten springen zu den Ankern der Themenliste darunter (`#grundlagen`, `#elektronik` …) – IDs nicht umbenennen.
 
 ## Quellen
 
