@@ -183,3 +183,13 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
   `Netzsicherheit`, `Loesung`, `Stufe`, `Quiz`.
 - Der Name `Symbol` ist für Komponenten tabu (kollidiert mit JavaScript-`Symbol` in MDX).
 - In Bildunterschriften „farbig“ statt „blau“ (Akzentfarbe ist Petrol).
+
+## Erweiterung 22.11.2026 (Transistoren, Kippstufen, Spektren, Magnetkreise, Praxis)
+
+- Theorie von **Transistoren, Oszillatoren und Signalkennwerte** liegt jetzt im Unterordner `theorie/` (`index.mdx` = alte
+  Seite, URL unverändert) mit Zusatzseiten: `grundschaltungen`, `differenzverstaerker`, `kippstufen`, `spektren`.
+- Interaktive Fourier-Visualisierung: `src/components/FourierLabor.astro` (echte Fourier-Koeffizienten, kein Framework).
+- `Kasten` hat einen Bereich `<span slot="gilt">…</span>` für Gültigkeitsangaben mit Formeln (statt `gilt="…"` mit `R_E`).
+- Neue Rechenwerte wurden mit Python nachgerechnet, Transistorschaltungen mit LTspice (2N3904) gegengeprüft.
+- Texte mit LaTeX nicht per Shell-Heredoc in Python-Strings schreiben (`\a` in `\approx` wird zum Steuerzeichen) –
+  besser Datei schreiben und anhängen.

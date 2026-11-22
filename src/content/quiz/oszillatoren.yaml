@@ -196,3 +196,56 @@ fragen:
     loesung: 0.2337
     einheit: mA/V
     erklaerung: '$g_\mathrm{m,crit} = 4 \cdot \mathrm{ESR} \cdot (2\pi f)^2 (C_0 + C_\mathrm{L})^2 = 4 \cdot 80 \cdot (5{,}03 \cdot 10^{7})^2 \cdot (17 \cdot 10^{-12})^2\,\mathrm{A/V} \approx 0{,}23\,\mathrm{mA/V}$ – deutlich unter 1 mA/V, der Oszillator schwingt sicher an.'
+
+  # ---------- Kippstufen ----------
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Kippstufe hat keinen stabilen Zustand und erzeugt deshalb von selbst ein Rechtecksignal?
+    optionen:
+      - text: die astabile Kippstufe
+        richtig: true
+      - text: die monostabile Kippstufe
+      - text: die bistabile Kippstufe
+      - text: jede Kippstufe, sobald sie Strom bekommt
+    erklaerung: Astabil = kein stabiler Zustand, sie kippt dauernd hin und her (Blinker, Takt). Monostabil hat einen, bistabil zwei stabile Zustände.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein 555-Monoflop hat $R = 100\,\mathrm{k\Omega}$ und $C = 10\,\mu\mathrm{F}$. Wie lange bleibt der Ausgang nach dem Trigger High?'
+    loesung: 1.0986
+    einheit: s
+    toleranz: 3
+    erklaerung: '$t_\mathrm{i} = \ln 3 \cdot RC \approx 1{,}1 \cdot 100\,\mathrm{k\Omega} \cdot 10\,\mu\mathrm{F} \approx 1{,}1\,\mathrm{s}$. Der Kondensator lädt von 0 auf ⅔ der Versorgungsspannung – daher $\ln 3$. Typischer Fehler: $0{,}69\,RC$ wie beim astabilen 555 verwenden (0,69 s).'
+
+  - typ: mc
+    stufe: standard
+    frage: Was bestimmt beim Transistor-Multivibrator die Dauer eines Zustands?
+    optionen:
+      - text: der Basiswiderstand und der Koppelkondensator, über den der gesperrte Transistor wieder aufgesteuert wird
+        richtig: true
+      - text: nur der Kollektorwiderstand
+      - text: die Stromverstärkung B der Transistoren
+      - text: die Frequenz des Netzes
+    erklaerung: Die Basis des gesperrten Transistors springt negativ und lädt sich über $R_\mathrm{B}$ und $C$ bis 0,7 V auf – Zeit ≈ 0,69 … 0,76 $R_\mathrm{B} C$. $R_\mathrm{C}$ beeinflusst nur die Flanken.
+
+  - typ: mc
+    stufe: standard
+    frage: Eine Maschine soll mit Taster „Ein“ starten und mit Taster „Aus“ stoppen; dazwischen soll der Zustand erhalten bleiben. Welche Kippstufe passt?
+    optionen:
+      - text: die bistabile Kippstufe
+        richtig: true
+      - text: die astabile Kippstufe
+      - text: die monostabile Kippstufe
+      - text: ein Wien-Brücken-Oszillator
+    erklaerung: Die bistabile Kippstufe speichert den Zustand, bis der andere Taster gedrückt wird. Ein Monoflop würde nach einer festen Zeit von selbst abschalten.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Ein Transistor-Multivibrator an 12 V liefert eine falsche Frequenz, und die Transistoren altern schnell. Was ist die wahrscheinliche Ursache?
+    optionen:
+      - text: Die Basis springt auf etwa −11 V; das überschreitet die zulässige Emitter-Basis-Sperrspannung (oft 5 … 6 V).
+        richtig: true
+      - text: Die Kollektorwiderstände sind zu klein.
+      - text: Die Kondensatoren sind zu groß.
+      - text: 12 V sind für Transistoren generell zu viel.
+    erklaerung: Beim Umschalten wird die Kollektorspannungsänderung über den Kondensator auf die Basis übertragen. Die Basis-Emitter-Strecke bricht dann in Sperrrichtung durch. Abhilfe ist eine Diode in Reihe zur Basis oder eine Versorgung von höchstens 5 V.

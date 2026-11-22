@@ -1,6 +1,6 @@
 ---
 title: Rechenbeispiele – Oszillatoren
-description: Rechenbeispiele zu Barkhausen-Kriterium, RC-Phasenschieber, Wien-Brücke, Relaxationsoszillator, Lastkapazität eines Quarzes, Frequenzabweichung in ppm und Auslegung eines Pierce-Oszillators.
+description: Rechenbeispiele zu Barkhausen-Kriterium, RC-Phasenschieber, Wien-Brücke, Relaxationsoszillator, Lastkapazität eines Quarzes, Frequenzabweichung in ppm, Pierce-Oszillator, astabiler Kippstufe (Blinker, Blitzlicht) und Monoflop (Treppenhauslicht, Entprellen).
 ---
 
 import Stufe from '../../../components/Stufe.astro';
@@ -343,5 +343,96 @@ Die parasitäre Kapazität wird mit $C_\mathrm{stray} = 5\,\mathrm{pF}$ geschät
 3. $C_\mathrm{tot} = 15 + 2{,}5 + 1 = 18{,}5\,\mathrm{pF}$ →
    $DL = \dfrac{60\,\Omega}{2} \cdot (\pi \cdot 16\,\mathrm{MHz} \cdot 0{,}8\,\mathrm{V} \cdot 18{,}5\,\mathrm{pF})^2 \approx 17\,\mathrm{\mu W}$
    → deutlich unter 100 µW, also $R_\mathrm{D} = 0\,\Omega$. Ein $R_\mathrm{D}$ würde die Anschwingreserve nur weiter verkleinern.
+
+</Loesung>
+
+## Blinker mit astabiler Kippstufe
+
+<Stufe wert="standard" />
+
+Ein Blinker nach der [astabilen Kippstufe mit zwei Transistoren](/oszillatoren/theorie/kippstufen/#mit-zwei-transistoren-multivibrator)
+arbeitet an $U_\mathrm{B} = 5\,\mathrm{V}$. In beiden Kollektorzweigen liegt eine LED ($U_\mathrm{F} \approx 2\,\mathrm{V}$) mit
+$R_\mathrm{C} = 330\,\Omega$. Symmetrisch: $R_\mathrm{B1} = R_\mathrm{B2} = 27\,\mathrm{k\Omega}$, $C_1 = C_2 = 22\,\mu\mathrm{F}$, $B_\mathrm{min} = 100$.
+
+**Gesucht:** Blinkfrequenz; sind die Transistoren gesättigt? Wie groß wäre der Fehler mit der Faustformel $0{,}69\,RC$?
+
+<Loesung>
+
+1. Faktor bei 5 V: $\ln \dfrac{2 \cdot 5\,\mathrm{V} - 0{,}8\,\mathrm{V}}{5\,\mathrm{V} - 0{,}7\,\mathrm{V}} = \ln \dfrac{9{,}2}{4{,}3} \approx 0{,}76$
+2. $t_1 = t_2 = 0{,}76 \cdot 27\,\mathrm{k\Omega} \cdot 22\,\mu\mathrm{F} \approx 0{,}45\,\mathrm{s}$ → $T \approx 0{,}90\,\mathrm{s}$ → $f \approx 1{,}1\,\mathrm{Hz}$
+3. Sättigung: $I_\mathrm{C} = \dfrac{5\,\mathrm{V} - 2\,\mathrm{V} - 0{,}1\,\mathrm{V}}{330\,\Omega} \approx 8{,}8\,\mathrm{mA}$,
+   $I_\mathrm{B} = \dfrac{5\,\mathrm{V} - 0{,}7\,\mathrm{V}}{27\,\mathrm{k\Omega}} \approx 0{,}16\,\mathrm{mA}$ → $I_\mathrm{C}/I_\mathrm{B} \approx 55 < B_\mathrm{min}$ ✓
+4. Faustformel: $T = 2 \cdot 0{,}69 \cdot 27\,\mathrm{k\Omega} \cdot 22\,\mu\mathrm{F} \approx 0{,}82\,\mathrm{s}$ → $f \approx 1{,}2\,\mathrm{Hz}$ – etwa 9 % zu hoch.
+
+**Ergebnis:** $f \approx 1{,}1\,\mathrm{Hz}$, die Transistoren sind sicher gesättigt. Bei 5 V lohnt sich die genaue Formel; die
+Toleranz der Elkos (oft ±20 %) ist allerdings noch größer.
+
+</Loesung>
+
+## Blitzlicht mit ungleichen Zeiten
+
+<Stufe wert="vertiefung" />
+
+Die LED an T2 soll **0,1 s** aufblitzen und dann **0,9 s** dunkel bleiben ($U_\mathrm{B} = 5\,\mathrm{V}$, LED-Zweig $R_\mathrm{C2} = 330\,\Omega$,
+$B_\mathrm{min} = 100$). Vorgesehen sind $C_2 = 10\,\mu\mathrm{F}$ und $C_1 = 47\,\mu\mathrm{F}$.
+
+1. Welcher Basiswiderstand bestimmt welche Zeit? Dimensioniere $R_\mathrm{B1}$ und $R_\mathrm{B2}$ (E12).
+2. Prüfe die Sättigung von T2.
+3. Wie klein muss $R_\mathrm{C1}$ sein, damit sich $C_1$ in der kurzen Phase wieder aufladen kann?
+
+<Loesung>
+
+1. T2 leitet, solange T1 gesperrt ist; T1 wird über $C_2$ gesperrt und über $R_\mathrm{B1}$ wieder freigegeben →
+   Leuchtzeit $= 0{,}76 \cdot R_\mathrm{B1} C_2$. Dunkelzeit $= 0{,}76 \cdot R_\mathrm{B2} C_1$.
+   - $R_\mathrm{B1} = \dfrac{0{,}1\,\mathrm{s}}{0{,}76 \cdot 10\,\mu\mathrm{F}} \approx 13\,\mathrm{k\Omega}$ → **12 kΩ** (0,091 s)
+   - $R_\mathrm{B2} = \dfrac{0{,}9\,\mathrm{s}}{0{,}76 \cdot 47\,\mu\mathrm{F}} \approx 25\,\mathrm{k\Omega}$ → **27 kΩ** (0,97 s)
+2. $I_\mathrm{B2} = 4{,}3\,\mathrm{V}/27\,\mathrm{k\Omega} \approx 0{,}16\,\mathrm{mA}$, $I_\mathrm{C2} \approx 8{,}8\,\mathrm{mA}$ → $I_\mathrm{C}/I_\mathrm{B} \approx 55$ ✓.
+   (Mit $C_1 = 10\,\mu\mathrm{F}$ bräuchte man 120 kΩ – dann wäre $I_\mathrm{C}/I_\mathrm{B} \approx 245 > B_\mathrm{min}$, die LED bliebe dunkel.)
+3. In der kurzen Phase (0,09 s) ist T1 gesperrt, und $C_1$ lädt sich über $R_\mathrm{C1}$ nach. Nach etwa $5\tau$ ist das erledigt:
+   $5 R_\mathrm{C1} \cdot 47\,\mu\mathrm{F} \leq 0{,}09\,\mathrm{s}$ → $R_\mathrm{C1} \leq 380\,\Omega$ → z. B. **390 Ω** (knapp) oder 330 Ω.
+   T1 bleibt gesättigt: $I_\mathrm{C1} \approx 12{,}6\,\mathrm{mA}$, $I_\mathrm{B1} \approx 0{,}36\,\mathrm{mA}$ → Verhältnis ≈ 35 ✓.
+
+**Ergebnis:** $R_\mathrm{B1} = 12\,\mathrm{k\Omega}$, $R_\mathrm{B2} = 27\,\mathrm{k\Omega}$, $R_\mathrm{C1} \approx 330 \dots 390\,\Omega$. Lange Zeiten erreicht man
+über große Kondensatoren, nicht über große Basiswiderstände – sonst fällt der Transistor aus der Sättigung.
+
+</Loesung>
+
+## Treppenhauslicht mit dem 555
+
+<Stufe wert="grundlagen" />
+
+Ein Taster startet ein [555-Monoflop](/oszillatoren/theorie/kippstufen/#monoflop-mit-dem-timer-555), das ein Licht für etwa 60 s
+einschaltet. Vorhanden ist ein Elko mit $C = 100\,\mu\mathrm{F}$ (Toleranz −20 % … +50 %).
+
+**Gesucht:** $R$ (E12), die tatsächliche Zeit und ihr Streubereich.
+
+<Loesung>
+
+$t_\mathrm{i} \approx 1{,}1\, R C$ → $R = \dfrac{60\,\mathrm{s}}{1{,}1 \cdot 100\,\mu\mathrm{F}} \approx 545\,\mathrm{k\Omega}$ → **560 kΩ** →
+$t_\mathrm{i} = 1{,}1 \cdot 560\,\mathrm{k\Omega} \cdot 100\,\mu\mathrm{F} \approx 62\,\mathrm{s}$
+
+Streubereich durch den Elko: $0{,}8 \cdot 62\,\mathrm{s} \approx 49\,\mathrm{s}$ bis $1{,}5 \cdot 62\,\mathrm{s} \approx 92\,\mathrm{s}$.
+
+**Ergebnis:** $R = 560\,\mathrm{k\Omega}$, $t_\mathrm{i} \approx 62\,\mathrm{s}$ (49 … 92 s). Für ein Treppenhaus reicht das; braucht man die Zeit genau,
+nimmt man eine Folie statt eines Elkos oder einen Mikrocontroller.
+
+</Loesung>
+
+## Taster entprellen mit einem Monoflop
+
+<Stufe wert="standard" />
+
+Ein mechanischer Taster prellt bis zu 10 ms lang. Ein 555-Monoflop soll aus jedem Tastendruck genau einen sauberen Impuls von etwa
+20 ms machen. Gewählt wird $C = 100\,\mathrm{nF}$. Welcher Widerstand ist nötig, und warum funktioniert das?
+
+<Loesung>
+
+$R = \dfrac{t_\mathrm{i}}{1{,}1\, C} = \dfrac{20\,\mathrm{ms}}{1{,}1 \cdot 100\,\mathrm{nF}} \approx 182\,\mathrm{k\Omega}$ → **180 kΩ** ($t_\mathrm{i} \approx 19{,}8\,\mathrm{ms}$)
+
+Der erste Prellimpuls startet das Monoflop. Alle weiteren Prellimpulse fallen in die 20 ms – der 555 ist nicht nachtriggerbar und
+reagiert darauf nicht. Der Ausgang liefert einen einzigen Impuls.
+
+**Ergebnis:** $R = 180\,\mathrm{k\Omega}$. Wichtig: $t_\mathrm{i}$ muss länger als die Prellzeit sein, aber kürzer als der Abstand zweier
+gewollter Tastendrücke.
 
 </Loesung>

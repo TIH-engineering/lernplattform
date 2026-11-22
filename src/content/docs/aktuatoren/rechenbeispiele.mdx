@@ -169,3 +169,38 @@ Ein 1,8°-Schrittmotor treibt eine Spindel mit 8 mm Steigung, der Treiber arbeit
    $f = 6{,}25 \cdot 3200 = 20\,000$ Mikroschritte pro Sekunde (20 kHz am STEP-Eingang)
 
 </Loesung>
+
+## Magnetkreis mit realer Kennlinie
+
+<Stufe wert="vertiefung" />
+
+Ein Elektromagnet hat einen Eisenweg $l_\mathrm{Fe} = 20\,\mathrm{cm}$ aus Elektroblech, den Querschnitt $A = 4\,\mathrm{cm^2}$, einen Luftspalt
+$\delta = 1\,\mathrm{mm}$ und $N = 500$ Windungen. Für das Blech gilt die folgende Kennlinie (typische Beispielwerte, kein bestimmtes Datenblatt):
+
+| $B$ in T | 0,95 | 1,1 | 1,2 | 1,3 | 1,4 | 1,5 | 1,6 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| $H$ in A/m | 100 | 150 | 200 | 300 | 500 | 1000 | 2500 |
+
+**Gesucht:** Strom für $B = 1{,}2\,\mathrm{T}$ und für $B = 1{,}5\,\mathrm{T}$ – mit und ohne Luftspalt. Wie groß ist jeweils die Induktivität?
+
+<Loesung>
+
+Durchflutungssatz: $N I = H_\mathrm{Fe}\, l_\mathrm{Fe} + \dfrac{B}{\mu_0}\, \delta$
+
+| | $B = 1{,}2\,\mathrm{T}$ | $B = 1{,}5\,\mathrm{T}$ |
+| --- | --- | --- |
+| Eisen: $H_\mathrm{Fe} \cdot 0{,}2\,\mathrm{m}$ | $200 \cdot 0{,}2 = 40\,\mathrm{A}$ | $1000 \cdot 0{,}2 = 200\,\mathrm{A}$ |
+| Luftspalt: $\dfrac{B}{\mu_0} \cdot 1\,\mathrm{mm}$ | $955\,\mathrm{A}$ | $1194\,\mathrm{A}$ |
+| Strom mit Luftspalt | $995\,\mathrm{A}/500 \approx 2{,}0\,\mathrm{A}$ | $1394\,\mathrm{A}/500 \approx 2{,}8\,\mathrm{A}$ |
+| Strom ohne Luftspalt | $40\,\mathrm{A}/500 = 0{,}08\,\mathrm{A}$ | $200\,\mathrm{A}/500 = 0{,}4\,\mathrm{A}$ |
+
+Induktivität $L = N \Phi / I = N B A / I$ (mit $\Phi = B \cdot 4 \cdot 10^{-4}\,\mathrm{m^2}$):
+
+- mit Luftspalt: $\dfrac{500 \cdot 1{,}2\,\mathrm{T} \cdot 4 \cdot 10^{-4}\,\mathrm{m^2}}{2{,}0\,\mathrm{A}} \approx 0{,}12\,\mathrm{H}$ bzw. bei 1,5 T $\approx 0{,}11\,\mathrm{H}$
+- ohne Luftspalt: $\approx 3{,}0\,\mathrm{H}$ bei 1,2 T, aber nur noch $\approx 0{,}75\,\mathrm{H}$ bei 1,5 T
+
+**Ergebnis:** Mit Luftspalt braucht man viel mehr Strom (2,0 A bzw. 2,8 A statt 0,08 A bzw. 0,4 A), dafür bleibt $L$ fast konstant (0,12 → 0,11 H).
+Ohne Luftspalt fällt $L$ beim Annähern an die Sättigung auf ein Viertel. Ein lineares Modell mit $\mu_\mathrm{r} = 4800$ (passend bei 1,2 T) würde
+bei 1,5 T nur 0,10 A statt 0,4 A ergeben – nahe der Sättigung versagt es.
+
+</Loesung>

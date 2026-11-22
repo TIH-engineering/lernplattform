@@ -134,3 +134,34 @@ fragen:
       - text: Der Motor wird schneller.
       - text: Der Treiber zählt die fehlenden Schritte automatisch nach.
     erklaerung: 'Ohne Positionssensor bemerkt die Steuerung den Fehler nicht. Abhilfe: Rampen, Momentreserve, Referenzfahrt oder Encoder.'
+
+  # ---------- Reale Magnetkreise ----------
+  - typ: mc
+    stufe: standard
+    frage: Ein Eisenkreis bekommt einen kleinen Luftspalt. Was passiert mit der Induktivität und dem Strom, bei dem das Eisen sättigt?
+    optionen:
+      - text: Die Induktivität sinkt, der Sättigungsstrom steigt deutlich – die Kennlinie wird flacher und linearer.
+        richtig: true
+      - text: Beides steigt.
+      - text: Beides sinkt.
+      - text: Nichts ändert sich, der Luftspalt ist zu klein.
+    erklaerung: Der Luftspalt hat einen großen magnetischen Widerstand. Für dieselbe Flussdichte braucht man mehr Durchflutung – daher kleinere Induktivität, aber Sättigung erst bei größerem Strom.
+
+  - typ: mc
+    stufe: standard
+    frage: Warum bestehen Transformatorkerne für 50 Hz aus dünnen, isolierten Blechen und Hochfrequenzkerne aus Ferrit?
+    optionen:
+      - text: Um Wirbelströme zu verhindern – sie wachsen etwa mit dem Quadrat der Frequenz; Ferrit leitet kaum.
+        richtig: true
+      - text: Um die Hystereseschleife zu verbreitern.
+      - text: Weil Bleche und Ferrit eine höhere Sättigungsflussdichte haben als massives Eisen.
+      - text: Damit der Kern leichter wird.
+    erklaerung: Isolierte Bleche unterbrechen die Strombahnen der Wirbelströme. Bei kHz bis MHz reicht das nicht mehr – Ferrit hat einen sehr großen spezifischen Widerstand. Seine Sättigungsflussdichte ist allerdings kleiner (≈ 0,4 T).
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein Eisenkreis ($l_\mathrm{Fe} = 0{,}2\,\mathrm{m}$, Luftspalt $\delta = 0{,}5\,\mathrm{mm}$, $N = 400$) soll $B = 1{,}2\,\mathrm{T}$ führen. Laut Kennlinie ist dafür $H_\mathrm{Fe} = 200\,\mathrm{A/m}$ nötig. Welcher Strom ist erforderlich?'
+    loesung: 1.294
+    einheit: A
+    toleranz: 2
+    erklaerung: '$N I = H_\mathrm{Fe} l_\mathrm{Fe} + \dfrac{B}{\mu_0}\delta = 40\,\mathrm{A} + 477{,}5\,\mathrm{A} = 517{,}5\,\mathrm{A}$ → $I \approx 1{,}29\,\mathrm{A}$. Der halbe Millimeter Luft braucht zwölfmal so viel Durchflutung wie 20 cm Eisen.'

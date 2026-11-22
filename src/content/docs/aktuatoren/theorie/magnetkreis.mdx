@@ -1,6 +1,6 @@
 ---
 title: Magnetkreis und Elektromagnet
-description: Durchflutung, magnetischer Fluss und magnetischer Widerstand, Ohmsches Gesetz des Magnetkreises, Einfluss des Luftspalts, Induktivität, Haltekraft eines Elektromagneten, Relais und Magnetventil, Spulenberechnung, Abschaltüberspannung und Freilaufschaltungen.
+description: Durchflutung, magnetischer Fluss und magnetischer Widerstand, Ohmsches Gesetz des Magnetkreises, Einfluss des Luftspalts, Induktivität, Haltekraft eines Elektromagneten, reale B-H-Kennlinie, Sättigung, Hysterese- und Wirbelstromverluste, Relais und Magnetventil, Spulenberechnung, Abschaltüberspannung und Freilaufschaltungen.
 sidebar:
   label: 1 · Magnetkreis und Elektromagnet
   order: 1
@@ -9,6 +9,9 @@ sidebar:
 import Abbildung from '../../../../components/Abbildung.astro';
 import Kreis from '../../../../assets/mtrs/magnetkreis.svg';
 import Freilauf from '../../../../assets/mtrs/freilauf.svg';
+import Hysterese from '../../../../assets/mtrs/hystereseschleife.svg';
+import LuftspaltKennlinie from '../../../../assets/mtrs/luftspalt-kennlinie.svg';
+import Kasten from '../../../../components/Kasten.astro';
 
 Die Grundbegriffe – Feldstärke, Flussdichte, Permeabilität, Induktion – stehen im Schulbuch (siehe
 [Magnetisches Feld](/grundlagen/magnetfeld/)). Hier werden sie auf Bauteile angewendet, die sich bewegen sollen.
@@ -66,6 +69,83 @@ $$
 Die Kraft wächst mit $B^2$ – und weil $B$ bei konstantem Strom mit kleiner werdendem Luftspalt steigt, ist sie bei
 **geöffnetem** Anker (großer Spalt) am kleinsten und bei angezogenem am größten. Darum braucht ein Elektromagnet zum
 **Anziehen** viel mehr Strom als zum **Halten**.
+
+## Reale Magnetkreise: Kennlinie, Sättigung und Verluste
+
+Bisher war $\mu_\mathrm{r}$ eine feste Zahl. Das ist ein **Modell** – für Luft exakt, für Eisen und Ferrit nur in einem begrenzten Bereich
+brauchbar. In Wirklichkeit hängt die Flussdichte $B$ nichtlinear von der Feldstärke $H$ ab.
+
+### B-H-Kennlinie und Sättigung
+
+<Abbildung bild={Hysterese} unterschrift="Hystereseschleife und Neukurve eines weichmagnetischen Werkstoffs (Modellrechnung)" />
+
+- Die **Neukurve** (erstmaliges Magnetisieren) beginnt flach, wird dann sehr steil – dort ist $\mu_\mathrm{r} = B/(\mu_0 H)$ groß – und biegt in die
+  **Sättigung** ab: Fast alle Weiss'schen Bezirke sind ausgerichtet, $B$ steigt nur noch wie in Luft.
+- Typische Sättigungsflussdichten: Elektroblech ≈ 1,5 … 2 T, Ferrit nur ≈ 0,35 … 0,5 T (und mit steigender Temperatur weniger).
+- Beispiel aus einer typischen Elektroblech-Kennlinie: Bei 1,2 T braucht man $H \approx 200\,\mathrm{A/m}$ ($\mu_\mathrm{r} \approx 4800$), bei 1,5 T schon
+  $H \approx 1000\,\mathrm{A/m}$ ($\mu_\mathrm{r} \approx 1200$). Die „Konstante“ $\mu_\mathrm{r}$ ist also um den Faktor 4 gefallen.
+
+Beim Ummagnetisieren mit Wechselstrom läuft das Material die **Hystereseschleife** ab. Nach dem Abschalten bleibt die **Remanenz**
+$B_\mathrm{r}$; um sie zu beseitigen, braucht man die Gegenfeldstärke $H_\mathrm{c}$ (**Koerzitivfeldstärke**). Weichmagnetische
+Werkstoffe (Transformatorblech, Ferrit) haben eine schmale Schleife, hartmagnetische (Dauermagnete) eine breite.
+
+### Magnetkreis mit realer Kennlinie berechnen
+
+Mit nichtlinearem Eisen rechnet man nicht mit $R_\mathrm{m}$, sondern direkt mit dem **Durchflutungssatz** – Abschnitt für Abschnitt:
+
+<Kasten typ="formel" titel="Durchflutungssatz für einen Kreis aus Eisen und Luftspalt">
+
+$$
+\Theta = N \cdot I = H_\mathrm{Fe} \cdot l_\mathrm{Fe} + H_\delta \cdot \delta
+\qquad\text{mit}\qquad
+H_\delta = \frac{B}{\mu_0}
+\quad\text{und}\quad
+H_\mathrm{Fe} \text{ aus der B-H-Kennlinie}
+$$
+
+<span slot="gilt">gleicher Querschnitt in Eisen und Luftspalt (sonst $B$ je Abschnitt aus $\Phi/A$), Streufluss und Randfelder am Luftspalt vernachlässigt.</span>
+
+</Kasten>
+
+Vorgehen: gewünschte Flussdichte festlegen → $H_\mathrm{Fe}$ in der Kennlinie ablesen → $H_\delta$ ausrechnen → beide Anteile addieren →
+$I = \Theta/N$. Umgekehrt (aus dem Strom die Flussdichte) muss man probieren oder grafisch lösen, weil die Kennlinie nichtlinear ist.
+Rechenbeispiel: [Strom bis zur Sättigung](/aktuatoren/rechenbeispiele/#magnetkreis-mit-realer-kennlinie).
+
+### Der Luftspalt „schert“ die Kennlinie
+
+<Abbildung bild={LuftspaltKennlinie} unterschrift="Berechnete Kennlinie eines Eisenkreises (20 cm Elektroblech, 4 cm²) ohne und mit 1 mm Luftspalt" />
+
+Ohne Luftspalt erreicht der Kreis die Sättigung schon bei sehr kleiner Durchflutung (im Bild: 1,5 T bei 200 A). Mit 1 mm Luftspalt braucht
+er für 1,2 T rund 1000 A – davon entfallen nur 40 A auf das Eisen, der Rest auf den Spalt. Die Kennlinie wird **flacher und fast linear**:
+
+| | ohne Luftspalt | mit Luftspalt |
+| --- | --- | --- |
+| Induktivität | sehr groß, aber stark stromabhängig | kleiner, dafür über einen großen Strombereich konstant |
+| Sättigung | schon bei kleinem Strom | erst bei viel größerem Strom |
+| gespeicherte Energie | klein (Eisen speichert wenig) | groß – sie sitzt im Luftspalt |
+| Toleranzen | $L$ streut mit dem Werkstoff | $L$ wird vom Luftspalt bestimmt, also gut reproduzierbar |
+
+Darum haben **Speicherdrosseln** in Schaltwandlern einen Luftspalt (oder Pulverkerne mit „verteiltem“ Luftspalt), während
+**Transformatoren** ohne Luftspalt gebaut werden – sie sollen möglichst wenig Magnetisierungsstrom brauchen und keine Energie speichern.
+
+### Kernverluste
+
+Ein Kern, der mit Wechselstrom ummagnetisiert wird, erwärmt sich durch zwei Effekte:
+
+- **Hystereseverluste:** Bei jedem Durchlauf der Schleife wird Energie in Wärme umgesetzt – pro Volumen entspricht sie der **Fläche der
+  Schleife**. Die Verlustleistung wächst ungefähr **proportional zur Frequenz** und stark mit der Flussdichte.
+- **Wirbelstromverluste:** Das wechselnde Feld induziert im leitfähigen Kern Ströme, die ihn erwärmen. Sie wachsen etwa mit **$f^2$** und
+  $B^2$. Abhilfe: dünne, gegeneinander isolierte **Bleche** (50 Hz), **Pulverkerne** oder **Ferrit**, das kaum leitet (kHz … MHz).
+
+Hersteller geben die Kernverluste als Diagramm an (z. B. in kW/m³ über $B$ für verschiedene Frequenzen und Temperaturen). Auch die
+[Drossel im Schaltwandler](/leistungselektronik/theorie/passive-bauelemente/#ferritkern-al-wert-und-vormagnetisierung) wird damit ausgelegt.
+
+<Kasten typ="merke" titel="Modell und Wirklichkeit">
+
+Das lineare Modell ($\mu_\mathrm{r}$ konstant, $L = N^2/R_\mathrm{m}$) gilt gut, solange ein Luftspalt den Kreis bestimmt **und** das Eisen weit unter der
+Sättigung bleibt. Für Ströme nahe der Sättigung, für Kreise ohne Luftspalt und für Verluste braucht man die Kennlinien des Werkstoffs.
+
+</Kasten>
 
 ## Relais, Hubmagnet und Magnetventil
 

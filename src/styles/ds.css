@@ -499,6 +499,7 @@
 	margin-block: 0.5rem !important;
 }
 .ds-kasten__gilt {
+	line-height: 1.5;
 	margin: 0.5rem 0 0 !important;
 	font-size: var(--sl-text-sm);
 	color: var(--ds-text-leise);

@@ -1,6 +1,6 @@
 ---
 title: Praxisbeispiele – Filter
-description: Anti-Aliasing-Filter vor dem ADC, Sensorsignal einer Industrieanlage, Sprachfilter für ein Mikrofon, Messung des Frequenzgangs mit dem Network Analyzer und Simulation in LTspice.
+description: Anti-Aliasing-Filter vor dem ADC, Sensorsignal einer Industrieanlage, Sprachfilter für ein Mikrofon, Messung des Frequenzgangs mit dem Network Analyzer und Simulation in LTspice, Bode-Messung mit dem Analog Discovery, Übertragungsfunktion aus einer Messung.
 ---
 
 import Loesung from '../../../components/Loesung.astro';
@@ -95,5 +95,57 @@ Baue den [Sallen-Key-Tiefpass aus den Rechenbeispielen](/filter/rechenbeispiele/
 2. $R_\mathrm{f} = 10\,\mathrm{k\Omega}$: $K = 2$, $Q = 1$ → sichtbare Überhöhung (+1,2 dB über dem Durchlasspegel).
    $R_\mathrm{f} = 15\,\mathrm{k\Omega}$: $K = 2{,}5$, $Q = 2$ → deutliche Spitze. Bei $K \geq 3$ wird die Schaltung instabil und schwingt – sie ist dann
    ein Oszillator!
+
+</Loesung>
+
+## Bode-Diagramm mit dem Analog Discovery messen
+
+Ein RC-Tiefpass mit $R = 10\,\mathrm{k\Omega}$ und $C = 10\,\mathrm{nF}$ wird mit dem **Network Analyzer** des Analog Discovery (Software WaveForms)
+gemessen: Wavegen W1 speist den Eingang, Kanal 1 misst die Eingangs-, Kanal 2 die Ausgangsspannung. Einstellungen: 10 Hz … 100 kHz,
+logarithmisch, 1 V Amplitude, kein Offset.
+
+1. Welche Werte erwartest du bei 159 Hz, 1,59 kHz und 15,9 kHz (Betrag in dB und Phase)?
+2. Gemessen wird $f_\mathrm{g} = 1{,}45\,\mathrm{kHz}$ statt 1,59 kHz. Liegt es am Messgerät (Eingang 1 MΩ ∥ 24 pF)? Was ist die wahrscheinlichere Ursache?
+3. Warum misst man das Ausgangssignal nicht einfach gegen den Generator-Sollwert, sondern mit einem zweiten Kanal am Eingang?
+4. Oberhalb von 50 kHz wird die gemessene Kurve unruhig. Was hilft?
+
+<Loesung>
+
+1. $f_\mathrm{g} = \dfrac{1}{2\pi R C} \approx 1{,}59\,\mathrm{kHz}$:
+
+   | Frequenz | 159 Hz ($0{,}1 f_\mathrm{g}$) | 1,59 kHz ($f_\mathrm{g}$) | 15,9 kHz ($10 f_\mathrm{g}$) |
+   | --- | --- | --- | --- |
+   | Betrag | ≈ 0 dB | −3 dB | −20 dB |
+   | Phase | −6° | −45° | −84° |
+
+2. Die 24 pF des Messeingangs liegen parallel zu 10 nF und verschieben $f_\mathrm{g}$ nur um 0,2 %. Rechnet man zurück, passt 1,45 kHz zu
+   $C \approx 11\,\mathrm{nF}$ – also +10 %, eine übliche **Kondensatortoleranz**. Kontrolle: $C$ mit dem LCR-Meter nachmessen.
+3. Der Generator hat einen Innenwiderstand (beim Analog Discovery etwa 50 Ω) und die Last verändert seine Ausgangsspannung. Gemessen wird
+   deshalb das **Verhältnis** Ausgang/Eingang – Pegelfehler des Generators kürzen sich heraus.
+4. Bei −30 dB und mehr ist das Ausgangssignal nur noch einige 10 mV groß. Mehr Mittelungen, kleinere Messbandbreite (längere Messzeit pro
+   Punkt) oder einen empfindlicheren Bereich für Kanal 2 wählen.
+
+</Loesung>
+
+## Übertragungsfunktion aus einer Messung bestimmen
+
+Ein unbekannter aktiver Tiefpass wird gemessen. Ergebnis: Durchlasspegel +4,0 dB, bei 700 Hz eine Überhöhung auf +5,25 dB, bei 1 kHz Phase −90°
+und Pegel +4,0 dB, oberhalb fällt der Betrag mit −40 dB/Dekade.
+
+1. Welche Ordnung hat das Filter, und wie groß sind Verstärkung $K$ und Kennfrequenz $f_0$?
+2. Bestimme die Güte $Q$.
+3. Stelle die Übertragungsfunktion auf.
+
+<Loesung>
+
+1. −40 dB/Dekade und −90° bei $f_0$ → **2. Ordnung**. Durchlass +4 dB → $K = 10^{4/20} \approx 1{,}58$. Die Phase −90° liegt bei der
+   Kennfrequenz → $f_0 = 1\,\mathrm{kHz}$.
+2. Bei $f_0$ gilt $\lvert H \rvert = K \cdot Q$. Gemessen: gleicher Pegel wie im Durchlass → $Q \approx 1$. Kontrolle über die Überhöhung: Für
+   $Q = 1$ liegt das Maximum $1{,}25\,\mathrm{dB}$ über dem Durchlasspegel bei $f_0/\sqrt{2} \approx 707\,\mathrm{Hz}$ – passt.
+3. $H(\mathrm{j}\omega) = \dfrac{K}{1 + \mathrm{j}\dfrac{\omega}{Q \omega_0} - \dfrac{\omega^2}{\omega_0^2}}$ mit $K \approx 1{,}58$, $Q \approx 1$, $\omega_0 = 2\pi \cdot 1\,\mathrm{kHz}$.
+
+**Folgerung:** $Q = 1$ statt 0,707 – das Filter ist **kein** Butterworth-Filter, es hat eine leichte Überhöhung. Bei einem Sallen-Key-Filter mit
+gleichen Bauteilen gehört zu $K = 1{,}58$ eigentlich $Q = 1/(3 - K) \approx 0{,}7$. Die Bauteile sind also offenbar **nicht** gleich groß –
+Werte nachmessen und mit dem [Sallen-Key-Rechenbeispiel](/filter/rechenbeispiele/#sallen-key-tiefpass-auslegen) vergleichen.
 
 </Loesung>

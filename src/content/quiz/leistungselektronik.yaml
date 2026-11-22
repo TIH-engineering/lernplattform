@@ -260,3 +260,31 @@ fragen:
     erklaerung: >-
       In dieser Schleife springt der Strom bei jedem Schaltvorgang zwischen null und vollem Wert. Die Drossel führt einen fast
       konstanten Strom und gehört **nicht** dazu. Darum muss der Eingangskondensator so nah wie möglich an Schalter und Diode.
+
+  # ---------- Ferritkern, AL-Wert, Sättigung ----------
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Ferritkern hat $A_\mathrm{L} = 160\,\mathrm{nH}$. Welche Induktivität hat eine Wicklung mit 25 Windungen (in µH)?'
+    loesung: 100
+    einheit: µH
+    toleranz: 2
+    erklaerung: '$L = A_\mathrm{L} N^2 = 160\,\mathrm{nH} \cdot 625 = 100\,\mu\mathrm{H}$. Typischer Fehler: mit $N$ statt $N^2$ rechnen (4 µH).'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Eine Drossel mit $L = 47\,\mu\mathrm{H}$ und $N = 15$ Windungen auf einem Kern mit $A_\mathrm{e} = 40\,\mathrm{mm^2}$ führt den Spitzenstrom 3 A. Wie groß ist die Spitzenflussdichte (in T)?'
+    loesung: 0.235
+    einheit: T
+    toleranz: 2
+    erklaerung: '$\hat{B} = \dfrac{L I}{N A_\mathrm{e}} = \dfrac{47\,\mu\mathrm{H} \cdot 3\,\mathrm{A}}{15 \cdot 40 \cdot 10^{-6}\,\mathrm{m^2}} \approx 0{,}235\,\mathrm{T}$ – für Ferrit noch zulässig (Grenze etwa 0,3 T).'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Beim Messen des Stromanstiegs in einer Drossel knickt die Kurve ab 2,8 A steil nach oben. Was bedeutet das?
+    optionen:
+      - text: Der Kern beginnt zu sättigen – die Induktivität bricht ein, der Strom steigt immer schneller.
+        richtig: true
+      - text: Die Freilaufdiode leitet.
+      - text: Der Shunt ist zu groß.
+      - text: Die Induktivität steigt mit dem Strom.
+    erklaerung: Aus $\mathrm{d}i/\mathrm{d}t = U/L$ folgt – wird $L$ kleiner, wird der Anstieg steiler. Den Sättigungsstrom liest man dort ab, wo die Steigung um 10 … 30 % gewachsen ist.

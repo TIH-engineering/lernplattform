@@ -1,0 +1,171 @@
+---
+title: Kippstufen
+description: "Astabile, monostabile und bistabile Kippstufe: Funktionsprinzip mit zwei Transistoren, Zeitdiagramme, Kippzeit aus R und C, Timer 555 als Monoflop, Anwendungen wie Blinker, Treppenhauslicht, Entprellen und Ein-Aus-Schaltung."
+sidebar:
+  label: 2 · Kippstufen
+  order: 2
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Kasten from '../../../../components/Kasten.astro';
+import Multivibrator from '../../../../assets/elektronik/multivibrator.svg';
+import MultiSignale from '../../../../assets/elektronik/multivibrator-signale.svg';
+import Monoflop from '../../../../assets/elektronik/monoflop-555.svg';
+import MonoSignale from '../../../../assets/elektronik/monoflop-signale.svg';
+import Bistabil from '../../../../assets/elektronik/bistabil.svg';
+import BiSignale from '../../../../assets/elektronik/bistabil-signale.svg';
+
+<Kasten typ="lernziele">
+
+- astabile, monostabile und bistabile Kippstufen an der Zahl ihrer stabilen Zustände unterscheiden,
+- die Funktion einer Kippstufe mit zwei Transistoren anhand eines Zeitdiagramms erklären,
+- Kippzeiten aus Widerstand und Kondensator berechnen (Transistor-Multivibrator, Timer 555),
+- für eine Aufgabe (Blinker, Treppenhauslicht, Ein/Aus) die passende Kippstufe auswählen.
+
+</Kasten>
+
+## 1 · Was ist eine Kippstufe?
+
+Eine Kippstufe kennt nur **zwei Zustände**: Ausgang High oder Low. Zwischen ihnen springt („kippt“) sie schnell um – dafür sorgt
+eine **Mitkopplung**: Hat das Umschalten einmal begonnen, beschleunigt es sich selbst. Das unterscheidet Kippstufen von den
+Sinusoszillatoren der [Theorie-Seite](/oszillatoren/theorie/), deren Verstärker im linearen Bereich arbeitet.
+
+Entscheidend ist, wie viele der beiden Zustände **stabil** sind, also ohne äußeren Anstoß erhalten bleiben:
+
+| Kippstufe | stabile Zustände | Verhalten | typische Anwendung |
+| --- | --- | --- | --- |
+| **astabil** | keiner | kippt von selbst dauernd hin und her → Rechteckgenerator | Blinker, Taktgeber, Summer |
+| **monostabil** (Monoflop) | einer | wird angestoßen, bleibt eine feste Zeit im anderen Zustand, kippt zurück | Treppenhauslicht, Impulsverlängerung, Entprellen |
+| **bistabil** | zwei | bleibt in jedem Zustand, bis er von außen umgeschaltet wird → Speicher | Ein/Aus mit zwei Tastern, Zustand merken |
+
+Die Zeiten der astabilen und monostabilen Kippstufe bestimmt ein **RC-Glied**: Ein Kondensator lädt sich über einen Widerstand,
+bis eine Schwelle erreicht ist. Wie lange das dauert, folgt aus der Ladekurve $u_\mathrm{C}(t)$ – siehe
+[Kondensator](/grundlagen/kondensator/).
+
+## 2 · Astabile Kippstufe
+
+### Mit zwei Transistoren (Multivibrator)
+
+<Abbildung bild={Multivibrator} unterschrift="Astabile Kippstufe: Jeder Kollektor ist über einen Kondensator mit der Basis des anderen Transistors gekoppelt" />
+
+Die Schaltung ist symmetrisch: Jeder Transistor arbeitet als [Schalter](/transistoren/theorie/#3--der-transistor-als-schalter), und
+jeder Kollektor steuert über einen Kondensator die Basis des anderen.
+
+**Ablauf** (T1 hat gerade eingeschaltet):
+
+1. T1 schaltet durch, sein Kollektor K1 springt von etwa $U_\mathrm{B}$ auf fast 0 V.
+2. $C_1$ kann seine Ladung nicht sprunghaft ändern: Die Spannung über ihm bleibt gleich. Darum springt die **Basis von T2** um denselben
+   Betrag nach unten – auf etwa $-(U_\mathrm{B} - 0{,}8\,\mathrm{V})$. T2 sperrt sicher.
+3. Über $R_\mathrm{B2}$ lädt sich $C_1$ um; die Basisspannung von T2 steigt mit der e-Funktion in Richtung $+U_\mathrm{B}$.
+4. Erreicht sie etwa 0,7 V, schaltet T2 ein. Sein Kollektor fällt, und über $C_2$ wird nun T1 gesperrt – das Spiel beginnt
+   von vorne mit vertauschten Rollen.
+
+<Abbildung bild={MultiSignale} unterschrift="Zeitdiagramm (berechnet für 5 V): Kollektorspannungen als Rechteck, Basisspannung von T2 mit Sprung nach unten und Ladekurve bis 0,7 V" />
+
+Die Kippzeit ist die Zeit, in der die Basisspannung von $-(U_\mathrm{B} - 0{,}8\,\mathrm{V})$ bis 0,7 V läuft:
+
+<Kasten typ="formel" titel="Kippzeiten des Multivibrators">
+
+$$
+t_1 = R_\mathrm{B2} C_1 \cdot \ln \frac{2 U_\mathrm{B} - 0{,}8\,\mathrm{V}}{U_\mathrm{B} - 0{,}7\,\mathrm{V}} \approx 0{,}69\, R_\mathrm{B2} C_1
+\qquad
+t_2 \approx 0{,}69\, R_\mathrm{B1} C_2
+\qquad
+T = t_1 + t_2
+$$
+
+<span slot="gilt">Transistoren voll gesättigt ($U_\mathrm{CE,sat} \approx 0{,}1\,\mathrm{V}$). Die Näherung $\ln 2 \approx 0{,}69$ gilt für große $U_\mathrm{B}$; bei 5 V ist der Faktor 0,76, bei 12 V 0,72.</span>
+
+</Kasten>
+
+- Mit $R_\mathrm{B1} C_2 \neq R_\mathrm{B2} C_1$ wird das Tastverhältnis ungleich – z. B. kurze Blitze mit langen Pausen.
+- Damit der eingeschaltete Transistor wirklich gesättigt ist, muss genug Basisstrom fließen: $R_\mathrm{B} \leq B_\mathrm{min} \cdot R_\mathrm{C}$
+  (besser mit Reserve).
+- Die Flanken an den Kollektoren sind etwas abgerundet: Beim Sperren lädt sich der Koppelkondensator über $R_\mathrm{C}$ nach
+  ($\tau = R_\mathrm{C} C$). Deshalb wählt man $R_\mathrm{C}$ deutlich kleiner als $R_\mathrm{B}$.
+
+<Kasten typ="achtung" titel="Achtung: negative Basisspannung">
+
+Die Basis springt auf etwa $-U_\mathrm{B}$. Kleinsignaltransistoren vertragen in Sperrrichtung zwischen Emitter und Basis aber oft nur
+5 … 6 V (Datenblattwert $U_\mathrm{EBO}$). Bei höherer Versorgung bricht die Basis-Emitter-Strecke durch – die Zeit stimmt nicht mehr, und
+der Transistor altert. Abhilfe: $U_\mathrm{B} \leq 5\,\mathrm{V}$ oder je eine Diode in Reihe zur Basis.
+
+</Kasten>
+
+### Mit Operationsverstärker oder Timer 555
+
+Dasselbe Prinzip – Kondensator lädt über einen Widerstand bis zu einer Schwelle, dann kippt der Ausgang – steckt im
+[Relaxationsoszillator mit OPV](/oszillatoren/theorie/#7--relaxationsoszillator-mit-opv) und im
+[Timer 555 als astabile Kippstufe](/oszillatoren/theorie/#timer-ic-555-als-astabile-kippstufe). Dort sind auch die Formeln für
+Frequenz und Tastverhältnis.
+
+## 3 · Monostabile Kippstufe (Monoflop)
+
+Ein Monoflop hat einen **stabilen Ruhezustand**. Ein kurzer Anstoß (Trigger) kippt ihn in den anderen Zustand; dort bleibt er eine
+genau festgelegte Zeit $t_\mathrm{i}$ und kippt dann **von selbst** zurück. Aus einem kurzen Impuls wird so ein Impuls definierter Länge.
+
+### Monoflop mit dem Timer 555
+
+<Abbildung bild={Monoflop} unterschrift="Timer 555 als monostabile Kippstufe" />
+
+Im **555** stecken zwei Komparatoren (Schwellen $\tfrac13 U_\mathrm{B}$ und $\tfrac23 U_\mathrm{B}$), ein Speicher-Flipflop und ein
+Entladetransistor (Anschluss DIS). In Ruhe ist der Ausgang Low und der Kondensator über DIS kurzgeschlossen.
+
+1. Sinkt der Trigger-Eingang (Pin 2) kurz unter $\tfrac13 U_\mathrm{B}$ (Taster gedrückt), kippt der Ausgang auf High und DIS gibt den
+   Kondensator frei.
+2. $C$ lädt sich über $R$ auf.
+3. Erreicht $u_\mathrm{C}$ an THR (Pin 6) $\tfrac23 U_\mathrm{B}$, kippt der Ausgang zurück auf Low und DIS entlädt $C$ schlagartig.
+
+<Abbildung bild={MonoSignale} unterschrift="Zeitdiagramm des Monoflops: Trigger, Kondensatorspannung und Ausgang" />
+
+<Kasten typ="formel" titel="Impulsdauer des 555-Monoflops">
+
+$$
+t_\mathrm{i} = R C \cdot \ln \frac{U_\mathrm{B}}{U_\mathrm{B} - \tfrac23 U_\mathrm{B}} = R C \cdot \ln 3 \approx 1{,}1\, R C
+$$
+
+<span slot="gilt">Kondensator startet bei 0 V; Leckstrom des Kondensators klein gegen den Ladestrom. Die Zeit hängt nicht von $U_\mathrm{B}$ ab.</span>
+
+</Kasten>
+
+- Der Trigger-Impuls muss **kürzer** als $t_\mathrm{i}$ sein. Bleibt der Taster länger gedrückt, bleibt auch der Ausgang so lange High.
+- Ein erneuter Trigger während $t_\mathrm{i}$ verlängert die Zeit beim 555 **nicht** (nicht nachtriggerbar).
+- Bei großen Zeiten (Minuten) werden $R$ und $C$ groß. Dann stören Toleranz und **Leckstrom** von Elektrolytkondensatoren
+  (z. B. −20 % … +50 %) – für genaue lange Zeiten nimmt man einen Mikrocontroller.
+
+**Anwendungen:** Treppenhauslicht (Taster startet eine feste Leuchtdauer), Impulsverlängerung (ein kurzer Sensorimpuls wird für eine
+LED sichtbar), Entprellen eines Tasters (alle Prellimpulse fallen in die Zeit $t_\mathrm{i}$), Watchdog (fehlt der Trigger, läuft die
+Zeit ab und löst einen Reset aus).
+
+Ein Monoflop lässt sich auch mit zwei Transistoren aufbauen: Man ersetzt in der astabilen Kippstufe **einen** Koppelkondensator durch
+einen Widerstand. Dann ist nur noch ein Zustand zeitbegrenzt.
+
+## 4 · Bistabile Kippstufe
+
+<Abbildung bild={Bistabil} unterschrift="Bistabile Kippstufe: Kollektor über Widerstand an die Basis des anderen Transistors, Taster S und R zum Umschalten" />
+
+Ersetzt man **beide** Koppelkondensatoren durch Widerstände, gibt es keine Zeitbegrenzung mehr. Die Schaltung hält jeden Zustand:
+
+- **Selbsthaltung:** Leitet T1, ist sein Kollektor fast 0 V. Über $R_\mathrm{K1}$ bekommt T2 keinen Basisstrom und sperrt. Der hohe
+  Kollektor von T2 versorgt über $R_\mathrm{K2}$ die Basis von T1 – T1 bleibt leitend. Der Zustand **hält sich selbst**.
+- **Setzen mit S:** S zieht die Basis von T1 auf Masse, T1 sperrt. Sein Kollektor steigt ($u_\mathrm{a1}$ High), über $R_\mathrm{K1}$
+  schaltet T2 ein, und dessen niedriger Kollektor hält T1 auch nach dem Loslassen gesperrt.
+- **Rücksetzen mit R:** R sperrt auf dieselbe Weise T2 – die Schaltung kippt zurück ($u_\mathrm{a1}$ Low).
+- Drückt man S, während $u_\mathrm{a1}$ schon High ist, ändert sich nichts.
+
+<Abbildung bild={BiSignale} unterschrift="Zeitdiagramm der bistabilen Kippstufe: Der Zustand bleibt gespeichert, bis der jeweils andere Taster gedrückt wird" />
+
+Die bistabile Kippstufe ist damit ein **Speicher für ein Bit**: Sie „merkt sich“, welcher Taster zuletzt gedrückt wurde – auch wenn
+beide längst losgelassen sind. Anwendungen: Ein-/Aus-Schaltung mit zwei Tastern (Maschine starten und stoppen), Merken eines Alarms
+bis zur Quittierung.
+
+<Kasten typ="merke">
+
+Astabil, monostabil und bistabil unterscheiden sich nur in der **Kopplung** zwischen den Transistoren: zwei Kondensatoren,
+ein Kondensator und ein Widerstand, zwei Widerstände. Kondensatoren machen einen Zustand zeitlich begrenzt.
+
+</Kasten>
+
+Verwandt ist der [Schmitt-Trigger](/operationsverstaerker/theorie/): Auch er hat zwei Zustände und durch die Mitkopplung eine Hysterese –
+umgeschaltet wird aber über die Höhe eines analogen Eingangssignals statt über Taster. Digitale Speicherbausteine (Flipflops) bauen auf
+demselben Prinzip auf; sie sind Thema der Digitaltechnik.

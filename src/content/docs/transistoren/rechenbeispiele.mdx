@@ -1,6 +1,6 @@
 ---
 title: Rechenbeispiele – Transistoren
-description: Rechenbeispiele zu Basisstrom und Basiswiderstand, Relaistreiber, LED-Schalter, Längsregler, Konstantstromquelle, MOSFET-Verluste und Gate-Ansteuerung.
+description: Rechenbeispiele zu Basisstrom und Basiswiderstand, Relaistreiber, LED-Schalter, Längsregler, Konstantstromquelle, MOSFET-Verluste, Gate-Ansteuerung, Arbeitspunkt und Verstärkung der Grundschaltungen, Emitterfolger, Basisschaltung und Differenzverstärker.
 ---
 
 import Stufe from '../../../components/Stufe.astro';
@@ -215,5 +215,140 @@ $$
 
 Für ein Relais oder eine Lampe sind 1 µs völlig ausreichend. Bei PWM mit hoher Frequenz (z. B. 100 kHz, Periode 10 µs) wären
 1 µs lange Flanken viel zu langsam – die Schaltverluste würden groß. Dann braucht man einen [Gate-Treiber](/leistungselektronik/theorie/gate-treiber/).
+
+</Loesung>
+
+## Arbeitspunkt einer Emitterschaltung
+
+<Stufe wert="grundlagen" />
+
+Eine Emitterschaltung (Schaltbild unter [Grundschaltungen](/transistoren/theorie/grundschaltungen/#2--arbeitspunkt-einstellen)) hat
+$U_\mathrm{B} = 12\,\mathrm{V}$, $R_1 = 82\,\mathrm{k\Omega}$, $R_2 = 15\,\mathrm{k\Omega}$, $R_\mathrm{C} = 4{,}7\,\mathrm{k\Omega}$ und
+$R_\mathrm{E} = 1\,\mathrm{k\Omega}$. Der Transistor hat $B = 200$.
+
+**Gegeben:** Versorgung, Widerstände, $B$, $U_\mathrm{BE} \approx 0{,}7\,\mathrm{V}$ · **Gesucht:** $I_\mathrm{C}$, $U_\mathrm{CE}$; ist der Spannungsteiler „steif“?
+
+<Loesung>
+
+1. Basisspannung (Basisstrom vernachlässigt): $U_\mathrm{Basis} = 12\,\mathrm{V} \cdot \dfrac{15}{82 + 15} \approx 1{,}86\,\mathrm{V}$
+2. $U_\mathrm{E} = 1{,}86\,\mathrm{V} - 0{,}7\,\mathrm{V} = 1{,}16\,\mathrm{V}$ → $I_\mathrm{C} \approx I_\mathrm{E} = 1{,}16\,\mathrm{V}/1\,\mathrm{k\Omega} = 1{,}16\,\mathrm{mA}$
+3. $U_\mathrm{C} = 12\,\mathrm{V} - 1{,}16\,\mathrm{mA} \cdot 4{,}7\,\mathrm{k\Omega} \approx 6{,}57\,\mathrm{V}$ → $U_\mathrm{CE} = 6{,}57\,\mathrm{V} - 1{,}16\,\mathrm{V} \approx 5{,}4\,\mathrm{V}$
+4. Kontrolle: $I_\mathrm{B} = I_\mathrm{C}/B \approx 5{,}8\,\mu\mathrm{A}$, Querstrom durch $R_2$: $1{,}86\,\mathrm{V}/15\,\mathrm{k\Omega} \approx 124\,\mu\mathrm{A}$ –
+   gut zwanzigmal so groß. Der Teiler ist steif genug, die Näherung erlaubt.
+
+**Ergebnis:** $I_\mathrm{C} \approx 1{,}16\,\mathrm{mA}$, $U_\mathrm{CE} \approx 5{,}4\,\mathrm{V}$ – ungefähr in der Mitte zwischen 0 und $U_\mathrm{B} - U_\mathrm{E}$.
+
+Wer den Basisstrom mitrechnet (Ersatzspannungsquelle für den Teiler), erhält $I_\mathrm{C} \approx 1{,}08\,\mathrm{mA}$ – rund 7 % weniger.
+Für die Praxis reicht die einfache Rechnung, weil $B$ ohnehin stark streut.
+
+</Loesung>
+
+## Verstärkung und Eingangswiderstand der Emitterschaltung
+
+<Stufe wert="standard" />
+
+Die Emitterschaltung aus dem vorigen Beispiel ($I_\mathrm{E} \approx 1{,}16\,\mathrm{mA}$, $\beta = 200$) treibt eine Last
+$R_\mathrm{L} = 10\,\mathrm{k\Omega}$. Der Eingangskoppelkondensator hat $C_\mathrm{K} = 10\,\mu\mathrm{F}$.
+
+**Gesucht:** Spannungsverstärkung und Eingangswiderstand a) mit Emitterkondensator, b) ohne; c) untere Grenzfrequenz durch $C_\mathrm{K}$.
+
+<Loesung>
+
+Kleinsignalgrößen: $r_\mathrm{e} = 26\,\mathrm{mV}/1{,}16\,\mathrm{mA} \approx 22{,}5\,\Omega$, $r_\mathrm{BE} = 200 \cdot 22{,}5\,\Omega = 4{,}5\,\mathrm{k\Omega}$,
+$R_\mathrm{C} \parallel R_\mathrm{L} = 4{,}7\,\mathrm{k\Omega} \parallel 10\,\mathrm{k\Omega} \approx 3{,}2\,\mathrm{k\Omega}$, $R_1 \parallel R_2 \approx 12{,}7\,\mathrm{k\Omega}$
+
+a) $v_\mathrm{u} \approx -\dfrac{3{,}2\,\mathrm{k\Omega}}{22{,}5\,\Omega} \approx -142$ ·
+   $r_\mathrm{ein} = 12{,}7\,\mathrm{k\Omega} \parallel 4{,}5\,\mathrm{k\Omega} \approx 3{,}3\,\mathrm{k\Omega}$
+
+b) $v_\mathrm{u} \approx -\dfrac{3{,}2\,\mathrm{k\Omega}}{22{,}5\,\Omega + 1\,\mathrm{k\Omega}} \approx -3{,}1$ ·
+   $r_\mathrm{ein} = 12{,}7\,\mathrm{k\Omega} \parallel (4{,}5\,\mathrm{k\Omega} + 201 \cdot 1\,\mathrm{k\Omega}) \approx 11{,}9\,\mathrm{k\Omega}$
+
+c) $f_\mathrm{g} = \dfrac{1}{2\pi \cdot 10\,\mu\mathrm{F} \cdot 3{,}3\,\mathrm{k\Omega}} \approx 4{,}8\,\mathrm{Hz}$ (mit $C_\mathrm{E}$) bzw. $\approx 1{,}3\,\mathrm{Hz}$ (ohne).
+
+**Ergebnis:** mit $C_\mathrm{E}$ $v_\mathrm{u} \approx -142$, $r_\mathrm{ein} \approx 3{,}3\,\mathrm{k\Omega}$; ohne $C_\mathrm{E}$ $v_\mathrm{u} \approx -3{,}1$, $r_\mathrm{ein} \approx 12\,\mathrm{k\Omega}$.
+
+**Plausibilität:** Eine LTspice-Simulation mit dem 2N3904 liefert $-126$ bzw. $-3{,}10$ und $3{,}0\,\mathrm{k\Omega}$ bzw. $11{,}7\,\mathrm{k\Omega}$.
+Die große Verstärkung in a) ist empfindlich gegenüber Arbeitspunkt und Transistor, die kleine in b) praktisch nicht.
+
+</Loesung>
+
+## Emitterfolger als Impedanzwandler
+
+<Stufe wert="standard" />
+
+Ein Sensor mit dem Innenwiderstand $R_\mathrm{G} = 10\,\mathrm{k\Omega}$ soll eine Last $R_\mathrm{L} = 1\,\mathrm{k\Omega}$ ansteuern.
+
+a) Welcher Anteil der Sensorspannung $u_\mathrm{q}$ kommt bei **direktem** Anschluss an der Last an?
+b) Dazwischen kommt ein Emitterfolger ($U_\mathrm{B} = 12\,\mathrm{V}$, $R_1 = 22\,\mathrm{k\Omega}$, $R_2 = 27\,\mathrm{k\Omega}$,
+$R_\mathrm{E} = 1\,\mathrm{k\Omega}$, $\beta = 200$). Berechne Eingangswiderstand, Verstärkung und den Anteil an der Last.
+
+<Loesung>
+
+a) Spannungsteiler: $\dfrac{1\,\mathrm{k\Omega}}{10\,\mathrm{k\Omega} + 1\,\mathrm{k\Omega}} \approx 0{,}091$ – nur 9 % kommen an.
+
+b) Arbeitspunkt: $U_\mathrm{Basis} = 12\,\mathrm{V} \cdot \tfrac{27}{49} \approx 6{,}61\,\mathrm{V}$, $U_\mathrm{E} \approx 5{,}91\,\mathrm{V}$,
+   $I_\mathrm{E} \approx 5{,}9\,\mathrm{mA}$, $r_\mathrm{e} \approx 4{,}4\,\Omega$
+- $R_\mathrm{E}' = R_\mathrm{E} \parallel R_\mathrm{L} = 500\,\Omega$, $v_\mathrm{u} = \dfrac{500}{504{,}4} \approx 0{,}991$
+- $r_\mathrm{ein} = (22\,\mathrm{k\Omega} \parallel 27\,\mathrm{k\Omega}) \parallel 201 \cdot 504{,}4\,\Omega \approx 12{,}1\,\mathrm{k\Omega} \parallel 101\,\mathrm{k\Omega} \approx 10{,}8\,\mathrm{k\Omega}$
+- Eingangsteiler: $\dfrac{10{,}8}{10 + 10{,}8} \approx 0{,}52$ → an der Last: $0{,}52 \cdot 0{,}991 \approx 0{,}515$
+
+**Ergebnis:** Mit Emitterfolger kommen gut 51 % statt 9 % an – fast sechsmal so viel. Der Ausgangswiderstand des Folgers beträgt nur
+etwa $31\,\Omega$ ($r_\mathrm{e} + R_\mathrm{G}'/(\beta + 1)$ parallel $R_\mathrm{E}$).
+
+Noch besser wäre ein größerer Eingangswiderstand: Er wird hier vom Basisspannungsteiler begrenzt (12,1 kΩ). Hochohmigere Teiler oder ein
+[Spannungsfolger mit OPV](/operationsverstaerker/theorie/) helfen.
+
+</Loesung>
+
+## Basisschaltung an einer 50-Ω-Quelle
+
+<Stufe wert="standard" />
+
+Eine Basisschaltung arbeitet mit $I_\mathrm{E} = 1{,}16\,\mathrm{mA}$, $R_\mathrm{E} = 1\,\mathrm{k\Omega}$ und $R_\mathrm{C} = 4{,}7\,\mathrm{k\Omega}$ (ohne Last).
+Die Signalquelle hat $50\,\Omega$ Innenwiderstand (Antennenkabel). Berechne Eingangswiderstand, Spannungsverstärkung und die
+Gesamtverstärkung bezogen auf die Quellenspannung.
+
+<Loesung>
+
+$r_\mathrm{e} \approx 22{,}5\,\Omega$ → $r_\mathrm{ein} = 22{,}5\,\Omega \parallel 1\,\mathrm{k\Omega} \approx 22\,\Omega$ ·
+$v_\mathrm{u} = +\dfrac{4{,}7\,\mathrm{k\Omega}}{22{,}5\,\Omega} \approx 209$
+
+Eingangsteiler: $\dfrac{22}{50 + 22} \approx 0{,}31$ → Gesamtverstärkung $\approx 0{,}31 \cdot 209 \approx 64$
+
+**Ergebnis:** $r_\mathrm{ein} \approx 22\,\Omega$, $v_\mathrm{u} \approx 209$ (nicht invertierend), bezogen auf die Quelle $\approx 64$.
+
+Der kleine Eingangswiderstand ist hier gewollt: Er liegt in der Größenordnung des Kabelwiderstands. Eine Emitterschaltung würde das
+Kabel dagegen kaum belasten – passt aber schlecht zu einem 50-Ω-System.
+
+</Loesung>
+
+## Differenzverstärker: Nutzsignal und Brummstörung
+
+<Stufe wert="vertiefung" />
+
+Ein Differenzverstärker ($U_\mathrm{B} = \pm 12\,\mathrm{V}$, $R_\mathrm{C} = 6{,}8\,\mathrm{k\Omega}$, $R_\mathrm{E} = 5{,}6\,\mathrm{k\Omega}$) erhält ein
+Sensorsignal von $u_\mathrm{D} = 10\,\mathrm{mV}$. Auf beiden Leitungen liegt zusätzlich eine Brummstörung von $u_\mathrm{Gl} = 0{,}5\,\mathrm{V}$
+(Scheitelwert, 50 Hz).
+
+a) Berechne den Arbeitspunkt und $r_\mathrm{e}$.
+b) Welche Nutz- und Störamplitude erscheint am Kollektor von T2 (einseitiger Ausgang)?
+c) Wie groß ist die CMRR in dB?
+d) Was ändert eine Stromquelle mit dem Innenwiderstand $r_\mathrm{q} = 1\,\mathrm{M\Omega}$ statt $R_\mathrm{E}$?
+
+<Loesung>
+
+a) $I_\mathrm{E,ges} = \dfrac{12\,\mathrm{V} - 0{,}7\,\mathrm{V}}{5{,}6\,\mathrm{k\Omega}} \approx 2{,}02\,\mathrm{mA}$, je Transistor $1{,}01\,\mathrm{mA}$ ·
+   $U_\mathrm{C} = 12\,\mathrm{V} - 6{,}8\,\mathrm{k\Omega} \cdot 1{,}01\,\mathrm{mA} \approx 5{,}1\,\mathrm{V}$ · $r_\mathrm{e} \approx 25{,}8\,\Omega$
+
+b) $v_\mathrm{D} = \dfrac{6{,}8\,\mathrm{k\Omega}}{2 \cdot 25{,}8\,\Omega} \approx 132$ → Nutzsignal $132 \cdot 10\,\mathrm{mV} \approx 1{,}32\,\mathrm{V}$ ·
+   $\lvert v_\mathrm{Gl} \rvert = \dfrac{6{,}8\,\mathrm{k\Omega}}{2 \cdot 5{,}6\,\mathrm{k\Omega}} \approx 0{,}61$ → Störung $0{,}61 \cdot 0{,}5\,\mathrm{V} \approx 0{,}30\,\mathrm{V}$
+
+c) $\mathrm{CMRR} = \dfrac{R_\mathrm{E}}{r_\mathrm{e}} \approx \dfrac{5600}{25{,}8} \approx 217$ → $20 \lg 217 \approx 47\,\mathrm{dB}$
+
+d) $\mathrm{CMRR} \approx \dfrac{1\,\mathrm{M\Omega}}{25{,}8\,\Omega} \approx 39\,000 \approx 92\,\mathrm{dB}$; die Störung am Kollektor sinkt auf
+   $\dfrac{6{,}8\,\mathrm{k\Omega}}{2\,\mathrm{M\Omega}} \cdot 0{,}5\,\mathrm{V} \approx 1{,}7\,\mathrm{mV}$.
+
+**Ergebnis:** Mit $R_\mathrm{E}$ ist die Störung (0,30 V) noch deutlich sichtbar neben dem Nutzsignal (1,32 V). Mit Stromquelle oder
+mit differenziellem Ausgang (Störanteile heben sich auf) verschwindet sie praktisch.
 
 </Loesung>

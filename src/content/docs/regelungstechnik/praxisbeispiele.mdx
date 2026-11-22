@@ -1,9 +1,11 @@
 ---
 title: Praxisbeispiele – Regelungstechnik
-description: Lötstation mit Zweipunkt- und PI-Regelung, Drehzahlregelung eines Lüfters mit Mikrocontroller, Raumheizung mit großer Totzeit, Konstantstrom-Laderegler, Tempomat, Regelkreis simulieren, Windup nach dem Aufheizen.
+description: Lötstation mit Zweipunkt- und PI-Regelung, Drehzahlregelung eines Lüfters mit Mikrocontroller, Raumheizung mit großer Totzeit, Konstantstrom-Laderegler, Tempomat, Regelkreis simulieren, Windup nach dem Aufheizen, Helligkeitsregelung im Labor, Ball-on-Beam mit P-, PD- und PID-Regler.
 ---
 
 import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import BallOnBeam from '../../../assets/mtrs/ball-on-beam.svg';
 
 ## Lötstation
 
@@ -127,5 +129,67 @@ Bevor ein Regler an eine teure Anlage geht, wird er simuliert.
    Python, LTspice mit Ersatzschaltungen).
 2. Stellgrößenbegrenzung, Totzeiten (auch Abtastung und Rechenzeit), Messrauschen und Auflösung von Sensor und A/D-Umsetzer,
    die wichtigsten Störgrößen. Ein Regler, der nur im idealen Modell gut aussieht, schwingt an der echten Anlage oft.
+
+</Loesung>
+
+## Helligkeitsregelung im Labor
+
+Ein einfacher geschlossener Regelkreis zum Selbstaufbauen: Eine LED beleuchtet einen Fotowiderstand (LDR) oder eine Fotodiode in einem
+dunklen Röhrchen. Ein Mikrocontroller misst die Helligkeit mit dem ADC und stellt den PWM-Tastgrad der LED so ein, dass ein Sollwert (vom
+Potentiometer) gehalten wird. Mit einer Taschenlampe kann man von außen eine **Störung** einbringen.
+
+1. Ordne zu: Sollwert, Istwert, Regelabweichung, Stellgröße, Stellglied, Strecke, Messglied, Störgröße.
+2. Der Regler ist zuerst ein reiner P-Regler. Was beobachtest du, wenn du die Taschenlampe dazuhältst?
+3. Mit einem PI-Regler wird der Sollwert genau erreicht. Was macht die LED, wenn die Taschenlampe sehr hell ist?
+4. Warum schwingt der Kreis mit einem LDR leichter als mit einer Fotodiode, wenn man $K_\mathrm{P}$ erhöht?
+
+<Loesung>
+
+1. Sollwert: Potentiometer-Einstellung · Istwert: ADC-Wert des Lichtsensors · Regelabweichung: Differenz im Programm · Stellgröße: PWM-Tastgrad ·
+   Stellglied: Transistor bzw. Port-Pin mit LED · Strecke: LED → Licht → Sensor · Messglied: Sensor mit Spannungsteiler und ADC · Störgröße: Fremdlicht.
+2. Die Regelung dimmt die LED, aber nicht genug: Der Istwert bleibt über dem Sollwert (**bleibende Regelabweichung**) – der P-Regler braucht
+   eine Abweichung, um eine geänderte Stellgröße auszugeben.
+3. Der I-Anteil senkt den Tastgrad bis 0 %. Ist das Fremdlicht allein schon heller als der Sollwert, kann der Regler nichts mehr tun
+   (**Stellgrößenbegrenzung**) – und ohne [Anti-Windup](/regelungstechnik/theorie/digitale-regelung/) läuft der I-Anteil weiter weg.
+4. Ein LDR ist träge (Zeitkonstante einige 10 ms) – er wirkt wie ein zusätzliches PT1-Glied und kostet Phasenreserve. Die Fotodiode reagiert
+   fast sofort; dort begrenzen eher die Abtastzeit und das PWM-Flackern (Tiefpass im Messzweig nötig).
+
+</Loesung>
+
+## Ball-on-Beam: P, PD oder PID?
+
+<Abbildung bild={BallOnBeam} unterschrift="Ball-on-Beam: Ein Servo kippt den Balken, ein Abstandssensor misst die Lage der Kugel" />
+
+Eine Kugel rollt auf einem Balken, den ein Servomotor um den Winkel $\alpha$ kippt. Ein Abstandssensor (Infrarot oder Ultraschall) misst die
+Position $x$; der Regler soll die Kugel an einer Sollposition halten. Für eine rollende Vollkugel und kleine Winkel gilt
+
+$$
+\ddot{x} = \frac{5}{7}\, g \cdot \alpha \approx 7{,}0\,\mathrm{\frac{m}{s^2}} \cdot \alpha \quad (\alpha \text{ in rad})
+$$
+
+1. Was für eine Strecke ist das (Übertragungsglied)? Warum ist sie schwer zu regeln?
+2. Was passiert mit einem reinen P-Regler?
+3. Ein PD-Regler stellt $\alpha = -K_\mathrm{P}\, e - K_\mathrm{D}\, \dot{e}$ (mit $e = x - w$). Bestimme $K_\mathrm{D}$ für $K_\mathrm{P} = 0{,}5\,\mathrm{rad/m}$ so, dass
+   die Dämpfung $D = 0{,}7$ wird. Wie lange dauert das Ausregeln ungefähr?
+4. Wozu braucht man zusätzlich einen kleinen I-Anteil, und worauf muss man dabei achten?
+5. Welche realen Effekte machen die Regelung schwieriger als das Modell?
+
+<Loesung>
+
+1. Der Winkel bestimmt die **Beschleunigung**, die Position ist das zweifache Integral davon: zwei I-Glieder hintereinander (**doppelt
+   integrierend**, $G_\mathrm{S} = 7{,}0/s^2$). Jedes I-Glied bringt −90° Phase – die Strecke hat schon von sich aus −180°.
+2. Der Kreis ist an der Stabilitätsgrenze: Die Kugel **pendelt** dauernd um den Sollwert (wie ein Federpendel ohne Reibung), jede kleine
+   Verzögerung (Servo, Sensor, Abtastung) facht die Schwingung an. Ein reiner P-Regler funktioniert nicht.
+3. Eingesetzt: $\ddot{x} + 7{,}0 K_\mathrm{D}\, \dot{x} + 7{,}0 K_\mathrm{P}\, x = 7{,}0 K_\mathrm{P}\, w$ – ein PT2-Glied mit
+   $\omega_0 = \sqrt{7{,}0 K_\mathrm{P}} = \sqrt{3{,}5}\,\mathrm{s^{-1}} \approx 1{,}87\,\mathrm{s^{-1}}$ und $2 D \omega_0 = 7{,}0 K_\mathrm{D}$ →
+   $K_\mathrm{D} = \dfrac{2 \cdot 0{,}7 \cdot 1{,}87}{7{,}0}\,\mathrm{rad \cdot s/m} \approx 0{,}37\,\mathrm{rad \cdot s/m}$.
+   Ausregelzeit (2 %-Band) ≈ $\dfrac{4}{D \omega_0} \approx 3\,\mathrm{s}$. Der D-Anteil wirkt wie eine Dämpfung: Er kippt den Balken schon
+   gegen die Bewegung, bevor die Kugel das Ziel erreicht.
+4. Ist der Balken bei $\alpha = 0$ nicht genau waagrecht (Montage, Servo-Nullpunkt) oder hat der Sensor einen Offset, bleibt eine Abweichung.
+   Ein kleiner I-Anteil beseitigt sie. Er bringt aber zusätzliche Phasenverschiebung → nur **schwach** einstellen und Anti-Windup verwenden,
+   weil der Servowinkel begrenzt ist.
+5. Sensorrauschen (der D-Anteil verstärkt es → $\dot{x}$ filtern), Totzeit und begrenzte Geschwindigkeit des Servos, Abtastzeit des Reglers
+   (hier etwa 10 … 20 ms sinnvoll), begrenzter Winkel (Stellgrößenbegrenzung), Reibung und Unebenheiten des Balkens. Darum wird der Regler
+   zuerst [simuliert](#regelkreis-vorher-simulieren) und dann vorsichtig am echten Aufbau nachgestellt.
 
 </Loesung>

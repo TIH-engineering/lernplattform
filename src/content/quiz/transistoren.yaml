@@ -138,3 +138,94 @@ fragen:
       - text: Bei 10 V an der Basis
       - text: Er leitet nie, PNP-Transistoren sind nur für Verstärker
     erklaerung: Die Basis muss etwa 0,7 V **unter** dem Emitter liegen. Bei 5 V an der Basis ist U_BE = 0 – der Transistor sperrt.
+
+  # ---------- Grundschaltungen und Differenzverstärker ----------
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Transistor arbeitet mit $I_\mathrm{E} = 2\,\mathrm{mA}$. Wie groß ist der differenzielle Emitterwiderstand $r_\mathrm{e}$ (Temperaturspannung 26 mV)?'
+    loesung: 13
+    einheit: Ω
+    toleranz: 3
+    erklaerung: '$r_\mathrm{e} = U_\mathrm{T}/I_\mathrm{E} = 26\,\mathrm{mV}/2\,\mathrm{mA} = 13\,\Omega$. Doppelter Strom → halber $r_\mathrm{e}$ → doppelte Verstärkung der Emitterschaltung. Typischer Fehler: mit 0,7 V statt 26 mV rechnen.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie liegt die Ausgangsspannung einer Emitterschaltung zur Eingangsspannung?
+    optionen:
+      - text: um 180° verschoben – steigt die Eingangsspannung, sinkt die Ausgangsspannung
+        richtig: true
+      - text: in Phase, aber kleiner
+      - text: um 90° verschoben wie bei einem Kondensator
+      - text: in Phase und genau gleich groß
+    erklaerung: Mehr Basisspannung → mehr Kollektorstrom → mehr Spannung an $R_\mathrm{C}$ → die Kollektorspannung sinkt. Die Emitterschaltung invertiert. Gleichphasig sind Kollektor- und Basisschaltung.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Eine Emitterschaltung hat $R_\mathrm{C} = 3{,}3\,\mathrm{k\Omega}$ und einen nicht überbrückten Emitterwiderstand $R_\mathrm{E} = 680\,\Omega$ ($r_\mathrm{e}$ vernachlässigbar, ohne Last). Wie groß ist die Spannungsverstärkung (mit Vorzeichen)?'
+    loesung: -4.853
+    toleranz: 3
+    erklaerung: '$v_\mathrm{u} \approx -R_\mathrm{C}/R_\mathrm{E} = -3300/680 \approx -4{,}85$. Mit Gegenkopplung bestimmt nur noch das Widerstandsverhältnis die Verstärkung – unabhängig von $\beta$ und Temperatur.'
+
+  - typ: mc
+    stufe: standard
+    frage: Was bewirkt ein Kondensator parallel zum Emitterwiderstand einer Emitterschaltung?
+    optionen:
+      - text: Er hebt die Gegenkopplung für das Signal auf – die Verstärkung steigt stark, der Arbeitspunkt bleibt stabil.
+        richtig: true
+      - text: Er verschiebt den Arbeitspunkt in die Sättigung.
+      - text: Er senkt die Verstärkung auf 1.
+      - text: Er hat keinen Einfluss, weil Kondensatoren Gleichstrom sperren.
+    erklaerung: Für Gleichstrom ist der Kondensator offen – $R_\mathrm{E}$ stabilisiert weiterhin den Arbeitspunkt. Für das Signal ist er ein Kurzschluss – der Emitter liegt an Masse, $v_\mathrm{u} \approx -R_\mathrm{C}/r_\mathrm{e}$.
+
+  - typ: mc
+    stufe: standard
+    frage: Eine hochohmige Sensorquelle soll eine niederohmige Last treiben. Welche Transistorgrundschaltung passt dazwischen?
+    optionen:
+      - text: Kollektorschaltung (Emitterfolger)
+        richtig: true
+      - text: Basisschaltung
+      - text: Emitterschaltung mit überbrücktem Emitterwiderstand
+      - text: keine – Transistoren können das nicht
+    erklaerung: Der Emitterfolger hat einen großen Eingangswiderstand (≈ $\beta$-fache Last) und einen sehr kleinen Ausgangswiderstand bei $v_\mathrm{u} \approx 1$ – ein Impedanzwandler. Die Basisschaltung hätte einen sehr kleinen Eingangswiderstand.
+
+  - typ: mc
+    stufe: standard
+    frage: Auf beiden Eingängen eines Differenzverstärkers liegt dieselbe Brummspannung. Was passiert damit?
+    optionen:
+      - text: Sie ist ein Gleichtaktsignal und wird kaum verstärkt; am differenziellen Ausgang hebt sie sich nahezu auf.
+        richtig: true
+      - text: Sie wird genauso verstärkt wie das Nutzsignal.
+      - text: Sie wird doppelt verstärkt, weil sie auf zwei Eingängen liegt.
+      - text: Sie zerstört den Differenzverstärker.
+    erklaerung: Bei Gleichtaktansteuerung wandert der gemeinsame Emitterpunkt mit, der Emitterstrom ändert sich kaum. Die Gleichtaktverstärkung ist ≈ $R_\mathrm{C}/(2R_\mathrm{E})$ – klein gegenüber der Differenzverstärkung $R_\mathrm{C}/(2r_\mathrm{e})$.
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein Differenzverstärker hat $R_\mathrm{E} = 10\,\mathrm{k\Omega}$ und je Transistor $r_\mathrm{e} = 25\,\Omega$. Wie groß ist die Gleichtaktunterdrückung (einseitiger Ausgang) in dB?'
+    loesung: 52.04
+    einheit: dB
+    toleranz: 0.5
+    toleranzArt: absolut
+    erklaerung: '$\mathrm{CMRR} \approx R_\mathrm{E}/r_\mathrm{e} = 400$ → $20 \lg 400 \approx 52\,\mathrm{dB}$. Typischer Fehler: $10 \lg$ statt $20 \lg$ (26 dB).'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum ersetzt man den gemeinsamen Emitterwiderstand eines Differenzverstärkers durch eine Konstantstromquelle?
+    optionen:
+      - text: Sie hält den gemeinsamen Strom fest und wirkt für Signale wie ein sehr großer Widerstand – die Gleichtaktunterdrückung steigt stark.
+        richtig: true
+      - text: Sie vergrößert die Differenzverstärkung um den Faktor 1000.
+      - text: Damit braucht die Schaltung keine Versorgungsspannung mehr.
+      - text: Sie macht die beiden Transistoren überflüssig.
+    erklaerung: In der CMRR-Formel $R_\mathrm{E}/r_\mathrm{e}$ steht dann der Innenwiderstand der Stromquelle (z. B. 1 MΩ) – aus 47 dB werden über 90 dB. Die Differenzverstärkung hängt weiter nur von $R_\mathrm{C}$ und $r_\mathrm{e}$ ab.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Woher kommen die Eingangsruheströme eines bipolaren Operationsverstärkers?
+    optionen:
+      - text: Es sind die Basisströme der beiden Transistoren in der Differenzverstärker-Eingangsstufe.
+        richtig: true
+      - text: Es sind Leckströme durch das Gehäuse.
+      - text: Sie fließen durch die Gegenkopplungswiderstände.
+      - text: Ein idealer und ein realer OPV haben gleich große Eingangsströme.
+    erklaerung: Die Eingangstransistoren brauchen einen Basisstrom ($I_\mathrm{C}/\beta$). Kleine Unterschiede zwischen beiden Hälften erzeugen außerdem die Offsetspannung. FET-Eingänge haben fast keine Eingangsströme.

@@ -385,3 +385,68 @@ Dazu kommt die Spitze durch die Streuinduktivität – deshalb verwendet man hie
 und eine Klemmbeschaltung.
 
 </Loesung>
+
+## Windungszahl aus dem AL-Wert
+
+<Stufe wert="grundlagen" />
+
+Ein Ferrit-Ringkern hat laut Datenblatt $A_\mathrm{L} = 400\,\mathrm{nH}$. Wie viele Windungen braucht eine Spule mit $47\,\mu\mathrm{H}$? Welche
+Induktivität ergibt sich mit der aufgerundeten Windungszahl?
+
+<Loesung>
+
+$N = \sqrt{\dfrac{L}{A_\mathrm{L}}} = \sqrt{\dfrac{47\,\mu\mathrm{H}}{400\,\mathrm{nH}}} = \sqrt{117{,}5} \approx 10{,}8$ → **11 Windungen**
+
+$L = A_\mathrm{L} \cdot N^2 = 400\,\mathrm{nH} \cdot 121 \approx 48\,\mu\mathrm{H}$
+
+**Ergebnis:** 11 Windungen, $L \approx 48\,\mu\mathrm{H}$. Typischer Fehler: $L/A_\mathrm{L}$ ohne Wurzel (117 Windungen) – $L$ wächst mit $N^2$.
+Der $A_\mathrm{L}$-Wert hat oft ±25 % Toleranz; wer es genau braucht, misst nach dem Wickeln nach.
+
+</Loesung>
+
+## Speicherdrossel auf Ferritkern
+
+<Stufe wert="vertiefung" />
+
+Für einen Tiefsetzsteller wird eine Drossel mit $L = 100\,\mu\mathrm{H}$ gebraucht. Der Gleichstrom beträgt 2 A, die Welligkeit
+$\Delta I_\mathrm{L} = 0{,}6\,\mathrm{A}$. Ein Ferrit-Schalenkern ist mit zwei Luftspalten lieferbar (Beispieldaten, typisch für einen Kern dieser
+Größe): $A_\mathrm{e} = 64\,\mathrm{mm^2}$, $A_\mathrm{L} = 2500\,\mathrm{nH}$ (ohne Luftspalt) bzw. $250\,\mathrm{nH}$ (mit Luftspalt). Zulässig sind
+$\hat{B} \leq 0{,}3\,\mathrm{T}$.
+
+1. Berechne Windungszahl und Spitzenflussdichte für beide Varianten.
+2. Wie groß ist der Luftspalt ungefähr?
+3. Welcher Drahtquerschnitt passt bei 4 A/mm²?
+
+<Loesung>
+
+Spitzenstrom: $I_\mathrm{max} = 2\,\mathrm{A} + 0{,}3\,\mathrm{A} = 2{,}3\,\mathrm{A}$
+
+1. **Ohne Luftspalt:** $N = \sqrt{100\,\mu\mathrm{H}/2500\,\mathrm{nH}} \approx 6{,}3$ → 7 Windungen, $L = 2500\,\mathrm{nH} \cdot 49 \approx 123\,\mu\mathrm{H}$
+   $\hat{B} = \dfrac{123\,\mu\mathrm{H} \cdot 2{,}3\,\mathrm{A}}{7 \cdot 64\,\mathrm{mm^2}} \approx 0{,}63\,\mathrm{T}$ – **weit über der Sättigung** von Ferrit. Unbrauchbar.
+
+   **Mit Luftspalt:** $N = \sqrt{100\,\mu\mathrm{H}/250\,\mathrm{nH}} = 20$ Windungen, $L = 100\,\mu\mathrm{H}$
+   $\hat{B} = \dfrac{100\,\mu\mathrm{H} \cdot 2{,}3\,\mathrm{A}}{20 \cdot 64\,\mathrm{mm^2}} \approx 0{,}18\,\mathrm{T}$ ✓ (Reserve bis 0,3 T)
+2. $\delta \approx \dfrac{\mu_0 A_\mathrm{e}}{A_\mathrm{L}} = \dfrac{4\pi \cdot 10^{-7}\,\mathrm{Vs/(Am)} \cdot 64 \cdot 10^{-6}\,\mathrm{m^2}}{250 \cdot 10^{-9}\,\mathrm{Vs/A}} \approx 0{,}32\,\mathrm{mm}$
+3. Effektivstrom ≈ 2 A (die Welligkeit trägt kaum bei) → $A = 2\,\mathrm{A} / 4\,\mathrm{A/mm^2} = 0{,}5\,\mathrm{mm^2}$ → Durchmesser ≈ 0,8 mm.
+   Bei hohen Schaltfrequenzen besser mehrere dünnere Drähte parallel oder HF-Litze (Skin-Effekt).
+
+**Ergebnis:** Der Kern mit Luftspalt (20 Windungen, 0,18 T) passt; ohne Luftspalt wäre die Drossel trotz größerer Induktivität bei 2 A
+gesättigt. Paradox, aber typisch: Der Luftspalt **senkt** $A_\mathrm{L}$ – und gerade dadurch verträgt die Drossel mehr Strom.
+
+</Loesung>
+
+## Kernverluste bei doppelter Schaltfrequenz
+
+<Stufe wert="standard" />
+
+Eine Drossel hat bei 50 kHz Kernverluste von 0,2 W; davon sind 0,14 W Hysterese- und 0,06 W Wirbelstromverluste. Die Schaltfrequenz wird bei
+gleicher Flussdichte-Aussteuerung auf 100 kHz verdoppelt. Schätze die neuen Kernverluste.
+
+<Loesung>
+
+Hystereseverluste ∝ $f$: $0{,}14\,\mathrm{W} \cdot 2 = 0{,}28\,\mathrm{W}$ · Wirbelstromverluste ∝ $f^2$: $0{,}06\,\mathrm{W} \cdot 4 = 0{,}24\,\mathrm{W}$
+
+**Ergebnis:** $\approx 0{,}52\,\mathrm{W}$ – mehr als doppelt so viel. In Wirklichkeit sinkt bei höherer Frequenz meist die nötige Induktivität und damit die
+Aussteuerung, das bremst den Anstieg. Genaue Werte liefert das Verlustdiagramm des Ferrits.
+
+</Loesung>

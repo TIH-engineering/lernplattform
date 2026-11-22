@@ -1882,3 +1882,696 @@ speichere('mtrs/wheatstone.svg', 520, 280, 'Wheatstone-Messbrücke mit Diagonals
 		}
 	}
 }
+
+// =====================================================================
+// TRANSISTOR-GRUNDSCHALTUNGEN UND DIFFERENZVERSTÄRKER  →  src/assets/elektronik/
+// =====================================================================
+{
+	const S1 = 'var(--ds-signal-1, #0b72c4)';
+	const S2 = 'var(--ds-signal-2, #b45a00)';
+	const klein = 'font-size="13"';
+	/** NPN gespiegelt (Basis rechts): Mitte (x,y), Basis (x+32,y), Kollektor (x,y-32), Emitter (x,y+32) */
+	const npnR = (x, y) => `<g transform="translate(${2 * x},0) scale(-1,1)">${npn(x, y)}</g>`;
+	const masseZ = (x, y) => masse(x, y);
+	/** Spannungspfeil mit Beschriftung (senkrecht, von oben nach unten) */
+	const upfeil = (x, y1, y2, name, idx, seite = 'rechts') =>
+		pfeil(x, y1, x, y2) + text(seite === 'rechts' ? x + 8 : x - 8, (y1 + y2) / 2 + 5, sym(name, idx), seite === 'rechts' ? 'start' : 'end');
+
+	// ---------- T1) Emitterschaltung mit Spannungsteiler ----------
+	{
+		const o = 30, u = 290, xb = 150, xt = 270, yb = 160, xa = 420;
+		speichere('elektronik/emitterschaltung.svg', 520, 330, 'Emitterschaltung mit Basisspannungsteiler, Emitterwiderstand, Koppelkondensatoren und Last',
+			draht([xb, o], [xa - 60, o]) + text(xa - 50, o + 5, '+' + sym('U', 'B'), 'start') +
+			// Basisspannungsteiler
+			widerstand(xb, o, xb, yb) + neben(xb, 95, 'R', '1', 'links') + widerstand(xb, yb, xb, u) + neben(xb, 225, 'R', '2', 'links') +
+			punkt(xb, yb) + draht([xb, yb], [xt - 32, yb]) + stromspitze(215, yb, 'r') + text(215, yb - 10, sym('I', 'B')) +
+			// Eingang
+			klemme(30, yb) + draht([34, yb], [70, yb]) + kondensator(70, yb, 115, yb) + text(92, yb - 22, sym('C', 'K')) + draht([115, yb], [xb, yb]) +
+			upfeil(30, yb + 20, u - 20, 'u', 'e', 'links') + klemme(30, u) +
+			// Transistor, Kollektor- und Emitterzweig
+			npn(xt, yb) + text(xt + 22, yb + 5, 'T', 'start') +
+			widerstand(xt, o, xt, 110) + neben(xt, 70, 'R', 'C') + draht([xt, 110], [xt, yb - 32]) + punkt(xt, 110) +
+			stromspitze(xt, 52, 'u') + text(xt - 10, 54, sym('I', 'C'), 'end') +
+			draht([xt, yb + 32], [xt, 205]) + punkt(xt, 205) + widerstand(xt, 205, xt, u) + neben(xt, 250, 'R', 'E', 'links') +
+			draht([xt, 205], [330, 205]) + kondensator(330, 205, 330, u) + text(348, 252, sym('C', 'E'), 'start') + punkt(330, u) +
+			// Ausgang
+			draht([xt, 110], [305, 110]) + kondensator(305, 110, 355, 110) + text(330, 88, sym('C', 'A')) + draht([355, 110], [xa, 110]) +
+			widerstand(xa, 110, xa, u) + neben(xa, 200, 'R', 'L') + punkt(xa, 110) + upfeil(480, 130, 270, 'u', 'a') +
+			draht([34, u], [xa, u]) + punkt(xb, u) + punkt(xt, u) + masseZ(225, u) +
+			pfeil(xt + 45, yb - 20, xt + 45, yb + 24) + text(xt + 53, yb + 6, sym('U', 'CE'), 'start', klein),
+		);
+	}
+
+	// ---------- T2) Kollektorschaltung (Emitterfolger) ----------
+	{
+		const o = 30, u = 290, xb = 150, xt = 270, yb = 140, xa = 420;
+		speichere('elektronik/kollektorschaltung.svg', 520, 330, 'Kollektorschaltung (Emitterfolger): Ausgang am Emitter, Kollektor direkt an der Versorgung',
+			draht([xb, o], [xt, o]) + text(xt + 10, o + 5, '+' + sym('U', 'B'), 'start') +
+			widerstand(xb, o, xb, yb) + neben(xb, 85, 'R', '1', 'links') + widerstand(xb, yb, xb, u) + neben(xb, 215, 'R', '2', 'links') +
+			punkt(xb, yb) + draht([xb, yb], [xt - 32, yb]) +
+			klemme(30, yb) + draht([34, yb], [70, yb]) + kondensator(70, yb, 115, yb) + text(92, yb - 22, sym('C', 'K')) + draht([115, yb], [xb, yb]) +
+			upfeil(30, yb + 20, u - 20, 'u', 'e', 'links') + klemme(30, u) +
+			npn(xt, yb) + draht([xt, o], [xt, yb - 32]) + punkt(xt, o) +
+			draht([xt, yb + 32], [xt, 195]) + punkt(xt, 195) + widerstand(xt, 195, xt, u) + neben(xt, 245, 'R', 'E', 'links') +
+			draht([xt, 195], [305, 195]) + kondensator(305, 195, 355, 195) + text(330, 224, sym('C', 'A')) + draht([355, 195], [xa, 195]) +
+			widerstand(xa, 195, xa, u) + neben(xa, 245, 'R', 'L') + punkt(xa, 195) + upfeil(480, 210, 275, 'u', 'a') +
+			draht([34, u], [xa, u]) + punkt(xb, u) + punkt(xt, u) + masseZ(225, u) +
+			pfeil(xt + 40, yb + 4, xt + 40, yb + 46) + text(xt + 48, yb + 30, sym('U', 'BE'), 'start', klein),
+		);
+	}
+
+	// ---------- T3) Basisschaltung ----------
+	{
+		const o = 30, u = 290, xb = 150, xt = 270, yb = 150, xa = 420;
+		speichere('elektronik/basisschaltung.svg', 520, 330, 'Basisschaltung: Basis über Kondensator an Masse, Eingang am Emitter, Ausgang am Kollektor',
+			draht([xb, o], [xa - 60, o]) + text(xa - 50, o + 5, '+' + sym('U', 'B'), 'start') +
+			widerstand(xb, o, xb, yb) + neben(xb, 90, 'R', '1', 'links') + widerstand(xb, yb, xb, u) + neben(xb, 220, 'R', '2', 'links') +
+			punkt(xb, yb) + draht([xb, yb], [xt - 32, yb]) + draht([200, yb], [200, 215]) + punkt(200, yb) +
+			kondensator(200, 215, 200, u) + text(186, 252, sym('C', 'B'), 'end') + punkt(200, u) +
+			npn(xt, yb) +
+			widerstand(xt, o, xt, 105) + neben(xt, 68, 'R', 'C') + draht([xt, 105], [xt, yb - 32]) + punkt(xt, 105) +
+			draht([xt, yb + 32], [xt, 215]) + punkt(xt, 215) + widerstand(xt, 215, xt, u) + neben(xt, 255, 'R', 'E') +
+			// Eingang am Emitter (von rechts unten)
+			draht([xt, 215], [330, 215]) + kondensator(330, 215, 375, 215) + text(352, 193, sym('C', 'K')) + draht([375, 215], [470, 215]) + klemme(474, 215) +
+			upfeil(474, 230, u - 15, 'u', 'e') +
+			draht([xt, 105], [305, 105]) + kondensator(305, 105, 350, 105) + text(328, 83, sym('C', 'A')) + draht([350, 105], [470, 105]) + klemme(474, 105) +
+			text(484, 110, sym('u', 'a'), 'start') +
+			draht([xb, u], [478, u]) + klemme(474, u) + punkt(xb, u) + punkt(xt, u) + masseZ(240, u),
+		);
+	}
+
+	// ---------- T4) Ausgangskennlinienfeld mit Arbeitsgerade ----------
+	{
+		const x0 = 70, y0 = 280, sx = 36, sy = 100; // 1 V = 36 px, 1 mA = 100 px
+		const X = (U) => x0 + U * sx, Y = (I) => y0 - I * sy;
+		// idealisiert: B = 200, ohne Early-Effekt (waagrechte Kennlinien), ib in mA → I_C in mA
+		const ic = (ib, U) => 200 * ib * (1 - Math.exp(-U / 0.08));
+		let kurven = '';
+		for (const ibu of [2, 4, 6, 8, 10]) {
+			const pts = [];
+			for (let U = 0; U <= 12.5; U += 0.05) pts.push([X(U).toFixed(1), Y(ic(ibu / 1000, U)).toFixed(1)]);
+			kurven += `<polyline points="${p(pts)}" stroke-width="1.75"/>` + text(X(12.6), Y(ic(ibu / 1000, 12.5)) + 4, `${ibu} µA`, 'start', 'font-size="11"');
+		}
+		// Arbeitsgerade U_B = 12 V, R_C + R_E = 5,7 kΩ  →  I_C = (12 V − U_CE)/5,7 kΩ
+		const gerade = (U) => (12 - U) / 5.7;
+		// Schnittpunkt mit der Kennlinie I_B = 6 µA
+		let ua = 0;
+		for (let U = 0; U < 12; U += 0.001) if (ic(0.00578, U) >= gerade(U)) { ua = U; break; }
+		const apKurve = [];
+		for (let U = 0; U <= 12.5; U += 0.05) apKurve.push([X(U).toFixed(1), Y(ic(0.00578, U)).toFixed(1)]);
+		const ia = gerade(ua);
+		speichere('elektronik/kennlinienfeld-arbeitsgerade.svg', 600, 330,
+			`Ausgangskennlinienfeld eines NPN-Transistors (idealisiert, B = 200) mit Arbeitsgerade für 12 V und 5,7 kΩ; Arbeitspunkt bei etwa ${ua.toFixed(1).replace('.', ',')} V und ${ia.toFixed(2).replace('.', ',')} mA`,
+			pfeil(x0, y0, x0 + 490, y0) + pfeil(x0, y0, x0, 25) + text(x0 + 490, y0 + 36, sym('U', 'CE') + ' in V', 'end') + text(x0 - 10, 34, sym('I', 'C') + ' in mA', 'end') +
+			[2, 4, 6, 8, 10, 12].map((U) => strich(X(U), y0 - 4, X(U), y0 + 4) + text(X(U), y0 + 18, String(U), 'middle', 'font-size="11"')).join('') +
+			[0.5, 1, 1.5, 2].map((I) => strich(x0 - 4, Y(I), x0 + 4, Y(I)) + text(x0 - 8, Y(I) + 4, String(I).replace('.', ','), 'end', 'font-size="11"')).join('') +
+			kurven + text(X(12.6), 52, sym('I', 'B') + ' =', 'start', 'font-size="11"') +
+			`<polyline points="${p(apKurve)}" stroke="${S2}" stroke-width="2" stroke-dasharray="6 4"/>` +
+			text(X(8.4), Y(1.156) - 8, sym('I', 'B') + ' ≈ 5,8 µA', 'start', `font-size="11" fill="${S2}"`) +
+			`<polyline points="${p([[X(0), Y(gerade(0))], [X(12), Y(0)]])}" stroke="${S1}" stroke-width="2.5"/>` +
+			text(X(2.2), Y(gerade(2.2)) + 18, 'Arbeitsgerade', 'start', `font-size="12" fill="${S1}" font-weight="600"`) +
+			`<circle cx="${X(ua)}" cy="${Y(ia)}" r="6" fill="${S2}" stroke="none"/>` + text(X(ua) + 10, Y(ia) - 10, 'AP', 'start', `font-weight="700" fill="${S2}"`) +
+			strich(X(ua), Y(ia), X(ua), y0, 'stroke-width="1" stroke-dasharray="3 3"') + strich(x0, Y(ia), X(ua), Y(ia), 'stroke-width="1" stroke-dasharray="3 3"') +
+			text(X(0) + 12, Y(gerade(0)) - 12, sym('U', 'B') + '/(' + sym('R', 'C') + ' + ' + sym('R', 'E') + ')', 'start', 'font-size="11"') +
+			text(X(12), y0 - 8, sym('U', 'B'), 'middle', 'font-size="11"'),
+		);
+		console.log(`  Arbeitspunkt im Kennlinienfeld: U_CE = ${ua.toFixed(2)} V, I_C = ${ia.toFixed(3)} mA`);
+	}
+
+	// ---------- T5) Kleinsignal-Ersatzschaltbild der Emitterschaltung ----------
+	{
+		const o = 50, u = 210;
+		speichere('elektronik/kleinsignal-emitterschaltung.svg', 560, 250,
+			'Kleinsignal-Ersatzschaltbild der Emitterschaltung mit überbrücktem Emitterwiderstand: Eingang mit R1 parallel R2 parallel rBE, Ausgang mit gesteuerter Stromquelle beta mal iB parallel RC und RL',
+			klemme(30, o) + klemme(30, u) + upfeil(30, o + 18, u - 18, 'u', 'e', 'links') +
+			draht([34, o], [270, o]) + draht([34, u], [520, u]) +
+			widerstand(110, o, 110, u) + neben(110, 130, 'R', '1') + punkt(110, o) + punkt(110, u) +
+			widerstand(180, o, 180, u) + neben(180, 130, 'R', '2') + punkt(180, o) + punkt(180, u) +
+			widerstand(260, o, 260, u) + neben(260, 130, 'r', 'BE') + stromspitze(260, 84, 'u') + text(272, 84, sym('i', 'B'), 'start', klein) +
+			text(110, 30, 'B', 'middle', 'font-weight="700"') + text(260, 236, 'E', 'middle', 'font-weight="700"') +
+			// Ausgang
+			draht([360, o], [520, o]) + squelle(360, u, 360, o) + text(334, 132, 'β·' + sym('i', 'B'), 'end') + stromspitze(360, 100, 'u') +
+			widerstand(440, o, 440, u) + neben(440, 130, 'R', 'C') + punkt(440, o) + punkt(440, u) +
+			widerstand(520, o, 520, u) + neben(520, 130, 'R', 'L', 'links') + text(360, 30, 'C', 'middle', 'font-weight="700"') +
+			pfeil(550, o + 20, 550, u - 20) + text(545, o + 10, sym('u', 'a'), 'end') + punkt(360, u) +
+			strich(300, 40, 300, 225, 'stroke-width="1" stroke-dasharray="4 4"') + text(300, 30, 'Eingang | Ausgang', 'middle', 'font-size="11"'),
+		);
+	}
+
+	// ---------- T6) Differenzverstärker mit gemeinsamem Emitterwiderstand bzw. Stromquelle ----------
+	function diff(name, stromquelle) {
+		const o = 30, x1 = 200, x2 = 360, yb = 170, ye = 240, u = 330;
+		const unten = stromquelle
+			? squelle(280, u, 280, ye) + text(304, 290, sym('I', '0'), 'start') + stromspitze(280, 262, 'u') + text(304, 308, '(Stromquelle)', 'start', klein)
+			: widerstand(280, ye, 280, u) + neben(280, 288, 'R', 'E') + stromspitze(280, 262, 'u') + text(266, 264, sym('I', 'E,ges'), 'end', klein);
+		speichere(`elektronik/${name}.svg`, 560, 370,
+			stromquelle
+				? 'Differenzverstärker mit zwei NPN-Transistoren, Kollektorwiderständen und einer Konstantstromquelle im gemeinsamen Emitterzweig'
+				: 'Differenzverstärker mit zwei NPN-Transistoren, zwei Kollektorwiderständen und gemeinsamem Emitterwiderstand an der negativen Versorgung',
+			draht([x1, o], [x2, o]) + punkt(280, o) + strich(280, o, 280, o - 12) + text(280, o - 16, '+' + sym('U', 'B')) +
+			widerstand(x1, o, x1, 115) + neben(x1, 72, 'R', 'C1', 'links') + widerstand(x2, o, x2, 115) + neben(x2, 72, 'R', 'C2') +
+			draht([x1, 115], [x1, yb - 32]) + draht([x2, 115], [x2, yb - 32]) + punkt(x1, 115) + punkt(x2, 115) +
+			npn(x1, yb) + npnR(x2, yb) + text(x1 + 20, yb + 5, sym('T', '1'), 'start') + text(x2 - 20, yb + 5, sym('T', '2'), 'end') +
+			draht([x1, yb + 32], [x1, ye], [x2, ye], [x2, yb + 32]) + punkt(280, ye) +
+			stromspitze(x1, 222, 'u') + text(x1 - 8, 225, sym('I', 'E1'), 'end', klein) + stromspitze(x2, 222, 'u') + text(x2 + 8, 225, sym('I', 'E2'), 'start', klein) +
+			unten + strich(280, u, 280, u + 8) + text(280, u + 24, '−' + sym('U', 'B')) +
+			// Eingänge
+			klemme(80, yb) + draht([84, yb], [x1 - 32, yb]) + upfeil(80, yb + 16, 300, 'u', 'e1', 'links') + masse(80, 304) +
+			klemme(480, yb) + draht([x2 + 32, yb], [476, yb]) + upfeil(480, yb + 16, 300, 'u', 'e2') + masse(480, 304) +
+			// Ausgänge
+			draht([x1, 115], [120, 115]) + klemme(116, 115) + text(108, 120, sym('u', 'a1'), 'end') +
+			draht([x2, 115], [440, 115]) + klemme(444, 115) + text(452, 120, sym('u', 'a2'), 'start') +
+			`<g stroke="${S1}">` + pfeil(x1 + 14, 100, x2 - 14, 100, S1) + `</g>` + text(280, 92, sym('u', 'aD'), 'middle', `fill="${S1}"`),
+		);
+	}
+	diff('differenzverstaerker', false);
+	diff('differenzverstaerker-stromquelle', true);
+}
+
+// ---------- T7) Differenzverstärker: Stromaufteilung über der Differenzspannung ----------
+{
+	const S1 = 'var(--ds-signal-1, #0b72c4)';
+	const S2 = 'var(--ds-signal-2, #b45a00)';
+	const x0 = 310, y0 = 250, sx = 2, sy = 180; // 1 mV = 2 px, I0 = 180 px
+	const X = (u) => x0 + u * sx, Y = (a) => y0 - a * sy;
+	const UT = 26;
+	const i1 = (u) => 1 / (1 + Math.exp(-u / UT)), i2 = (u) => 1 - i1(u);
+	const k1 = [], k2 = [];
+	for (let u = -140; u <= 140; u += 1) { k1.push([X(u).toFixed(1), Y(i1(u)).toFixed(1)]); k2.push([X(u).toFixed(1), Y(i2(u)).toFixed(1)]); }
+	const kl = 'font-size="11"';
+	speichere('elektronik/differenzverstaerker-kennlinie.svg', 620, 300,
+		'Stromaufteilung im Differenzverstärker: Kollektorströme beider Transistoren über der Differenzspannung; linear nur für wenige zehn Millivolt, darüber übernimmt ein Transistor den ganzen Strom',
+		pfeil(20, y0, 600, y0) + pfeil(x0, y0 + 10, x0, 30) + text(600, y0 + 36, sym('u', 'D') + ' in mV', 'end') + text(x0 - 8, 40, sym('I', 'C') + '/' + sym('I', '0'), 'end') +
+		[-120, -80, -40, 40, 80, 120].map((u) => strich(X(u), y0 - 4, X(u), y0 + 4) + text(X(u), y0 + 18, String(u).replace('-', '−'), 'middle', kl)).join('') +
+		[0.5, 1].map((a) => strich(x0 - 4, Y(a), x0 + 4, Y(a)) + text(x0 + 8, Y(a) + 4, String(a).replace('.', ','), 'start', kl)).join('') +
+		strich(20, Y(1), 600, Y(1), 'stroke-width="1" stroke-dasharray="3 4"') +
+		`<rect x="${X(-26)}" y="${Y(1)}" width="${52 * sx}" height="${sy}" fill="currentColor" opacity="0.07" stroke="none"/>` +
+		text(x0, y0 - 6, 'nahezu linear', 'middle', kl) +
+		`<polyline points="${p(k1)}" stroke="${S1}" stroke-width="2.5"/>` + `<polyline points="${p(k2)}" stroke="${S2}" stroke-width="2.5" stroke-dasharray="7 4"/>` +
+		text(X(45), Y(0.7), sym('I', 'C1') + ' (T1)', 'start', `fill="${S1}" font-weight="600"`) +
+		text(X(-45), Y(0.7), sym('I', 'C2') + ' (T2)', 'end', `fill="${S2}" font-weight="600"`) +
+		text(X(130), Y(0.06) - 6, 'T1 übernimmt', 'end', kl) + text(X(-130), Y(0.06) - 6, 'T2 übernimmt', 'start', kl),
+	);
+}
+
+// =====================================================================
+// KIPPSTUFEN  →  src/assets/elektronik/
+// =====================================================================
+{
+	const S1 = 'var(--ds-signal-1, #0b72c4)';
+	const S2 = 'var(--ds-signal-2, #b45a00)';
+	const kl = 'font-size="12"';
+	const npnR = (x, y) => `<g transform="translate(${2 * x},0) scale(-1,1)">${npn(x, y)}</g>`;
+
+	/** Zeitdiagramm-Spur: Grundlinie, Beschriftung links, Kurve */
+	function spur(y0, hoehe, name, pts, farbe = 'currentColor', extra = '') {
+		return strich(70, y0, 600, y0, 'stroke-width="1" opacity="0.5"') + text(62, y0 - hoehe / 2 + 5, name, 'end') +
+			`<polyline points="${p(pts)}" stroke="${farbe}" stroke-width="2.25" ${extra}/>`;
+	}
+
+	// ---------- K1) Astabile Kippstufe (Multivibrator) mit zwei Transistoren ----------
+	{
+		const o = 40, u = 330, xa = 100, xb1 = 190, xb2 = 350, xc = 440, yt = 270;
+		speichere('elektronik/multivibrator.svg', 540, 370,
+			'Astabile Kippstufe mit zwei NPN-Transistoren: Kollektorwiderstände, Basiswiderstände und zwei über Kreuz geschaltete Kondensatoren',
+			draht([xa, o], [xc, o]) + text(270, o - 12, '+' + sym('U', 'B')) + strich(270, o, 270, o - 4) + punkt(xb1, o) + punkt(xb2, o) +
+			widerstand(xa, o, xa, 160) + neben(xa, 100, 'R', 'C1', 'links') + widerstand(xc, o, xc, 160) + neben(xc, 100, 'R', 'C2') +
+			widerstand(xb1, o, xb1, 150) + neben(xb1, 95, 'R', 'B1', 'links') + widerstand(xb2, o, xb2, 150) + neben(xb2, 95, 'R', 'B2') +
+			draht([xa, 160], [xa, yt - 32]) + draht([xc, 160], [xc, yt - 32]) +
+			npnR(xa, yt) + npn(xc, yt) + text(xa - 24, yt + 5, sym('T', '1'), 'end') + text(xc + 24, yt + 5, sym('T', '2'), 'start') +
+			// Basisknoten
+			draht([xb1, 150], [xb1, yt], [xa + 32, yt]) + punkt(xb1, yt) + draht([xb2, 150], [xb2, yt], [xc - 32, yt]) + punkt(xb2, yt) +
+			// C1: Kollektor T1 → Basis T2 ; C2: Kollektor T2 → Basis T1
+			punkt(xa, 185) + draht([xa, 185], [245, 185]) + kondensator(245, 185, 295, 185) + draht([295, 185], [xb2, 185]) + punkt(xb2, 185) + text(270, 168, sym('C', '1')) +
+			punkt(xc, 220) + draht([xc, 220], [295, 220]) + kondensator(295, 220, 245, 220) + draht([245, 220], [xb1, 220]) + punkt(xb1, 220) + text(270, 245, sym('C', '2')) +
+			// Emitter an Masse
+			draht([xa, yt + 32], [xa, u], [xc, u], [xc, yt + 32]) + masse(270, u) +
+			// Ausgänge
+			draht([xc, 160], [500, 160]) + klemme(504, 160) + text(504, 148, sym('u', 'a'), 'middle') + punkt(xc, 160) +
+			text(xa + 12, yt - 34, 'K1', 'start', 'font-size="11"') + text(xc - 12, yt - 34, 'K2', 'end', 'font-size="11"'),
+		);
+	}
+
+	// ---------- K2) Zeitdiagramm der astabilen Kippstufe (berechnet) ----------
+	{
+		// Modell: U_B = 5 V, Transistor ein: U_CE = 0,1 V, U_BE = 0,7 V; τ_B = R_B·C, τ_C = R_C·C = 0,1·τ_B (symmetrisch)
+		const UB = 5, Usat = 0.1, Ube = 0.7, tauB = 1, tauC = 0.1;
+		// Kippzeit: u_BE läuft von (U_BE − (U_B − U_sat)) Richtung U_B bis U_BE
+		const ustart = Ube - (UB - Usat);
+		const tk = tauB * Math.log((UB - ustart) / (UB - Ube));
+		const T = 2 * tk;
+		const X = (t) => 80 + (t / (3 * T)) * 500;
+		const sp = 26; // px pro Volt (Basisspannung)
+		const spC = 14; // px pro Volt (Kollektorspannungen)
+		const ys = [105, 215, 330];
+		// Zustand: T1 leitet in [0, tk), T2 leitet in [tk, 2tk) usw.
+		const uCE = (t, nr) => {
+			const phase = Math.floor(t / tk), tr = t - phase * tk;
+			const t1an = phase % 2 === 0;
+			const an = nr === 1 ? t1an : !t1an;
+			return an ? Usat : UB - (UB - Ube) * Math.exp(-tr / tauC);
+		};
+		const uBE2 = (t) => {
+			const phase = Math.floor(t / tk), tr = t - phase * tk;
+			const t1an = phase % 2 === 0;
+			return t1an ? UB - (UB - ustart) * Math.exp(-tr / tauB) : Ube;
+		};
+		const pts = (f, y0, m = sp) => {
+			const a = [];
+			for (let t = 0; t <= 3 * T; t += T / 600) a.push([X(t).toFixed(1), (y0 - f(t) * m).toFixed(1)]);
+			return a;
+		};
+		const y3 = ys[2];
+		speichere('elektronik/multivibrator-signale.svg', 640, 490,
+			`Zeitdiagramm der astabilen Kippstufe (berechnet für 5 V): Kollektorspannungen von T1 und T2 als Rechteck, Basisspannung von T2 springt beim Umschalten auf etwa minus 4,2 V und steigt dann bis 0,7 V`,
+			spur(ys[0], 5 * spC, sym('u', 'CE1'), pts((t) => uCE(t, 1), ys[0], spC), S1) +
+			spur(ys[1], 5 * spC, sym('u', 'CE2'), pts((t) => uCE(t, 2), ys[1], spC), S2) +
+			strich(70, y3, 600, y3, 'stroke-width="1" opacity="0.5"') + text(62, y3 - 20, sym('u', 'BE2'), 'end') +
+			`<polyline points="${p(pts(uBE2, y3))}" stroke="currentColor" stroke-width="2.25"/>` +
+			strich(80, y3 - Ube * sp, 600, y3 - Ube * sp, 'stroke-width="1" stroke-dasharray="4 4"') + text(604, y3 - Ube * sp + 4, '0,7 V', 'start', 'font-size="11"') +
+			text(604, y3 - ustart * sp + 4, (ustart).toFixed(1).replace('.', ',').replace('-', '−') + ' V', 'start', 'font-size="11"') +
+			strich(80, y3 - ustart * sp, 600, y3 - ustart * sp, 'stroke-width="1" stroke-dasharray="2 5" opacity="0.6"') +
+			[ys[0], ys[1]].map((y) => text(604, y - UB * spC + 4, '5 V', 'start', 'font-size="11"')).join('') +
+			// Kippzeit markieren
+			mass(X(0), 458, X(tk), 458) + text((X(0) + X(tk)) / 2, 478, sym('t', '1') + ' ≈ 0,76 ' + sym('R', 'B2') + sym('C', '1') + ' (bei 5 V)', 'middle', kl) +
+			mass(X(0), 18, X(T), 18) + text((X(0) + X(T)) / 2, 12, 'Periodendauer ' + sym('T'), 'middle', kl) +
+			[1, 2, 3, 4, 5].map((k) => strich(X(k * tk), 30, X(k * tk), 445, 'stroke-width="1" stroke-dasharray="1 5" opacity="0.5"')).join('') +
+			text(X(tk * 0.5), ys[0] + 18, 'T1 leitet', 'middle', 'font-size="11"') + text(X(tk * 1.5), ys[0] + 18, 'T1 sperrt', 'middle', 'font-size="11"'),
+		);
+		console.log(`  Multivibrator: Kippzeit t1 = ${(tk / tauB).toFixed(3)}·R_B·C bei U_B = 5 V (ln 2 = 0,693)`);
+	}
+
+	// ---------- 555-Baustein als Kasten ----------
+	function ne555(x, y) {
+		// Kasten 110×150, Anschlüsse: 8 und 4 oben, 1 und 5 unten, 2 links, 6/7 rechts oben, 3 rechts unten
+		const b = 120, h = 150;
+		return `<rect x="${x}" y="${y}" width="${b}" height="${h}" rx="4"/>` + text(x + b / 2, y + h / 2 + 6, '555', 'middle', 'font-weight="700" font-size="18"') +
+			text(x + 30, y + 16, '8', 'middle', 'font-size="10"') + text(x + 80, y + 16, '4', 'middle', 'font-size="10"') +
+			text(x + 30, y + h - 6, '1', 'middle', 'font-size="10"') + text(x + 80, y + h - 6, '5', 'middle', 'font-size="10"') +
+			text(x + 8, y + 104, '2', 'start', 'font-size="10"') + text(x + b - 8, y + 34, '7', 'end', 'font-size="10"') +
+			text(x + b - 8, y + 64, '6', 'end', 'font-size="10"') + text(x + b - 8, y + 114, '3', 'end', 'font-size="10"') +
+			text(x + 14, y + 104, 'TRIG', 'start', 'font-size="9"') + text(x + b - 16, y + 34, 'DIS', 'end', 'font-size="9"') +
+			text(x + b - 16, y + 64, 'THR', 'end', 'font-size="9"') + text(x + b - 16, y + 114, 'OUT', 'end', 'font-size="9"') +
+			text(x + 30, y + 28, 'VCC', 'middle', 'font-size="9"') + text(x + 80, y + 28, 'RST', 'middle', 'font-size="9"') +
+			text(x + 30, y + h - 18, 'GND', 'middle', 'font-size="9"') + text(x + 80, y + h - 18, 'CV', 'middle', 'font-size="9"');
+	}
+
+	// ---------- K3) Monostabile Kippstufe mit 555 ----------
+	{
+		const x = 200, y = 90, o = 40, u = 320;
+		speichere('elektronik/monoflop-555.svg', 560, 350,
+			'Monostabile Kippstufe mit Timer 555: R vom Pluspol an Discharge und Threshold, C an Masse, Trigger mit Pull-up und Taster, Ausgang an Pin 3',
+			draht([60, o], [420, o]) + text(240, o - 12, '+' + sym('U', 'B')) +
+			ne555(x, y) +
+			draht([x + 30, o], [x + 30, y]) + punkt(x + 30, o) + draht([x + 80, o], [x + 80, y]) + punkt(x + 80, o) +
+			draht([x + 30, y + 150], [x + 30, u]) + draht([x + 80, y + 150], [x + 80, 260]) + kondensator(x + 80, 260, x + 80, u) +
+			text(x + 96, 292, '10 nF', 'start', 'font-size="11"') +
+			// R und C an 6/7
+			widerstand(380, o, 380, 124) + neben(380, 82, 'R') + punkt(380, o) + draht([380, 124], [380, 184]) +
+			draht([x + 120, y + 34], [380, y + 34]) + punkt(380, y + 34) + draht([x + 120, y + 64], [380, y + 64]) + punkt(380, y + 64) +
+			kondensator(380, 184, 380, u) + neben(380, 250, 'C') + punkt(380, 184) +
+			// Trigger: Pull-up und Taster
+			widerstand(80, o, 80, 150) + text(64, 98, '10 kΩ', 'end', 'font-size="11"') + punkt(80, o) + draht([80, 150], [80, y + 104], [x, y + 104]) +
+			punkt(80, y + 104) + schalter(80, y + 104, 80, u) + text(66, 260, 'Taster', 'end', 'font-size="11"') +
+			// Ausgang
+			draht([x + 120, y + 114], [470, y + 114]) + klemme(474, y + 114) + text(484, y + 119, sym('u', 'a'), 'start') +
+			draht([60, u], [420, u]) + punkt(x + 30, u) + punkt(x + 80, u) + punkt(380, u) + punkt(80, u) + masse(250, u),
+		);
+	}
+
+	// ---------- K4) Zeitdiagramm Monoflop ----------
+	{
+		const tp = 1.1; // t_i = ln3·RC ≈ 1,1 RC, Zeitachse in Einheiten von RC
+		const X = (t) => 80 + t * 130; // 0 … 4 RC
+		const ys = [100, 210, 320];
+		const sp = 12;
+		const tr = 0.4; // Triggerzeitpunkt
+		const trg = (t) => (t >= tr && t < tr + 0.08 ? 0 : 5);
+		const uc = (t) => (t < tr ? 0 : t < tr + tp ? 5 * (1 - Math.exp(-(t - tr))) : 0);
+		const ua = (t) => (t >= tr && t < tr + tp ? 5 : 0);
+		const pts = (f, y0) => {
+			const a = [];
+			for (let t = 0; t <= 3.6; t += 0.004) a.push([X(t).toFixed(1), (y0 - f(t) * sp).toFixed(1)]);
+			return a;
+		};
+		speichere('elektronik/monoflop-signale.svg', 640, 380,
+			'Zeitdiagramm der monostabilen Kippstufe: kurzer Low-Impuls am Trigger, Ausgang wird für die Zeit 1,1 R C high, Kondensatorspannung steigt bis zwei Drittel der Versorgung und wird dann entladen',
+			spur(ys[0], 100, sym('u', 'TRIG'), pts(trg, ys[0])) +
+			spur(ys[1], 100, sym('u', 'C'), pts(uc, ys[1]), S1) +
+			strich(80, ys[1] - (10 / 3) * sp, 600, ys[1] - (10 / 3) * sp, 'stroke-width="1" stroke-dasharray="4 4"') + text(604, ys[1] - (10 / 3) * sp + 4, '⅔ ' + sym('U', 'B'), 'start', 'font-size="11"') +
+			strich(80, ys[0] - (5 / 3) * sp, 600, ys[0] - (5 / 3) * sp, 'stroke-width="1" stroke-dasharray="4 4"') + text(604, ys[0] - (5 / 3) * sp + 4, '⅓ ' + sym('U', 'B'), 'start', 'font-size="11"') +
+			spur(ys[2], 100, sym('u', 'a'), pts(ua, ys[2]), S2) +
+			mass(X(tr), ys[2] + 26, X(tr + tp), ys[2] + 26) + text((X(tr) + X(tr + tp)) / 2, ys[2] + 46, sym('t', 'i') + ' = ln 3 · ' + sym('R') + sym('C') + ' ≈ 1,1 ' + sym('R') + sym('C'), 'middle', kl) +
+			strich(X(tr), 30, X(tr), ys[2], 'stroke-width="1" stroke-dasharray="1 5" opacity="0.6"') + strich(X(tr + tp), 30, X(tr + tp), ys[2], 'stroke-width="1" stroke-dasharray="1 5" opacity="0.6"') +
+			text(X(tr) + 8, 30, 'Trigger', 'start', 'font-size="11"') + text(X(tr + tp) + 8, 30, 'Zeit abgelaufen', 'start', 'font-size="11"'),
+		);
+	}
+
+	// ---------- K5) Bistabile Kippstufe ----------
+	{
+		const o = 40, u = 340, xa = 100, xk1 = 200, xk2 = 340, xc = 440, yt = 250;
+		speichere('elektronik/bistabil.svg', 540, 380,
+			'Bistabile Kippstufe mit zwei NPN-Transistoren, über Kreuz geschalteten Widerständen vom Kollektor zur Basis des anderen Transistors und zwei Tastern zum Setzen und Rücksetzen',
+			draht([xa, o], [xc, o]) + text(270, o - 12, '+' + sym('U', 'B')) +
+			widerstand(xa, o, xa, 150) + neben(xa, 95, 'R', 'C1', 'links') + widerstand(xc, o, xc, 150) + neben(xc, 95, 'R', 'C2') +
+			draht([xa, 150], [xa, yt - 32]) + draht([xc, 150], [xc, yt - 32]) +
+			npnR(xa, yt) + npn(xc, yt) + text(xa - 24, yt + 5, sym('T', '1'), 'end') + text(xc + 24, yt + 5, sym('T', '2'), 'start') +
+			// Querwiderstände: Kollektor T1 → Basis T2, Kollektor T2 → Basis T1
+			punkt(xa, 170) + draht([xa, 170], [215, 170]) + `<g>${widerstand(215, 170, 305, 170)}</g>` + draht([305, 170], [xk2, 170], [xk2, yt]) + text(260, 155, sym('R', 'K1')) +
+			punkt(xc, 200) + draht([xc, 200], [305, 200]) + widerstand(305, 200, 215, 200) + draht([215, 200], [xk1, 200], [xk1, yt]) + text(260, 225, sym('R', 'K2')) +
+			draht([xk1, yt], [xa + 32, yt]) + punkt(xk1, yt) + draht([xk2, yt], [xc - 32, yt]) + punkt(xk2, yt) +
+			// Basiswiderstände nach Masse und Taster
+			widerstand(xk1, yt, xk1, u) + neben(xk1, 300, 'R', 'B1', 'links') + widerstand(xk2, yt, xk2, u) + neben(xk2, 300, 'R', 'B2') +
+			draht([xk1, yt], [235, yt]) + schalter(235, yt, 235, u) + text(250, 312, 'S', 'start', 'font-size="13" font-weight="700"') +
+			draht([xk2, yt], [305, yt]) + schalter(305, yt, 305, u) + text(290, 312, 'R', 'end', 'font-size="13" font-weight="700"') +
+			draht([xa, yt + 32], [xa, u], [xc, u], [xc, yt + 32]) + punkt(xk1, u) + punkt(xk2, u) + punkt(235, u) + punkt(305, u) + masse(270, u) +
+			draht([xa, 150], [40, 150]) + klemme(36, 150) + text(36, 138, sym('u', 'a1')) + punkt(xa, 150) +
+			draht([xc, 150], [500, 150]) + klemme(504, 150) + text(504, 138, sym('u', 'a2')) + punkt(xc, 150),
+		);
+	}
+
+	// ---------- K6) Zeitdiagramm bistabil ----------
+	{
+		const X = (t) => 80 + t * 50; // 0 … 10
+		const ys = [80, 170, 270, 360];
+		const sp = 14;
+		const s = (t) => ((t >= 2 && t < 2.4) || (t >= 3.8 && t < 4.2) ? 5 : 0);
+		const r = (t) => (t >= 6.2 && t < 6.6 ? 5 : 0);
+		// S (Basis T1 an Masse) → T1 sperrt → u_a1 high; R → T2 sperrt → u_a2 high, u_a1 low
+		const ua1 = (t) => (t < 2 ? 0.1 : t < 6.2 ? 5 : 0.1);
+		const ua2 = (t) => 5.1 - ua1(t);
+		const pts = (f, y0) => {
+			const a = [];
+			for (let t = 0; t <= 10; t += 0.01) a.push([X(t).toFixed(1), (y0 - f(t) * sp).toFixed(1)]);
+			return a;
+		};
+		speichere('elektronik/bistabil-signale.svg', 640, 400,
+			'Zeitdiagramm der bistabilen Kippstufe: Taster S schaltet den Ausgang 1 auf High, Taster R schaltet zurück; dazwischen bleibt der Zustand gespeichert, ein zweites Drücken von S ändert nichts',
+			spur(ys[0], 70, 'Taster S', pts(s, ys[0])) + spur(ys[1], 70, 'Taster R', pts(r, ys[1])) +
+			spur(ys[2], 70, sym('u', 'a1'), pts(ua1, ys[2]), S1) + spur(ys[3], 70, sym('u', 'a2'), pts(ua2, ys[3]), S2) +
+			text(X(5.1), ys[2] - 5 * sp - 8, 'bleibt gespeichert', 'middle', 'font-size="11"') + text(X(8.1), ys[3] - 5 * sp - 8, 'bleibt gespeichert', 'middle', 'font-size="11"') +
+			text(X(4.4), ys[0] - 5 * sp + 6, 'erneut S: keine Änderung', 'start', 'font-size="11"') +
+			[2, 3.8, 6.2].map((t) => strich(X(t), 24, X(t), ys[3], 'stroke-width="1" stroke-dasharray="1 5" opacity="0.6"')).join(''),
+		);
+	}
+}
+
+// =====================================================================
+// SIGNALE UND SPEKTREN  →  src/assets/mtrs/
+// Alle Kurven und Linienhöhen werden aus den Fourier-Koeffizienten bzw. einer DFT berechnet.
+// =====================================================================
+{
+	const S1 = 'var(--ds-signal-1, #0b72c4)';
+	const S2 = 'var(--ds-signal-2, #b45a00)';
+	const kl = 'font-size="11"';
+	const komma = (z, n = 2) => z.toFixed(n).replace('.', ',');
+
+	// Fourier-Koeffizienten (Amplitude 1, symmetrisch um 0)
+	const koeff = {
+		Sinus: (n) => (n === 1 ? 1 : 0),
+		Rechteck: (n) => (n % 2 === 1 ? 4 / (Math.PI * n) : 0),
+		Dreieck: (n) => (n % 2 === 1 ? ((8 / (Math.PI * Math.PI * n * n)) * (((n - 1) / 2) % 2 === 0 ? 1 : -1)) : 0),
+	};
+	const ideal = {
+		Sinus: (x) => Math.sin(2 * Math.PI * x),
+		Rechteck: (x) => ((x % 1) + 1) % 1 < 0.5 ? 1 : -1,
+		Dreieck: (x) => {
+			const t = (((x % 1) + 1) % 1);
+			return t < 0.25 ? 4 * t : t < 0.75 ? 2 - 4 * t : 4 * t - 4;
+		},
+	};
+
+	// ---------- S1) Zeit- und Frequenzbereich nebeneinander ----------
+	{
+		const zeilen = ['Sinus', 'Rechteck', 'Dreieck'];
+		const h = 150, oben = 40;
+		let inhalt = text(175, 24, 'Zeitbereich', 'middle', 'font-weight="700"') + text(515, 24, 'Frequenzbereich (Amplitudenspektrum)', 'middle', 'font-weight="700"');
+		zeilen.forEach((name, i) => {
+			const y0 = oben + i * h + 70; // Nulllinie Zeitbereich
+			const yb = oben + i * h + 120; // Grundlinie Spektrum
+			// Zeitbereich: 2 Perioden auf 260 px
+			const X = (x) => 50 + x * 130, Y = (v) => y0 - v * 45;
+			const pts = [];
+			for (let x = 0; x <= 2; x += 0.002) pts.push([X(x).toFixed(1), Y(ideal[name](x)).toFixed(1)]);
+			inhalt += text(14, y0 - 52, name, 'start', 'font-weight="700"') +
+				pfeil(50, y0, 320, y0) + pfeil(50, y0 + 52, 50, y0 - 56) + text(320, y0 + 16, sym('t'), 'end', kl) +
+				text(44, Y(1) + 4, '1', 'end', kl) + text(44, Y(-1) + 4, '−1', 'end', kl) +
+				strich(46, Y(1), 54, Y(1)) + strich(46, Y(-1), 54, Y(-1)) +
+				`<polyline points="${p(pts)}" stroke="${S1}" stroke-width="2.25"/>` +
+				mass(X(0), y0 + 62, X(1), y0 + 62) + text(X(0.5), y0 + 58, sym('T'), 'middle', kl);
+			// Spektrum: n = 1 … 11
+			const XF = (n) => 380 + n * 24, YF = (a) => yb - a * 70;
+			inhalt += pfeil(380, yb, 660, yb) + pfeil(380, yb, 380, yb - 105) + text(660, yb + 16, sym('f'), 'end', kl) +
+				text(374, YF(1) + 4, '1', 'end', kl) + strich(376, YF(1), 384, YF(1));
+			for (let n = 1; n <= 11; n++) {
+				const a = Math.abs(koeff[name](n));
+				inhalt += strich(XF(n), yb, XF(n), yb + 4) + (n % 2 === 1 ? text(XF(n), yb + 16, n === 1 ? sym('f', '0') : `${n}${sym('f', '0')}`, 'middle', 'font-size="10"') : '');
+				if (a > 0) {
+					inhalt += strich(XF(n), yb, XF(n), YF(a), `stroke="${S2}" stroke-width="3"`) + `<circle cx="${XF(n)}" cy="${YF(a)}" r="3" fill="${S2}" stroke="none"/>`;
+					if (n <= 5 || name === 'Rechteck' && n <= 7) inhalt += text(XF(n) + 4, YF(a) - 6, komma(a), 'start', 'font-size="10"');
+				}
+			}
+		});
+		speichere('mtrs/zeit-frequenzbereich.svg', 680, 500,
+			'Sinus, Rechteck und Dreieck im Zeit- und Frequenzbereich: Der Sinus hat nur eine Spektrallinie, das Rechteck ungerade Oberschwingungen mit Amplituden 4 durch pi n, das Dreieck ungerade Oberschwingungen mit 8 durch pi Quadrat n Quadrat',
+			inhalt);
+	}
+
+	// ---------- S2) Aliasing ----------
+	{
+		const fs = 10, f = 9, fa = 1; // kHz
+		const X = (t) => 60 + t * 540, Y = (v) => 140 - v * 85; // t in ms, 0 … 1 ms
+		const echt = [], schein = [];
+		for (let t = 0; t <= 1.0001; t += 0.0005) {
+			echt.push([X(t).toFixed(1), Y(Math.sin(2 * Math.PI * f * t)).toFixed(1)]);
+			schein.push([X(t).toFixed(1), Y(-Math.sin(2 * Math.PI * fa * t)).toFixed(1)]);
+		}
+		let punkte = '';
+		for (let k = 0; k <= 10; k++) {
+			const t = k / fs;
+			const v = Math.sin(2 * Math.PI * f * t);
+			punkte += strich(X(t), Y(0), X(t), Y(v), 'stroke-width="1" opacity="0.6"') + `<circle cx="${X(t)}" cy="${Y(v)}" r="5" fill="${S2}" stroke="none"/>`;
+		}
+		speichere('mtrs/aliasing.svg', 640, 290,
+			'Aliasing: Ein 9-kHz-Sinus wird mit 10 kHz abgetastet. Die Abtastwerte liegen genau auf einem 1-kHz-Sinus – das Messgerät zeigt fälschlich 1 kHz',
+			pfeil(60, Y(0), 620, Y(0)) + pfeil(60, 240, 60, 40) + text(620, Y(0) + 34, sym('t') + ' in ms', 'end', kl) +
+			[0.2, 0.4, 0.6, 0.8, 1].map((t) => strich(X(t), Y(0) - 4, X(t), Y(0) + 4) + text(X(t), Y(0) + 18, komma(t, 1), 'middle', kl)).join('') +
+			`<polyline points="${p(echt)}" stroke="currentColor" stroke-width="1.5" opacity="0.75"/>` +
+			`<polyline points="${p(schein)}" stroke="${S1}" stroke-width="3" stroke-dasharray="8 5"/>` + punkte +
+			strich(80, 262, 108, 262, 'stroke-width="1.5"') + text(114, 266, 'Signal 9 kHz', 'start', kl) +
+			`<circle cx="230" cy="262" r="5" fill="${S2}" stroke="none"/>` + text(242, 266, 'Abtastwerte (10 kHz)', 'start', kl) +
+			strich(400, 262, 428, 262, `stroke="${S1}" stroke-width="3" stroke-dasharray="8 5"`) + text(434, 266, 'scheinbar 1 kHz', 'start', kl),
+		);
+	}
+
+	// ---------- S3) Spektrale Leckage und Fensterfunktion (echte DFT) ----------
+	{
+		const N = 256;
+		const dft = (x) => {
+			const m = [];
+			for (let k = 0; k < N / 2; k++) {
+				let re = 0, im = 0;
+				for (let n = 0; n < N; n++) { re += x[n] * Math.cos((2 * Math.PI * k * n) / N); im -= x[n] * Math.sin((2 * Math.PI * k * n) / N); }
+				m.push(Math.hypot(re, im));
+			}
+			return m;
+		};
+		const signal = (zyklen, fenster) => {
+			const x = [];
+			let summe = 0;
+			for (let n = 0; n < N; n++) {
+				const w = fenster ? 0.5 - 0.5 * Math.cos((2 * Math.PI * n) / N) : 1;
+				summe += w;
+				x.push(w * Math.sin((2 * Math.PI * zyklen * n) / N));
+			}
+			return dft(x).map((v) => (2 * v) / summe); // amplitudenrichtig
+		};
+		const ganz = signal(20, false), halbR = signal(20.5, false), halbH = signal(20.5, true);
+		const db = (v) => Math.max(-80, 20 * Math.log10(Math.max(v, 1e-6)));
+		const X = (k) => 70 + (k - 5) * 17, Y = (d) => 40 - d * 2.6; // Bins 5 … 36
+		const linie = (m, farbe, extra = '') => {
+			const pts = [];
+			for (let k = 5; k <= 36; k++) pts.push([X(k), Y(db(m[k])).toFixed(1)]);
+			return `<polyline points="${p(pts)}" stroke="${farbe}" stroke-width="2" ${extra}/>` +
+				pts.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="2.6" fill="${farbe}" stroke="none"/>`).join('');
+		};
+		speichere('mtrs/leckage-fenster.svg', 640, 320,
+			`Spektrale Leckage (berechnete DFT, 256 Werte): Mit genau 20 Perioden nur eine Linie; mit 20,5 Perioden und Rechteckfenster verschmiert das Spektrum weit (Linie nur ${komma(db(halbR[20]), 1)} dB statt 0 dB); das Hann-Fenster begrenzt die Leckage auf die Nachbarlinien`,
+			pfeil(70, Y(-80), 620, Y(-80)) + pfeil(70, Y(-80), 70, 25) + text(620, Y(-80) + 34, 'Frequenzlinie ' + sym('k'), 'end', kl) +
+			text(64, 30, 'dB', 'end', kl) +
+			[0, -20, -40, -60, -80].map((d) => strich(66, Y(d), 74, Y(d)) + text(62, Y(d) + 4, String(d).replace('-', '−'), 'end', kl) +
+				strich(74, Y(d), 620, Y(d), 'stroke-width="0.6" opacity="0.25"')).join('') +
+			[10, 15, 20, 25, 30, 35].map((k) => strich(X(k), Y(-80) - 4, X(k), Y(-80) + 4) + text(X(k), Y(-80) + 18, String(k), 'middle', kl)).join('') +
+			linie(halbR, S2) + linie(halbH, S1) +
+			`<line x1="${X(20)}" y1="${Y(-80)}" x2="${X(20)}" y2="${Y(db(ganz[20]))}" stroke="currentColor" stroke-width="3"/>` +
+			text(X(20) + 6, Y(0) - 4, 'ganze Periodenzahl: eine Linie', 'start', kl) +
+			strich(120, 304, 148, 304, `stroke="${S2}" stroke-width="2"`) + text(154, 308, '20,5 Perioden, Rechteckfenster', 'start', kl) +
+			strich(370, 304, 398, 304, `stroke="${S1}" stroke-width="2"`) + text(404, 308, '20,5 Perioden, Hann-Fenster', 'start', kl),
+		);
+		console.log(`  Leckage: Rechteck halbzahlig Spitze ${db(halbR[20]).toFixed(1)} dB, bei k=30: ${db(halbR[30]).toFixed(1)} dB; Hann Spitze ${db(halbH[20]).toFixed(1)} dB, bei k=30: ${db(halbH[30]).toFixed(1)} dB`);
+	}
+}
+
+// =====================================================================
+// REALE MAGNETKREISE UND INDUKTIVITÄTEN  →  src/assets/mtrs/ bzw. leistungselektronik/
+// =====================================================================
+{
+	const S1 = 'var(--ds-signal-1, #0b72c4)';
+	const S2 = 'var(--ds-signal-2, #b45a00)';
+	const kl = 'font-size="11"';
+	const komma = (z, n = 1) => z.toFixed(n).replace('.', ',');
+	const mu0 = 4e-7 * Math.PI;
+	// Beispielkennlinie Elektroblech (typische Werte, keine Datenblattangabe)
+	const HT = [0, 50, 100, 150, 200, 300, 500, 1000, 2500, 5000, 10000];
+	const BT = [0, 0.55, 0.95, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.68, 1.78];
+	const Hvon = (b) => {
+		for (let i = 1; i < BT.length; i++) if (b <= BT[i]) return HT[i - 1] + ((HT[i] - HT[i - 1]) * (b - BT[i - 1])) / (BT[i] - BT[i - 1]);
+		return HT[HT.length - 1];
+	};
+
+	// ---------- M1) Hystereseschleife und Neukurve (schematisch, berechnet mit tanh-Modell) ----------
+	{
+		const Bs = 1.5, Hc = 60, H0 = 120; // Modell eines weichmagnetischen Werkstoffs
+		const X = (h) => 320 + h * 0.5, Y = (b) => 160 - b * 85; // H −500 … 500 A/m
+		const ast = (sgn) => {
+			const pts = [];
+			for (let h = -500; h <= 500; h += 2) pts.push([X(sgn * h).toFixed(1), Y(sgn * Bs * Math.tanh((h - Hc) / H0)).toFixed(1)]);
+			return pts;
+		};
+		const neu = [];
+		// Neukurve: beginnt flach (Anfangspermeabilität), wird steil und läuft in die Sättigung
+		for (let h = 0; h <= 500; h += 2) neu.push([X(h).toFixed(1), Y(Bs * Math.tanh(h / (H0 * 1.15)) * (1 - Math.exp(-h / 40))).toFixed(1)]);
+		const Br = Bs * Math.tanh(Hc / H0);
+		speichere('mtrs/hystereseschleife.svg', 640, 330,
+			'Hystereseschleife eines weichmagnetischen Werkstoffs mit Neukurve, Sättigung, Remanenz und Koerzitivfeldstärke; die Fläche der Schleife entspricht den Ummagnetisierungsverlusten',
+			`<path d="M${p(ast(1)).split(' ').join(' L')} L${p(ast(-1)).split(' ').join(' L')} Z" fill="${S1}" opacity="0.08" stroke="none"/>` +
+			pfeil(40, Y(0), 610, Y(0)) + pfeil(X(0), 310, X(0), 18) + text(610, Y(0) + 18, sym('H') + ' in A/m', 'end', kl) + text(X(0) + 8, 26, sym('B') + ' in T', 'start', kl) +
+			[-400, -200, 200, 400].map((h) => strich(X(h), Y(0) - 4, X(h), Y(0) + 4) + text(X(h), Y(0) + 18, String(h).replace('-', '−'), 'middle', kl)).join('') +
+			[-1.5, -1, 1, 1.5].map((b) => strich(X(0) - 4, Y(b), X(0) + 4, Y(b)) + text(X(0) - 8, Y(b) + 4, komma(b).replace('-', '−'), 'end', kl)).join('') +
+			`<polyline points="${p(ast(1))}" stroke="${S1}" stroke-width="2.5"/>` + `<polyline points="${p(ast(-1))}" stroke="${S1}" stroke-width="2.5"/>` +
+			`<polyline points="${p(neu)}" stroke="${S2}" stroke-width="2" stroke-dasharray="6 4"/>` +
+			`<circle cx="${X(0)}" cy="${Y(Br)}" r="4.5" fill="currentColor" stroke="none"/>` + text(X(0) - 10, Y(Br) - 8, 'Remanenz ' + sym('B', 'r'), 'end', kl) +
+			`<circle cx="${X(-Hc)}" cy="${Y(0)}" r="4.5" fill="currentColor" stroke="none"/>` + text(X(-Hc) - 6, Y(0) - 10, sym('H', 'c'), 'end', kl) +
+			text(X(470), Y(1.46) - 12, 'Sättigung', 'end', kl) + text(X(180), Y(0.55), 'Neukurve', 'start', `${kl} fill="${S2}"`) +
+			text(X(-450), Y(-0.6), 'Fläche ~ Verluste', 'start', kl) + text(X(-450), Y(-0.6) + 14, 'je Ummagnetisierung', 'start', kl),
+		);
+	}
+
+	// ---------- M2) Fluss über Durchflutung: Luftspalt „schert“ die Kennlinie ----------
+	{
+		const lFe = 0.2, A = 4e-4;
+		const X = (th) => 70 + th * 0.34, Y = (b) => 270 - b * 140; // Θ 0 … 1600 A, B 0 … 1,7 T
+		const kurve = (delta) => {
+			const pts = [];
+			for (let b = 0; b <= 1.72; b += 0.005) {
+				const th = Hvon(b) * lFe + (b / mu0) * delta;
+				if (th > 1620) break;
+				pts.push([X(th).toFixed(1), Y(b).toFixed(1)]);
+			}
+			return pts;
+		};
+		const kl2 = 'font-size="12"';
+		speichere('mtrs/luftspalt-kennlinie.svg', 660, 320,
+			'Flussdichte über der Durchflutung für einen Eisenkreis (20 cm Elektroblech, 4 Quadratzentimeter) ohne Luftspalt und mit 1 mm Luftspalt: Der Luftspalt macht die Kennlinie flacher und linearer, Sättigung tritt erst bei viel größerer Durchflutung ein',
+			pfeil(70, 270, 640, 270) + pfeil(70, 270, 70, 20) + text(640, 290, sym('Θ') + ' = ' + sym('N') + sym('I') + ' in A', 'end', kl) + text(78, 28, sym('B') + ' in T', 'start', kl) +
+			[400, 800, 1200, 1600].map((t) => strich(X(t), 266, X(t), 274) + text(X(t), 288, String(t), 'middle', kl)).join('') +
+			[0.5, 1, 1.5].map((b) => strich(66, Y(b), 74, Y(b)) + text(62, Y(b) + 4, komma(b), 'end', kl) + strich(74, Y(b), 640, Y(b), 'stroke-width="0.6" opacity="0.25"')).join('') +
+			`<polyline points="${p(kurve(0))}" stroke="${S2}" stroke-width="2.5"/>` +
+			`<polyline points="${p(kurve(1e-3))}" stroke="${S1}" stroke-width="2.5"/>` +
+			text(X(250), Y(1.58), 'ohne Luftspalt: sehr steil, früh gesättigt', 'start', `${kl2} fill="${S2}" font-weight="600"`) +
+			text(X(830), Y(0.92), 'mit 1 mm Luftspalt:', 'start', `${kl2} fill="${S1}" font-weight="600"`) +
+			text(X(830), Y(0.92) + 15, 'flach, lange linear', 'start', `${kl2} fill="${S1}" font-weight="600"`) +
+			strich(X(0), Y(1.2), X(995), Y(1.2), 'stroke-width="1" stroke-dasharray="3 4"') + strich(X(995), Y(1.2), X(995), 270, 'stroke-width="1" stroke-dasharray="3 4"') +
+			text(X(995) + 4, 262, '995 A', 'start', kl),
+		);
+	}
+
+	// ---------- M3) Sättigung messen: Messaufbau ----------
+	{
+		const o = 50, u = 250;
+		speichere('leistungselektronik/saettigung-messaufbau.svg', 600, 300,
+			'Messaufbau zur Sättigungsmessung: Labornetzteil mit Pufferkondensator, Drossel, MOSFET als Schalter, Shunt-Widerstand zur Strommessung mit dem Oszilloskop, Freilaufdiode parallel zur Drossel',
+			gquelle(60, o, u, 'U', 'B') + draht([60, o], [260, o]) + kondensator(150, o, 150, u) + neben(150, 150, 'C') + punkt(150, o) + punkt(150, u) +
+			spule(260, o, 260, 150) + neben(260, 100, 'L', '', 'links') + punkt(260, o) + punkt(260, 150) +
+			draht([260, o], [340, o]) + diode(340, 150, 340, o) + text(356, 100, sym('D'), 'start') + draht([260, 150], [340, 150]) + punkt(340, 150) +
+			draht([260, 150], [260, 170]) + nmos(260, 200, { bodyDiode: false }) + draht([200, 200], [230, 200]) + klemme(196, 200) + text(190, 205, 'Puls', 'end', kl) +
+			text(190, 220, '(z. B. 20 µs)', 'end', kl) + widerstand(260, 230, 260, u + 20) + neben(260, 250, 'R', 'S') +
+			draht([60, u], [150, u], [150, u + 20], [260, u + 20]) + punkt(260, 230) +
+			draht([260, 230], [440, 230]) + klemme(444, 230) + text(452, 222, 'Oszilloskop', 'start', kl) + text(452, 238, sym('u', 'RS') + ' = ' + sym('R', 'S') + '·' + sym('i', 'L'), 'start', kl) +
+			draht([260, u + 20], [440, u + 20]) + klemme(444, u + 20) + text(452, u + 25, 'Masse', 'start', kl) + masse(350, u + 20),
+		);
+	}
+
+	// ---------- M4) Stromanstieg mit Sättigung (berechnet) ----------
+	{
+		const L0 = 100e-6, Isat = 3.2, U = 12;
+		const L = (i) => L0 * (0.12 + 0.88 / (1 + Math.pow(i / Isat, 8)));
+		const pts = [], ideal = [];
+		let i = 0, t = 0, tSat = 0, iSat = 0;
+		const dt = 1e-8;
+		const X = (tt) => 70 + tt * 1e6 * 16, Y = (ii) => 250 - ii * 40; // 0 … 34 µs, 0 … 5,5 A
+		while (i < 5.4 && t < 34e-6) {
+			if (!tSat && L(i) <= 0.8 * L0) { tSat = t; iSat = i; }
+			i += (U / L(i)) * dt; t += dt;
+			if (Math.round(t / dt) % 20 === 0) pts.push([X(t).toFixed(1), Y(i).toFixed(1)]);
+		}
+		for (let tt = 0; tt <= 46e-6; tt += 1e-6) { const ii = (U / L0) * tt; if (ii > 5.5) break; ideal.push([X(tt).toFixed(1), Y(ii).toFixed(1)]); }
+		speichere('leistungselektronik/saettigung-stromanstieg.svg', 640, 300,
+			`Berechneter Stromanstieg in einer 100-µH-Drossel an 12 V: zunächst gerade (di/dt = U/L), ab etwa ${komma(iSat)} A krümmt sich die Kurve steil nach oben, weil die Induktivität durch Sättigung einbricht`,
+			pfeil(70, 250, 620, 250) + pfeil(70, 250, 70, 20) + text(620, 270, sym('t') + ' in µs', 'end', kl) + text(78, 28, sym('i', 'L') + ' in A', 'start', kl) +
+			[10, 20, 30].map((tt) => strich(X(tt * 1e-6), 246, X(tt * 1e-6), 254) + text(X(tt * 1e-6), 268, String(tt), 'middle', kl)).join('') +
+			[1, 2, 3, 4, 5].map((ii) => strich(66, Y(ii), 74, Y(ii)) + text(62, Y(ii) + 4, String(ii), 'end', kl) + strich(74, Y(ii), 620, Y(ii), 'stroke-width="0.6" opacity="0.25"')).join('') +
+			`<polyline points="${p(ideal)}" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 4"/>` +
+			`<polyline points="${p(pts)}" stroke="${S1}" stroke-width="3"/>` +
+			`<circle cx="${X(tSat)}" cy="${Y(iSat)}" r="5" fill="${S2}" stroke="none"/>` +
+			text(X(tSat) - 10, Y(iSat) - 6, sym('I', 'sat') + ' ≈ ' + komma(iSat) + ' A (L um 20 % gesunken)', 'end', `${kl} fill="${S2}" font-weight="600"`) +
+			text(X(33e-6), Y(1.4), 'gestrichelt: ideal, Gerade mit', 'end', kl) + text(X(33e-6), Y(1.4) + 15, sym('U') + '/' + sym('L', '0') + ' = 0,12 A/µs', 'end', kl),
+		);
+		console.log(`  Sättigung: I_sat(−20 %) = ${iSat.toFixed(2)} A nach ${(tSat * 1e6).toFixed(1)} µs`);
+	}
+}
+
+// ---------- R1) Ball-on-Beam: Aufbau und Regelkreis ----------
+{
+	const S1 = 'var(--ds-signal-1, #0b72c4)';
+	const S2 = 'var(--ds-signal-2, #b45a00)';
+	const kl = 'font-size="12"';
+	const block = (x, y, b, h, z1, z2 = '') =>
+		`<rect x="${x}" y="${y}" width="${b}" height="${h}" rx="6"/>` +
+		text(x + b / 2, y + (z2 ? h / 2 - 3 : h / 2 + 5), z1, 'middle', 'font-size="13" font-weight="600"') +
+		(z2 ? text(x + b / 2, y + h / 2 + 14, z2, 'middle', 'font-size="11"') : '');
+	// Aufbau: Balken um Drehpunkt (360, 120) um −6° geneigt
+	const w = (-6 * Math.PI) / 180, px = 360, py = 120, L = 250;
+	const pkt = (s) => [px + s * Math.cos(w), py + s * Math.sin(w)];
+	const [ax, ay] = pkt(-L), [bx, by] = pkt(L);
+	const [kx, ky] = pkt(-90);
+	const n = [-Math.sin(w), Math.cos(w)]; // Normale (nach unten)
+	const yd = 300;
+	speichere('mtrs/ball-on-beam.svg', 720, 420,
+		'Ball-on-Beam: Eine Kugel rollt auf einem kippbaren Balken, ein Abstandssensor misst ihre Position, ein Servomotor stellt den Neigungswinkel. Darunter der Regelkreis aus Regler, Servo, Balken mit Kugel und Sensor',
+		// Balken, Drehpunkt, Kugel
+		`<line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke-width="7"/>` +
+		`<polygon points="${p([[px, py + 6], [px - 16, py + 40], [px + 16, py + 40]])}"/>` + strich(px - 30, py + 40, px + 30, py + 40, 'stroke-width="3"') +
+		`<circle cx="${kx - n[0] * 17}" cy="${ky - n[1] * 17}" r="13" fill="${S2}" stroke="none"/>` +
+		pfeil(kx - 40, ky - 34 - 4, kx - 80, ky - 30 - 4 - 4, S2) + text(kx - 60, ky - 48, 'rollt', 'middle', `${kl} fill="${S2}"`) +
+		// Abstandssensor am linken Ende
+		`<rect x="${ax - 46}" y="${ay - 34}" width="36" height="28" rx="3"/>` + text(ax - 28, ay - 42, 'Sensor', 'middle', kl) +
+		`<path d="M${ax - 6},${ay - 26} q8,6 0,12 M${ax + 2},${ay - 30} q12,10 0,20" stroke="${S1}"/>` +
+		mass(ax - 10, ay + 22, kx - 17, ky + 22) + text((ax + kx) / 2 - 10, ay + 40, sym('x'), 'middle') +
+		// Servo am rechten Ende über Hebel
+		`<rect x="${bx - 30}" y="${by + 60}" width="60" height="40" rx="4"/>` + text(bx, by + 85, 'Servo', 'middle', kl) +
+		draht([bx, by + 4], [bx, by + 40], [bx + 18, by + 60]) + `<circle cx="${bx}" cy="${by + 40}" r="4"/>` +
+		`<path d="M${px + 70},${py} A70,70 0 0 1 ${pkt(70)[0]},${pkt(70)[1]}" stroke-width="1.5"/>` + text(px + 80, py - 4, sym('α'), 'start') +
+		strich(px - 200, py, px + 200, py, 'stroke-width="1" stroke-dasharray="4 5" opacity="0.5"') +
+		// Blockschaltbild
+		text(20, yd - 26, 'Regelkreis', 'start', 'font-weight="700"') +
+		pfeil(20, yd + 25, 66, yd + 25) + text(24, yd + 16, sym('w'), 'start') + `<circle cx="80" cy="${yd + 25}" r="14"/>` +
+		text(74, yd + 12, '+', 'middle', 'font-size="11"') + text(86, yd + 52, '−', 'middle', 'font-size="13"') +
+		pfeil(94, yd + 25, 130, yd + 25) + text(112, yd + 16, sym('e'), 'middle', 'font-size="11"') +
+		block(130, yd, 130, 50, 'Regler', 'P, PD oder PID') + pfeil(260, yd + 25, 300, yd + 25) + text(280, yd + 16, sym('α', 'soll'), 'middle', 'font-size="11"') +
+		block(300, yd, 110, 50, 'Servo', 'Totzeit, Begrenzung') + pfeil(410, yd + 25, 450, yd + 25) + text(430, yd + 16, sym('α'), 'middle', 'font-size="11"') +
+		block(450, yd, 150, 50, 'Balken + Kugel', 'ẍ = 5/7 · g · α') + pfeil(600, yd + 25, 700, yd + 25) + text(690, yd + 16, sym('x'), 'end') +
+		draht([650, yd + 25], [650, yd + 95], [400, yd + 95]) + punkt(650, yd + 25) + block(300, yd + 75, 100, 40, 'Sensor') +
+		draht([300, yd + 95], [80, yd + 95]) + pfeil(80, yd + 95, 80, yd + 39),
+	);
+}

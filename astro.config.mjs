@@ -116,10 +116,10 @@ export default defineConfig({
 					label: 'Elektronik',
 					items: [
 						thema('Dioden', 'dioden'),
-						thema('Transistoren', 'transistoren'),
+						thema('Transistoren', 'transistoren', { theorieOrdner: true }),
 						thema('Operationsverstärker', 'operationsverstaerker'),
 						thema('Filter', 'filter'),
-						thema('Oszillatoren', 'oszillatoren'),
+						thema('Oszillatoren', 'oszillatoren', { theorieOrdner: true }),
 						thema('Thermische Auslegung', 'thermische-auslegung'),
 						// Ergänzung: nur C-Grundlagen für einfache Mikrocontroller-Programme (wird nicht erweitert)
 						thema('Programmierung in C', 'programmierung', {
@@ -149,7 +149,7 @@ export default defineConfig({
 					items: [
 						thema('Grundlagen der Messtechnik', 'messtechnik'),
 						thema('Messfehler und Messunsicherheit', 'messfehler'),
-						thema('Signalkennwerte', 'signalkennwerte'),
+						thema('Signalkennwerte', 'signalkennwerte', { theorieOrdner: true }),
 						thema('Sensoren', 'sensoren'),
 						thema('Messwerke und Messbereiche', 'messwerke'),
 						thema('Messbrücken', 'messbruecken'),

@@ -52,10 +52,11 @@ Signalwege in Schaltbildern sind beschriftet („positive Halbwelle: D1 und D4 l
 | `Zeichen` | 30 einheitliche technische Symbole (24er-Raster, 1,75 px Linie, `currentColor`) | `<Zeichen name="diode" />` |
 | `Themenkarte` | Karte mit Symbol, Titel, Kurztext und Schnelleinstiegen (Theorie · Rechnen · Quiz); ganze Karte anklickbar | `<Themenkarte titel="Dioden" symbol="diode" href="/dioden/" text="…" />` |
 | `Seitentitel` | Titel + automatisch Weg (Start › Bereich › Thema) und Reiter aller Teile des Themas | wirkt von selbst auf jeder Themenseite |
-| `Kasten` | Lernziele (Häkchenliste), Merke, Formel (mit Gültigkeit), Achtung | `<Kasten typ="formel" titel="…" gilt="…">$$…$$</Kasten>` |
+| `Kasten` | Lernziele (Häkchenliste), Merke, Formel (mit Gültigkeit, auch als `<span slot="gilt">` mit Formeln), Achtung | `<Kasten typ="formel" titel="…" gilt="…">$$…$$</Kasten>` |
 | `Rechenbeispiel` | Kopf mit Stufe · Angabe · Gegeben/Gesucht nebeneinander · aufklappbare Lösung · hervorgehobenes Ergebnis | siehe Dioden-Theorie, Abschnitt Z-Diode |
 | `Quiz` | Karten, Antwortkacheln, ✓/✗-Etiketten, Fortschrittsbalken (Desktop mitlaufend, Handy am Ende) | `<Quiz id="dioden" />` |
 | `Loesung` | aufklappbare Lösung in allen Rechenbeispielen (Karte mit Pfeil) | `<Loesung> … </Loesung>` |
+| `FourierLabor` | interaktive Fourier-Reihe: Zeitbereich und Linienspektrum, Sinus/Rechteck/Dreieck, 1 … 19 Harmonische | `<FourierLabor />` |
 
 CSS-Klassen für freies HTML in MDX: `ds-raster` (Kartenraster), `ds-karte`, `ds-bereich` (Bereichsüberschrift mit Symbol),
 `ds-schritte` (nummerierte Schritte), `ds-bildpaar` (zwei Abbildungen nebeneinander, am Handy untereinander), `ds-fuss`.

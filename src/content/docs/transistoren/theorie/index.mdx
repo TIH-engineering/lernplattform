@@ -1,13 +1,16 @@
 ---
 title: Theorie – Transistoren
 description: "Bipolartransistor: Aufbau, Funktion, Kennlinien, Arbeitsbereiche, Schalterbetrieb, NPN und PNP, Längsregler, Konstantstromquelle; Feldeffekttransistoren: JFET, MOSFET-Typen, Kennwerte, Verluste und Ansteuerung."
+sidebar:
+  label: 1 · Grundlagen, Schalter, MOSFET
+  order: 1
 ---
 
-import Abbildung from '../../../components/Abbildung.astro';
-import NpnSchalter from '../../../assets/elektronik/npn-schalter.svg';
-import Laengsregler from '../../../assets/elektronik/laengsregler.svg';
-import Stromquelle from '../../../assets/elektronik/stromquelle.svg';
-import MosfetRelais from '../../../assets/elektronik/mosfet-relais.svg';
+import Abbildung from '../../../../components/Abbildung.astro';
+import NpnSchalter from '../../../../assets/elektronik/npn-schalter.svg';
+import Laengsregler from '../../../../assets/elektronik/laengsregler.svg';
+import Stromquelle from '../../../../assets/elektronik/stromquelle.svg';
+import MosfetRelais from '../../../../assets/elektronik/mosfet-relais.svg';
 
 ## 1 · Überblick
 
@@ -112,9 +115,9 @@ Durchlassrichtung gepolt.
 | Kollektorschaltung (**Emitterfolger**) | Kollektor | ≈ 1 | großer Eingangs-, kleiner Ausgangswiderstand → **Impedanzwandler** |
 | Basisschaltung | Basis | groß | für hohe Frequenzen |
 
-Für einen stabilen **Arbeitspunkt** muss die Basis über einen Spannungsteiler oder eine Referenz vorgespannt werden.
-Heute werden Verstärker meist mit [Operationsverstärkern](/operationsverstaerker/) gebaut; die folgenden zwei Schaltungen
-nutzen das Prinzip aber nach wie vor.
+Arbeitspunkt, Kleinsignalbetrachtung und alle Formeln stehen ausführlich unter
+[Grundschaltungen](/transistoren/theorie/grundschaltungen/), der Differenzverstärker unter
+[Differenzverstärker](/transistoren/theorie/differenzverstaerker/). Die folgenden zwei Schaltungen nutzen den Emitterfolger.
 
 ### Spannungsstabilisierung (Längsregler)
 

@@ -1,0 +1,365 @@
+---
+// Interaktive Lernvisualisierung: Fourier-Reihe und Oberschwingungen.
+// Verwendung in einer .mdx-Seite:  <FourierLabor />
+// Zwei Diagramme: Zeitbereich (Summe der Sinusschwingungen + ideale Kurve gestrichelt) und Linienspektrum.
+// Gerechnet wird mit den echten Fourier-Koeffizienten (Amplitude 1):
+//   Rechteck: 4/π · Σ sin(nωt)/n,  n = 1, 3, 5, …
+//   Dreieck:  8/π² · Σ (−1)^((n−1)/2) · sin(nωt)/n²,  n = 1, 3, 5, …
+//   Sinus:    nur die Grundschwingung
+// Es wird nichts gespeichert oder gesendet.
+const id = 'fourier-' + Math.random().toString(36).slice(2, 8);
+---
+
+<figure class="fourier not-content" id={id} data-fourier>
+	<div class="fourier-steuerung">
+		<fieldset class="fourier-gruppe">
+			<legend>Signalform</legend>
+			<div class="fourier-knoepfe" data-gruppe="form">
+				<button type="button" data-wert="Sinus" aria-pressed="false">Sinus</button>
+				<button type="button" data-wert="Rechteck" aria-pressed="true">Rechteck</button>
+				<button type="button" data-wert="Dreieck" aria-pressed="false">Dreieck</button>
+			</div>
+		</fieldset>
+		<fieldset class="fourier-gruppe">
+			<legend>Berücksichtigte Sinusschwingungen (ungerade Harmonische)</legend>
+			<div class="fourier-knoepfe" data-gruppe="anzahl">
+				<button type="button" data-wert="1" aria-pressed="true">1</button>
+				<button type="button" data-wert="3" aria-pressed="false">3</button>
+				<button type="button" data-wert="5" aria-pressed="false">5</button>
+				<button type="button" data-wert="9" aria-pressed="false">9</button>
+				<button type="button" data-wert="19" aria-pressed="false">19</button>
+			</div>
+		</fieldset>
+		<label class="fourier-einzeln"><input type="checkbox" data-einzeln /> einzelne Sinusschwingungen zeigen</label>
+	</div>
+
+	<div class="fourier-diagramm">
+		<p class="fourier-titel">Zeitbereich: <span data-text-zeit></span></p>
+		<svg viewBox="0 0 640 252" role="img" data-zeit aria-label="Zeitbereich">
+			<g class="f-gitter" data-zeit-gitter></g>
+			<g data-zeit-einzeln class="f-einzeln"></g>
+			<polyline data-zeit-ideal class="f-ideal" points="" />
+			<polyline data-zeit-summe class="f-summe" points="" />
+		</svg>
+	</div>
+
+	<div class="fourier-diagramm">
+		<p class="fourier-titel">Frequenzbereich (Amplitudenspektrum)</p>
+		<svg viewBox="0 0 640 230" role="img" data-spektrum aria-label="Frequenzbereich">
+			<g class="f-gitter" data-spektrum-gitter></g>
+			<g data-spektrum-linien></g>
+		</svg>
+	</div>
+
+	<figcaption class="fourier-info" aria-live="polite" data-info></figcaption>
+</figure>
+
+<script>
+	type Form = 'Sinus' | 'Rechteck' | 'Dreieck';
+	const NS = 'http://www.w3.org/2000/svg';
+	const NMAX = 37; // höchste dargestellte Harmonische (19. ungerade Harmonische = 37 f0)
+
+	/** Fourier-Koeffizient b_n (Sinusanteil) für Amplitude 1 */
+	function koeffizient(form: Form, n: number): number {
+		if (form === 'Sinus') return n === 1 ? 1 : 0;
+		if (n % 2 === 0) return 0;
+		if (form === 'Rechteck') return 4 / (Math.PI * n);
+		const vorzeichen = ((n - 1) / 2) % 2 === 0 ? 1 : -1;
+		return (8 / (Math.PI * Math.PI * n * n)) * vorzeichen;
+	}
+	/** ideale Kurve, x in Perioden */
+	function ideal(form: Form, x: number): number {
+		const t = ((x % 1) + 1) % 1;
+		if (form === 'Sinus') return Math.sin(2 * Math.PI * x);
+		if (form === 'Rechteck') return t < 0.5 ? 1 : -1;
+		return t < 0.25 ? 4 * t : t < 0.75 ? 2 - 4 * t : 4 * t - 4;
+	}
+	const komma = (z: number, n = 2) => z.toFixed(n).replace('.', ',');
+	const el = (name: string, attr: Record<string, string | number>, inhalt?: string) => {
+		const e = document.createElementNS(NS, name);
+		for (const [k, v] of Object.entries(attr)) e.setAttribute(k, String(v));
+		if (inhalt !== undefined) e.textContent = inhalt;
+		return e;
+	};
+
+	// Zeitbereich: 2 Perioden, x 60 … 620, y: +1 → 40, −1 → 200 (Platz für Überschwinger)
+	const ZX = (x: number) => 60 + x * 280;
+	const ZY = (v: number) => 120 - v * 72;
+	// Spektrum: n = 0 … 38, Amplitude 0 … 1,3
+	const SX = (n: number) => 60 + n * 14.5;
+	const SY = (a: number) => 190 - a * 120;
+
+	function zeichneGitter(fig: HTMLElement) {
+		const zg = fig.querySelector('[data-zeit-gitter]')!;
+		zg.append(
+			el('line', { x1: 60, y1: ZY(0), x2: 625, y2: ZY(0) }),
+			el('line', { x1: 60, y1: 18, x2: 60, y2: 228 }),
+			el('line', { x1: 60, y1: 228, x2: 625, y2: 228, class: 'f-hilfslinie' }),
+			el('text', { x: 625, y: 244, 'text-anchor': 'end' }, 't / T'),
+			el('text', { x: 66, y: 22 }, 'u / û'),
+		);
+		for (const v of [1, 0.5, -0.5, -1]) {
+			zg.append(el('line', { x1: 56, y1: ZY(v), x2: 625, y2: ZY(v), class: 'f-hilfslinie' }));
+			zg.append(el('text', { x: 52, y: ZY(v) + 4, 'text-anchor': 'end' }, komma(v, v % 1 ? 1 : 0).replace('-', '−')));
+		}
+		for (const x of [0.5, 1, 1.5]) {
+			zg.append(el('line', { x1: ZX(x), y1: ZY(0) - 4, x2: ZX(x), y2: ZY(0) + 4 }));
+			zg.append(el('line', { x1: ZX(x), y1: 226, x2: ZX(x), y2: 230 }));
+			zg.append(el('text', { x: ZX(x), y: 244, 'text-anchor': 'middle' }, komma(x, x % 1 ? 1 : 0)));
+		}
+		const sg = fig.querySelector('[data-spektrum-gitter]')!;
+		sg.append(
+			el('line', { x1: 60, y1: SY(0), x2: 625, y2: SY(0) }),
+			el('line', { x1: 60, y1: 18, x2: 60, y2: SY(0) }),
+			el('text', { x: 625, y: SY(0) + 34, 'text-anchor': 'end' }, 'f / f₀'),
+			el('text', { x: 625, y: 22, 'text-anchor': 'end' }, 'Amplitude ûₙ / û'),
+		);
+		for (const a of [0.5, 1]) {
+			sg.append(el('line', { x1: 56, y1: SY(a), x2: 625, y2: SY(a), class: 'f-hilfslinie' }));
+			sg.append(el('text', { x: 52, y: SY(a) + 4, 'text-anchor': 'end' }, komma(a, a % 1 ? 1 : 0)));
+		}
+		for (let n = 1; n <= NMAX; n += 2) {
+			sg.append(el('line', { x1: SX(n), y1: SY(0), x2: SX(n), y2: SY(0) + 4 }));
+			if (n <= 9 || n % 4 === 1) sg.append(el('text', { x: SX(n), y: SY(0) + 17, 'text-anchor': 'middle' }, String(n)));
+		}
+	}
+
+	function aktualisiere(fig: HTMLElement) {
+		const form = (fig.dataset.form ?? 'Rechteck') as Form;
+		const anzahl = form === 'Sinus' ? 1 : Number(fig.dataset.anzahl ?? 1);
+		const nGrenze = 2 * anzahl - 1; // höchste verwendete Harmonische
+		const einzeln = fig.querySelector<HTMLInputElement>('[data-einzeln]')!.checked;
+
+		// Zeitbereich
+		const summe: string[] = [], idealPts: string[] = [];
+		let max = 0;
+		for (let i = 0; i <= 1400; i++) {
+			const x = (2 * i) / 1400;
+			let v = 0;
+			for (let n = 1; n <= nGrenze; n += 2) v += koeffizient(form, n) * Math.sin(2 * Math.PI * n * x);
+			max = Math.max(max, v);
+			summe.push(`${ZX(x).toFixed(1)},${ZY(v).toFixed(1)}`);
+			idealPts.push(`${ZX(x).toFixed(1)},${ZY(ideal(form, x)).toFixed(1)}`);
+		}
+		fig.querySelector('[data-zeit-summe]')!.setAttribute('points', summe.join(' '));
+		fig.querySelector('[data-zeit-ideal]')!.setAttribute('points', idealPts.join(' '));
+		const eg = fig.querySelector('[data-zeit-einzeln]')!;
+		eg.replaceChildren();
+		if (einzeln) {
+			for (let n = 1; n <= nGrenze; n += 2) {
+				const b = koeffizient(form, n);
+				if (!b) continue;
+				const pts: string[] = [];
+				for (let i = 0; i <= 700; i++) {
+					const x = (2 * i) / 700;
+					pts.push(`${ZX(x).toFixed(1)},${ZY(b * Math.sin(2 * Math.PI * n * x)).toFixed(1)}`);
+				}
+				eg.append(el('polyline', { points: pts.join(' ') }));
+			}
+		}
+
+		// Spektrum: berücksichtigte Linien kräftig, fehlende blass
+		const lg = fig.querySelector('[data-spektrum-linien]')!;
+		lg.replaceChildren();
+		for (let n = 1; n <= NMAX; n++) {
+			const a = Math.abs(koeffizient(form, n));
+			if (!a) continue;
+			const drin = n <= nGrenze;
+			const g = el('g', { class: drin ? 'f-linie' : 'f-linie f-linie--aus' });
+			g.append(el('line', { x1: SX(n), y1: SY(0), x2: SX(n), y2: SY(a) }), el('circle', { cx: SX(n), cy: SY(a), r: 3.2 }));
+			if (drin && n <= 7) g.append(el('text', { x: SX(n) + 5, y: SY(a) - 5 }, komma(a)));
+			lg.append(g);
+		}
+
+		// Texte und Beschreibung für Screenreader
+		const terme = [];
+		for (let n = 1; n <= nGrenze; n += 2) if (koeffizient(form, n)) terme.push(n);
+		const zeitText =
+			form === 'Sinus' ? 'reiner Sinus – nur die Grundschwingung' : `Summe aus ${terme.length} Sinusschwingung${terme.length > 1 ? 'en' : ''} (bis ${nGrenze}·f₀)`;
+		fig.querySelector('[data-text-zeit]')!.textContent = zeitText;
+		const ueber = form === 'Rechteck' && anzahl > 1 ? ` Größter Wert: ${komma(max)} – Überschwinger von ${komma((max - 1) * 50, 0)} % der Sprunghöhe an den Sprungstellen (Gibbs-Phänomen).` : '';
+		const formel =
+			form === 'Rechteck' ? 'Amplituden 4/(π·n): ' : form === 'Dreieck' ? 'Amplituden 8/(π²·n²): ' : 'Amplitude: ';
+		const werte = terme.slice(0, 4).map((n) => `${n}·f₀: ${komma(Math.abs(koeffizient(form, n)), 3)}`).join(' · ');
+		fig.querySelector('[data-info]')!.textContent = `${form}: ${formel}${werte}${terme.length > 4 ? ' · …' : ''}.${ueber}`;
+		fig.querySelector('[data-zeit]')!.setAttribute('aria-label', `Zeitbereich, ${form}: ${zeitText}; ideale Kurve gestrichelt.${ueber}`);
+		fig.querySelector('[data-spektrum]')!.setAttribute('aria-label', `Linienspektrum, ${form}: ${werte}`);
+		fig.querySelectorAll<HTMLButtonElement>('[data-gruppe="anzahl"] button').forEach((b) => (b.disabled = form === 'Sinus'));
+	}
+
+	document.querySelectorAll<HTMLElement>('[data-fourier]').forEach((fig) => {
+		fig.dataset.form = 'Rechteck';
+		fig.dataset.anzahl = '1';
+		zeichneGitter(fig);
+		fig.querySelectorAll<HTMLElement>('[data-gruppe]').forEach((gruppe) => {
+			gruppe.addEventListener('click', (e) => {
+				const knopf = (e.target as HTMLElement).closest('button');
+				if (!knopf || knopf.disabled) return;
+				gruppe.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === knopf)));
+				fig.dataset[gruppe.dataset.gruppe!] = knopf.dataset.wert!;
+				aktualisiere(fig);
+			});
+		});
+		fig.querySelector('[data-einzeln]')!.addEventListener('change', () => aktualisiere(fig));
+		aktualisiere(fig);
+	});
+</script>
+
+<style>
+	.fourier {
+		margin: 1.5rem 0;
+		padding: 1rem 1.15rem;
+		border: 1px solid var(--ds-linie);
+		border-radius: var(--ds-radius);
+		background: var(--ds-flaeche);
+		box-shadow: var(--ds-schatten);
+	}
+	.fourier-steuerung {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem 1.5rem;
+		align-items: flex-end;
+		margin-bottom: 0.75rem;
+	}
+	.fourier-gruppe {
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+	.fourier-gruppe legend {
+		margin-bottom: 0.3rem;
+		font-size: var(--sl-text-xs);
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--ds-text-leise);
+	}
+	.fourier-knoepfe {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.3rem;
+	}
+	.fourier-knoepfe button {
+		min-width: 2.6rem;
+		padding: 0.35rem 0.75rem;
+		border: 1px solid var(--ds-linie);
+		border-radius: var(--ds-radius-klein);
+		background: var(--ds-flaeche-2);
+		color: var(--sl-color-white);
+		font: inherit;
+		font-weight: 600;
+		cursor: pointer;
+	}
+	.fourier-knoepfe button[aria-pressed='true'] {
+		background: var(--ds-petrol);
+		border-color: var(--ds-petrol);
+		color: var(--sl-color-black);
+	}
+	:global([data-theme='light']) .fourier-knoepfe button[aria-pressed='true'] {
+		color: #fff;
+	}
+	.fourier-knoepfe button:disabled {
+		opacity: 0.45;
+		cursor: not-allowed;
+	}
+	.fourier-knoepfe button:focus-visible,
+	.fourier-einzeln input:focus-visible {
+		outline: 2px solid var(--ds-petrol);
+		outline-offset: 2px;
+	}
+	.fourier-einzeln {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-size: var(--sl-text-sm);
+		cursor: pointer;
+	}
+	.fourier-einzeln input {
+		width: 1.05rem;
+		height: 1.05rem;
+		accent-color: var(--ds-petrol);
+	}
+	.fourier-diagramm {
+		margin-top: 0.5rem;
+	}
+	.fourier-titel {
+		margin: 0 0 0.2rem;
+		font-size: var(--sl-text-sm);
+		font-weight: 650;
+	}
+	.fourier svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		font-size: 12px;
+		font-family: inherit;
+	}
+	.fourier :global(.f-gitter line) {
+		stroke: currentColor;
+		stroke-width: 1.2;
+	}
+	.fourier :global(.f-gitter .f-hilfslinie) {
+		stroke-width: 0.6;
+		opacity: 0.3;
+	}
+	.fourier :global(.f-gitter text) {
+		fill: currentColor;
+		font-size: 12px;
+	}
+	.fourier :global(.f-ideal) {
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.5;
+		stroke-dasharray: 6 5;
+		opacity: 0.8;
+	}
+	.fourier :global(.f-summe) {
+		fill: none;
+		stroke: var(--ds-signal-1, #0b72c4);
+		stroke-width: 2.5;
+		stroke-linejoin: round;
+	}
+	.fourier :global(.f-einzeln polyline) {
+		fill: none;
+		stroke: var(--ds-signal-2, #b45a00);
+		stroke-width: 1.1;
+		opacity: 0.55;
+	}
+	.fourier :global(.f-linie line) {
+		stroke: var(--ds-signal-2, #b45a00);
+		stroke-width: 3.5;
+	}
+	.fourier :global(.f-linie circle) {
+		fill: var(--ds-signal-2, #b45a00);
+	}
+	.fourier :global(.f-linie text) {
+		fill: currentColor;
+		font-size: 11px;
+	}
+	.fourier :global(.f-linie--aus) {
+		opacity: 0.2;
+	}
+	/* Auf schmalen Bildschirmen wird das Diagramm verkleinert → Schrift und Linien im SVG-Maßstab vergrößern */
+	@media (max-width: 40rem) {
+		.fourier :global(.f-gitter text) {
+			font-size: 21px;
+		}
+		.fourier :global(.f-linie text) {
+			display: none;
+		}
+		.fourier :global(.f-summe) {
+			stroke-width: 4;
+		}
+		.fourier :global(.f-ideal) {
+			stroke-width: 2.5;
+		}
+		.fourier :global(.f-linie line) {
+			stroke-width: 5;
+		}
+	}
+	.fourier-info {
+		margin-top: 0.6rem;
+		font-size: var(--sl-text-sm);
+		color: var(--ds-text-leise);
+	}
+</style>

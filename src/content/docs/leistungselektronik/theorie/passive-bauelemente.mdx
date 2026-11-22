@@ -1,6 +1,6 @@
 ---
 title: Passive Bauelemente
-description: Reale Kondensatoren (ESR, ESL, Eigenresonanz), X- und Y-Kondensatoren, reale Drosseln (Sättigung, Skin- und Proximity-Effekt) und Transformatoren.
+description: Reale Kondensatoren (ESR, ESL, Eigenresonanz), X- und Y-Kondensatoren, reale Drosseln (Sättigung, AL-Wert, Gleichstromvormagnetisierung, Dimensionierung auf Ferritkern, Skin- und Proximity-Effekt) und Transformatoren.
 sidebar:
   label: 7 · Passive Bauelemente
   order: 7
@@ -8,6 +8,7 @@ sidebar:
 
 import Abbildung from '../../../../components/Abbildung.astro';
 import KondensatorESB from '../../../../assets/leistungselektronik/kondensator-esb.svg';
+import Kasten from '../../../../components/Kasten.astro';
 
 Passive Bauelemente **speichern Energie**, **glätten** Ströme und Spannungen und bestimmen das
 **Störverhalten** (EMV). In Schaltwandlern sind Strombelastbarkeit, Verluste, Temperatur und parasitäre
@@ -99,6 +100,55 @@ verändern das Verhalten. Oberhalb der Eigenresonanz wirkt die Drossel kapazitiv
 - **Gleichstromwiderstand** $R_\mathrm{DC}$ → Kupferverluste $P = I^2 \cdot R_\mathrm{DC}$
 - Prüfbedingungen beachten!
 :::
+
+### Ferritkern: AL-Wert und Vormagnetisierung
+
+Für Drosseln und Übertrager auf **Ferritkernen** (Schalenkern, E-Kern, Ringkern) geben die Hersteller statt $\mu$ und Abmessungen
+direkt den **Induktivitätsfaktor** $A_\mathrm{L}$ an – die Induktivität einer einzigen Windung:
+
+<Kasten typ="formel" titel="Induktivität über den AL-Wert">
+
+$$
+L = A_\mathrm{L} \cdot N^2
+\qquad\Longleftrightarrow\qquad
+N = \sqrt{\frac{L}{A_\mathrm{L}}}
+$$
+
+<span slot="gilt">$A_\mathrm{L}$ in nH (= nH pro Windung²) laut Datenblatt, gemessen bei kleiner Aussteuerung, ohne Gleichstrom und bei Raumtemperatur.</span>
+
+</Kasten>
+
+Derselbe Kern wird mit **verschiedenen Luftspalten** angeboten. Je größer der Luftspalt, desto kleiner $A_\mathrm{L}$ – aber desto mehr Strom
+verträgt die Drossel (siehe [Luftspalt und Sättigung](/aktuatoren/theorie/magnetkreis/#der-luftspalt-schert-die-kennlinie)). Ohne Iterieren
+lässt sich die Luftspaltlänge abschätzen: Bestimmt der Spalt den magnetischen Widerstand, gilt $A_\mathrm{L} \approx \mu_0 A_\mathrm{e}/\delta$.
+
+**Gleichstromvormagnetisierung.** In einem Tiefsetzsteller fließt durch die Drossel ein großer **Gleichstrom** mit etwas Welligkeit. Der
+Gleichstrom verschiebt den Arbeitspunkt auf der B-H-Kennlinie in Richtung Sättigung; $L$ sinkt. Ob der Kern das aushält, prüft man über die
+**Spitzenflussdichte**:
+
+<Kasten typ="formel" titel="Spitzenflussdichte einer Drossel">
+
+$$
+\Phi = \frac{L \cdot I}{N}
+\qquad\Rightarrow\qquad
+\hat{B} = \frac{L \cdot I_\mathrm{max}}{N \cdot A_\mathrm{e}} \;<\; B_\mathrm{max}
+$$
+
+<span slot="gilt">$A_\mathrm{e}$: wirksamer Kernquerschnitt (Datenblatt); $B_\mathrm{max}$ mit Reserve unter der Sättigung, für Ferrit typisch 0,25 … 0,3 T (die Sättigung sinkt bei 100 °C auf etwa 0,4 T).</span>
+
+</Kasten>
+
+**Dimensionierung in fünf Schritten** (Beispiel mit Zahlen: [Speicherdrossel auf Ferritkern](/leistungselektronik/rechenbeispiele/#speicherdrossel-auf-ferritkern)):
+
+1. Aus dem Wandler: Induktivität $L$, Spitzenstrom $I_\mathrm{max}$ (Gleichstrom + halbe Welligkeit), Effektivstrom.
+2. Kern mit passendem $A_\mathrm{L}$ (Luftspalt) wählen → Windungszahl $N = \sqrt{L/A_\mathrm{L}}$, aufrunden.
+3. **Sättigung prüfen:** $\hat{B} = L I_\mathrm{max}/(N A_\mathrm{e})$. Zu groß → Kern mit größerem Luftspalt (kleinerem $A_\mathrm{L}$) oder größerer Kern.
+4. **Draht wählen:** Stromdichte 3 … 5 A/mm² → Querschnitt; passt die Wicklung in den Wickelraum?
+5. **Verluste abschätzen:** Kupfer $I_\mathrm{eff}^2 R_\mathrm{DC}$ (bei hoher Frequenz mehr, Skin-Effekt), Kern aus dem Verlustdiagramm des Ferrits.
+
+In der Praxis kauft man meist eine fertige Drossel und prüft nur die Datenblattwerte (siehe oben). Wer selbst wickelt oder eine Drossel
+für eine Sonderanwendung braucht, geht nach diesen Schritten vor – und misst den [Sättigungsstrom](/leistungselektronik/praxisbeispiele/#sättigungsstrom-einer-drossel-messen)
+anschließend nach.
 
 ### Skin- und Proximity-Effekt
 

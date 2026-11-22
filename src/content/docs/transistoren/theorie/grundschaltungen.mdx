@@ -1,0 +1,260 @@
+---
+title: Transistorgrundschaltungen
+description: "Bipolartransistor als Verstärker: Arbeitspunkt mit Basisspannungsteiler und Emitterwiderstand, Arbeitsgerade, Kleinsignalbetrachtung mit r_e und r_BE, Emitterschaltung mit und ohne Emitterkondensator, Kollektorschaltung (Emitterfolger) als Impedanzwandler, Basisschaltung, Vergleichstabelle."
+sidebar:
+  label: 2 · Grundschaltungen
+  order: 2
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Kasten from '../../../../components/Kasten.astro';
+import Emitter from '../../../../assets/elektronik/emitterschaltung.svg';
+import Kollektor from '../../../../assets/elektronik/kollektorschaltung.svg';
+import Basis from '../../../../assets/elektronik/basisschaltung.svg';
+import Kennlinien from '../../../../assets/elektronik/kennlinienfeld-arbeitsgerade.svg';
+import Kleinsignal from '../../../../assets/elektronik/kleinsignal-emitterschaltung.svg';
+
+<Kasten typ="lernziele">
+
+- den Arbeitspunkt einer Emitterschaltung mit Basisspannungsteiler berechnen und im Kennlinienfeld einzeichnen,
+- erklären, was „Kleinsignal“ bedeutet, und $r_\mathrm{e}$ sowie $r_\mathrm{BE}$ aus dem Arbeitspunkt bestimmen,
+- Spannungsverstärkung, Ein- und Ausgangswiderstand der drei Grundschaltungen mit Näherungsformeln berechnen,
+- begründen, wofür man Emitterschaltung, Emitterfolger und Basisschaltung einsetzt.
+
+</Kasten>
+
+Die Grundlagen des Bipolartransistors (Aufbau, Kennlinien, Schalterbetrieb) stehen unter
+[Grundlagen, Schalter, MOSFET](/transistoren/theorie/). Hier geht es um den **Linearbetrieb**: Der Transistor soll ein kleines
+Wechselsignal (z. B. von einem Mikrofon oder Sensor) **verstärken**, ohne es zu verzerren.
+
+## 1 · Die Idee: kleiner Basisstrom steuert großen Kollektorstrom
+
+Im aktiven Bereich gilt $I_\mathrm{C} \approx B \cdot I_\mathrm{B}$. Ändert ein Eingangssignal den Basisstrom ein wenig, ändert sich
+der Kollektorstrom um das $B$-Fache. Fließt dieser Strom durch einen Widerstand $R_\mathrm{C}$, entsteht dort eine große
+Spannungsänderung – das ist die **Verstärkung**.
+
+Damit das funktioniert, muss der Transistor **schon ohne Signal** im aktiven Bereich arbeiten: Es fließt ein Ruhestrom, und
+$U_\mathrm{CE}$ liegt ungefähr in der Mitte zwischen 0 und $U_\mathrm{B}$. Das ist der **Arbeitspunkt** (AP). Das Wechselsignal
+„wackelt“ dann um diesen Punkt nach oben und unten. Liegt der AP schlecht, wird eine Halbwelle abgeschnitten
+(Sättigung oder Sperren).
+
+Welcher Anschluss **gemeinsam** für Ein- und Ausgang ist (wechselstrommäßig an Masse liegt), gibt der Schaltung ihren Namen:
+
+| Grundschaltung | Eingang | Ausgang | gemeinsam |
+| --- | --- | --- | --- |
+| Emitterschaltung | Basis | Kollektor | Emitter |
+| Kollektorschaltung (Emitterfolger) | Basis | Emitter | Kollektor (über $U_\mathrm{B}$) |
+| Basisschaltung | Emitter | Kollektor | Basis |
+
+## 2 · Arbeitspunkt einstellen
+
+<Abbildung bild={Emitter} unterschrift="Emitterschaltung mit Basisspannungsteiler R1/R2, Emitterwiderstand RE und Koppelkondensatoren" />
+
+Die Gleichspannungen stellt man mit dem **Basisspannungsteiler** $R_1$/$R_2$ und dem **Emitterwiderstand** $R_\mathrm{E}$ ein.
+Die Kondensatoren $C_\mathrm{K}$, $C_\mathrm{A}$ und $C_\mathrm{E}$ sind für Gleichstrom offen – für den Arbeitspunkt denkt man
+sie sich weg.
+
+**Rechenweg** (Spannungsteiler „steif“, d. h. Querstrom durch $R_2$ mindestens zehnmal so groß wie $I_\mathrm{B}$):
+
+$$
+U_\mathrm{Basis} \approx U_\mathrm{B} \cdot \frac{R_2}{R_1 + R_2}
+\qquad
+U_\mathrm{E} = U_\mathrm{Basis} - U_\mathrm{BE}
+\qquad
+I_\mathrm{C} \approx I_\mathrm{E} = \frac{U_\mathrm{E}}{R_\mathrm{E}}
+$$
+
+$$
+U_\mathrm{C} = U_\mathrm{B} - I_\mathrm{C} \cdot R_\mathrm{C}
+\qquad
+U_\mathrm{CE} = U_\mathrm{C} - U_\mathrm{E}
+$$
+
+**Beispiel** ($U_\mathrm{B} = 12\,\mathrm{V}$, $R_1 = 82\,\mathrm{k\Omega}$, $R_2 = 15\,\mathrm{k\Omega}$, $R_\mathrm{C} = 4{,}7\,\mathrm{k\Omega}$,
+$R_\mathrm{E} = 1\,\mathrm{k\Omega}$): $U_\mathrm{Basis} \approx 1{,}86\,\mathrm{V}$, $U_\mathrm{E} \approx 1{,}16\,\mathrm{V}$,
+$I_\mathrm{C} \approx 1{,}16\,\mathrm{mA}$, $U_\mathrm{C} \approx 6{,}57\,\mathrm{V}$, $U_\mathrm{CE} \approx 5{,}4\,\mathrm{V}$ – gut in der Mitte.
+Den ausführlichen Rechenweg findest du bei den [Rechenbeispielen](/transistoren/rechenbeispiele/#arbeitspunkt-einer-emitterschaltung).
+
+<Kasten typ="merke" titel="Warum ein Emitterwiderstand?">
+
+$B$ streut von Exemplar zu Exemplar stark (z. B. 100 … 300) und steigt mit der Temperatur. Mit $R_\mathrm{E}$ hängt der Strom fast
+nur noch von $U_\mathrm{E}/R_\mathrm{E}$ ab, nicht von $B$: Steigt $I_\mathrm{C}$, steigt $U_\mathrm{E}$, damit sinkt $U_\mathrm{BE}$ –
+der Strom wird zurückgeregelt (**Gleichstromgegenkopplung**). Faustregel: $U_\mathrm{E} \approx 1 \dots 2\,\mathrm{V}$ bzw. etwa 10 %
+von $U_\mathrm{B}$.
+
+</Kasten>
+
+### Arbeitsgerade im Kennlinienfeld
+
+<Abbildung bild={Kennlinien} unterschrift="Ausgangskennlinienfeld (idealisiert, B = 200) mit Arbeitsgerade für 12 V und RC + RE = 5,7 kΩ" />
+
+Für den Ausgangskreis gilt $U_\mathrm{B} = I_\mathrm{C} (R_\mathrm{C} + R_\mathrm{E}) + U_\mathrm{CE}$ (mit $I_\mathrm{E} \approx I_\mathrm{C}$). Das ist
+eine Gerade durch die Punkte $U_\mathrm{CE} = U_\mathrm{B}$ (Transistor sperrt) und $I_\mathrm{C} = U_\mathrm{B}/(R_\mathrm{C} + R_\mathrm{E})$
+(Transistor voll leitend). Wo sie die Kennlinie des eingestellten Basisstroms schneidet, liegt der **Arbeitspunkt**. Das Signal
+verschiebt den Punkt entlang der Geraden – liegt er in der Mitte, bleibt nach oben und unten gleich viel Platz.
+
+## 3 · Kleinsignalbetrachtung
+
+Für ein **kleines** Wechselsignal verhält sich der Transistor um den Arbeitspunkt herum fast linear. Man ersetzt ihn dann durch
+ein einfaches **Kleinsignal-Ersatzschaltbild**. Dabei gilt:
+
+- Gleichspannungsquellen sind für Wechselsignale **Kurzschlüsse** ($U_\mathrm{B}$ liegt wechselstrommäßig an Masse).
+- Große Kondensatoren sind bei der Signalfrequenz ebenfalls **Kurzschlüsse**.
+- Es zählen nur die **Änderungen** von Strömen und Spannungen (Kleinbuchstaben: $u_\mathrm{e}$, $i_\mathrm{B}$).
+
+Die Basis-Emitter-Diode hat im Arbeitspunkt einen **differenziellen Widerstand** – je größer der Strom, desto steiler die Kennlinie:
+
+<Kasten typ="formel" titel="Kleinsignalgrößen im Arbeitspunkt" gilt="Raumtemperatur (Temperaturspannung ≈ 26 mV), β ≫ 1, Signal am Basis-Emitter-Übergang deutlich kleiner als 26 mV.">
+
+$$
+r_\mathrm{e} = \frac{U_\mathrm{T}}{I_\mathrm{E}} \approx \frac{26\,\mathrm{mV}}{I_\mathrm{E}}
+\qquad
+r_\mathrm{BE} = \beta \cdot r_\mathrm{e}
+\qquad
+S = \frac{1}{r_\mathrm{e}} \approx \frac{I_\mathrm{C}}{U_\mathrm{T}}
+$$
+
+</Kasten>
+
+$r_\mathrm{e}$ ist der Widerstand „vom Emitter aus gesehen“, $r_\mathrm{BE}$ der Widerstand „von der Basis aus gesehen“ (er ist um
+$\beta$ größer, weil nur der $\beta$-te Teil des Stroms in die Basis fließt). $\beta$ ist die Wechselstromverstärkung, praktisch
+$\beta \approx B$. Im Beispiel: $r_\mathrm{e} = 26\,\mathrm{mV}/1{,}16\,\mathrm{mA} \approx 22{,}5\,\Omega$ und
+$r_\mathrm{BE} \approx 200 \cdot 22{,}5\,\Omega = 4{,}5\,\mathrm{k\Omega}$.
+
+<Abbildung bild={Kleinsignal} unterschrift="Kleinsignal-Ersatzschaltbild der Emitterschaltung (RE durch CE überbrückt)" />
+
+## 4 · Emitterschaltung
+
+### Mit Emitterkondensator (volle Verstärkung)
+
+Ist $R_\mathrm{E}$ durch $C_\mathrm{E}$ überbrückt, liegt der Emitter für das Signal an Masse. Eine Eingangsspannung $u_\mathrm{e}$
+erzeugt $i_\mathrm{C} = u_\mathrm{e}/r_\mathrm{e}$; dieser Strom fließt durch $R_\mathrm{C}$ (und $R_\mathrm{L}$). Steigt die
+Eingangsspannung, steigt der Strom, und die Kollektorspannung **sinkt** – Ausgang und Eingang sind um **180° phasenverschoben**.
+
+<Kasten typ="formel" titel="Emitterschaltung mit überbrücktem Emitterwiderstand" gilt="Kleinsignal; Kondensatoren bei der Signalfrequenz Kurzschluss; Ausgangswiderstand des Transistors vernachlässigt (sonst etwa 10 % weniger).">
+
+$$
+v_\mathrm{u} = \frac{u_\mathrm{a}}{u_\mathrm{e}} \approx -\frac{R_\mathrm{C} \parallel R_\mathrm{L}}{r_\mathrm{e}}
+\qquad
+r_\mathrm{ein} = R_1 \parallel R_2 \parallel r_\mathrm{BE}
+\qquad
+r_\mathrm{aus} \approx R_\mathrm{C}
+$$
+
+</Kasten>
+
+Beispiel: ohne Last $v_\mathrm{u} \approx -4{,}7\,\mathrm{k\Omega}/22{,}5\,\Omega \approx -209$, mit $R_\mathrm{L} = 10\,\mathrm{k\Omega}$ etwa $-142$;
+$r_\mathrm{ein} \approx 3{,}3\,\mathrm{k\Omega}$. Eine LTspice-Simulation mit dem Transistor 2N3904 liefert $-126$ – der Unterschied kommt
+vor allem vom Ausgangswiderstand des Transistors (Early-Effekt) und vom tatsächlichen Arbeitspunkt.
+
+**Nachteile:** Die Verstärkung hängt über $r_\mathrm{e}$ vom Strom und damit von Temperatur und Exemplar ab. Und weil sich $r_\mathrm{e}$
+während einer großen Signalschwingung mitändert, wird das Signal **verzerrt** – schon wenige Millivolt an der Basis sind „groß“.
+
+### Ohne Emitterkondensator (Stromgegenkopplung)
+
+Ohne $C_\mathrm{E}$ wirkt $R_\mathrm{E}$ auch für das Signal: Ein Teil der Eingangsspannung fällt an $R_\mathrm{E}$ ab und wirkt der Ansteuerung
+entgegen (**Gegenkopplung**).
+
+<Kasten typ="formel" titel="Emitterschaltung mit Emitterwiderstand (Gegenkopplung)">
+
+<span slot="gilt">Kleinsignal; Näherung rechts für $R_\mathrm{E} \gg r_\mathrm{e}$.</span>
+
+$$
+v_\mathrm{u} \approx -\frac{R_\mathrm{C} \parallel R_\mathrm{L}}{r_\mathrm{e} + R_\mathrm{E}} \approx -\frac{R_\mathrm{C} \parallel R_\mathrm{L}}{R_\mathrm{E}}
+\qquad
+r_\mathrm{ein} = R_1 \parallel R_2 \parallel \big(r_\mathrm{BE} + (\beta + 1)\, R_\mathrm{E}\big)
+$$
+
+</Kasten>
+
+Im Beispiel ohne Last: $v_\mathrm{u} \approx -4{,}7$. Die Verstärkung ist viel kleiner, dafür **stabil** (nur noch ein
+Widerstandsverhältnis), **linear** und der Eingangswiderstand steigt auf $\approx 12\,\mathrm{k\Omega}$. Ein Mittelweg ist,
+$R_\mathrm{E}$ zu teilen und nur einen Teil mit $C_\mathrm{E}$ zu überbrücken: Dann gilt $v_\mathrm{u} \approx -R_\mathrm{C}/(r_\mathrm{e} + R_\mathrm{E1})$
+mit dem nicht überbrückten Teil $R_\mathrm{E1}$.
+
+<Kasten typ="merke">
+
+Gegenkopplung tauscht Verstärkung gegen Stabilität und Linearität – genau dieselbe Idee wie beim
+[Operationsverstärker](/operationsverstaerker/theorie/).
+
+</Kasten>
+
+**Koppelkondensatoren:** $C_\mathrm{K}$ bildet mit dem Eingangswiderstand einen Hochpass mit
+$f_\mathrm{g} = 1/(2\pi\, C_\mathrm{K}\, r_\mathrm{ein})$. Er muss so groß sein, dass $f_\mathrm{g}$ deutlich unter der kleinsten
+Signalfrequenz liegt. Dasselbe gilt für $C_\mathrm{A}$ mit $R_\mathrm{L}$ und für $C_\mathrm{E}$.
+
+## 5 · Kollektorschaltung (Emitterfolger)
+
+<Abbildung bild={Kollektor} unterschrift="Kollektorschaltung: Der Ausgang wird am Emitter abgenommen" />
+
+Der Kollektor liegt direkt an $U_\mathrm{B}$ (wechselstrommäßig an Masse), der Ausgang ist der Emitter. Weil
+$U_\mathrm{BE} \approx 0{,}7\,\mathrm{V}$ fast konstant bleibt, **folgt** die Emitterspannung der Basisspannung: $v_\mathrm{u} \approx 1$,
+gleichphasig. Der Nutzen liegt woanders – in den Widerständen:
+
+<Kasten typ="formel" titel="Kollektorschaltung">
+
+<span slot="gilt">Kleinsignal; $R_\mathrm{E}' = R_\mathrm{E} \parallel R_\mathrm{L}$ und $R_\mathrm{G}' = R_\mathrm{G} \parallel R_1 \parallel R_2$ ($R_\mathrm{G}$: Innenwiderstand der Signalquelle).</span>
+
+$$
+v_\mathrm{u} = \frac{R_\mathrm{E}'}{r_\mathrm{e} + R_\mathrm{E}'} \approx 1
+\qquad
+r_\mathrm{ein} = R_1 \parallel R_2 \parallel (\beta + 1)(r_\mathrm{e} + R_\mathrm{E}')
+\qquad
+r_\mathrm{aus} \approx r_\mathrm{e} + \frac{R_\mathrm{G}'}{\beta + 1}
+$$
+
+</Kasten>
+
+- Der Transistor „transformiert“ den Lastwiderstand um den Faktor $\beta + 1$ nach oben: Die Quelle sieht einen großen
+  Eingangswiderstand.
+- Umgekehrt sieht die Last nur einen sehr kleinen Ausgangswiderstand (wenige Ohm).
+- Die **Stromverstärkung** ist groß (bis $\beta + 1$), die Spannungsverstärkung ≈ 1 – die Leistung wird trotzdem verstärkt.
+
+Darum heißt die Kollektorschaltung auch **Impedanzwandler**: Eine hochohmige Quelle (Sensor, Spannungsteiler) kann damit eine
+niederohmige Last (Kabel, Lautsprecher, nächste Stufe) treiben, ohne einzubrechen. Bekannte Anwendungen sind der
+[Längsregler](/transistoren/theorie/#spannungsstabilisierung-längsregler) und die Gegentakt-Endstufe in Audioverstärkern.
+Beispiel mit Zahlen: [Rechenbeispiele](/transistoren/rechenbeispiele/#emitterfolger-als-impedanzwandler).
+
+## 6 · Basisschaltung
+
+<Abbildung bild={Basis} unterschrift="Basisschaltung: Die Basis liegt über CB an Masse, das Signal kommt am Emitter an" />
+
+Die Basis liegt über $C_\mathrm{B}$ wechselstrommäßig an Masse, das Signal wird am **Emitter** eingespeist. Eine Eingangsspannung
+ändert direkt $U_\mathrm{BE}$ und damit den Emitterstrom; fast derselbe Strom fließt als Kollektorstrom durch $R_\mathrm{C}$.
+
+<Kasten typ="formel" titel="Basisschaltung" gilt="Kleinsignal; Stromverstärkung α = β/(β + 1) ≈ 1.">
+
+$$
+v_\mathrm{u} \approx +\frac{R_\mathrm{C} \parallel R_\mathrm{L}}{r_\mathrm{e}}
+\qquad
+\frac{i_\mathrm{a}}{i_\mathrm{e}} \approx \alpha \approx 1
+\qquad
+r_\mathrm{ein} \approx r_\mathrm{e} \parallel R_\mathrm{E} \approx r_\mathrm{e}
+\qquad
+r_\mathrm{aus} \approx R_\mathrm{C}
+$$
+
+</Kasten>
+
+- Gleich große Spannungsverstärkung wie die Emitterschaltung, aber **ohne Phasendrehung**.
+- Sehr **kleiner Eingangswiderstand** (im Beispiel ≈ 22 Ω) – passt zu niederohmigen Quellen wie einem 50-Ω-Antennenkabel.
+- Kollektor und Emitter sind durch die an Masse liegende Basis getrennt: Die Rückwirkung über die Kollektor-Basis-Kapazität fällt
+  weg. Darum eignet sich die Basisschaltung für **hohe Frequenzen** (HF-Vorverstärker) und als obere Stufe der **Kaskodeschaltung**.
+
+## 7 · Vergleich der Grundschaltungen
+
+| | Emitterschaltung | Kollektorschaltung | Basisschaltung |
+| --- | --- | --- | --- |
+| Spannungsverstärkung | groß ($R_\mathrm{C}/r_\mathrm{e}$), mit $R_\mathrm{E}$: $\approx R_\mathrm{C}/R_\mathrm{E}$ | $\approx 1$ | groß ($R_\mathrm{C}/r_\mathrm{e}$) |
+| Stromverstärkung | groß ($\approx \beta$) | groß ($\approx \beta + 1$) | $\approx 1$ |
+| Leistungsverstärkung | sehr groß | mittel | mittel |
+| Phasenlage $u_\mathrm{a}$ zu $u_\mathrm{e}$ | 180° (invertierend) | 0° | 0° |
+| Eingangswiderstand | mittel (kΩ) | groß (10 … 100 kΩ und mehr) | sehr klein (Ω … 100 Ω) |
+| Ausgangswiderstand | groß ($\approx R_\mathrm{C}$) | sehr klein (Ω) | groß ($\approx R_\mathrm{C}$) |
+| typische Anwendung | Spannungsverstärker | Impedanzwandler, Endstufe, Längsregler | HF-Verstärker, Kaskode |
+
+:::note[Und heute?]
+Für die meisten Verstärkeraufgaben nimmt man heute einen [Operationsverstärker](/operationsverstaerker/). In seinem Inneren stecken
+aber genau diese Grundschaltungen: ein [Differenzverstärker](/transistoren/theorie/differenzverstaerker/) am Eingang, Emitterschaltungen
+in der Mitte und Emitterfolger am Ausgang.
+:::

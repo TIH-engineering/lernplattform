@@ -130,3 +130,34 @@ fragen:
       - text: Weil der I-Anteil dann null wird.
       - text: Die Abtastzeit hat keinen Einfluss auf die Stabilität.
     erklaerung: 'Faustregel: $\omega_\mathrm{D} T_\mathrm{s} \leq 0{,}1 \dots 0{,}2$, damit der Phasenverlust klein bleibt.'
+
+  # ---------- Praxis: Laborregelkreis und Ball-on-Beam ----------
+  - typ: mc
+    stufe: standard
+    frage: Eine Helligkeitsregelung mit reinem P-Regler wird mit einer Taschenlampe gestört. Was passiert?
+    optionen:
+      - text: Die LED wird gedimmt, aber der Istwert bleibt etwas über dem Sollwert – eine bleibende Regelabweichung.
+        richtig: true
+      - text: Der Istwert erreicht exakt den Sollwert.
+      - text: Die LED wird heller.
+      - text: Der Regler schaltet sich ab.
+    erklaerung: Ein P-Regler ändert die Stellgröße nur, solange eine Abweichung besteht. Erst ein I-Anteil bringt die Abweichung auf null – solange die Stellgröße nicht an ihre Grenze (0 %) stößt.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum lässt sich die Kugel auf einem Ball-on-Beam mit einem reinen P-Regler nicht ruhig halten?
+    optionen:
+      - text: Die Strecke ist doppelt integrierend (Winkel → Beschleunigung → Position) und hat schon −180° Phase – der Kreis pendelt; erst ein D-Anteil dämpft.
+        richtig: true
+      - text: Weil der P-Regler zu langsam ist und die Kugel davonrollt, ohne dass er reagiert.
+      - text: Weil ein P-Regler immer eine bleibende Regelabweichung hat.
+      - text: Weil der Sensor die Kugel nicht erkennt.
+    erklaerung: Mit P-Regler entsteht ein ungedämpftes Feder-Masse-System. Der D-Anteil kippt den Balken schon gegen die Bewegung und wirkt wie eine Dämpfung.
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ball-on-Beam mit $\ddot{x} = 7{,}0\,\mathrm{m/s^2} \cdot \alpha$ und PD-Regler $K_\mathrm{P} = 2\,\mathrm{rad/m}$. Wie groß ist die Kennkreisfrequenz $\omega_0 = \sqrt{7{,}0 \cdot K_\mathrm{P}}$ des geschlossenen Kreises (in 1/s)?'
+    loesung: 3.742
+    einheit: 1/s
+    toleranz: 2
+    erklaerung: '$\omega_0 = \sqrt{7{,}0 \cdot 2}\,\mathrm{s^{-1}} \approx 3{,}74\,\mathrm{s^{-1}}$. Vierfaches $K_\mathrm{P}$ verdoppelt $\omega_0$ – der Kreis wird schneller, braucht für dieselbe Dämpfung aber auch ein größeres $K_\mathrm{D}$.'

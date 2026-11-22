@@ -1,0 +1,205 @@
+---
+title: Signale und Spektren
+description: "Zeitbereich und Frequenzbereich, Grundschwingung und Oberschwingungen, Spektren von Sinus, Rechteck und Dreieck, Fourier-Reihe mit interaktiver Visualisierung und Gibbs-Phänomen, Fourier-Transformation und FFT, Abtasttheorem und Aliasing, spektrale Leckage und Fensterfunktionen, FFT am Oszilloskop."
+sidebar:
+  label: 2 · Signale und Spektren
+  order: 2
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Kasten from '../../../../components/Kasten.astro';
+import FourierLabor from '../../../../components/FourierLabor.astro';
+import ZeitFrequenz from '../../../../assets/mtrs/zeit-frequenzbereich.svg';
+import Aliasing from '../../../../assets/mtrs/aliasing.svg';
+import Leckage from '../../../../assets/mtrs/leckage-fenster.svg';
+
+<Kasten typ="lernziele">
+
+- ein Signal im Zeit- und im Frequenzbereich beschreiben und beide Darstellungen einander zuordnen,
+- die Amplituden der Oberschwingungen von Rechteck und Dreieck aus der Fourier-Reihe berechnen,
+- begründen, warum ein symmetrisches Rechteck nur ungeradzahlige Harmonische enthält,
+- Fourier-Reihe, Fourier-Transformation und FFT voneinander abgrenzen,
+- mit dem Abtasttheorem die nötige Abtastrate bestimmen und Aliasfrequenzen berechnen,
+- eine FFT am Oszilloskop sinnvoll einstellen (Abtastrate, Aufzeichnungsdauer, Fenster).
+
+</Kasten>
+
+**Vorwissen:** [Kennwerte von Signalen](/signalkennwerte/theorie/) (Periodendauer, Scheitel- und Effektivwert).
+
+## 1 · Zeitbereich und Frequenzbereich
+
+Ein Oszilloskop zeigt, wie sich eine Spannung **über der Zeit** ändert – das ist der **Zeitbereich**. Man kann dasselbe Signal aber auch
+anders beschreiben: als Summe von Sinusschwingungen und mit der Angabe, **welche Frequenzen mit welcher Amplitude** darin
+vorkommen. Diese Darstellung heißt **Frequenzbereich** oder **Spektrum**.
+
+<Abbildung bild={ZeitFrequenz} unterschrift="Drei Signale mit gleicher Periodendauer T und Amplitude 1 – links im Zeitbereich, rechts im Frequenzbereich (Werte aus der Fourier-Reihe)" />
+
+- Ein **Sinus** hat genau **eine** Spektrallinie bei seiner Frequenz $f_0 = 1/T$.
+- **Rechteck** und **Dreieck** haben dieselbe Grundfrequenz, enthalten aber zusätzlich **Oberschwingungen** bei Vielfachen von $f_0$.
+- Beide Darstellungen enthalten dieselbe Information. Je nach Frage ist eine anschaulicher: Für eine Flanke oder eine Pulsbreite
+  der Zeitbereich, für Brummen, Verzerrungen und Störfrequenzen der Frequenzbereich.
+
+Ein Spektrum misst man mit einem **Spektrumanalysator** oder – für niedrige Frequenzen – mit der **FFT-Funktion** eines
+Digitaloszilloskops.
+
+## 2 · Grundschwingung und Oberschwingungen
+
+Jedes **periodische** Signal mit der Periodendauer $T$ enthält nur Frequenzen, die ganzzahlige Vielfache der **Grundfrequenz**
+$f_0 = 1/T$ sind:
+
+| Bezeichnung | Frequenz |
+| --- | --- |
+| Gleichanteil | $0$ |
+| Grundschwingung (1. Harmonische) | $f_0$ |
+| 1. Oberschwingung = 2. Harmonische | $2 f_0$ |
+| 2. Oberschwingung = 3. Harmonische | $3 f_0$ |
+| … | $n \cdot f_0$ |
+
+Vorsicht bei der Zählung: Die **$n$-te Harmonische** liegt bei $n f_0$, die **$n$-te Oberschwingung** bei $(n + 1) f_0$. Eindeutiger ist
+es, einfach die Frequenz anzugeben. Wie Oberschwingungen im Netz zusätzliche Blindleistung verursachen, steht bei der
+[Leistungsmessung](/leistungsmessung/theorie/#2--nicht-sinusförmiger-strom-verzerrungsblindleistung).
+
+## 3 · Die Fourier-Reihe
+
+Der Mathematiker Joseph Fourier zeigte: Jedes periodische Signal lässt sich als Summe aus einem Gleichanteil und Sinusschwingungen
+mit den Frequenzen $n f_0$ schreiben – jede mit eigener Amplitude $\hat{u}_n$ und eigenem Nullphasenwinkel $\varphi_n$:
+
+$$
+u(t) = U_0 + \sum_{n=1}^{\infty} \hat{u}_n \sin(n \omega t + \varphi_n)
+\qquad\text{mit}\qquad \omega = 2\pi f_0
+$$
+
+Für die wichtigsten Kurvenformen sind die Amplituden bekannt (Scheitelwert $\hat{u}$, symmetrisch um 0 V):
+
+<Kasten typ="formel" titel="Fourier-Reihen von Rechteck und Dreieck">
+
+$$
+\text{Rechteck:}\quad u(t) = \frac{4 \hat{u}}{\pi} \left[ \sin(\omega t) + \frac{1}{3} \sin(3\omega t) + \frac{1}{5} \sin(5\omega t) + \ldots \right]
+$$
+
+$$
+\text{Dreieck:}\quad u(t) = \frac{8 \hat{u}}{\pi^2} \left[ \sin(\omega t) - \frac{1}{9} \sin(3\omega t) + \frac{1}{25} \sin(5\omega t) - \ldots \right]
+$$
+
+<span slot="gilt">symmetrische Signale ohne Gleichanteil, Tastverhältnis 50 %, Nullpunkt wie im Bild oben. Ein Rechteck 0 … U hat zusätzlich den Gleichanteil U/2 und die halben Amplituden.</span>
+
+</Kasten>
+
+### Probiere es aus
+
+Wähle eine Signalform und die Zahl der Sinusschwingungen. Oben siehst du ihre Summe (durchgezogen) und das ideale Signal
+(gestrichelt), unten die zugehörigen Spektrallinien. Blasse Linien sind die Anteile, die noch fehlen.
+
+<FourierLabor />
+
+Was dabei auffällt:
+
+- **Schon die Grundschwingung** gibt die grobe Form vor. Jede weitere Oberschwingung macht die Flanken steiler und das Dach flacher.
+- **Nur ungerade Harmonische:** Rechteck und Dreieck sind **halbwellensymmetrisch** – die zweite Halbperiode ist das Spiegelbild der
+  ersten ($u(t + T/2) = -u(t)$). Eine gerade Harmonische (z. B. $2 f_0$) hätte in beiden Halbperioden dasselbe Vorzeichen und würde die
+  Symmetrie zerstören. Darum fehlen alle geraden Anteile. Ein Rechteck mit Tastverhältnis ≠ 50 % enthält dagegen auch gerade
+  Harmonische.
+- **Abnehmende Amplituden:** Je glatter ein Signal, desto schneller fallen die Amplituden. Das Rechteck hat **Sprünge** → die Amplituden
+  fallen nur mit $1/n$. Das Dreieck ist stetig und hat nur **Knicke** → die Amplituden fallen mit $1/n^2$, schon die dritte Harmonische hat
+  nur noch 11 % der Grundschwingung. Ein Sinus hat weder Sprünge noch Knicke – er braucht keine Oberschwingungen.
+- **Gibbs-Phänomen:** An den Sprüngen des Rechtecks bleibt ein **Überschwinger** von etwa 9 % der Sprunghöhe, auch mit sehr vielen
+  Oberschwingungen. Er wird schmaler, aber nicht kleiner. Ähnliche Überschwinger sieht man an realen Rechtecksignalen, wenn ein
+  steilflankiger Tiefpass die hohen Frequenzen abschneidet.
+
+<Kasten typ="merke">
+
+Steile Flanken bedeuten hohe Frequenzen. Wer ein Rechteck sauber übertragen oder messen will, braucht ein Vielfaches seiner
+Grundfrequenz an Bandbreite – grob die 5. bis 10. Harmonische.
+
+</Kasten>
+
+## 4 · Fourier-Reihe, Fourier-Transformation und FFT
+
+| | Fourier-Reihe | Fourier-Transformation | DFT / FFT |
+| --- | --- | --- | --- |
+| für welche Signale? | **periodische** Signale | auch **nicht periodische** (einmalige Impulse, Rauschen) | eine endliche Zahl von **Abtastwerten** |
+| Ergebnis | **Linienspektrum** bei $n f_0$ | **kontinuierliches** Spektrum | Spektrum an $N/2$ Stützstellen im Abstand $\Delta f$ |
+| wo verwendet? | Theorie, Rechnen mit Oberschwingungen | Theorie der Signale und Systeme | Messgeräte, Software, Mikrocontroller |
+
+Die **diskrete Fourier-Transformation (DFT)** berechnet aus $N$ Abtastwerten das Spektrum. Die **FFT** (*Fast Fourier Transform*) ist
+kein anderes Verfahren, sondern ein besonders **schneller Rechenweg** für die DFT (meist für $N = 2^k$, z. B. 1024 oder 65 536 Werte). Für
+die FFT gelten zwei einfache Zusammenhänge:
+
+<Kasten typ="formel" titel="Frequenzauflösung und höchste Frequenz einer FFT">
+
+$$
+\Delta f = \frac{f_\mathrm{s}}{N} = \frac{1}{T_\mathrm{Aufz}}
+\qquad\qquad
+f_\mathrm{max} = \frac{f_\mathrm{s}}{2}
+$$
+
+<span slot="gilt">$f_\mathrm{s}$: Abtastrate, $N$: Zahl der Abtastwerte, $T_\mathrm{Aufz} = N/f_\mathrm{s}$: Aufzeichnungsdauer.</span>
+
+</Kasten>
+
+Die Frequenzauflösung hängt also nur von der **Aufzeichnungsdauer** ab: Will man 50 Hz und 60 Hz sicher trennen, muss man deutlich
+länger als $1/(10\,\mathrm{Hz}) = 0{,}1\,\mathrm{s}$ aufzeichnen.
+
+## 5 · Abtastung und Aliasing
+
+Ein digitales Messgerät kennt nur die **Abtastwerte** im Abstand $T_\mathrm{s} = 1/f_\mathrm{s}$. Damit ein Signal eindeutig rekonstruiert
+werden kann, muss das **Abtasttheorem** (Nyquist-Shannon) erfüllt sein:
+
+<Kasten typ="formel" titel="Abtasttheorem">
+
+$$
+f_\mathrm{s} > 2 \cdot f_\mathrm{max}
+$$
+
+<span slot="gilt">$f_\mathrm{max}$: höchste im Signal enthaltene Frequenz – einschließlich Oberschwingungen und Störungen, nicht nur die Frequenz, die man messen will.</span>
+
+</Kasten>
+
+<Abbildung bild={Aliasing} unterschrift="Aliasing: Ein 9-kHz-Sinus wird mit 10 kHz abgetastet – die Abtastwerte beschreiben ebenso gut einen 1-kHz-Sinus" />
+
+Ist das Theorem verletzt, entsteht **Aliasing**: Eine zu hohe Frequenz $f$ erscheint als falsche, tiefe **Aliasfrequenz**
+
+$$
+f_\mathrm{alias} = \lvert f - k \cdot f_\mathrm{s} \rvert \qquad \text{(mit der ganzen Zahl } k\text{, für die das Ergebnis kleiner als } f_\mathrm{s}/2 \text{ wird)}
+$$
+
+Im Bild: $\lvert 9\,\mathrm{kHz} - 1 \cdot 10\,\mathrm{kHz} \rvert = 1\,\mathrm{kHz}$. Aus den Abtastwerten allein lässt sich das **nicht** mehr
+erkennen. Abhilfe schafft nur ein **Anti-Aliasing-Tiefpass vor** dem A/D-Umsetzer, der alle Anteile oberhalb $f_\mathrm{s}/2$ ausreichend
+dämpft – siehe [A/D-Umsetzer](/ad-da-umsetzer/theorie/) und [Digitale Messtechnik](/digitale-messtechnik/theorie/). Im Alltag kennt man
+den Effekt von Filmaufnahmen, in denen sich Räder scheinbar rückwärts drehen.
+
+## 6 · Spektrale Leckage und Fensterfunktionen
+
+Die FFT nimmt stillschweigend an, dass sich der aufgezeichnete Abschnitt **endlos wiederholt**. Enthält die Aufzeichnung eine **ganze Zahl**
+von Perioden, passt das Ende nahtlos an den Anfang, und ein Sinus ergibt genau eine Linie. Bei einer **nicht ganzen** Periodenzahl entsteht
+an der Nahtstelle ein Sprung – und Sprünge erzeugen viele Frequenzen. Die Energie „leckt“ in die Nachbarlinien: **spektrale Leckage**.
+
+<Abbildung bild={Leckage} unterschrift="Berechnete DFT eines Sinus: ganze Periodenzahl, halbzahlige Periodenzahl mit Rechteck- und mit Hann-Fenster" />
+
+Gegen die Leckage multipliziert man die Abtastwerte mit einer **Fensterfunktion**, die zum Rand hin sanft auf null geht. Der Sprung an der
+Nahtstelle verschwindet, die Leckage fällt viel schneller ab – dafür wird die Linie etwas breiter.
+
+| Fenster | Stärke | wofür? |
+| --- | --- | --- |
+| Rechteck (= kein Fenster) | schmalste Linie, aber starke Leckage | ganze Periodenzahl, einmalige Impulse |
+| Hann (Hanning) | guter Kompromiss | Standard für die meisten Messungen |
+| Flat-Top | sehr genaue Amplituden, breite Linien | Pegel einer Linie genau messen |
+
+Im Bild sieht man auch den zweiten Effekt: Liegt die Frequenz genau zwischen zwei Linien, zeigt das Rechteckfenster die Amplitude um fast
+4 dB zu klein, das Hann-Fenster nur um etwa 1,4 dB. Das Flat-Top-Fenster hält diesen Fehler unter 0,1 dB.
+
+## 7 · FFT am Oszilloskop
+
+Digitaloszilloskope und Messsysteme wie der **Analog Discovery** (Software WaveForms) berechnen die FFT aus der aufgezeichneten Kurve. Damit
+das Ergebnis stimmt:
+
+1. **Abtastrate** hoch genug: $f_\mathrm{s}/2$ muss über der höchsten interessierenden Frequenz liegen. Achtung: Bei langer Zeitbasis senken
+   viele Oszilloskope die Abtastrate automatisch.
+2. **Aufzeichnungsdauer** lang genug für die gewünschte Auflösung $\Delta f = 1/T_\mathrm{Aufz}$ – mehrere Perioden der tiefsten Frequenz.
+3. **Fenster** passend wählen: Hann für Übersicht, Flat-Top für genaue Pegel.
+4. **Senkrechte Achse in dB** (z. B. dBV: $0\,\mathrm{dBV} = 1\,\mathrm{V}$ Effektivwert): So sieht man kleine Oberschwingungen neben einer großen
+   Grundschwingung.
+5. **Mitteln** mehrerer Spektren beruhigt das Rauschen.
+6. Den Eingang nicht übersteuern – Begrenzung am Eingang erzeugt selbst Oberschwingungen.
+
+Ein Messbeispiel mit Rechteck und Netzbrummen steht bei den [Praxisbeispielen](/signalkennwerte/praxisbeispiele/#fft-messung-eines-rechtecksignals).

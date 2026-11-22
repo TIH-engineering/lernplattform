@@ -3,6 +3,7 @@
 //   <Kasten typ="merke">Text …</Kasten>
 //   <Kasten typ="formel" titel="Vorwiderstand" gilt="Gilt für …">$$ … $$</Kasten>
 //   <Kasten typ="lernziele"> - Ziel 1 … </Kasten>
+// Gültigkeit mit Formeln: <span slot="gilt">für $R_\mathrm{E} \gg r_\mathrm{e}$</span> statt gilt="…"
 // typ: lernziele | merke | formel | achtung
 import Zeichen from './Zeichen.astro';
 
@@ -28,5 +29,12 @@ const ueberschrift = titel ? (typ === 'formel' ? `Formel: ${titel}` : titel) : v
 <section class={`ds-kasten ds-kasten--${typ}`} aria-label={ueberschrift}>
 	<p class="ds-kasten__kopf"><Zeichen name={v.symbol} />{ueberschrift}</p>
 	<div class="ds-kasten__inhalt"><slot /></div>
-	{gilt && <p class="ds-kasten__gilt"><strong>Gilt:</strong> {gilt}</p>}
+	{
+		(gilt || Astro.slots.has('gilt')) && (
+			<div class="ds-kasten__gilt">
+				<strong>Gilt:</strong> {gilt}
+				<slot name="gilt" />
+			</div>
+		)
+	}
 </section>

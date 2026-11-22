@@ -1,0 +1,196 @@
+---
+title: Differenzverstärker
+description: "Diskreter Differenzverstärker mit zwei NPN-Transistoren: Aufbau, symmetrischer Arbeitspunkt, gemeinsamer Emitterstrom, Differenz- und Gleichtaktsignal, Verstärkung bei einseitigem und differenziellem Ausgang, Gleichtaktunterdrückung (CMRR), Emitterwiderstand oder Konstantstromquelle, Stromaufteilung, Eingangsstufe des Operationsverstärkers, Ausblick Stromspiegel."
+sidebar:
+  label: 3 · Differenzverstärker
+  order: 3
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Kasten from '../../../../components/Kasten.astro';
+import Diff from '../../../../assets/elektronik/differenzverstaerker.svg';
+import DiffQuelle from '../../../../assets/elektronik/differenzverstaerker-stromquelle.svg';
+import Kennlinie from '../../../../assets/elektronik/differenzverstaerker-kennlinie.svg';
+
+<Kasten typ="lernziele">
+
+- Aufbau und Arbeitspunkt eines Differenzverstärkers mit zwei NPN-Transistoren berechnen,
+- eine Eingangsspannung in Differenz- und Gleichtaktanteil zerlegen,
+- Differenz- und Gleichtaktverstärkung sowie die Gleichtaktunterdrückung (CMRR) berechnen,
+- begründen, warum eine Konstantstromquelle im Emitterzweig die Gleichtaktunterdrückung stark verbessert,
+- erklären, warum jeder Operationsverstärker mit einem Differenzverstärker beginnt.
+
+</Kasten>
+
+**Vorwissen:** [Emitterschaltung und Kleinsignalgrößen](/transistoren/theorie/grundschaltungen/).
+
+## 1 · Die Aufgabe
+
+Ein Sensor liefert ein winziges Signal – z. B. die Spannung einer [Messbrücke](/messbruecken/) von wenigen Millivolt. Auf den
+Zuleitungen sitzt außerdem eine Störung, etwa 50-Hz-Brummen, das auf **beide** Leitungen fast gleich einkoppelt. Gesucht ist ein
+Verstärker, der
+
+- den **Unterschied** zwischen zwei Eingangsspannungen stark verstärkt und
+- alles, was auf **beiden** Eingängen gleich ist, möglichst nicht verstärkt.
+
+Genau das leistet der **Differenzverstärker**.
+
+## 2 · Aufbau und Arbeitspunkt
+
+<Abbildung bild={Diff} unterschrift="Differenzverstärker mit zwei NPN-Transistoren und gemeinsamem Emitterwiderstand" />
+
+Zwei möglichst **gleiche** Transistoren T1 und T2 mit gleichen Kollektorwiderständen teilen sich einen gemeinsamen
+Emitterwiderstand $R_\mathrm{E}$, der an die negative Versorgung führt. Die symmetrische Versorgung $\pm U_\mathrm{B}$ erlaubt, dass beide
+Basen ohne Spannungsteiler auf 0 V liegen.
+
+**Arbeitspunkt** ($u_\mathrm{e1} = u_\mathrm{e2} = 0$): Die Emitter liegen eine Diodenspannung unter den Basen, also bei
+$-U_\mathrm{BE} \approx -0{,}7\,\mathrm{V}$. Damit liegt an $R_\mathrm{E}$ eine feste Spannung, und der **gemeinsame Emitterstrom**
+teilt sich aus Symmetriegründen genau zur Hälfte auf:
+
+<Kasten typ="formel" titel="Arbeitspunkt des Differenzverstärkers" gilt="beide Transistoren gleich, Basisströme vernachlässigt, Basen auf 0 V.">
+
+$$
+I_\mathrm{E,ges} = \frac{U_\mathrm{B} - U_\mathrm{BE}}{R_\mathrm{E}}
+\qquad
+I_\mathrm{C1} = I_\mathrm{C2} \approx \frac{I_\mathrm{E,ges}}{2}
+\qquad
+U_\mathrm{C} = U_\mathrm{B} - R_\mathrm{C} \cdot \frac{I_\mathrm{E,ges}}{2}
+$$
+
+</Kasten>
+
+Beispiel: $U_\mathrm{B} = \pm 12\,\mathrm{V}$, $R_\mathrm{E} = 5{,}6\,\mathrm{k\Omega}$, $R_\mathrm{C} = 6{,}8\,\mathrm{k\Omega}$ →
+$I_\mathrm{E,ges} \approx 2{,}02\,\mathrm{mA}$, je Transistor $\approx 1{,}01\,\mathrm{mA}$, $U_\mathrm{C} \approx 5{,}1\,\mathrm{V}$ und
+$r_\mathrm{e} = 26\,\mathrm{mV}/1{,}01\,\mathrm{mA} \approx 25{,}8\,\Omega$.
+
+## 3 · Differenz- und Gleichtaktsignal
+
+Jedes Paar von Eingangsspannungen lässt sich in zwei Anteile zerlegen:
+
+$$
+u_\mathrm{D} = u_\mathrm{e1} - u_\mathrm{e2}
+\qquad\qquad
+u_\mathrm{Gl} = \frac{u_\mathrm{e1} + u_\mathrm{e2}}{2}
+$$
+
+Umgekehrt ist $u_\mathrm{e1} = u_\mathrm{Gl} + u_\mathrm{D}/2$ und $u_\mathrm{e2} = u_\mathrm{Gl} - u_\mathrm{D}/2$. Beispiel:
+$u_\mathrm{e1} = 2{,}005\,\mathrm{V}$ und $u_\mathrm{e2} = 1{,}995\,\mathrm{V}$ ergeben $u_\mathrm{D} = 10\,\mathrm{mV}$ (das Nutzsignal) und
+$u_\mathrm{Gl} = 2\,\mathrm{V}$ (der gemeinsame Anteil, z. B. Störung oder Gleichspannung). Beide Anteile behandelt der
+Differenzverstärker **völlig unterschiedlich**.
+
+### Differenzansteuerung: Der Emitter bleibt stehen
+
+Wird T1 um $u_\mathrm{D}/2$ angehoben und T2 um $u_\mathrm{D}/2$ abgesenkt, nimmt der Strom in T1 genau so viel zu, wie er in T2
+abnimmt. Der Strom durch $R_\mathrm{E}$ bleibt gleich – der **gemeinsame Emitterpunkt bewegt sich nicht**. Für das Differenzsignal
+liegt er wie an Masse, jeder Transistor arbeitet als [Emitterschaltung](/transistoren/theorie/grundschaltungen/#4--emitterschaltung)
+ohne Gegenkopplung mit der Eingangsspannung $u_\mathrm{D}/2$:
+
+<Kasten typ="formel" titel="Differenzverstärkung" gilt="Kleinsignal, symmetrische Schaltung, ohne Last; Ausgangswiderstand der Transistoren vernachlässigt.">
+
+$$
+v_\mathrm{D,einseitig} = \frac{u_\mathrm{a2}}{u_\mathrm{D}} = +\frac{R_\mathrm{C}}{2\, r_\mathrm{e}}
+\qquad\qquad
+v_\mathrm{D,differenziell} = \frac{u_\mathrm{aD}}{u_\mathrm{D}} = -\frac{R_\mathrm{C}}{r_\mathrm{e}}
+$$
+
+</Kasten>
+
+$u_\mathrm{aD} = u_\mathrm{a1} - u_\mathrm{a2}$ ist die Spannung zwischen den beiden Kollektoren. Am Kollektor von T1 erscheint das Signal
+invertiert ($u_\mathrm{a1} = -\tfrac{R_\mathrm{C}}{2 r_\mathrm{e}} u_\mathrm{D}$), an T2 nicht invertiert. Beim **differenziellen** Ausgang
+addieren sich beide Hälften – doppelte Verstärkung. Im Beispiel: einseitig $\approx 132$, differenziell $\approx 264$ (die Simulation mit
+2N3904 ergibt 120 bzw. 240).
+
+### Gleichtaktansteuerung: Der Emitterwiderstand bremst
+
+Steigen **beide** Eingänge um $u_\mathrm{Gl}$, steigt auch der gemeinsame Emitterpunkt um fast $u_\mathrm{Gl}$. Der Strom durch
+$R_\mathrm{E}$ nimmt nur um $u_\mathrm{Gl}/R_\mathrm{E}$ zu, jeder Transistor bekommt die Hälfte davon. Jede Hälfte wirkt wie eine
+Emitterschaltung **mit** dem großen Emitterwiderstand $2 R_\mathrm{E}$ (Gegenkopplung):
+
+<Kasten typ="formel" titel="Gleichtaktverstärkung">
+
+<span slot="gilt">Kleinsignal, symmetrische Schaltung; $R_\mathrm{E} \gg r_\mathrm{e}$.</span>
+
+$$
+v_\mathrm{Gl,einseitig} = \frac{u_\mathrm{a1}}{u_\mathrm{Gl}} \approx -\frac{R_\mathrm{C}}{2 R_\mathrm{E}}
+\qquad\qquad
+v_\mathrm{Gl,differenziell} \approx 0 \ \text{(bei exakter Symmetrie)}
+$$
+
+</Kasten>
+
+Im Beispiel: $v_\mathrm{Gl} \approx -6{,}8\,\mathrm{k\Omega}/11{,}2\,\mathrm{k\Omega} \approx -0{,}61$ (Simulation: $-0{,}60$). Eine Störung auf beiden
+Leitungen kommt also abgeschwächt am Ausgang an, das Nutzsignal 132-fach verstärkt. Nimmt man die Spannung **zwischen** den
+Kollektoren ab, heben sich die Gleichtaktanteile beider Seiten sogar fast vollständig auf.
+
+## 4 · Gleichtaktunterdrückung (CMRR)
+
+Die Güte eines Differenzverstärkers beschreibt das Verhältnis von Differenz- zu Gleichtaktverstärkung, die
+**Gleichtaktunterdrückung** (engl. *common-mode rejection ratio*):
+
+<Kasten typ="formel" titel="Gleichtaktunterdrückung (einseitiger Ausgang)" gilt="Formeln von oben eingesetzt; bei realen Schaltungen begrenzen Unsymmetrien von Transistoren und Widerständen die CMRR.">
+
+$$
+\mathrm{CMRR} = \left| \frac{v_\mathrm{D}}{v_\mathrm{Gl}} \right| \approx \frac{R_\mathrm{C}/(2 r_\mathrm{e})}{R_\mathrm{C}/(2 R_\mathrm{E})} = \frac{R_\mathrm{E}}{r_\mathrm{e}}
+\qquad\qquad
+\mathrm{CMRR}_\mathrm{dB} = 20 \lg \mathrm{CMRR}
+$$
+
+</Kasten>
+
+Bemerkenswert: $R_\mathrm{C}$ kürzt sich heraus. Im Beispiel ist $\mathrm{CMRR} \approx 5{,}6\,\mathrm{k\Omega}/25{,}8\,\Omega \approx 217$, also
+etwa **47 dB**. Für Messverstärker ist das zu wenig – dort braucht man 80 … 120 dB (siehe
+[Messverstärker](/messverstaerker/theorie/)).
+
+<Kasten typ="merke">
+
+Der Differenzverstärker unterdrückt Gleichtaktsignale, weil der **gemeinsame Emitterstrom** sich kaum ändern kann. Je „starrer“
+dieser Strom ist, desto besser die Unterdrückung.
+
+</Kasten>
+
+## 5 · Verbesserung: Konstantstromquelle statt Emitterwiderstand
+
+<Abbildung bild={DiffQuelle} unterschrift="Differenzverstärker mit Konstantstromquelle im Emitterzweig" />
+
+Ein großer $R_\mathrm{E}$ verbessert die CMRR, braucht aber eine große negative Versorgungsspannung, damit noch genug Strom fließt.
+Die Lösung ist eine **Konstantstromquelle**, z. B. ein Transistor mit fester Basisspannung und Emitterwiderstand
+(siehe [Konstantstromquelle](/transistoren/theorie/#konstantstromquelle)):
+
+- Für Gleichstrom liefert sie den gewünschten Strom $I_0$ – unabhängig von der Gleichtaktspannung am Eingang.
+- Für Signale wirkt sie wie ein **sehr großer** Widerstand $r_\mathrm{q}$ (einige 100 kΩ bis MΩ). In der CMRR-Formel steht dann $r_\mathrm{q}$
+  statt $R_\mathrm{E}$: Mit $r_\mathrm{q} = 1\,\mathrm{M\Omega}$ und $r_\mathrm{e} = 25{,}8\,\Omega$ wird $\mathrm{CMRR} \approx 39\,000$, also
+  etwa **92 dB**.
+- Der Arbeitspunkt bleibt auch bei großer Gleichtaktspannung stabil – mit $R_\mathrm{E}$ würde sich der Strom mit $u_\mathrm{Gl}$ ändern.
+
+## 6 · Großsignal: Wie weit ist der Verstärker linear?
+
+<Abbildung bild={Kennlinie} unterschrift="Aufteilung des gemeinsamen Stroms I0 auf beide Transistoren in Abhängigkeit von der Differenzspannung" />
+
+Wegen der exponentiellen Diodenkennlinie teilt sich der Strom nach $I_\mathrm{C1} = I_0 / (1 + \mathrm{e}^{-u_\mathrm{D}/U_\mathrm{T}})$ auf.
+Nur für **kleine** Differenzspannungen (etwa $\pm 25\,\mathrm{mV}$) ist der Zusammenhang annähernd linear. Ab etwa $\pm 100\,\mathrm{mV}$ leitet
+ein Transistor den ganzen Strom, der andere sperrt – der Ausgang begrenzt sauber. Diese Eigenschaft nutzt man in
+[Komparatoren](/frequenzmessung/theorie/) und als schnellen Stromschalter.
+
+Den linearen Bereich vergrößert man mit kleinen Emitterwiderständen in jedem Zweig (Gegenkopplung) – auf Kosten der Verstärkung.
+
+## 7 · Die Eingangsstufe des Operationsverstärkers
+
+Jeder [Operationsverstärker](/operationsverstaerker/theorie/) beginnt mit einem Differenzverstärker. Viele OPV-Eigenschaften erklären
+sich direkt aus dieser Stufe:
+
+| OPV-Eigenschaft | Ursache im Differenzverstärker |
+| --- | --- |
+| zwei Eingänge, Verstärkung von $U_+ - U_-$ | Differenzverstärkung |
+| hohe Gleichtaktunterdrückung (z. B. 90 dB) | Konstantstromquelle im Emitterzweig |
+| **Eingangsruheströme** (nA … µA bei bipolaren OPV) | Basisströme der beiden Eingangstransistoren |
+| **Offsetspannung** (µV … mV) | kleine Unterschiede von $U_\mathrm{BE}$ und $R_\mathrm{C}$ zwischen beiden Hälften |
+| begrenzter Gleichtakt-Eingangsbereich | Stromquelle und Transistoren brauchen eine Mindestspannung |
+
+Bei OPV mit sehr kleinen Eingangsströmen bestehen die Eingangstransistoren aus FETs (JFET- oder CMOS-OPV).
+
+## 8 · Ausblick: Stromspiegel und aktive Last
+
+In integrierten Schaltungen ersetzt man die Kollektorwiderstände durch einen **Stromspiegel** (zwei Transistoren, die einen Strom
+„kopieren“). Er wirkt für Signale wie ein sehr großer Widerstand (**aktive Last**). So erreicht schon eine einzige Stufe eine
+Verstärkung von mehreren Tausend, und das Ausgangssignal beider Hälften wird zu einem einseitigen Ausgang zusammengefasst.
+Das ist Stoff für die Vertiefung – für das Verständnis des OPV genügt das Prinzip.

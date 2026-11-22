@@ -1,11 +1,14 @@
 ---
 title: Praxisbeispiele
-description: Leistungselektronik in echten Bauteilen – integrierte H-Brücke, Buck- und Boost-ICs, Drosselauswahl, Flyback-Netzteil, Layout und Messen am Oszilloskop.
+description: Leistungselektronik in echten Bauteilen – integrierte H-Brücke, Buck- und Boost-ICs, Drosselauswahl, Sättigungsstrom messen, Flyback-Netzteil, Layout und Messen am Oszilloskop.
 ---
 
 import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
 import Netzsicherheit from '../../../components/Netzsicherheit.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import SaettigungAufbau from '../../../assets/leistungselektronik/saettigung-messaufbau.svg';
+import SaettigungStrom from '../../../assets/leistungselektronik/saettigung-stromanstieg.svg';
 
 Hier siehst du, wie die Theorie in **echten Bauteilen** steckt. Die Kennwerte stammen aus den
 Herstellerdatenblättern (Links unter [Literatur & Links](/leistungselektronik/literatur/)).
@@ -231,5 +234,39 @@ Die Masseleitung und die Tastkopfspitze bilden eine **Leiterschleife** mit einig
 Magnetfeld des Wandlers (heißer Pfad, Drossel) durchsetzt diese Schleife und **induziert** dort eine Spannung
 ($u = \mathrm{d}\Phi/\mathrm{d}t$). Diese Spannung addiert sich zum Messsignal – du misst also Störungen, die in
 der Schaltung gar nicht vorhanden sind. Die Massefeder macht die Schleifenfläche fast null.
+
+</Loesung>
+
+## Sättigungsstrom einer Drossel messen
+
+<Stufe wert="standard" />
+
+Für eine selbst gewickelte oder unbekannte Drossel soll der Sättigungsstrom bestimmt werden. Dazu legt man kurz eine Gleichspannung an und
+beobachtet den Stromanstieg am Oszilloskop (Spannung über dem Shunt).
+
+<Abbildung bild={SaettigungAufbau} unterschrift="Messaufbau: Ein MOSFET legt für einige Mikrosekunden 12 V an die Drossel, der Shunt RS macht den Strom messbar" />
+
+<Abbildung bild={SaettigungStrom} unterschrift="Berechneter Stromverlauf für eine 100-µH-Drossel an 12 V: gerader Anstieg, dann steiler Knick durch Sättigung" />
+
+1. Warum steigt der Strom zunächst **linear** an, und wie liest man daraus $L$ ab?
+2. Woran erkennt man den Beginn der Sättigung?
+3. Warum muss der Puls kurz sein, und wofür ist die Diode D?
+4. Welche Werte für $R_\mathrm{S}$ und für die Pulsdauer passen zu einer 100-µH-Drossel mit erwartet 3 A?
+
+<Loesung>
+
+1. An der Drossel liegt fast konstant $U$, und $u = L \cdot \mathrm{d}i/\mathrm{d}t$ → $\mathrm{d}i/\mathrm{d}t = U/L$ ist konstant. Aus der Steigung folgt
+   $L = U / (\Delta i / \Delta t)$, z. B. $12\,\mathrm{V} / (0{,}12\,\mathrm{A}/\mu\mathrm{s}) = 100\,\mu\mathrm{H}$.
+2. Die Kurve biegt **nach oben** ab: $L$ wird kleiner, der Strom steigt immer schneller. Als $I_\mathrm{sat}$ nimmt man meist den Strom, bei dem die
+   Steigung um 10 … 30 % gewachsen bzw. $L$ um diesen Anteil gefallen ist – im Datenblatt steht, welche Definition gilt (im Bild 20 %: 2,75 A).
+3. In der Sättigung begrenzt fast nur noch der Widerstand des Kreises den Strom – er würde sehr groß, Drossel und MOSFET würden heiß. Der
+   Pufferkondensator $C$ liefert den kurzen Stromimpuls, ohne dass das Netzteil einbricht. Beim Abschalten übernimmt die **Freilaufdiode**
+   den Drosselstrom, sonst würde die Induktionsspannung den MOSFET zerstören.
+4. $R_\mathrm{S}$ klein, damit er die Spannung an der Drossel kaum verändert: z. B. $0{,}1\,\Omega$ → bei 4 A nur 0,4 V (und 0,4 V am Oszilloskop gut
+   messbar). Pulsdauer: bis 4 A braucht es ohne Sättigung $4\,\mathrm{A} / (0{,}12\,\mathrm{A}/\mu\mathrm{s}) \approx 33\,\mu\mathrm{s}$; mit Sättigung weniger
+   → 30 … 40 µs, mit großer Pause (Tastgrad unter 1 %), damit nichts warm wird.
+
+**Messtipps:** Strom zusätzlich mit einer Stromzange kontrollieren, MOSFET mit ausreichend Strombelastbarkeit wählen, mit kleiner Spannung
+beginnen. Bei warmem Kern ist der Sättigungsstrom kleiner – für die Auslegung zählt die Betriebstemperatur.
 
 </Loesung>

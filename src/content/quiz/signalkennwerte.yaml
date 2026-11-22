@@ -107,3 +107,83 @@ fragen:
       - text: Um die Frequenz zu berechnen
       - text: Er hat in der Messtechnik keine Bedeutung.
     erklaerung: Bei hohem Scheitelfaktor sind die Spitzen im Verhältnis zum Effektivwert groß – der Eingangsverstärker des Messgeräts kann übersteuern.
+
+  # ---------- Signale und Spektren ----------
+  - typ: mc
+    stufe: grundlagen
+    frage: Welches Spektrum hat ein reiner Sinus mit 50 Hz?
+    optionen:
+      - text: eine einzige Linie bei 50 Hz
+        richtig: true
+      - text: Linien bei 50, 150, 250 Hz …
+      - text: ein breites, kontinuierliches Band
+      - text: Linien bei 25 und 75 Hz
+    erklaerung: Der Sinus ist der Grundbaustein der Fourier-Zerlegung – er braucht keine Oberschwingungen. Oberschwingungen zeigen, dass ein Signal vom Sinus abweicht.
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein symmetrisches Rechteck hat den Scheitelwert $\hat{u} = 10\,\mathrm{V}$. Wie groß ist der Scheitelwert der 3. Harmonischen?'
+    loesung: 4.244
+    einheit: V
+    toleranz: 2
+    erklaerung: '$\hat{u}_3 = \dfrac{4 \hat{u}}{3\pi} = \dfrac{40\,\mathrm{V}}{3\pi} \approx 4{,}24\,\mathrm{V}$. Typischer Fehler: den Faktor $4/\pi$ vergessen (3,33 V).'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum enthält ein symmetrisches Rechteck (Tastverhältnis 50 %) keine geradzahligen Harmonischen?
+    optionen:
+      - text: Es ist halbwellensymmetrisch – die zweite Halbperiode ist das Spiegelbild der ersten, gerade Harmonische würden diese Symmetrie zerstören.
+        richtig: true
+      - text: Weil gerade Zahlen in der Fourier-Reihe grundsätzlich nicht vorkommen.
+      - text: Weil das Oszilloskop gerade Harmonische herausfiltert.
+      - text: Weil die Flanken unendlich steil sind.
+    erklaerung: Für $u(t + T/2) = -u(t)$ bleiben nur ungerade Harmonische übrig. Ein Rechteck mit z. B. 30 % Tastverhältnis hat auch Linien bei $2 f_0$, $4 f_0$ …
+
+  - typ: mc
+    stufe: standard
+    frage: Warum fallen die Oberschwingungen eines Dreiecks viel schneller ab als die eines Rechtecks?
+    optionen:
+      - text: Das Dreieck hat keine Sprünge, nur Knicke – seine Amplituden fallen mit 1/n², die des Rechtecks nur mit 1/n.
+        richtig: true
+      - text: Weil das Dreieck eine kleinere Amplitude hat.
+      - text: Weil das Dreieck keine Grundschwingung hat.
+      - text: Das stimmt nicht, beide fallen gleich schnell.
+    erklaerung: Je glatter ein Signal, desto weniger hohe Frequenzen braucht es. Sprünge erfordern viele, kräftige Oberschwingungen.
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Messsystem tastet mit $f_\mathrm{s} = 10\,\mathrm{kHz}$ ab und hat kein Anti-Aliasing-Filter. Bei welcher Frequenz erscheint ein Signal mit 8,5 kHz?'
+    loesung: 1500
+    einheit: Hz
+    toleranz: 1
+    erklaerung: '$f_\mathrm{alias} = \lvert 8{,}5\,\mathrm{kHz} - 10\,\mathrm{kHz} \rvert = 1{,}5\,\mathrm{kHz}$. Alles oberhalb von $f_\mathrm{s}/2 = 5\,\mathrm{kHz}$ wird an dieser Grenze gespiegelt.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Eine FFT verwendet 4096 Abtastwerte bei $f_\mathrm{s} = 20\,\mathrm{kS/s}$. Wie groß ist der Linienabstand $\Delta f$?'
+    loesung: 4.883
+    einheit: Hz
+    toleranz: 2
+    erklaerung: '$\Delta f = f_\mathrm{s}/N = 20\,000\,\mathrm{Hz}/4096 \approx 4{,}88\,\mathrm{Hz}$ – das ist der Kehrwert der Aufzeichnungsdauer (0,205 s).'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: In einer FFT ist eine einzelne Sinusfrequenz auf viele Nachbarlinien „verschmiert“. Was ist die wahrscheinlichste Ursache, und was hilft?
+    optionen:
+      - text: Spektrale Leckage, weil keine ganze Zahl von Perioden aufgezeichnet wurde – ein Hann- oder Flat-Top-Fenster verringert sie.
+        richtig: true
+      - text: Aliasing – eine höhere Abtastrate hilft.
+      - text: Das Signal ist kein Sinus, sondern Rauschen.
+      - text: Die Amplitude ist zu groß – den Eingang empfindlicher stellen.
+    erklaerung: Die FFT setzt den Abschnitt periodisch fort. Bei nicht ganzzahliger Periodenzahl entsteht an der Nahtstelle ein Sprung. Fensterfunktionen gehen am Rand auf null und vermeiden diesen Sprung.
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Was ist der Unterschied zwischen DFT und FFT?
+    optionen:
+      - text: Die FFT ist ein besonders schneller Rechenweg für die DFT – das Ergebnis ist dasselbe.
+        richtig: true
+      - text: Die FFT ist genauer als die DFT.
+      - text: Die DFT gilt nur für periodische, die FFT nur für nicht periodische Signale.
+      - text: Die FFT braucht keine Abtastwerte.
+    erklaerung: Beide berechnen aus N Abtastwerten dasselbe Spektrum. Die FFT braucht dafür statt etwa N² nur etwa N·log₂N Rechenschritte – bei 65 536 Werten ein Faktor von rund 4000.

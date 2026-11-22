@@ -1,6 +1,6 @@
 ---
 title: Praxisbeispiele – Sensoren
-description: Sensor für Kühlschrank, Pizzaofen und Heizungsrohr auswählen, NTC als Einschaltstrombegrenzer, Varistor im Netzfilter, Küchenwaage mit DMS, Fahrradtacho mit Hall-Sensor, Pt100 in Zweileiterschaltung, Smartphone-Sensoren.
+description: Sensor für Kühlschrank, Pizzaofen und Heizungsrohr auswählen, NTC als Einschaltstrombegrenzer, Varistor im Netzfilter, Küchenwaage mit DMS, Fahrradtacho mit Hall-Sensor, Pt100 in Zweileiterschaltung, Smartphone-Sensoren, NTC-Messkette mit ADC und Umrechnung.
 ---
 
 import Loesung from '../../../components/Loesung.astro';
@@ -106,5 +106,42 @@ Ein Pt100 sitzt in 15 m Entfernung und ist in **Zweileiterschaltung** mit Kupfer
 3. **Vierleiterschaltung**: Über zwei Leitungen fließt der Messstrom, über zwei weitere wird die Spannung **direkt am Sensor** stromlos gemessen – die
    Zuleitungswiderstände gehen nicht ein. Alternativ: **Dreileiterschaltung** (Kompensation in der Brücke), Pt1000 (Fehler zehnmal kleiner) oder ein
    Messumformer direkt am Sensor (4 … 20 mA).
+
+</Loesung>
+
+## Vom NTC zum Messwert im Mikrocontroller
+
+Eine Temperatur soll mit einem NTC ($R_{25} = 10\,\mathrm{k\Omega}$, $B = 3950\,\mathrm{K}$) gemessen werden. Die Messkette: NTC als unterer Widerstand
+eines Spannungsteilers mit $R_\mathrm{V} = 10\,\mathrm{k\Omega}$ an 3,3 V → RC-Tiefpass → 12-Bit-A/D-Umsetzer ($U_\mathrm{ref} = 3{,}3\,\mathrm{V}$) →
+Umrechnung im Programm.
+
+1. Welche Spannung und welcher ADC-Wert ergeben sich bei 0 °C, 25 °C und 50 °C?
+2. Wie fein kann die Schaltung um 25 °C auflösen?
+3. Wie rechnet das Programm aus dem ADC-Wert die Temperatur aus?
+4. Wie groß ist die Eigenerwärmung bei 25 °C, wenn der NTC laut Datenblatt 1,5 mW/K an die Luft abgibt?
+5. Die Anzeige springt um ±0,3 K. Was hilft?
+
+<Loesung>
+
+1. $R_\mathrm{NTC} = R_{25} \cdot \mathrm{e}^{B\,(1/T - 1/T_{25})}$ und $U = 3{,}3\,\mathrm{V} \cdot \dfrac{R_\mathrm{NTC}}{R_\mathrm{NTC} + R_\mathrm{V}}$:
+
+   | Temperatur | $R_\mathrm{NTC}$ | $U$ | ADC-Wert ($U/3{,}3\,\mathrm{V} \cdot 4095$) |
+   | --- | --- | --- | --- |
+   | 0 °C | 33,6 kΩ | 2,54 V | 3156 |
+   | 25 °C | 10,0 kΩ | 1,65 V | 2048 |
+   | 50 °C | 3,59 kΩ | 0,87 V | 1081 |
+
+2. Um 25 °C ändert sich $U$ um etwa −37 mV/K. Eine ADC-Stufe ist $3{,}3\,\mathrm{V}/4096 \approx 0{,}8\,\mathrm{mV}$ → Auflösung ≈ 0,02 K. Das ist
+   **Auflösung, nicht Genauigkeit** – die Toleranz von NTC und $R_\mathrm{V}$ (z. B. ±1 %) bringt Fehler von mehreren Zehntel Kelvin.
+3. Rückwärts: $R_\mathrm{NTC} = R_\mathrm{V} \cdot \dfrac{N}{4095 - N}$ (mit dem ADC-Wert $N$), dann
+   $T = \dfrac{1}{\dfrac{1}{T_{25}} + \dfrac{1}{B} \ln \dfrac{R_\mathrm{NTC}}{R_{25}}}$ in Kelvin. Weil Versorgung und Referenz dieselben 3,3 V sind, kürzt
+   sich deren Toleranz heraus (**ratiometrische Messung**).
+4. $P = \dfrac{U^2}{R_\mathrm{NTC}} = \dfrac{(1{,}65\,\mathrm{V})^2}{10\,\mathrm{k\Omega}} \approx 0{,}27\,\mathrm{mW}$ → $\Delta T \approx 0{,}27/1{,}5\,\mathrm{K} \approx 0{,}18\,\mathrm{K}$.
+   Abhilfe: größeren Teiler wählen oder den Teiler nur während der Messung einschalten (über einen Port-Pin).
+5. Störungen glätten: RC-Tiefpass vor dem ADC (z. B. 10 kΩ und 100 nF, siehe [Anti-Aliasing-Filter](/filter/praxisbeispiele/#anti-aliasing-filter-vor-dem-adc)),
+   im Programm über 16 Messungen mitteln (Rauschen sinkt um den Faktor 4), Anzeige mit einer kleinen Hysterese aktualisieren.
+
+**Überblick über die Messkette:** Sensor (Temperatur → Widerstand) → Signalaufbereitung (Spannungsteiler, Filter) → Digitalisierung (ADC) →
+Verarbeitung (Mitteln, Linearisieren mit der B-Formel) → Anzeige. Jeder Block trägt einen eigenen Fehler bei.
 
 </Loesung>

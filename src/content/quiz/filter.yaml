@@ -128,3 +128,26 @@ fragen:
       - text: Etwa −3 dB
       - text: Etwa +40 dB
     erklaerung: Im Durchlassbereich dämpfen die Filter praktisch nicht, es wirkt nur die Verstärkung (+20 dB = Faktor 10).
+
+  # ---------- Praxis: Messen von Frequenzgängen ----------
+  - typ: mc
+    stufe: standard
+    frage: Ein RC-Tiefpass mit berechnet 1,59 kHz Grenzfrequenz wird mit 1,45 kHz gemessen. Was ist die wahrscheinlichste Ursache?
+    optionen:
+      - text: die Toleranz des Kondensators (etwa +10 %)
+        richtig: true
+      - text: die Eingangskapazität des Oszilloskops von rund 24 pF
+      - text: der Innenwiderstand des Generators verändert die Grenzfrequenz stark
+      - text: das Filter ist defekt
+    erklaerung: '$f_\mathrm{g} \sim 1/C$ – 1,45 kHz entspricht $C \approx 11\,\mathrm{nF}$ statt 10 nF. 24 pF parallel zu 10 nF verschieben $f_\mathrm{g}$ nur um 0,2 %.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Ein gemessener Tiefpass 2. Ordnung hat bei der Kennfrequenz (Phase −90°) denselben Pegel wie im Durchlassbereich. Welche Güte hat er?
+    optionen:
+      - text: Q ≈ 1
+        richtig: true
+      - text: Q ≈ 0,5
+      - text: Q ≈ 0,707
+      - text: Q ≈ 2
+    erklaerung: 'Bei $f_0$ gilt $\lvert H \rvert = K \cdot Q$. Gleicher Pegel wie im Durchlass heißt $Q = 1$. Ein Butterworth-Filter ($Q = 0{,}707$) läge dort 3 dB unter dem Durchlasspegel.'
