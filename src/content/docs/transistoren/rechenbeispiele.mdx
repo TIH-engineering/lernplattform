@@ -305,20 +305,38 @@ Noch besser wäre ein größerer Eingangswiderstand: Er wird hier vom Basisspann
 <Stufe wert="standard" />
 
 Eine Basisschaltung arbeitet mit $I_\mathrm{E} = 1{,}16\,\mathrm{mA}$, $R_\mathrm{E} = 1\,\mathrm{k\Omega}$ und $R_\mathrm{C} = 4{,}7\,\mathrm{k\Omega}$ (ohne Last).
-Die Signalquelle hat $50\,\Omega$ Innenwiderstand (Antennenkabel). Berechne Eingangswiderstand, Spannungsverstärkung und die
-Gesamtverstärkung bezogen auf die Quellenspannung.
+Angesteuert wird sie von einem Signalgenerator mit $R_\mathrm{i} = 50\,\Omega$ Quellinnenwiderstand (Ersatzschaltung: ideale
+Spannungsquelle $u_\mathrm{q}$ mit $50\,\Omega$ in Reihe).
+
+1. Berechne Eingangswiderstand, Spannungsverstärkung und die Gesamtverstärkung bezogen auf die Quellenspannung $u_\mathrm{q}$.
+2. Im HF-Labor kommt das Signal über ein 50-Ω-Koaxialkabel. Ist der Verstärkereingang ein passender Abschluss?
+3. Auf welchen Emitterstrom müsste man den Arbeitspunkt legen, damit $r_\mathrm{ein} = 50\,\Omega$ wird? Wie groß ist dann die
+   Gesamtverstärkung?
 
 <Loesung>
 
-$r_\mathrm{e} \approx 22{,}5\,\Omega$ → $r_\mathrm{ein} = 22{,}5\,\Omega \parallel 1\,\mathrm{k\Omega} \approx 22\,\Omega$ ·
-$v_\mathrm{u} = +\dfrac{4{,}7\,\mathrm{k\Omega}}{22{,}5\,\Omega} \approx 209$
+1. $r_\mathrm{e} \approx 22{,}5\,\Omega$ → $r_\mathrm{ein} = 22{,}5\,\Omega \parallel 1\,\mathrm{k\Omega} \approx 22\,\Omega$ ·
+   $v_\mathrm{u} = +\dfrac{4{,}7\,\mathrm{k\Omega}}{22{,}5\,\Omega} \approx 209$
 
-Eingangsteiler: $\dfrac{22}{50 + 22} \approx 0{,}31$ → Gesamtverstärkung $\approx 0{,}31 \cdot 209 \approx 64$
+   Innenwiderstand und Eingangswiderstand bilden einen **Spannungsteiler**: Am Eingang kommt nur
+   $\dfrac{r_\mathrm{ein}}{R_\mathrm{i} + r_\mathrm{ein}} = \dfrac{22}{50 + 22} \approx 0{,}31$ der Quellenspannung an →
+   Gesamtverstärkung $\approx 0{,}31 \cdot 209 \approx 64$.
 
-**Ergebnis:** $r_\mathrm{ein} \approx 22\,\Omega$, $v_\mathrm{u} \approx 209$ (nicht invertierend), bezogen auf die Quelle $\approx 64$.
+   **Ergebnis:** $r_\mathrm{ein} \approx 22\,\Omega$, $v_\mathrm{u} \approx 209$ (nicht invertierend), bezogen auf $u_\mathrm{q}$ $\approx 64$.
+   Der kleine Eingangswiderstand **belastet** die Quelle stark – über zwei Drittel der Spannung fallen am Innenwiderstand ab.
+   Eine Emitterschaltung (einige kΩ) würde fast die volle Quellenspannung erhalten.
 
-Der kleine Eingangswiderstand ist hier gewollt: Er liegt in der Größenordnung des Kabelwiderstands. Eine Emitterschaltung würde das
-Kabel dagegen kaum belasten – passt aber schlecht zu einem 50-Ω-System.
+2. Achtung: Die 50 Ω eines Koaxialkabels sind sein **Wellenwiderstand** $Z_\mathrm{L}$, kein ohmscher Widerstand der Leitung
+   (der ist für kurze Kabel praktisch null). Ein Abschluss passt nur, wenn er gleich groß ist wie $Z_\mathrm{L}$ – sonst wird ein Teil
+   der Welle zurückgeworfen. Reflexionsfaktor:
+   $\Gamma = \dfrac{r_\mathrm{ein} - Z_\mathrm{L}}{r_\mathrm{ein} + Z_\mathrm{L}} = \dfrac{22 - 50}{22 + 50} \approx -0{,}39$,
+   reflektierter Leistungsanteil $\Gamma^2 \approx 0{,}15$, also rund **15 %**. 22 Ω sind daher **kein angepasster Abschluss**.
+
+3. Für $r_\mathrm{ein} = 50\,\Omega$ muss $r_\mathrm{e} \parallel 1\,\mathrm{k\Omega} = 50\,\Omega$ sein → $r_\mathrm{e} \approx 52{,}6\,\Omega$ →
+   $I_\mathrm{E} = \dfrac{U_\mathrm{T}}{r_\mathrm{e}} \approx \dfrac{26\,\mathrm{mV}}{52{,}6\,\Omega} \approx 0{,}49\,\mathrm{mA}$.
+   Dann ist $v_\mathrm{u} = \dfrac{4{,}7\,\mathrm{k\Omega}}{52{,}6\,\Omega} \approx 89$, der Eingangsteiler $0{,}5$ und die Gesamtverstärkung $\approx 45$.
+   Weniger Verstärkung als in Teil 1 – dafür keine Reflexion. Genau diese einstellbare **Impedanzanpassung** und die gute
+   Hochfrequenztauglichkeit machen die Basisschaltung für HF-Eingangsstufen interessant.
 
 </Loesung>
 

@@ -118,8 +118,10 @@ Grundfrequenz an Bandbreite – grob die 5. bis 10. Harmonische.
 | | Fourier-Reihe | Fourier-Transformation | DFT / FFT |
 | --- | --- | --- | --- |
 | für welche Signale? | **periodische** Signale | auch **nicht periodische** (einmalige Impulse, Rauschen) | eine endliche Zahl von **Abtastwerten** |
-| Ergebnis | **Linienspektrum** bei $n f_0$ | **kontinuierliches** Spektrum | Spektrum an $N/2$ Stützstellen im Abstand $\Delta f$ |
+| Ergebnis | **Linienspektrum** bei $n f_0$ | **kontinuierliches** Spektrum | Spektrum an Stützstellen im Abstand $\Delta f$: $N$ komplexe Werte, davon $N/2 + 1$ im einseitigen Spektrum¹ |
 | wo verwendet? | Theorie, Rechnen mit Oberschwingungen | Theorie der Signale und Systeme | Messgeräte, Software, Mikrocontroller |
+
+¹ Bei $N$ (gerade) Abtastwerten liefert die vollständige DFT $N$ Frequenzwerte. Für ein **reelles** Signal ist die obere Hälfte nur das Spiegelbild der unteren; Messgeräte zeigen deshalb das **einseitige Spektrum** von $0$ (Gleichanteil) bis $f_\mathrm{s}/2$ – das sind $N/2 + 1$ Werte, wenn man Gleichanteil und Nyquist-Frequenz mitzählt.
 
 Die **diskrete Fourier-Transformation (DFT)** berechnet aus $N$ Abtastwerten das Spektrum. Die **FFT** (*Fast Fourier Transform*) ist
 kein anderes Verfahren, sondern ein besonders **schneller Rechenweg** für die DFT (meist für $N = 2^k$, z. B. 1024 oder 65 536 Werte). Für

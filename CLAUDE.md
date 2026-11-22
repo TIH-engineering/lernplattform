@@ -126,6 +126,7 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
 - Ausnahme Startseite (22.11.2026): Bilder aus dem Startseitenkonzept des Lehrers (`src/assets/startseite/*.webp`,
   Platzhalter in geringer Auflösung) in `src/components/Startseite.astro` (Hero, fünf Bereichskarten, „So lernst du“).
   Die Karten springen zu den Ankern der Themenliste darunter (`#grundlagen`, `#elektronik` …) – IDs nicht umbenennen.
+  Die Themenliste ist kompakt (`ds-raster--kompakt`, ohne Schnelleinstiege); C steht als Leiste `ds-zusatz` unter Elektronik.
 
 ## Quellen
 

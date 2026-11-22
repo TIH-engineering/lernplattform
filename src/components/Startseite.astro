@@ -2,7 +2,7 @@
 // Oberer Teil der Startseite: Begrüßung mit Bild, fünf Fachbereichskarten und „So lernst du“.
 // Eingebunden in src/content/docs/index.mdx mit <Startseite />.
 // Die Karten springen zur ausführlichen Themenliste weiter unten auf derselben Seite (#grundlagen usw.).
-// Bilder: src/assets/startseite/ (Platzhalterbilder aus dem Startseitenkonzept des Lehrers).
+// Bilder: src/assets/startseite/ (aus dem Startseitenkonzept des Lehrers; bei Bedarf durch höher aufgelöste Fassungen gleichen Namens ersetzen).
 import { Image } from 'astro:assets';
 import Zeichen from './Zeichen.astro';
 import heldBild from '../assets/startseite/hero-elektronik-messtechnik.webp';
@@ -24,7 +24,7 @@ const bereiche = [
 	},
 	{
 		titel: 'Elektronik',
-		text: 'Dioden, Transistoren, Operationsverstärker, Filter und Oszillatoren.',
+		text: 'Dioden, Transistorgrundschaltungen, Operationsverstärker, Filter, Oszillatoren und Kippstufen.',
 		anker: 'elektronik',
 		bild: bildElektronik,
 		alt: 'Bestückte Leiterplatte mit integrierter Schaltung',
@@ -38,7 +38,7 @@ const bereiche = [
 	},
 	{
 		titel: 'Mess- und Regelungstechnik',
-		text: 'Messfehler, Sensoren, Messverstärker und Regelkreise in der Praxis.',
+		text: 'Sensoren, Signale und FFT, Messverstärker und Regelkreise in der Praxis.',
 		anker: 'mess-und-regelungstechnik',
 		bild: bildMess,
 		alt: 'Oszilloskop mit Rechtecksignal und ein Sensor',

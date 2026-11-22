@@ -762,3 +762,67 @@ details.loesung > :nth-child(2) {
 details.loesung > :last-child {
 	margin-bottom: 1rem;
 }
+
+/* ---------- 9. Kompakte Themenliste auf der Startseite (seit 22.11.2026) ----------
+   <div class="ds-raster ds-raster--kompakt"> … Themenkarten … </div>
+   Symbol links, daneben Titel und Kurztext. Die Schnelleinstiege (Theorie · Rechnen · Quiz) entfallen hier,
+   weil jede Themenseite sie oben als Reiter zeigt. Eine breite Karte (breit) behält sie. */
+.ds-raster--kompakt {
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+	gap: 0.6rem;
+	margin-block: 0.75rem 1.5rem;
+}
+.ds-raster--kompakt .ds-thema:not(.ds-thema--breit) {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: start;
+	gap: 0.1rem 0.75rem;
+	padding: 0.7rem 0.9rem;
+}
+.ds-raster--kompakt .ds-thema:not(.ds-thema--breit) .ds-thema__kopf {
+	display: contents;
+}
+.ds-raster--kompakt .ds-thema:not(.ds-thema--breit) .ds-symbol {
+	grid-row: 1 / span 2;
+	width: 2.25rem;
+	height: 2.25rem;
+}
+.ds-raster--kompakt .ds-thema:not(.ds-thema--breit) .ds-symbol svg {
+	width: 1.3rem;
+	height: 1.3rem;
+}
+.ds-raster--kompakt .ds-thema:not(.ds-thema--breit) .ds-thema__titel {
+	font-size: var(--sl-text-base);
+}
+.ds-raster--kompakt .ds-thema:not(.ds-thema--breit) .ds-thema__text {
+	grid-column: 2;
+	font-size: var(--sl-text-xs);
+	line-height: 1.45;
+}
+.ds-raster--kompakt .ds-thema:not(.ds-thema--breit) .ds-thema__teile {
+	display: none;
+}
+.ds-raster--kompakt .ds-thema--breit {
+	padding: 0.8rem 1rem;
+}
+.ds-raster--kompakt ~ .ds-bereich,
+.ds-zusatz + .ds-bereich {
+	margin-top: 1.75rem;
+}
+
+/* Ergänzungsleiste (z. B. „Programmieren mit C“) unter einem Startseitenbereich */
+.ds-zusatz {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin-block: -0.5rem 1.5rem;
+	padding: 0.6rem 0.9rem;
+	border: 1px dashed var(--ds-petrol);
+	border-radius: var(--ds-radius);
+	background: var(--ds-ton-petrol);
+}
+.ds-zusatz p {
+	margin: 0 !important;
+	font-size: var(--sl-text-sm);
+	line-height: 1.5;
+}
