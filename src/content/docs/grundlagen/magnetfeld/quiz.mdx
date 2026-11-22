@@ -4,8 +4,14 @@ description: Quiz zu Feldstärke, Flussdichte, Durchflutung, Spulen, magnetische
 ---
 
 import Quiz from '../../../../components/Quiz.astro';
+import Kasten from '../../../../components/Kasten.astro';
 
-Beantworte die Fragen und klicke auf **Antwort prüfen**. Bei Rechenfragen gibst du nur die Zahl ein.
+<Kasten typ="merke" titel="So funktioniert das Quiz">
+
+Beantworte die Fragen und klicke auf **Antwort prüfen**. Bei Rechenfragen gibst du nur die Zahl ein. Nach jeder Antwort siehst du eine Erklärung. Gezählt wird nur der **erste Versuch** –
+nichts wird gespeichert oder gesendet.
+
+</Kasten>
 Konstante: $\mu_0 = 4\pi \cdot 10^{-7}\,\mathrm{Vs/(Am)}$
 
 <Quiz id="grundlagen-magnetfeld" />

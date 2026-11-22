@@ -14,83 +14,112 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid, LinkCard, Badge } from '@astrojs/starlight/components';
+import { Badge } from '@astrojs/starlight/components';
+import Themenkarte from '../../components/Themenkarte.astro';
+import Zeichen from '../../components/Zeichen.astro';
 
 ## Schnellstart in drei Schritten
 
-1. **Thema auswählen** und mit der **Übersicht** beginnen – dort stehen die Lernziele und was du vorher können solltest.
-2. Eine Aufgabe der Stufe <Badge text="Grundlagen" variant="success" /> **selbst rechnen**, erst dann die Lösung aufklappen und vergleichen.
-3. Mit dem **Quiz** kontrollieren. Was falsch war, in der Theorie oder bei den Praxisbeispielen nachlesen und das Quiz wiederholen.
+<ol class="ds-schritte">
+	<li class="ds-karte"><strong>Thema auswählen</strong>Mit der <em>Übersicht</em> beginnen – dort stehen die Lernziele und was du vorher können solltest.</li>
+	<li class="ds-karte"><strong>Selbst rechnen</strong>Eine Aufgabe der Stufe <Badge text="Grundlagen" variant="success" /> lösen, erst dann die Lösung aufklappen und vergleichen.</li>
+	<li class="ds-karte"><strong>Mit dem Quiz kontrollieren</strong>Was falsch war, in der Theorie oder bei den Praxisbeispielen nachlesen und das Quiz wiederholen.</li>
+</ol>
 
 Typische Einstiege: [Grundlagen der Elektrotechnik](/grundlagen/) · [Messtechnik](/messtechnik/) · [Elektronik – Dioden](/dioden/)
 
-## Themenbereiche
+<div class="ds-bereich">
+	<span class="ds-symbol"><Zeichen name="buch" /></span>
+	<div>
+		<h2 id="grundlagen">Grundlagen der Elektrotechnik</h2>
+		<p class="ds-bereich__text">14 Themen passend zu den Schulbüchern GET1 und GET2 – mit Rechenbeispielen, Praxis und Quizzes.</p>
+	</div>
+</div>
 
-### Grundlagen
+<div class="ds-raster">
+	<Themenkarte titel="Grundlagen der Elektrotechnik" symbol="buch" href="/grundlagen/" text="Vom Ohmschen Gesetz bis zu Resonanz und Filter – Übungen zum Schulbuch." breit teile={[['Ohmsches Gesetz', 'ohmsches-gesetz'], ['Wechselstrom', 'wechselstrom'], ['Alle 14 Themen', '']]} />
+</div>
 
-<CardGrid>
-	<LinkCard title="Grundlagen der Elektrotechnik" description="14 Themen zum Schulbuch: Rechenbeispiele, Praxisbeispiele und Quizzes – vom Ohmschen Gesetz bis zu Resonanz und Filter" href="/grundlagen/" />
-</CardGrid>
+<div class="ds-bereich">
+	<span class="ds-symbol"><Zeichen name="schaltung" /></span>
+	<div>
+		<h2 id="elektronik">Elektronik</h2>
+		<p class="ds-bereich__text">Bauteile, Schaltungen und ihre Auslegung – mit ausführlicher Theorie.</p>
+	</div>
+</div>
 
-### Elektronik
-
-<CardGrid>
-	<LinkCard title="Dioden" description="Kennlinie, Gleichrichter, Glättung, Z-Diode, LED" href="/dioden/" />
-	<LinkCard title="Transistoren" description="Bipolartransistor als Schalter und Verstärker, Längsregler, Stromquelle, MOSFET" href="/transistoren/" />
-	<LinkCard title="Operationsverstärker" description="Grundschaltungen, Rechenschaltungen, Schmitt-Trigger, reale Grenzen" href="/operationsverstaerker/" />
-	<LinkCard title="Filter" description="dB und Bode-Diagramm, passive und aktive Filter, Butterworth, Sallen-Key" href="/filter/" />
-	<LinkCard title="Oszillatoren" description="Barkhausen, RC-Phasenschieber, Wien-Brücke, Relaxationsoszillator, Quarz" href="/oszillatoren/" />
-	<LinkCard title="Thermische Auslegung" description="Verlustleistung, Wärmewiderstand, Kühlkörper, dynamisches Modell" href="/thermische-auslegung/" />
-</CardGrid>
+<div class="ds-raster">
+	<Themenkarte titel="Dioden" symbol="diode" href="/dioden/" text="Kennlinie, Gleichrichter, Glättung, Z-Diode, LED" />
+	<Themenkarte titel="Transistoren" symbol="transistor" href="/transistoren/" text="Bipolartransistor als Schalter und Verstärker, Längsregler, Stromquelle, MOSFET" />
+	<Themenkarte titel="Operationsverstärker" symbol="opv" href="/operationsverstaerker/" text="Grundschaltungen, Rechenschaltungen, Schmitt-Trigger, reale Grenzen" />
+	<Themenkarte titel="Filter" symbol="filter" href="/filter/" text="dB und Bode-Diagramm, passive und aktive Filter, Butterworth, Sallen-Key" />
+	<Themenkarte titel="Oszillatoren" symbol="welle" href="/oszillatoren/" text="Barkhausen, RC-Phasenschieber, Wien-Brücke, Relaxationsoszillator, Quarz" />
+	<Themenkarte titel="Thermische Auslegung" symbol="thermometer" href="/thermische-auslegung/" text="Verlustleistung, Wärmewiderstand, Kühlkörper, dynamisches Modell" />
+</div>
 
 Ergänzend dazu: [Programmierung in C](/programmierung/) – die Grundlagen für einfache Mikrocontroller-Programme.
 
-### Energietechnik
+<div class="ds-bereich">
+	<span class="ds-symbol"><Zeichen name="blitz" /></span>
+	<div>
+		<h2 id="energietechnik">Energietechnik</h2>
+		<p class="ds-bereich__text">Drehstromnetz und das Umformen elektrischer Energie.</p>
+	</div>
+</div>
 
-<CardGrid>
-	<LinkCard title="Drehstrom" description="Stern und Dreieck, Neutralleiter, Drehstromleistung, Drehfeld, B6-Gleichrichter" href="/drehstrom/" />
-	<LinkCard title="Leistungselektronik" description="Gleichrichter, Schaltregler, Wechselrichter, Bauelemente" href="/leistungselektronik/" />
-</CardGrid>
+<div class="ds-raster">
+	<Themenkarte titel="Drehstrom" symbol="drehstrom" href="/drehstrom/" text="Stern und Dreieck, Neutralleiter, Drehstromleistung, Drehfeld, B6-Gleichrichter" />
+	<Themenkarte titel="Leistungselektronik" symbol="blitz" href="/leistungselektronik/" text="Gleichrichter, Schaltregler, Wechselrichter, Bauelemente" teile={[['Theorie', 'theorie/einfuehrung'], ['Rechnen', 'rechenbeispiele'], ['Quiz', 'quiz']]} />
+</div>
 
-### Mess- und Regelungstechnik
+<div class="ds-bereich">
+	<span class="ds-symbol"><Zeichen name="messgeraet" /></span>
+	<div>
+		<h2 id="mess-und-regelungstechnik">Mess- und Regelungstechnik</h2>
+		<p class="ds-bereich__text">Vom Messwert über Sensoren und Messverstärker bis zum geschlossenen Regelkreis.</p>
+	</div>
+</div>
 
-<CardGrid>
-	<LinkCard title="Grundlagen der Messtechnik" description="SI-Einheiten, Messkette, Empfindlichkeit, Linearisierung, Kalibrieren" href="/messtechnik/" />
-	<LinkCard title="Messfehler und Messunsicherheit" description="Fehlerarten, Statistik, Vertrauensbereich, Genauigkeitsklassen" href="/messfehler/" />
-	<LinkCard title="Signalkennwerte" description="Mittelwert, Gleichrichtwert, Effektivwert, Form- und Scheitelfaktor" href="/signalkennwerte/" />
-	<LinkCard title="Sensoren" description="NTC, PTC, VDR, LDR, Pt100, Thermoelement, Piezo, DMS, Hall" href="/sensoren/" />
-	<LinkCard title="Messwerke und Messbereiche" description="Drehspul, Dreheisen, Vorwiderstand, Shunt, Widerstandsmessung" href="/messwerke/" />
-	<LinkCard title="Messbrücken" description="Wheatstone, DMS-Brücken, belastete Brücke, Thomson" href="/messbruecken/" />
-	<LinkCard title="Digitale Messtechnik" description="A/D-Umsetzer, Multimeter, Oszilloskop, Funktionsgenerator" href="/digitale-messtechnik/" />
-	<LinkCard title="Leistungs- und Impedanzmessung" description="Wirkleistung, Leistungsfaktor, Verzerrung, LCR-Meter, parasitäre Elemente" href="/leistungsmessung/" />
-	<LinkCard title="Komparator und Frequenzmessung" description="Hysterese, Torzeit, Periodendauer, Drehzahl mit dem Mikrocontroller" href="/frequenzmessung/" />
-	<LinkCard title="Messverstärker und Schnittstellen" description="Instrumentenverstärker, Shunt, Trennverstärker, 4–20 mA" href="/messverstaerker/" />
-	<LinkCard title="A/D- und D/A-Umsetzer" description="R-2R, PWM, Flash, Dual-Slope, Sigma-Delta, DNL, INL, ENOB" href="/ad-da-umsetzer/" />
-	<LinkCard title="Aktuatoren" description="Magnetkreis, Relais, Gleichstrom-, BLDC-, Asynchron- und Schrittmotor" href="/aktuatoren/" />
-	<LinkCard title="Regelungstechnik" description="Regelkreis, Übertragungsglieder, PID-Regler, Stabilität, digitale Regler" href="/regelungstechnik/" />
-</CardGrid>
+<div class="ds-raster">
+	<Themenkarte titel="Grundlagen der Messtechnik" symbol="lineal" href="/messtechnik/" text="SI-Einheiten, Messkette, Empfindlichkeit, Linearisierung, Kalibrieren" />
+	<Themenkarte titel="Messfehler und Messunsicherheit" symbol="streuung" href="/messfehler/" text="Fehlerarten, Statistik, Vertrauensbereich, Genauigkeitsklassen" />
+	<Themenkarte titel="Signalkennwerte" symbol="signal" href="/signalkennwerte/" text="Mittelwert, Gleichrichtwert, Effektivwert, Form- und Scheitelfaktor" />
+	<Themenkarte titel="Sensoren" symbol="sensor" href="/sensoren/" text="NTC, PTC, VDR, LDR, Pt100, Thermoelement, Piezo, DMS, Hall" />
+	<Themenkarte titel="Messwerke und Messbereiche" symbol="messgeraet" href="/messwerke/" text="Drehspul, Dreheisen, Vorwiderstand, Shunt, Widerstandsmessung" />
+	<Themenkarte titel="Messbrücken" symbol="bruecke" href="/messbruecken/" text="Wheatstone, DMS-Brücken, belastete Brücke, Thomson" />
+	<Themenkarte titel="Digitale Messtechnik" symbol="digital" href="/digitale-messtechnik/" text="A/D-Umsetzer, Multimeter, Oszilloskop, Funktionsgenerator" />
+	<Themenkarte titel="Leistungs- und Impedanzmessung" symbol="leistung" href="/leistungsmessung/" text="Wirkleistung, Leistungsfaktor, Verzerrung, LCR-Meter, parasitäre Elemente" />
+	<Themenkarte titel="Komparator und Frequenzmessung" symbol="frequenz" href="/frequenzmessung/" text="Hysterese, Torzeit, Periodendauer, Drehzahl mit dem Mikrocontroller" />
+	<Themenkarte titel="Messverstärker und Schnittstellen" symbol="verstaerker" href="/messverstaerker/" text="Instrumentenverstärker, Shunt, Trennverstärker, 4–20 mA" />
+	<Themenkarte titel="A/D- und D/A-Umsetzer" symbol="umsetzer" href="/ad-da-umsetzer/" text="R-2R, PWM, Flash, Dual-Slope, Sigma-Delta, DNL, INL, ENOB" />
+	<Themenkarte titel="Aktuatoren" symbol="motor" href="/aktuatoren/" text="Magnetkreis, Relais, Gleichstrom-, BLDC-, Asynchron- und Schrittmotor" teile={[['Theorie', 'theorie/magnetkreis'], ['Rechnen', 'rechenbeispiele'], ['Quiz', 'quiz']]} />
+	<Themenkarte titel="Regelungstechnik" symbol="regelkreis" href="/regelungstechnik/" text="Regelkreis, Übertragungsglieder, PID-Regler, Stabilität, digitale Regler" teile={[['Theorie', 'theorie/grundbegriffe'], ['Rechnen', 'rechenbeispiele'], ['Quiz', 'quiz']]} />
+</div>
 
-### Projektarbeit
+<div class="ds-bereich">
+	<span class="ds-symbol"><Zeichen name="projekt" /></span>
+	<div>
+		<h2 id="projektarbeit">Projektarbeit</h2>
+		<p class="ds-bereich__text">Projekte planen, steuern und dokumentieren.</p>
+	</div>
+</div>
 
-<CardGrid>
-	<LinkCard title="Projektmanagement" description="Ziele, Planung, Risiken, Qualität, Lasten- und Pflichtenheft – mit Fallbeispielen" href="/projektmanagement/" />
-</CardGrid>
+<div class="ds-raster">
+	<Themenkarte titel="Projektmanagement" symbol="projekt" href="/projektmanagement/" text="Ziele, Planung, Risiken, Qualität, Lasten- und Pflichtenheft – mit Fallbeispielen" teile={[['Theorie', 'theorie'], ['Fallbeispiele', 'fallbeispiele'], ['Quiz', 'quiz']]} />
+</div>
 
 ## So ist jeder Themenbereich aufgebaut
 
-<CardGrid>
-	<Card title="Theorie" icon="open-book">
-		Die wichtigsten Zusammenhänge mit Formeln und Schaltplänen.
-	</Card>
-	<Card title="Rechenbeispiele" icon="pencil">
-		Aufgaben in drei Stufen. Zuerst selbst rechnen, dann die Lösung aufklappen.
-	</Card>
-	<Card title="Praxisbeispiele" icon="setting">
-		Echte Schaltungen, Bauteile und Messungen aus der Werkstätte und dem Labor.
-	</Card>
-	<Card title="Quiz" icon="approve-check">
-		Teste dein Wissen – nach jeder Antwort bekommst du eine Erklärung.
-	</Card>
-</CardGrid>
+<div class="ds-raster">
+	<div class="ds-karte ds-thema"><div class="ds-thema__kopf"><span class="ds-symbol"><Zeichen name="buch" /></span><h3 class="ds-thema__titel">Theorie</h3></div><p class="ds-thema__text">Die wichtigsten Zusammenhänge mit Formeln und Schaltplänen.</p></div>
+	<div class="ds-karte ds-thema"><div class="ds-thema__kopf"><span class="ds-symbol"><Zeichen name="formel" /></span><h3 class="ds-thema__titel">Rechenbeispiele</h3></div><p class="ds-thema__text">Aufgaben in drei Stufen. Zuerst selbst rechnen, dann die Lösung aufklappen.</p></div>
+	<div class="ds-karte ds-thema"><div class="ds-thema__kopf"><span class="ds-symbol"><Zeichen name="schaltung" /></span><h3 class="ds-thema__titel">Praxisbeispiele</h3></div><p class="ds-thema__text">Echte Schaltungen, Bauteile und Messungen aus Werkstätte und Labor.</p></div>
+	<div class="ds-karte ds-thema"><div class="ds-thema__kopf"><span class="ds-symbol"><Zeichen name="pruefen" /></span><h3 class="ds-thema__titel">Quiz</h3></div><p class="ds-thema__text">Teste dein Wissen – nach jeder Antwort bekommst du eine Erklärung.</p></div>
+</div>
 
 Schwierigkeit: <Badge text="Grundlagen" variant="success" /> <Badge text="Standard" variant="caution" /> <Badge text="Vertiefung" variant="danger" />
+
+<footer class="ds-fuss">
+	Frei zugänglich, ohne Anmeldung, ohne Cookies und ohne Tracking ·
+	<a href="/hinweise/">So benutzt du diese Seite</a> · <a href="/impressum/">Impressum und Datenschutz</a>
+</footer>

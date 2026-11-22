@@ -1,0 +1,53 @@
+---
+// Karte für einen Themenbereich (Startseite).
+//   <Themenkarte titel="Dioden" symbol="diode" href="/dioden/" text="Kennlinie, Gleichrichter, Z-Diode, LED" />
+// teile: Schnelleinstiege. Standard: Theorie · Rechnen · Quiz.
+//   teile={[['Fallbeispiele', 'fallbeispiele'], ['Quiz', 'quiz']]}   oder   teile={[]} für keine.
+import Zeichen from './Zeichen.astro';
+
+interface Props {
+	titel: string;
+	text: string;
+	href: string;
+	symbol: Parameters<typeof Zeichen>[0]['name'];
+	teile?: [string, string][];
+	/** über die ganze Zeile (z. B. für einen ganzen Bereich wie „Grundlagen“) */
+	breit?: boolean;
+}
+
+const {
+	titel,
+	text,
+	href,
+	symbol,
+	teile = [
+		['Theorie', 'theorie'],
+		['Rechnen', 'rechenbeispiele'],
+		['Quiz', 'quiz'],
+	],
+	breit = false,
+} = Astro.props;
+const basis = href.endsWith('/') ? href : href + '/';
+// Weiche Trennstellen (U+00AD) an Wortfugen langer Fachwörter: Der Browser trennt dort mit Bindestrich,
+// aber nur, wenn die Karte zu schmal ist (Windows-Browser haben oft kein deutsches Silbentrennungs-Wörterbuch).
+const titelGetrennt = titel.replace(/(Operations|Leistungs|Regelungs|Mess|Programmier)(?=\p{Ll}{4})/gu, '$1­');
+---
+
+<article class:list={['ds-karte ds-thema', { 'ds-thema--breit': breit }]}>
+	<div class="ds-thema__kopf">
+		<span class="ds-symbol"><Zeichen name={symbol} /></span>
+		<h3 class="ds-thema__titel"><a href={basis}>{titelGetrennt}</a></h3>
+	</div>
+	<p class="ds-thema__text">{text}</p>
+	{
+		teile.length > 0 && (
+			<ul class="ds-thema__teile" aria-label={`Direkt zu ${titel}`}>
+				{teile.map(([label, pfad]) => (
+					<li>
+						<a href={pfad ? basis + pfad + '/' : basis}>{label}</a>
+					</li>
+				))}
+			</ul>
+		)
+	}
+</article>

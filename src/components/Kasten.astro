@@ -1,0 +1,32 @@
+---
+// Hervorgehobener Kasten mit einheitlichem Aussehen.
+//   <Kasten typ="merke">Text …</Kasten>
+//   <Kasten typ="formel" titel="Vorwiderstand" gilt="Gilt für …">$$ … $$</Kasten>
+//   <Kasten typ="lernziele"> - Ziel 1 … </Kasten>
+// typ: lernziele | merke | formel | achtung
+import Zeichen from './Zeichen.astro';
+
+interface Props {
+	typ: 'lernziele' | 'merke' | 'formel' | 'achtung';
+	titel?: string;
+	/** Gültigkeitsbereich einer Formel (Modellannahmen), wird klein darunter angezeigt */
+	gilt?: string;
+}
+
+const vorgabe = {
+	lernziele: { titel: 'Das lernst du hier', symbol: 'ziel' },
+	merke: { titel: 'Merke', symbol: 'merke' },
+	formel: { titel: 'Formel', symbol: 'formel' },
+	achtung: { titel: 'Achtung', symbol: 'achtung' },
+} as const;
+
+const { typ, titel, gilt } = Astro.props;
+const v = vorgabe[typ];
+const ueberschrift = titel ? (typ === 'formel' ? `Formel: ${titel}` : titel) : v.titel;
+---
+
+<section class={`ds-kasten ds-kasten--${typ}`} aria-label={ueberschrift}>
+	<p class="ds-kasten__kopf"><Zeichen name={v.symbol} />{ueberschrift}</p>
+	<div class="ds-kasten__inhalt"><slot /></div>
+	{gilt && <p class="ds-kasten__gilt"><strong>Gilt:</strong> {gilt}</p>}
+</section>

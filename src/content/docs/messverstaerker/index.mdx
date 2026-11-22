@@ -6,6 +6,7 @@ sidebar:
 ---
 
 import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+import Kasten from '../../../components/Kasten.astro';
 
 Viele Sensoren liefern nur wenige Millivolt – eine DMS-Brücke 10 mV, ein Shunt 40 mV, ein Thermoelement 4 mV – und oft
 liegt dieses kleine Signal auf einer großen **Gleichtaktspannung**. Ein normaler OPV-Verstärker reicht dann nicht.
@@ -15,13 +16,15 @@ Potentiale. Und damit das Signal über viele Meter Leitung in einer Industrieanl
 
 ## Lernziele
 
-Nach diesem Thema kannst du …
+<Kasten typ="lernziele" titel="Nach diesem Thema kannst du …">
 
 - Differenz- und Gleichtaktspannung unterscheiden und die **Gleichtaktunterdrückung** (CMRR) anwenden,
 - Aufbau und Verstärkung eines **Instrumentenverstärkers** erklären und ihn für eine Messbrücke bemessen,
 - einen **Shunt** auswählen und Low-Side- und High-Side-Strommessung vergleichen,
 - erklären, wann man **Auto-Zero**-Verstärker und **Trennverstärker** braucht,
 - eine **4–20-mA-Stromschleife** berechnen (Messwert, Bürde, Versorgungsspannung) und Fehler erkennen.
+
+</Kasten>
 
 ## Teile
 

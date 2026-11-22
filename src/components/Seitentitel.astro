@@ -1,0 +1,90 @@
+---
+// Ersetzt Starlights Seitentitel (Einstellung „components.PageTitle“ in astro.config.mjs).
+// Unter dem Titel erscheint automatisch die Themennavigation: Weg (Start › Bereich › Thema) und Reiter für die Teile.
+// Bereich, Thema und Teile werden aus der Seitenleiste gelesen – neue Themen brauchen also keine eigene Einstellung.
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+
+type Link = { type: 'link'; label: string; href: string; isCurrent: boolean };
+type Gruppe = { type: 'group'; label: string; entries: Eintrag[] };
+type Eintrag = Link | Gruppe;
+
+const { sidebar } = Astro.locals.starlightRoute as unknown as { sidebar: Eintrag[] };
+
+/** Weg der Gruppen bis zur aktuellen Seite, z. B. [Elektronik, Dioden] oder [Energietechnik, Leistungselektronik, Theorie] */
+function finde(eintraege: Eintrag[], weg: Gruppe[]): Gruppe[] | null {
+	for (const e of eintraege) {
+		if (e.type === 'link' && e.isCurrent) return weg;
+		if (e.type === 'group') {
+			const t = finde(e.entries, [...weg, e]);
+			if (t) return t;
+		}
+	}
+	return null;
+}
+const ersterLink = (g: Gruppe): Link | undefined => {
+	for (const e of g.entries) {
+		if (e.type === 'link') return e;
+		const t = ersterLink(e);
+		if (t) return t;
+	}
+};
+const enthaeltAktuell = (g: Gruppe): boolean =>
+	g.entries.some((e) => (e.type === 'link' ? e.isCurrent : enthaeltAktuell(e)));
+
+let navi: null | {
+	bereich?: string;
+	thema: string;
+	themaHref: string;
+	teile: { label: string; href: string; aktuell: boolean }[];
+} = null;
+
+const weg = finde(sidebar, []);
+if (weg && weg.length > 0) {
+	// Die Gruppe „Theorie“ (Theorie mit Unterseiten) gehört zum Thema darüber
+	const ohneTheorie = weg[weg.length - 1].label === 'Theorie' ? weg.slice(0, -1) : weg;
+	const thema = ohneTheorie[ohneTheorie.length - 1];
+	const teile = thema
+		? thema.entries.flatMap((e) => {
+				if (e.type === 'link') return [{ label: e.label, href: e.href, aktuell: e.isCurrent }];
+				const erster = ersterLink(e);
+				// Untergruppen werden nur als Reiter gezeigt, wenn es die Theorie ist (nicht z. B. die 14 Grundlagen-Themen)
+				return e.label === 'Theorie' && erster ? [{ label: 'Theorie', href: erster.href, aktuell: enthaeltAktuell(e) }] : [];
+			})
+		: [];
+	if (thema && teile.length >= 2) {
+		navi = {
+			bereich: ohneTheorie.length > 1 ? ohneTheorie[ohneTheorie.length - 2].label : undefined,
+			thema: thema.label.replace(/^\d+\s*·\s*/, ''),
+			themaHref: teile[0].href,
+			teile,
+		};
+	}
+}
+const start = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+
+<Default />
+{
+	navi && (
+		<nav class="ds-themennavi" aria-label={`Teile des Themas ${navi.thema}`}>
+			<ol class="ds-weg">
+				<li>
+					<a href={start}>Start</a>
+				</li>
+				{navi.bereich && <li>{navi.bereich}</li>}
+				<li>
+					<a href={navi.themaHref}>{navi.thema}</a>
+				</li>
+			</ol>
+			<ul class="ds-reiter">
+				{navi.teile.map((t) => (
+					<li>
+						<a href={t.href} aria-current={t.aktuell ? 'page' : undefined}>
+							{t.label}
+						</a>
+					</li>
+				))}
+			</ul>
+		</nav>
+	)
+}

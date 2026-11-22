@@ -1783,3 +1783,102 @@ speichere('mtrs/wheatstone.svg', 520, 280, 'Wheatstone-Messbrücke mit Diagonals
 			legende(300, 170, [['P-Regler, ' + sym('K', 'P') + ' = 2', 'currentColor'], ['PI-Regler (Betragsoptimum)', AKZENT]]));
 	}
 }
+
+// =====================================================================
+// DESIGNSYSTEM-ENTWURF: Dioden-Theorie mit farbigen Signalwegen
+// Farben kommen aus dem Designsystem (--ds-signal-1/2), mit Ersatzfarbe für andere Seiten.
+// =====================================================================
+{
+	const S1 = 'var(--ds-signal-1, #0b72c4)';
+	const S2 = 'var(--ds-signal-2, #b45a00)';
+
+	// ---------- Brückengleichrichter: Stromweg je Halbwelle ----------
+	const o = 40, u = 220, xl = 110, xr = 230, m = 130, xL = 360;
+	const blass = (inhalt) => `<g opacity="0.35">${inhalt}</g>`;
+	const wechselquelle = () => {
+		const xm = (xl + xr) / 2;
+		return strich(xl, m, xm - 18, m) + strich(xm + 18, m, xr, m) + `<circle cx="${xm}" cy="${m}" r="18"/>` +
+			`<path d="M${xm - 11},${m} q5.5,-12 11,0 t11,0"/>`;
+	};
+	/** Stromweg: breites, halbtransparentes Band hinter den Leitungen + Richtungspfeile */
+	const weg = (pts, farbe, pfeile) =>
+		`<polyline points="${p(pts)}" stroke="${farbe}" stroke-width="10" stroke-opacity="0.28" stroke-linejoin="round"/>` +
+		pfeile.map(([x1, y1, x2, y2]) => spitze(x1, y1, x2, y2, farbe)).join('');
+
+	function bruecke(halbwelle) {
+		const pos = halbwelle === 'positiv';
+		const farbe = pos ? S1 : S2;
+		// leitende Dioden: positiv D1 (links oben) und D4 (rechts unten), negativ D2 und D3
+		const d1 = diode(xl, m, xl, o), d2 = diode(xr, m, xr, o), d3 = diode(xl, u, xl, m), d4 = diode(xr, u, xr, m);
+		const pfad = pos
+			? [[xl, m], [xl, o], [xL, o], [xL, u], [xr, u], [xr, m], [xl, m]]
+			: [[xr, m], [xr, o], [xL, o], [xL, u], [xl, u], [xl, m], [xr, m]];
+		const pfeile = pos
+			? [[xl, 70, xl, 58], [280, o, 296, o], [xL, 150, xL, 166], [300, u, 284, u], [xr, 196, xr, 184]]
+			: [[xr, 70, xr, 58], [280, o, 296, o], [xL, 150, xL, 166], [180, u, 164, u], [xl, 196, xl, 184]];
+		const titel = pos
+			? 'Brückengleichrichter, positive Halbwelle: Strom über D1, Last und D4'
+			: 'Brückengleichrichter, negative Halbwelle: Strom über D2, Last und D3';
+		speichere(`elektronik/bruecke-${halbwelle}.svg`, 460, 262, titel,
+			weg(pfad, farbe, pfeile) +
+			(pos ? d1 + d4 + blass(d2 + d3) : d2 + d3 + blass(d1 + d4)) +
+			text(xl - 18, 88, sym('D', '1'), 'end') + text(xr + 18, 88, sym('D', '2'), 'start') +
+			text(xl - 18, 178, sym('D', '3'), 'end') + text(xr + 18, 178, sym('D', '4'), 'start') +
+			punkt(xl, m) + punkt(xr, m) + wechselquelle() +
+			text(xl + 8, m - 10, pos ? '+' : '−', 'start', 'font-weight="700"') +
+			text(xr - 8, m - 10, pos ? '−' : '+', 'end', 'font-weight="700"') +
+			text((xl + xr) / 2, m + 38, sym('u', '~')) +
+			draht([xl, o], [xL, o]) + draht([xl, u], [xL, u]) + punkt(xr, o) + punkt(xr, u) +
+			widerstand(xL, o, xL, u) + neben(xL, 130, 'R', 'L') +
+			pfeil(420, 90, 420, 170) + text(428, 135, sym('u', 'a'), 'start') +
+			text(xL + 12, o - 8, '+', 'start') + text(xL + 12, u + 20, '−', 'start') +
+			text(230, 254, pos ? 'positive Halbwelle: D1 und D4 leiten' : 'negative Halbwelle: D2 und D3 leiten', 'middle',
+				`font-size="13" font-weight="600" fill="${farbe}"`),
+		);
+	}
+	bruecke('positiv');
+	bruecke('negativ');
+
+	// ---------- Spannungsverlauf mit Ladekondensator (Brücke, 50 Hz) ----------
+	// Modell: ideale Dioden, Spitzenwert 1, Entladung über R_L mit τ = R_L·C = 67 ms (ergibt ΔU ≈ 14 %).
+	{
+		const x0 = 60, y0 = 230, bx = 560 / 40, by = 170; // 40 ms auf 560 px, Spitzenwert 1 auf 170 px
+		const X = (t) => x0 + t * bx, Y = (v) => y0 - v * by;
+		const tau = 66.7, dt = 0.02;
+		const gl = [], uc = [];
+		let v = 0, vmin = 1, tmin = 0;
+		for (let t = 0; t <= 40 + 1e-9; t += dt) {
+			const s = Math.abs(Math.sin((2 * Math.PI * t) / 20));
+			v = Math.max(s, v * Math.exp(-dt / tau));
+			gl.push([X(t).toFixed(1), Y(s).toFixed(1)]);
+			uc.push([X(t).toFixed(1), Y(v).toFixed(1)]);
+			if (t > 10 && t < 20 && v < vmin) { vmin = v; tmin = t; }
+		}
+		const ymin = Y(vmin), ymax = Y(1);
+		const klein = 'font-size="12"';
+		speichere('elektronik/glaettung-verlauf.svg', 660, 290,
+			`Spannungsverlauf am Brückengleichrichter mit Ladekondensator: gleichgerichtete Spannung und geglättete Ausgangsspannung mit Brummspannung von etwa ${Math.round((1 - vmin) * 100)} Prozent`,
+			pfeil(x0, y0, x0 + 590, y0) + pfeil(x0, y0 + 10, x0, 25) +
+			text(x0 + 590, y0 + 20, sym('t'), 'end') + text(x0 - 10, 34, sym('u'), 'end') +
+			[10, 20, 30, 40].map((t) => strich(X(t), y0 - 4, X(t), y0 + 4) + text(X(t), y0 + 20, `${t} ms`, 'middle', 'font-size="11"')).join('') +
+			`<polyline points="${p(gl)}" stroke-width="1.75" stroke-dasharray="5 4" opacity="0.7"/>` +
+			`<polyline points="${p(uc)}" stroke="${S1}" stroke-width="3"/>` +
+			// ΔU zwischen Spitze und Minimum
+			strich(X(5) - 10, ymax, X(tmin) + 40, ymax, 'stroke-width="1" stroke-dasharray="2 3"') +
+			strich(X(tmin) - 10, ymin, X(tmin) + 40, ymin, 'stroke-width="1" stroke-dasharray="2 3"') +
+			mass(X(tmin) + 32, ymax, X(tmin) + 32, ymin) + text(X(tmin) + 40, (ymax + ymin) / 2 + 5, 'Δ' + sym('U', '', false), 'start') +
+			// û_a
+			strich(x0 - 4, ymax, x0 + 4, ymax) + text(x0 - 8, ymax + 5, sym('û', 'a'), 'end') +
+			// Erklärungen in freien Flächen: „Nachladen“ über der Spitze bei 25 ms, „Entladen“ in der Lücke bei 30 ms
+			text(X(24.3), Y(1) - 22, 'Nachladen', 'middle', `${klein} fill="${S1}" font-weight="600"`) +
+			pfeil(X(24.3), Y(1) - 16, X(24.3), Y(1) - 4, S1) +
+			text(X(30), Y(0.72), 'Entladen', 'middle', klein) + text(X(30), Y(0.72) + 15, 'über ' + sym('R', 'L'), 'middle', klein) +
+			pfeil(X(30), Y(0.72) - 13, X(30), Y(0.86) + 2) +
+			legendeZeile(x0 + 10, 270, S1),
+		);
+		function legendeZeile(x, y, farbe) {
+			return strich(x, y - 4, x + 28, y - 4, `stroke="${farbe}" stroke-width="3"`) + text(x + 36, y, sym('u', 'a') + ' mit Ladekondensator', 'start', klein) +
+				strich(x + 250, y - 4, x + 278, y - 4, 'stroke-width="1.75" stroke-dasharray="5 4"') + text(x + 286, y, 'gleichgerichtet, ohne Kondensator', 'start', klein);
+		}
+	}
+}

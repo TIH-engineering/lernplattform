@@ -102,7 +102,10 @@ export default defineConfig({
 			defaultLocale: 'root',
 			locales: { root: { label: 'Deutsch', lang: 'de' } },
 			// KaTeX-Stil wird lokal mitgeliefert (keine externen Server).
-			customCss: ['katex/dist/katex.min.css', './src/styles/eigene.css'],
+			// ds.css = Designsystem „Modern Technical Education“ (siehe DESIGNSYSTEM.md)
+			customCss: ['katex/dist/katex.min.css', './src/styles/eigene.css', './src/styles/ds.css'],
+			// Eigener Seitentitel: zeigt darunter automatisch Weg und Reiter des Themas
+			components: { PageTitle: './src/components/Seitentitel.astro' },
 			sidebar: [
 				{ label: 'Startseite', slug: 'index' },
 				{ label: 'So benutzt du diese Seite', slug: 'hinweise' },

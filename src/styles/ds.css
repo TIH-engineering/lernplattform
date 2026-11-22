@@ -1,0 +1,763 @@
+/* =====================================================================
+   Designsystem „Modern Technical Education“ (Stand 22.11.2026)
+
+   Gilt für die ganze Webseite (eingebunden in astro.config.mjs unter customCss).
+   Dokumentation: DESIGNSYSTEM.md im Projektordner.
+   ===================================================================== */
+
+/* ---------- 1. Farben (Design-Tokens) ---------- */
+
+/* Dunkelmodus (Starlight-Standard) */
+:root {
+	/* Grundpalette */
+	--ds-petrol: #2bb3c0;
+	--ds-petrol-stark: #8fe0e7;
+	--ds-blau: #7fb2f0;
+	--ds-tuerkis: #3fd0c0;
+	--ds-bernstein: #f2b84b;
+	--ds-rot: #ff8a80;
+
+	/* Flächen und Linien */
+	--ds-flaeche: #111b20;
+	--ds-flaeche-2: #16232a;
+	--ds-linie: #2a3a42;
+	--ds-text-leise: #a9b9c1;
+	--ds-schatten: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 16px rgb(0 0 0 / 0.25);
+
+	/* Getönte Hintergründe für Kästen */
+	--ds-ton-petrol: rgb(43 179 192 / 0.12);
+	--ds-ton-blau: rgb(127 178 240 / 0.12);
+	--ds-ton-tuerkis: rgb(63 208 192 / 0.12);
+	--ds-ton-bernstein: rgb(242 184 75 / 0.13);
+	--ds-ton-rot: rgb(255 138 128 / 0.13);
+
+	/* Signalfarben in Schaltbildern (Halbwellen, Signalwege) */
+	--ds-signal-1: #4cc3ff;
+	--ds-signal-2: #f2b84b;
+
+	/* Starlight-Akzent auf Petrol umstellen */
+	--sl-color-accent-low: #0c2f36;
+	--sl-color-accent: #2bb3c0;
+	--sl-color-accent-high: #b4ecef;
+	--sl-color-bg: #0d1518;
+	--sl-color-bg-nav: #111b20;
+	--sl-color-bg-sidebar: #0f181c;
+	--sl-color-hairline: #24333a;
+	--sl-color-hairline-light: #2e3f47;
+}
+
+/* Hellmodus */
+:root[data-theme='light'] {
+	--ds-petrol: #0f6e7a;
+	--ds-petrol-stark: #0a4650;
+	--ds-blau: #1f5fae;
+	--ds-tuerkis: #0a6b64;
+	--ds-bernstein: #8a5a00;
+	--ds-rot: #b42318;
+
+	--ds-flaeche: #ffffff;
+	--ds-flaeche-2: #f3f7f8;
+	--ds-linie: #d7e1e5;
+	--ds-text-leise: #4d5f68;
+	--ds-schatten: 0 1px 2px rgb(16 42 52 / 0.06), 0 4px 14px rgb(16 42 52 / 0.07);
+
+	--ds-ton-petrol: #e3f3f5;
+	--ds-ton-blau: #e7f0fb;
+	--ds-ton-tuerkis: #e0f5f2;
+	--ds-ton-bernstein: #fdf3dc;
+	--ds-ton-rot: #fdeceb;
+
+	--ds-signal-1: #0b72c4;
+	--ds-signal-2: #b45a00;
+
+	--sl-color-accent-low: #d3eef1;
+	--sl-color-accent: #0f6e7a;
+	--sl-color-accent-high: #0a4650;
+	--sl-color-bg: #f7fafb;
+	--sl-color-bg-nav: #ffffff;
+	--sl-color-bg-sidebar: #f3f7f8;
+	--sl-color-hairline: #dfe7ea;
+	--sl-color-hairline-light: #e8eef0;
+}
+
+/* ---------- 2. Typografie und Rhythmus ---------- */
+:root {
+	--ds-radius: 0.75rem;
+	--ds-radius-klein: 0.5rem;
+	--ds-abstand: 1.5rem;
+}
+:root .sl-markdown-content {
+	line-height: 1.7;
+}
+/* Starlight legt um jede Überschrift einen Rahmen .sl-heading-wrapper – Linie und Abstand gehören dorthin */
+:root .sl-markdown-content .sl-heading-wrapper.level-h2 {
+	position: relative;
+	margin-top: 3rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid var(--ds-linie);
+}
+:root .sl-markdown-content .sl-heading-wrapper.level-h2::before {
+	/* kurzer Petrol-Balken über jeder Hauptüberschrift */
+	content: '';
+	position: absolute;
+	top: -2px;
+	left: 0;
+	width: 3rem;
+	height: 3px;
+	border-radius: 3px;
+	background: var(--ds-petrol);
+}
+:root .sl-markdown-content h2 {
+	font-size: 1.75rem;
+	font-weight: 700;
+	letter-spacing: -0.01em;
+}
+:root .sl-markdown-content h3 {
+	font-size: 1.3rem;
+	font-weight: 650;
+	color: var(--ds-petrol-stark);
+}
+:root .sl-markdown-content strong {
+	font-weight: 650;
+}
+
+/* Tabellen: ruhig, mit Kopfzeile in Petrol-Ton */
+:root .sl-markdown-content table {
+	border-collapse: separate;
+	border-spacing: 0;
+	border: 1px solid var(--ds-linie);
+	border-radius: var(--ds-radius-klein);
+	overflow: hidden;
+}
+:root .sl-markdown-content th {
+	background: var(--ds-ton-petrol);
+	color: var(--ds-petrol-stark);
+	font-weight: 650;
+}
+:root .sl-markdown-content th,
+:root .sl-markdown-content td {
+	border: 0;
+	border-bottom: 1px solid var(--ds-linie);
+}
+:root .sl-markdown-content tr:last-child td {
+	border-bottom: 0;
+}
+
+/* Abgesetzte Formeln: leicht hinterlegt */
+:root .sl-markdown-content .katex-display {
+	padding: 0.75rem 1rem;
+	border-radius: var(--ds-radius-klein);
+	background: var(--ds-flaeche-2);
+}
+
+/* Abbildungen als dezente Karte */
+:root figure.abbildung {
+	padding: 1rem;
+	border: 1px solid var(--ds-linie);
+	border-radius: var(--ds-radius);
+	background: var(--ds-flaeche);
+}
+:root figure.abbildung figcaption {
+	color: var(--ds-text-leise);
+}
+
+/* Starlight-Hinweisboxen (:::note, :::caution …) an die Kästen angleichen */
+:root .starlight-aside {
+	border: 1px solid var(--ds-linie);
+	border-left-width: 4px;
+	border-radius: var(--ds-radius-klein);
+}
+
+/* Fokus für Tastaturbedienung überall deutlich sichtbar */
+:root :is(a, button, summary, input, select):focus-visible {
+	outline: 2px solid var(--ds-petrol);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
+
+/* ---------- 3. Navigation: Seitenleiste ---------- */
+:root nav.sidebar a[aria-current='page'] {
+	font-weight: 650;
+	background: var(--sl-color-accent-low);
+	color: var(--sl-color-accent-high);
+	border-left: 3px solid var(--ds-petrol);
+}
+:root nav.sidebar details[open] > ul {
+	border-left: 1px solid var(--ds-linie);
+}
+
+/* ---------- 4. Bausteine ---------- */
+
+/* Karte (Grundform aller Kästen) */
+.ds-karte {
+	border: 1px solid var(--ds-linie);
+	border-radius: var(--ds-radius);
+	background: var(--ds-flaeche);
+	box-shadow: var(--ds-schatten);
+}
+
+/* Symbol in einem getönten Quadrat */
+.ds-symbol {
+	display: inline-grid;
+	place-items: center;
+	flex: none;
+	width: 2.75rem;
+	height: 2.75rem;
+	border-radius: var(--ds-radius-klein);
+	background: var(--ds-ton-petrol);
+	color: var(--ds-petrol);
+}
+.ds-symbol svg {
+	width: 1.6rem;
+	height: 1.6rem;
+}
+.ds-symbol--klein {
+	width: 2rem;
+	height: 2rem;
+}
+.ds-symbol--klein svg {
+	width: 1.2rem;
+	height: 1.2rem;
+}
+
+/* Raster für Karten */
+.ds-raster {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+	gap: 1rem;
+	margin-block: 1rem 2rem;
+}
+.ds-raster > * {
+	margin: 0 !important;
+}
+
+/* Themenkarte */
+.ds-thema {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+	padding: 1.1rem 1.1rem 1rem;
+	transition: border-color 0.15s;
+}
+.ds-thema:hover,
+.ds-thema:focus-within {
+	border-color: var(--ds-petrol);
+}
+.ds-thema__kopf {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+.ds-thema__titel {
+	min-width: 0; /* darf in der Flex-Zeile schrumpfen … */
+	margin: 0 !important;
+	font-size: var(--sl-text-lg);
+	font-weight: 700;
+	line-height: 1.25;
+	/* … und lange Wörter wie „Operationsverstärker“ werden getrennt statt abgeschnitten */
+	hyphens: auto;
+	overflow-wrap: break-word;
+}
+.ds-thema__titel a {
+	color: var(--sl-color-white);
+	text-decoration: none;
+}
+/* Die ganze Karte ist anklickbar (Link über die Fläche gespannt) */
+.ds-thema__titel a::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: var(--ds-radius);
+}
+.ds-thema__text {
+	margin: 0 !important;
+	color: var(--ds-text-leise);
+	font-size: var(--sl-text-sm);
+	line-height: 1.5;
+}
+.ds-thema__teile {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+	margin: auto 0 0 !important;
+	padding: 0.4rem 0 0 !important;
+	list-style: none;
+}
+.ds-thema__teile li {
+	margin: 0 !important;
+}
+.ds-thema__teile a {
+	position: relative; /* liegt über dem Kartenlink */
+	z-index: 1;
+	display: inline-block;
+	padding: 0.15rem 0.6rem;
+	border: 1px solid var(--ds-linie);
+	border-radius: 999px;
+	font-size: var(--sl-text-xs);
+	font-weight: 600;
+	color: var(--ds-petrol-stark);
+	text-decoration: none;
+	background: var(--ds-flaeche-2);
+}
+.ds-thema__teile a:hover {
+	border-color: var(--ds-petrol);
+}
+/* Breite Karte über die ganze Zeile */
+.ds-thema--breit {
+	grid-column: 1 / -1;
+}
+@media (min-width: 50rem) {
+	.ds-thema--breit {
+		display: grid;
+		grid-template-columns: minmax(14rem, 1fr) 2fr;
+		align-items: center;
+		column-gap: 1.5rem;
+	}
+	.ds-thema--breit .ds-thema__teile {
+		grid-column: 2;
+		padding: 0 !important;
+	}
+}
+
+/* Bereichsüberschrift auf der Startseite */
+.ds-bereich {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin-top: 2.5rem;
+}
+.ds-bereich h2,
+.ds-bereich h3 {
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 0 !important;
+	font-size: 1.6rem;
+	line-height: 1.2;
+}
+.ds-bereich h2::before,
+.ds-bereich h3::before {
+	display: none;
+}
+.ds-bereich__text {
+	margin: 0.25rem 0 0 !important;
+	color: var(--ds-text-leise);
+	font-size: var(--sl-text-sm);
+}
+
+/* Schritte (Schnellstart) */
+.ds-schritte {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+	gap: 1rem;
+	margin: 1rem 0 0 !important;
+	padding: 0 !important;
+	list-style: none;
+	counter-reset: schritt;
+}
+.ds-schritte > li {
+	counter-increment: schritt;
+	margin: 0 !important;
+	padding: 1rem 1.1rem;
+	font-size: var(--sl-text-sm);
+	line-height: 1.55;
+}
+.ds-schritte > li::before {
+	content: counter(schritt);
+	display: grid;
+	place-items: center;
+	width: 2rem;
+	height: 2rem;
+	margin-bottom: 0.5rem;
+	border-radius: 50%;
+	background: var(--ds-petrol);
+	color: var(--sl-color-black);
+	font-weight: 700;
+}
+:root[data-theme='light'] .ds-schritte > li::before {
+	color: #fff;
+}
+.ds-schritte strong {
+	display: block;
+	margin-bottom: 0.2rem;
+	font-size: var(--sl-text-base);
+}
+
+/* Themennavigation (Weg + Reiter) */
+.ds-themennavi {
+	margin-bottom: 2rem;
+}
+.ds-weg {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.35rem;
+	margin: 0 0 0.6rem !important;
+	padding: 0 !important;
+	list-style: none;
+	font-size: var(--sl-text-sm);
+	color: var(--ds-text-leise);
+}
+.ds-weg li {
+	margin: 0 !important;
+}
+.ds-weg li + li::before {
+	content: '›';
+	margin-right: 0.35rem;
+}
+.ds-weg a {
+	color: var(--ds-text-leise);
+}
+.ds-reiter {
+	display: flex;
+	flex-wrap: wrap; /* auf dem Handy umbrechen, damit der aktive Reiter immer sichtbar ist */
+	gap: 0.35rem;
+	margin: 0 !important;
+	padding: 0.3rem !important;
+	list-style: none;
+	border: 1px solid var(--ds-linie);
+	border-radius: 1.3rem;
+	background: var(--ds-flaeche-2);
+}
+.ds-reiter li {
+	margin: 0 !important;
+	flex: none;
+}
+.ds-reiter a {
+	display: block;
+	padding: 0.3rem 0.85rem;
+	border-radius: 999px;
+	font-size: var(--sl-text-sm);
+	font-weight: 600;
+	color: var(--ds-text-leise);
+	text-decoration: none;
+	white-space: nowrap;
+}
+.ds-reiter a:hover {
+	color: var(--sl-color-white);
+}
+.ds-reiter a[aria-current='page'] {
+	background: var(--ds-petrol);
+	color: var(--sl-color-black);
+}
+:root[data-theme='light'] .ds-reiter a[aria-current='page'] {
+	color: #fff;
+}
+
+/* Kasten: Lernziele, Merke, Formel, Achtung */
+.ds-kasten {
+	--farbe: var(--ds-petrol);
+	--ton: var(--ds-ton-petrol);
+	margin-block: var(--ds-abstand);
+	padding: 1rem 1.15rem;
+	border: 1px solid var(--ds-linie);
+	border-left: 4px solid var(--farbe);
+	border-radius: var(--ds-radius-klein);
+	background: var(--ton);
+}
+.ds-kasten__kopf {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0 0 0.5rem !important;
+	font-size: var(--sl-text-sm);
+	font-weight: 700;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	color: var(--farbe);
+}
+.ds-kasten__kopf svg {
+	width: 1.15rem;
+	height: 1.15rem;
+	flex: none;
+}
+.ds-kasten > :last-child,
+.ds-kasten__inhalt > :last-child {
+	margin-bottom: 0 !important;
+}
+.ds-kasten__inhalt > :first-child {
+	margin-top: 0 !important;
+}
+.ds-kasten--lernziele {
+	--farbe: var(--ds-petrol);
+	--ton: var(--ds-ton-petrol);
+}
+.ds-kasten--merke {
+	--farbe: var(--ds-tuerkis);
+	--ton: var(--ds-ton-tuerkis);
+}
+.ds-kasten--formel {
+	--farbe: var(--ds-blau);
+	--ton: var(--ds-ton-blau);
+}
+.ds-kasten--achtung {
+	--farbe: var(--ds-bernstein);
+	--ton: var(--ds-ton-bernstein);
+}
+.ds-kasten--formel .katex-display {
+	background: var(--ds-flaeche) !important;
+	margin-block: 0.5rem !important;
+}
+.ds-kasten__gilt {
+	margin: 0.5rem 0 0 !important;
+	font-size: var(--sl-text-sm);
+	color: var(--ds-text-leise);
+}
+/* Lernziele als Häkchenliste */
+.ds-kasten--lernziele ul {
+	margin: 0 !important;
+	padding: 0 !important;
+	list-style: none;
+}
+.ds-kasten--lernziele li {
+	position: relative;
+	margin: 0.3rem 0 !important;
+	padding-left: 1.6rem;
+}
+.ds-kasten--lernziele li::before {
+	content: '';
+	position: absolute;
+	left: 0.1rem;
+	top: 0.45em;
+	width: 0.85rem;
+	height: 0.45rem;
+	border-left: 2.5px solid var(--farbe);
+	border-bottom: 2.5px solid var(--farbe);
+	transform: rotate(-45deg);
+}
+
+/* Rechenbeispiel */
+.ds-beispiel {
+	margin-block: 2rem;
+	overflow: hidden;
+}
+.ds-beispiel__kopf {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+	padding: 0.75rem 1.15rem;
+	border-bottom: 1px solid var(--ds-linie);
+	background: var(--ds-flaeche-2);
+}
+.ds-beispiel__titel {
+	margin: 0 !important;
+	font-size: var(--sl-text-base);
+	font-weight: 700;
+}
+.ds-beispiel__abschnitt {
+	padding: 0.9rem 1.15rem;
+}
+.ds-beispiel__abschnitt + .ds-beispiel__abschnitt {
+	border-top: 1px solid var(--ds-linie);
+}
+.ds-beispiel__marke {
+	display: block;
+	margin-bottom: 0.35rem;
+	font-size: var(--sl-text-xs);
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--ds-text-leise);
+}
+.ds-beispiel__gg {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+	gap: 0.75rem;
+}
+.ds-beispiel__gg > div {
+	padding: 0.6rem 0.8rem;
+	border-radius: var(--ds-radius-klein);
+	background: var(--ds-flaeche-2);
+}
+/* Starlight gibt Folge-Elementen einen oberen Abstand – im Beispiel einheitlich ausrichten */
+.ds-beispiel > *,
+.ds-beispiel__gg > div,
+.ds-beispiel__abschnitt > :is(div, p, ul, ol):first-of-type,
+.ds-beispiel__gg > div > div,
+.ds-beispiel__gg > div > div > :first-child,
+.ds-beispiel__loesung > div > :first-child,
+.ds-beispiel__ergebnis > div > :first-child {
+	margin-top: 0 !important;
+}
+.ds-beispiel__ergebnis > div > :last-child,
+.ds-beispiel__loesung > div > :last-child {
+	margin-bottom: 0 !important;
+}
+.ds-beispiel__gg ul {
+	margin: 0 !important;
+	padding-left: 1.1rem !important;
+}
+.ds-beispiel__gg li {
+	margin: 0.15rem 0 !important;
+}
+.ds-beispiel details {
+	border-top: 1px solid var(--ds-linie);
+}
+.ds-beispiel details > summary {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.75rem 1.15rem;
+	cursor: pointer;
+	font-weight: 650;
+	color: var(--ds-petrol-stark);
+	list-style: none;
+}
+.ds-beispiel details > summary::-webkit-details-marker {
+	display: none;
+}
+.ds-beispiel details > summary::before {
+	content: '›';
+	display: inline-block;
+	flex: none;
+	width: 1rem;
+	font-size: 1.5em;
+	line-height: 1;
+	text-align: center;
+	transition: transform 0.15s;
+}
+.ds-beispiel details[open] > summary::before {
+	transform: rotate(90deg);
+}
+.ds-beispiel__loesung {
+	padding: 0 1.15rem 1rem;
+}
+.ds-beispiel__ergebnis {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0.5rem 1rem;
+	margin: 0.75rem 0 0 !important;
+	padding: 0.7rem 1rem;
+	border: 1px solid var(--ds-petrol);
+	border-radius: var(--ds-radius-klein);
+	background: var(--ds-ton-petrol);
+}
+.ds-beispiel__ergebnis .ds-beispiel__marke {
+	margin: 0;
+	color: var(--ds-petrol-stark);
+}
+
+/* Zwei Abbildungen nebeneinander (auf dem Handy untereinander) */
+.ds-bildpaar {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+	gap: 1rem;
+	margin-block: 1.5rem;
+}
+.ds-bildpaar figure.abbildung {
+	margin: 0;
+}
+/* Legende für farbige Signalwege */
+.ds-legende {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1.25rem;
+	margin: 0.5rem 0 1.5rem !important;
+	padding: 0 !important;
+	list-style: none;
+	font-size: var(--sl-text-sm);
+	color: var(--ds-text-leise);
+}
+.ds-legende li {
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+	margin: 0 !important;
+}
+.ds-legende i {
+	display: inline-block;
+	width: 1.75rem;
+	height: 0;
+	border-top: 3px solid var(--c);
+}
+.ds-legende i.gestrichelt {
+	border-top-style: dashed;
+}
+
+/* Fußzeile der Startseite */
+.ds-fuss {
+	margin-top: 3rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid var(--ds-linie);
+	font-size: var(--sl-text-sm);
+	color: var(--ds-text-leise);
+}
+
+/* ---------- 5. Startseite (Splash) ---------- */
+:root .hero {
+	padding-block: 2.5rem 1.5rem;
+}
+:root .hero h1 {
+	font-weight: 800;
+	letter-spacing: -0.02em;
+}
+:root .hero .tagline {
+	color: var(--ds-text-leise);
+	max-width: 38rem;
+}
+
+/* ---------- 6. Quiz ---------- */
+/* Die Quiz-Stile stehen direkt in src/components/Quiz.astro (mit den Farben von oben). */
+
+/* ---------- 7. Bewegung reduzieren (Betriebssystem-Einstellung) ---------- */
+@media (prefers-reduced-motion: reduce) {
+	.ds-thema,
+	.ds-beispiel details > summary::before,
+	details.loesung > summary::before {
+		transition: none;
+	}
+}
+
+/* ---------- 8. Aufklappbare Lösungen (<Loesung>) in allen Rechenbeispielen ---------- */
+details.loesung {
+	margin-block: 1rem 2rem;
+	padding: 0;
+	border: 1px solid var(--ds-linie);
+	border-radius: var(--ds-radius);
+	background: var(--ds-flaeche);
+	box-shadow: var(--ds-schatten);
+	overflow: hidden;
+}
+details.loesung > summary {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.75rem 1.15rem;
+	cursor: pointer;
+	font-weight: 650;
+	color: var(--ds-petrol-stark);
+	background: var(--ds-flaeche-2);
+	list-style: none;
+}
+details.loesung > summary::-webkit-details-marker {
+	display: none;
+}
+details.loesung > summary::before {
+	content: '›';
+	display: inline-block;
+	flex: none;
+	width: 1rem;
+	font-size: 1.5em;
+	line-height: 1;
+	text-align: center;
+	transition: transform 0.15s;
+}
+details.loesung[open] > summary {
+	margin: 0;
+	border-bottom: 1px solid var(--ds-linie);
+}
+details.loesung[open] > summary::before {
+	transform: rotate(90deg);
+}
+details.loesung > :not(summary) {
+	margin-inline: 1.15rem;
+}
+details.loesung > :nth-child(2) {
+	margin-top: 1rem;
+}
+details.loesung > :last-child {
+	margin-bottom: 1rem;
+}

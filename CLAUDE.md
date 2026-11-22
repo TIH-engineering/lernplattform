@@ -174,3 +174,12 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
 - `npm run dev` – lokale Vorschau auf http://localhost:4321
 - `npm run build` – fertige Webseite in `dist/` erzeugen (inkl. Suchindex)
 - `npm run preview` – gebaute Seite lokal ansehen
+
+## Designsystem (seit 22.11.2026 auf der ganzen Seite)
+
+- „Modern Technical Education“: `src/styles/ds.css` (global), Dokumentation `DESIGNSYSTEM.md`.
+- Weg + Reiter je Thema kommen automatisch aus `src/components/Seitentitel.astro` (liest die Seitenleiste).
+- Bausteine: `Zeichen` (Symbole), `Themenkarte`, `Kasten` (lernziele/merke/formel/achtung), `Rechenbeispiel`,
+  `Netzsicherheit`, `Loesung`, `Stufe`, `Quiz`.
+- Der Name `Symbol` ist für Komponenten tabu (kollidiert mit JavaScript-`Symbol` in MDX).
+- In Bildunterschriften „farbig“ statt „blau“ (Akzentfarbe ist Petrol).

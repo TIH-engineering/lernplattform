@@ -8,6 +8,22 @@ import Kennlinie from '../../../assets/elektronik/diodenkennlinie.svg';
 import Einweg from '../../../assets/elektronik/einweggleichrichter.svg';
 import Bruecke from '../../../assets/elektronik/brueckengleichrichter.svg';
 import ZStab from '../../../assets/elektronik/z-stabilisierung.svg';
+import BrueckePos from '../../../assets/elektronik/bruecke-positiv.svg';
+import BrueckeNeg from '../../../assets/elektronik/bruecke-negativ.svg';
+import Glaettung from '../../../assets/elektronik/glaettung-verlauf.svg';
+import Kasten from '../../../components/Kasten.astro';
+import Rechenbeispiel from '../../../components/Rechenbeispiel.astro';
+
+<Kasten typ="lernziele">
+
+- erklären, wie durch Dotierung n- und p-Halbleiter entstehen und was am pn-Übergang passiert,
+- die Kennlinie einer Diode zeichnen und die wichtigsten Kenngrößen aus einem Datenblatt ablesen,
+- Einweg- und Brückengleichrichter mit Ladekondensator beschreiben und die Brummspannung berechnen,
+- eine Spannungsstabilisierung mit Z-Diode dimensionieren,
+- Vorwiderstände für LEDs berechnen,
+- Schottky-, Foto-, Kapazitäts- und Schutzdioden unterscheiden und typische Anwendungen nennen.
+
+</Kasten>
 
 ## 1 · Halbleiter
 
@@ -55,12 +71,16 @@ es stellt sich ein Gleichgewicht ein.
 | **Durchlassrichtung:** + an p (Anode), − an n (Kathode) | wird abgebaut, sobald $U > \approx 0{,}7\,\mathrm{V}$ | großer Strom |
 | **Sperrrichtung:** + an n, − an p | wird breiter | nur ein winziger **Sperrstrom** (nA … µA) |
 
-**Schaltzeichen:** Das Dreieck zeigt in **Stromrichtung** (technisch) – von der **Anode** zur **Kathode**. Der Strich ist die
+<Kasten typ="merke" titel="Merke: Schaltzeichen">
+
+Das Dreieck zeigt in **Stromrichtung** (technisch) – von der **Anode** zur **Kathode**. Der Strich ist die
 Kathode; auf dem Bauteil ist sie durch einen **Ring** gekennzeichnet.
+
+</Kasten>
 
 ## 3 · Kennlinie und Ersatzmodelle
 
-<Abbildung bild={Kennlinie} unterschrift="Kennlinie einer Siliziumdiode (blau) und Durchbruch einer Z-Diode (gestrichelt)" />
+<Abbildung bild={Kennlinie} unterschrift="Kennlinie einer Siliziumdiode (farbige Linie) und Durchbruch einer Z-Diode (gestrichelt)" />
 
 - **Durchlassbereich:** Unterhalb der **Schleusenspannung** (Si ≈ 0,6 … 0,7 V) fließt fast kein Strom, danach steigt er
   **exponentiell** stark an. Die Spannung an einer leitenden Si-Diode bleibt deshalb fast konstant bei ≈ 0,7 V.
@@ -89,6 +109,13 @@ verdoppelt sich ungefähr alle 10 K.
 | mit Bahnwiderstand | $U = U_\mathrm{F0} + r_\mathrm{F} \cdot I$ | große Ströme, genauere Rechnung |
 
 In Sperrrichtung gilt in allen Modellen: $I \approx 0$ (offener Schalter).
+
+<Kasten typ="merke">
+
+Für Schulrechnungen rechnet man mit dem **Schwellspannungsmodell**: Eine leitende Si-Diode hat $U_\mathrm{F} \approx 0{,}7\,\mathrm{V}$,
+eine sperrende Diode ist ein offener Schalter.
+
+</Kasten>
 
 ## 4 · Datenblattwerte
 
@@ -119,12 +146,28 @@ Laststrom. Dabei sinkt seine Spannung etwas – es entsteht die **Brummspannung*
 
 ### Brückengleichrichter (Graetz-Schaltung)
 
-<Abbildung bild={Bruecke} unterschrift="Brückengleichrichter: Bei jeder Halbwelle leiten zwei diagonal liegende Dioden" />
+<Abbildung bild={Bruecke} unterschrift="Brückengleichrichter mit Ladekondensator" />
+
+Welche Dioden leiten? Die beiden Bilder zeigen den Stromweg für jede Halbwelle (zur besseren Übersicht ohne Ladekondensator).
+Die sperrenden Dioden sind blass gezeichnet.
+
+<div class="ds-bildpaar">
+	<Abbildung bild={BrueckePos} unterschrift="Positive Halbwelle (linker Anschluss +): D1 und D4 leiten" />
+	<Abbildung bild={BrueckeNeg} unterschrift="Negative Halbwelle (rechter Anschluss +): D2 und D3 leiten" />
+</div>
 
 - Ist der linke Anschluss der Wechselspannung positiv, leiten D1 und D4; in der anderen Halbwelle leiten D2 und D3.
-  Der Strom fließt durch die Last **immer in dieselbe Richtung**.
+  Der Strom fließt durch die Last **immer in dieselbe Richtung** – von + nach − in beiden Bildern.
 - Beide Halbwellen werden genutzt → der Kondensator wird **zweimal pro Periode** nachgeladen (100 Hz bei 50-Hz-Netz).
 - Es liegen immer **zwei** Dioden im Strompfad → Verlust $2\,U_\mathrm{F}$ (≈ 1,4 V).
+
+### Glättung mit dem Ladekondensator
+
+<Abbildung bild={Glaettung} unterschrift="Ausgangsspannung am Brückengleichrichter mit Ladekondensator (berechnet für ideale Dioden, Zeitkonstante Last mal Kondensator ≈ 67 ms, 50 Hz)" />
+
+Der Kondensator wird nur kurz um die Spannungsspitzen **nachgeladen**. Dazwischen sperren alle Dioden, und der Kondensator
+liefert den Laststrom allein – seine Spannung sinkt. Der Unterschied zwischen Höchst- und Tiefstwert ist die Brummspannung
+$\Delta U$. Je größer $C_\mathrm{L}$ und je kleiner der Laststrom, desto flacher sinkt die Spannung.
 
 ### Formeln (Näherung)
 
@@ -172,16 +215,69 @@ $$
 **Dimensionierung:** Auch im ungünstigsten Fall (kleinste Eingangsspannung, größter Laststrom) muss noch ein Mindest-Z-Strom
 $I_\mathrm{Z,min}$ fließen (typ. einige mA), sonst verlässt die Diode den Durchbruch:
 
+<Kasten typ="formel" titel="größter Vorwiderstand" gilt="Z-Spannung als konstant angenommen (Schwellspannungsmodell); Normwert kleiner wählen.">
+
 $$
 R_\mathrm{V,max} = \frac{U_\mathrm{e,min} - U_\mathrm{Z}}{I_\mathrm{L,max} + I_\mathrm{Z,min}}
 $$
 
+</Kasten>
+
 **Kontrolle:** Im anderen Extremfall (größte Eingangsspannung, **keine Last**) fließt der ganze Strom durch die Z-Diode –
 ihre Verlustleistung darf nicht überschritten werden:
+
+<Kasten typ="formel" titel="größte Verlustleistung der Z-Diode" gilt="ungünstigster Fall: größte Eingangsspannung, Last abgeklemmt.">
 
 $$
 P_\mathrm{Z,max} = U_\mathrm{Z} \cdot \frac{U_\mathrm{e,max} - U_\mathrm{Z}}{R_\mathrm{V}}
 $$
+
+</Kasten>
+
+<Rechenbeispiel titel="Z-Diode für einen Sensor dimensionieren" stufe="standard">
+
+Ein Sensor braucht eine stabile Versorgung von 5,1 V. Die Eingangsspannung schwankt zwischen 12 V und 15 V, der Sensor nimmt
+bis zu 20&nbsp;mA auf und kann auch abgesteckt werden. Die Z-Diode braucht mindestens 5&nbsp;mA und verträgt 0,5&nbsp;W.
+
+<div slot="gegeben">
+
+- $U_\mathrm{e} = 12 \dots 15\,\mathrm{V}$
+- $U_\mathrm{Z} = 5{,}1\,\mathrm{V}$
+- $I_\mathrm{L} = 0 \dots 20\,\mathrm{mA}$
+- $I_\mathrm{Z,min} = 5\,\mathrm{mA}$
+- $P_\mathrm{Z,zul} = 0{,}5\,\mathrm{W}$
+
+</div>
+
+<div slot="gesucht">
+
+- Vorwiderstand $R_\mathrm{V}$ (Normwert E12)
+- Verlustleistung der Z-Diode im ungünstigsten Fall
+- Belastbarkeit des Vorwiderstands
+
+</div>
+
+<div slot="loesung">
+
+1. Ungünstigster Fall für den Mindeststrom (kleinste Spannung, größte Last):
+   $R_\mathrm{V,max} = \dfrac{12\,\mathrm{V} - 5{,}1\,\mathrm{V}}{20\,\mathrm{mA} + 5\,\mathrm{mA}} = \dfrac{6{,}9\,\mathrm{V}}{25\,\mathrm{mA}} = 276\,\Omega$
+   → nächstkleinerer Normwert **270 Ω**. Kontrolle: $I_\mathrm{Z} = 6{,}9\,\mathrm{V}/270\,\Omega - 20\,\mathrm{mA} \approx 5{,}6\,\mathrm{mA}$ ✓
+2. Ungünstigster Fall für die Z-Diode (größte Spannung, ohne Last):
+   $I = \dfrac{15\,\mathrm{V} - 5{,}1\,\mathrm{V}}{270\,\Omega} \approx 36{,}7\,\mathrm{mA}$ →
+   $P_\mathrm{Z} = 5{,}1\,\mathrm{V} \cdot 36{,}7\,\mathrm{mA} \approx 0{,}19\,\mathrm{W} < 0{,}5\,\mathrm{W}$ ✓
+3. Vorwiderstand: $P_\mathrm{R} = \dfrac{(9{,}9\,\mathrm{V})^2}{270\,\Omega} \approx 0{,}36\,\mathrm{W}$ → Bauform mit 0,5 W oder mehr.
+
+**Plausibilität:** Ein größerer Normwert (z. B. 330 Ω) wäre falsch – bei 12 V und voller Last bliebe zu wenig Z-Strom.
+
+</div>
+
+<div slot="ergebnis">
+
+$R_\mathrm{V} = 270\,\Omega$ (≥ 0,5 W) · $P_\mathrm{Z,max} \approx 0{,}19\,\mathrm{W}$
+
+</div>
+
+</Rechenbeispiel>
 
 **Grenzen:** Der Wirkungsgrad ist schlecht (der Strom fließt dauernd, auch ohne Last), und für größere Ströme wird die
 Z-Diode zu stark belastet. Dann verwendet man einen [Längsregler mit Transistor](/transistoren/theorie/#spannungsstabilisierung-längsregler)
@@ -197,8 +293,15 @@ Leuchtstoff.
 
 - LEDs werden mit **Strom** betrieben, nicht mit Spannung: Wegen der steilen Kennlinie braucht jede LED einen
   **Vorwiderstand** oder eine Konstantstromquelle.
-- $R_\mathrm{V} = \dfrac{U_\mathrm{B} - n \cdot U_\mathrm{F}}{I_\mathrm{F}}$ (bei $n$ LEDs in Reihe) – Normwert **aufrunden**.
 - Die Sperrspannung von LEDs ist klein (oft nur 5 V)!
+
+<Kasten typ="formel" titel="Vorwiderstand für LEDs" gilt="n gleiche LEDs in Reihe; Durchlassspannung aus dem Datenblatt beim gewünschten Strom. Normwert aufrunden.">
+
+$$
+R_\mathrm{V} = \frac{U_\mathrm{B} - n \cdot U_\mathrm{F}}{I_\mathrm{F}}
+$$
+
+</Kasten>
 
 ### Schottky-Diode
 

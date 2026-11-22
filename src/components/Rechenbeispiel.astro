@@ -1,0 +1,57 @@
+---
+// Rechenbeispiel mit klar getrennten Bereichen.
+//   <Rechenbeispiel titel="Z-Diode dimensionieren" stufe="standard">
+//     Angabe als normaler Text (Standard-Inhalt)
+//     <div slot="gegeben"> - … </div>
+//     <div slot="gesucht"> - … </div>
+//     <div slot="loesung"> Rechenweg … </div>
+//     <div slot="ergebnis"> $R_\mathrm{V} = 270\,\Omega$ </div>
+//   </Rechenbeispiel>
+// Die Lösung ist zugeklappt („Lösung anzeigen“), das Ergebnis steht hervorgehoben am Ende der Lösung.
+import Stufe from './Stufe.astro';
+
+interface Props {
+	titel: string;
+	stufe: 'grundlagen' | 'standard' | 'vertiefung';
+}
+const { titel, stufe } = Astro.props;
+---
+
+<article class="ds-karte ds-beispiel">
+	<header class="ds-beispiel__kopf">
+		<p class="ds-beispiel__titel">{titel}</p>
+		<Stufe wert={stufe} />
+	</header>
+	<div class="ds-beispiel__abschnitt">
+		<span class="ds-beispiel__marke">Angabe</span>
+		<slot />
+	</div>
+	{
+		(Astro.slots.has('gegeben') || Astro.slots.has('gesucht')) && (
+			<div class="ds-beispiel__abschnitt ds-beispiel__gg">
+				<div>
+					<span class="ds-beispiel__marke">Gegeben</span>
+					<slot name="gegeben" />
+				</div>
+				<div>
+					<span class="ds-beispiel__marke">Gesucht</span>
+					<slot name="gesucht" />
+				</div>
+			</div>
+		)
+	}
+	<details>
+		<summary>Lösung anzeigen</summary>
+		<div class="ds-beispiel__loesung">
+			<slot name="loesung" />
+			{
+				Astro.slots.has('ergebnis') && (
+					<div class="ds-beispiel__ergebnis">
+						<span class="ds-beispiel__marke">Ergebnis</span>
+						<slot name="ergebnis" />
+					</div>
+				)
+			}
+		</div>
+	</details>
+</article>
