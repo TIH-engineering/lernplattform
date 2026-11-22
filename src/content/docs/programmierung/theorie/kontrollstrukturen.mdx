@@ -1,0 +1,212 @@
+---
+title: Kontrollstrukturen
+description: Verzweigungen mit if, else if, else und switch/case, Schleifen mit while, do … while und for, break und continue, verschachtelte Schleifen, Endlosschleifen und typische Fehler.
+sidebar:
+  label: 4 · Kontrollstrukturen
+  order: 4
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Summe from '../../../../assets/programmierung/ns-summe.svg';
+
+**Kontrollstrukturen** bestimmen, **welche** Anweisungen **wie oft** ausgeführt werden. Ohne sie liefe jedes Programm
+einfach von oben nach unten durch.
+
+## Verzweigung mit if und else
+
+```c
+if (temperatur > 40) {
+    printf("Lüfter EIN\n");
+} else {
+    printf("Lüfter AUS\n");
+}
+```
+
+- Die **Bedingung** steht in runden Klammern. Ist sie wahr (≠ 0), wird der erste Block ausgeführt, sonst der `else`-Block.
+- Der `else`-Teil ist optional.
+- Die geschweiften Klammern kann man bei einer einzelnen Anweisung weglassen – besser ist es, sie **immer** zu schreiben.
+  Sonst gehört eine später ergänzte zweite Zeile plötzlich nicht mehr zum `if`.
+
+### Mehrere Fälle: else if
+
+```c
+if (note == 1) {
+    printf("Sehr gut\n");
+} else if (note == 2) {
+    printf("Gut\n");
+} else if (note >= 3 && note <= 4) {
+    printf("Befriedigend oder Genügend\n");
+} else {
+    printf("Ungültige oder negative Note\n");
+}
+```
+
+Die Bedingungen werden **von oben nach unten** geprüft; nur der **erste** zutreffende Zweig wird ausgeführt.
+
+:::danger[Der klassische Fehler: = statt ==]
+```c
+if (zahl = 10) { … }    // FALSCH: weist 10 zu – die Bedingung ist immer wahr
+if (zahl == 10) { … }   // richtig: Vergleich
+```
+Der Compiler übersetzt beides! Achte auf seine Warnung „Zuweisung in Bedingung“.
+:::
+
+Ebenfalls tückisch ist ein Strichpunkt direkt nach der Bedingung: `if (x > 5);` – dann ist die „Anweisung“ des `if` leer,
+und der folgende Block wird **immer** ausgeführt.
+
+## Mehrfachauswahl mit switch
+
+Wenn eine Variable mit **mehreren festen Werten** verglichen wird, ist `switch` übersichtlicher:
+
+```c
+char befehl;
+scanf(" %c", &befehl);   // Leerzeichen vor %c überspringt ein altes Enter
+
+switch (befehl) {
+    case 'e':
+    case 'E':
+        printf("Einschalten\n");
+        break;
+    case 'a':
+    case 'A':
+        printf("Ausschalten\n");
+        break;
+    default:
+        printf("Unbekannter Befehl\n");
+        break;
+}
+```
+
+- `switch` funktioniert nur mit **ganzzahligen Werten** (`int`, `char`) – nicht mit Kommazahlen und nicht mit Strings.
+- Hinter `case` steht ein **fester** Wert, kein Bereich und keine Bedingung.
+- `break` beendet den `switch`. **Fehlt es, läuft das Programm in den nächsten `case` weiter** („Durchfallen“). Das kann man
+  gezielt nutzen (oben: `'e'` und `'E'` machen dasselbe), meist ist es aber ein Fehler.
+- `default` fängt alle übrigen Werte ab – wie „sonst“ im Struktogramm.
+
+## Schleifen
+
+### Die while-Schleife (kopfgesteuert)
+
+```c
+int i = 1;
+while (i <= 5) {
+    printf("%d ", i);
+    i++;
+}
+// Ausgabe: 1 2 3 4 5
+```
+
+Die Bedingung wird **vor** jedem Durchlauf geprüft. Im Schleifenkörper muss sich etwas ändern, das die Bedingung
+irgendwann falsch macht – sonst entsteht eine **Endlosschleife**.
+
+### Die do … while-Schleife (fußgesteuert)
+
+```c
+int zahl;
+do {
+    printf("Zahl zwischen 1 und 10: ");
+    scanf("%d", &zahl);
+} while (zahl < 1 || zahl > 10);
+```
+
+Der Körper wird **mindestens einmal** ausgeführt, die Bedingung erst danach geprüft. Ideal für Eingaben, die wiederholt
+werden sollen, bis sie gültig sind. Achtung: Nach `while (…)` steht hier ein **Strichpunkt**.
+
+### Die for-Schleife
+
+Wenn die Anzahl der Durchläufe vorher feststeht, ist die `for`-Schleife am kürzesten. Sie fasst die drei Teile einer
+Zählschleife in einer Zeile zusammen:
+
+```c
+for (Startwert; Bedingung; Schritt) { … }
+```
+
+<Abbildung bild={Summe} unterschrift="Struktogramm: Summe der Zahlen 1 bis 100" />
+
+```c
+#include <stdio.h>
+
+int main(void)
+{
+    int summe = 0;
+    for (int i = 1; i <= 100; i++) {
+        summe = summe + i;
+    }
+    printf("Die Summe von 1 bis 100 ist %d\n", summe);   // 5050
+    return 0;
+}
+```
+
+Ablauf: (1) `i = 1` einmal am Anfang → (2) Bedingung `i <= 100` prüfen; falls falsch: Ende → (3) Körper ausführen →
+(4) Schritt `i++` → weiter bei (2).
+
+Weitere Beispiele:
+
+```c
+for (int i = 10; i > 0; i--)      { … }   // rückwärts: 10, 9, …, 1
+for (int i = 0; i < 100; i += 5)  { … }   // in 5er-Schritten: 0, 5, …, 95
+for (int i = 0; i < 8; i++)       { … }   // genau 8 Durchläufe: 0 … 7
+```
+
+:::tip[Bei 0 beginnen]
+In C zählt man meist **ab 0**: `for (i = 0; i < n; i++)` läuft genau `n`-mal. Das passt zu den Arrays, deren erstes
+Element den Index 0 hat.
+:::
+
+### Welche Schleife wann?
+
+| Situation | Schleife |
+| --- | --- |
+| Anzahl der Durchläufe steht fest (Zählen, Array durchlaufen) | `for` |
+| Wiederholen, solange eine Bedingung gilt – vielleicht gar nicht | `while` |
+| mindestens einmal ausführen (Eingabe prüfen, Menü) | `do … while` |
+| Hauptprogramm eines Mikrocontrollers – läuft ewig | `while (1)` |
+
+### break und continue
+
+- `break` verlässt die Schleife **sofort**.
+- `continue` überspringt den Rest des aktuellen Durchlaufs und macht mit dem nächsten weiter.
+
+```c
+for (int i = 1; i <= 10; i++) {
+    if (i % 3 == 0) {
+        continue;        // Vielfache von 3 überspringen
+    }
+    if (i > 8) {
+        break;           // ab 9 aufhören
+    }
+    printf("%d ", i);
+}
+// Ausgabe: 1 2 4 5 7 8
+```
+
+### Verschachtelte Schleifen
+
+Eine Schleife in einer Schleife: Die innere läuft bei **jedem** Durchlauf der äußeren komplett durch.
+
+```c
+for (int zeile = 1; zeile <= 3; zeile++) {
+    for (int spalte = 1; spalte <= zeile; spalte++) {
+        printf("*");
+    }
+    printf("\n");
+}
+```
+
+Ausgabe:
+
+```text
+*
+**
+***
+```
+
+### Typische Schleifenfehler
+
+| Fehler | Folge |
+| --- | --- |
+| `for (i = 0; i < 10; i++);` – Strichpunkt nach der Klammer | Der Körper läuft nur **einmal**, nach der (leeren) Schleife |
+| Zählvariable im `while` wird nie verändert | Endlosschleife |
+| `i <= 10` statt `i < 10` | ein Durchlauf zu viel („Zaunpfahlfehler“) – bei Arrays ein Zugriff über das Ende hinaus |
+| Summe nicht mit 0 initialisiert | zufälliges Ergebnis |
+| `float`-Zähler mit `!=` vergleichen, z. B. `x != 1.0` bei `x += 0.1` | Kommazahlen sind nicht exakt – die Schleife endet nie |

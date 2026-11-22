@@ -1,0 +1,147 @@
+---
+title: Das erste C-Programm
+description: Aufbau eines C-Programms, vom Quellcode über Compiler und Linker zum Programm, Kommentare, Ausgabe mit printf und Formatangaben, Eingabe mit scanf, typische Compilerfehler.
+sidebar:
+  label: 2 · Das erste C-Programm
+  order: 2
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Kette from '../../../../assets/programmierung/werkzeugkette.svg';
+
+## Hallo Welt
+
+Das klassische erste Programm gibt einen Text am Bildschirm aus:
+
+```c
+#include <stdio.h>   // Bibliothek für Ein- und Ausgabe einbinden
+
+int main(void)       // Hier beginnt jedes C-Programm
+{
+    printf("Hallo Welt!\n");   // Text ausgeben, \n = neue Zeile
+    return 0;                  // Programm endet ohne Fehler
+}
+```
+
+Was bedeuten die Zeilen?
+
+| Teil | Bedeutung |
+| --- | --- |
+| `#include <stdio.h>` | bindet die **Standardbibliothek** für Ein- und Ausgabe ein – dort ist `printf` beschrieben |
+| `int main(void)` | die **Hauptfunktion**. Hier startet das Programm. `int` heißt: sie gibt am Ende eine ganze Zahl zurück |
+| `{ … }` | ein **Block** – alles, was zu `main` gehört |
+| `printf(…);` | eine **Anweisung**. Jede Anweisung endet mit einem **Strichpunkt** `;` |
+| `return 0;` | beendet `main` und meldet dem Betriebssystem „alles in Ordnung“ |
+| `// …` | **Kommentar** – wird vom Compiler ignoriert, erklärt den Code für Menschen |
+
+:::caution[Groß- und Kleinschreibung]
+C unterscheidet Groß- und Kleinschreibung: `Printf`, `MAIN` oder `Return` sind Fehler. Alle C-Schlüsselwörter werden klein
+geschrieben.
+:::
+
+## Vom Quellcode zum Programm
+
+Der Text, den du schreibst, heißt **Quellcode** (Datei `main.c`). Der Prozessor versteht ihn nicht direkt – er muss erst
+**übersetzt** werden.
+
+<Abbildung bild={Kette} unterschrift="Werkzeugkette: Quellcode → Compiler → Linker → ausführbares Programm" />
+
+1. Der **Compiler** prüft die Schreibweise (Syntax) und übersetzt den Quellcode in Maschinencode.
+2. Der **Linker** fügt fertige Teile aus Bibliotheken dazu (z. B. den Code von `printf`) und erzeugt das ausführbare
+   Programm.
+3. Am PC entsteht eine `.exe`-Datei. Für einen Mikrocontroller entsteht eine `.hex`- oder `.bin`-Datei, die mit einem
+   Programmiergerät in den Flash-Speicher des Chips geladen wird.
+
+Eine **Entwicklungsumgebung** (IDE, z. B. Visual Studio) fasst Editor, Compiler, Linker und Debugger zusammen. Mit einem
+Klick auf „Starten“ läuft die ganze Kette.
+
+### Zwei Arten von Fehlern
+
+- **Syntaxfehler** (Compilerfehler): Der Code verstößt gegen die Regeln der Sprache – z. B. ein fehlender Strichpunkt. Der
+  Compiler meldet die **Zeilennummer**. Tipp: Der Fehler liegt oft in der Zeile **davor**. Immer den **ersten** Fehler zuerst
+  beheben, die anderen sind oft nur Folgefehler.
+- **Logikfehler** (Laufzeitfehler): Das Programm lässt sich übersetzen, macht aber etwas anderes als gewollt – z. B. eine
+  falsche Bedingung. Diese Fehler findet nur, wer testet: mit Zahlen, deren Ergebnis man kennt, mit `printf`-Zwischenausgaben
+  oder mit dem **Debugger** (Programm Zeile für Zeile ausführen und Variablen beobachten).
+
+**Warnungen** des Compilers sind keine Fehler – das Programm entsteht trotzdem. Sie weisen aber fast immer auf ein echtes
+Problem hin. Lies sie!
+
+## Ausgabe mit printf
+
+`printf` gibt einen Text aus. Platzhalter mit `%` werden durch die Werte von Variablen ersetzt:
+
+```c
+int alter = 16;
+float spannung = 3.3f;
+printf("Ich bin %d Jahre alt.\n", alter);
+printf("U = %.2f V\n", spannung);
+```
+
+Ausgabe:
+
+```text
+Ich bin 16 Jahre alt.
+U = 3.30 V
+```
+
+| Platzhalter | Datentyp | Beispiel |
+| --- | --- | --- |
+| `%d` | ganze Zahl (`int`) | `42` |
+| `%f` | Kommazahl (`float`, `double`) | `3.300000` |
+| `%.2f` | Kommazahl mit 2 Nachkommastellen | `3.30` |
+| `%c` | ein Zeichen (`char`) | `A` |
+| `%s` | Zeichenkette (String) | `Hallo` |
+| `%x` bzw. `%X` | ganze Zahl hexadezimal | `2c` bzw. `2C` |
+| `%%` | das Prozentzeichen selbst | `%` |
+
+**Feldbreite:** `%5d` gibt die Zahl rechtsbündig in 5 Stellen aus, `%-5d` linksbündig, `%05d` mit führenden Nullen
+(`00042`). Damit lassen sich Tabellen sauber untereinander ausgeben.
+
+**Steuerzeichen** beginnen mit einem Rückstrich: `\n` neue Zeile, `\t` Tabulator, `\\` der Rückstrich selbst, `\"` ein
+Anführungszeichen im Text.
+
+:::note[Punkt statt Komma]
+Im Programmcode – und bei der Ausgabe mit `printf` – ist das Dezimaltrennzeichen immer ein **Punkt**: `3.3`, nicht `3,3`.
+Auf dieser Webseite schreiben wir im Text weiterhin 3,3 V.
+:::
+
+## Eingabe mit scanf
+
+`scanf` liest Werte von der Tastatur in Variablen ein:
+
+```c
+int zahl;
+printf("Bitte eine ganze Zahl eingeben: ");
+scanf("%d", &zahl);          // & nicht vergessen!
+printf("Das Doppelte ist %d\n", 2 * zahl);
+```
+
+- Die Platzhalter sind dieselben wie bei `printf`; für `double` verwendet man beim Einlesen `%lf`.
+- Vor dem Variablennamen steht ein **`&`** (Adressoperator): `scanf` braucht die **Adresse** der Variablen, damit es den
+  Wert dort hineinschreiben kann. Fehlt das `&`, stürzt das Programm meist ab. (Ausnahme: Strings – siehe
+  [Arrays und Strings](/programmierung/theorie/arrays-strings/#strings-einlesen).)
+- `scanf` liefert zurück, wie viele Werte erfolgreich gelesen wurden. Tippt jemand Buchstaben statt einer Zahl, ist das
+  Ergebnis 0 – gute Programme prüfen das.
+
+:::caution[scanf in Visual Studio]
+Visual Studio meldet bei `scanf` den Fehler C4996 („unsicher, verwende scanf_s“). Lösung: ganz oben in der Datei – **vor**
+den `#include`-Zeilen – `#define _CRT_SECURE_NO_WARNINGS` einfügen, oder `scanf_s` verwenden. `scanf_s` gibt es nur bei
+Microsoft; auf einem Mikrocontroller gibt es ohnehin keine Tastatur.
+:::
+
+## Kommentare und guter Stil
+
+```c
+// Einzeiliger Kommentar bis zum Zeilenende
+
+/* Mehrzeiliger Kommentar:
+   alles zwischen den Zeichen wird ignoriert */
+```
+
+- **Einrücken:** Alles innerhalb von `{ }` wird um 4 Leerzeichen (oder einen Tabulator) eingerückt. Der Compiler braucht
+  das nicht – aber Menschen sehen so sofort, was zusammengehört.
+- **Sprechende Namen:** `spannung`, `anzahlVersuche` statt `x`, `a2`.
+- **Kommentare erklären das Warum**, nicht das Offensichtliche: `i++; // i um 1 erhöhen` hilft niemandem,
+  `// 10 Messungen mitteln, um Rauschen zu verringern` schon.
+- Ein **Dateikopf** mit Name, Datum und Zweck des Programms gehört zu jeder abgegebenen Datei.

@@ -1,0 +1,56 @@
+---
+title: Programmierung in C
+description: "Übersicht: Grundlagen der Programmierung in C für einfache Mikrocontroller-Programme – Struktogramme, Variablen, Operatoren, Kontrollstrukturen, Funktionen, Arrays, Strings und Bitmanipulation."
+sidebar:
+  label: Übersicht
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Fast jedes elektronische Gerät enthält heute einen **Mikrocontroller**: ein kleiner Computer auf einem Chip, der Taster abfragt,
+Sensoren misst, LEDs, Motoren und Displays ansteuert. Programmiert wird er meistens in der Sprache **C**. Dieser Bereich ist eine
+**Ergänzung zur Elektronik**: Er zeigt dir die Grundlagen, die du brauchst, um einfache Mikrocontroller-Programme zu verstehen
+und selbst zu schreiben.
+
+Geübt wird zuerst am **PC** (Konsolenprogramme mit `printf` und `scanf`, z. B. in Visual Studio), weil man dort Fehler
+leichter findet. Die Sprache ist dieselbe – auf dem Mikrocontroller kommen nur Register für Ein- und Ausgänge dazu.
+
+## Lernziele
+
+Nach diesem Themenbereich kannst du …
+
+- einen Ablauf als **Struktogramm** darstellen und in C-Code übersetzen,
+- ein C-Programm übersetzen (kompilieren), starten und Fehlermeldungen des Compilers lesen,
+- **Variablen** mit passendem **Datentyp** anlegen und mit Operatoren rechnen und vergleichen,
+- Ein- und Ausgaben mit `printf` und `scanf` programmieren,
+- **Verzweigungen** (`if`, `else`, `switch`) und **Schleifen** (`for`, `while`, `do … while`) einsetzen,
+- eigene **Funktionen** mit Parametern und Rückgabewert schreiben,
+- **Arrays** und **Strings** in Schleifen verarbeiten,
+- einzelne **Bits** setzen, löschen, umschalten und abfragen – so wie es ein Mikrocontroller-Programm mit seinen Registern tut,
+- fremden Code lesen, seine Ausgabe vorhersagen und typische Fehler finden.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="1 · Algorithmen und Struktogramme" description="Vom Problem zum Ablauf: Sequenz, Verzweigung, Schleife" href="/programmierung/theorie/algorithmen/" />
+	<LinkCard title="2 · Das erste C-Programm" description="Aufbau, Compiler, Ausgabe mit printf, Eingabe mit scanf" href="/programmierung/theorie/erstes-programm/" />
+	<LinkCard title="3 · Variablen, Datentypen, Operatoren" description="int, float, char, bool, uint8_t; rechnen, vergleichen, verknüpfen" href="/programmierung/theorie/variablen-operatoren/" />
+	<LinkCard title="4 · Kontrollstrukturen" description="if, else, switch, while, do … while, for" href="/programmierung/theorie/kontrollstrukturen/" />
+	<LinkCard title="5 · Funktionen" description="Parameter, Rückgabewert, Prototyp, Gültigkeit von Variablen" href="/programmierung/theorie/funktionen/" />
+	<LinkCard title="6 · Arrays, Strings und Zeiger" description="Felder, Zeichenketten mit \0, Adressen und Zeiger" href="/programmierung/theorie/arrays-strings/" />
+	<LinkCard title="7 · Bitmanipulation und Mikrocontroller" description="Hex und Binär, Bitoperatoren, Register, Hauptschleife" href="/programmierung/theorie/bitmanipulation/" />
+	<LinkCard title="Programmieraufgaben" description="Aufgaben mit Musterlösung: lesen, Fehler finden, selbst schreiben" href="/programmierung/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="LED blinken, Taster, Lauflicht, Temperaturschwelle, Ampel" href="/programmierung/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen" href="/programmierung/quiz/" />
+	<LinkCard title="Werkzeuge und Links" description="Entwicklungsumgebung, Struktogramm-Editor, Tutorial" href="/programmierung/literatur/" />
+</CardGrid>
+
+:::tip[So lernst du Programmieren]
+Programmieren lernt man nur durch **Programmieren**. Tippe die Beispiele selbst ab (nicht kopieren!), verändere sie und
+beobachte, was passiert. Fehlermeldungen sind keine Strafe, sondern Hinweise – lies sie genau.
+:::
+
+:::note[Bezug zur Elektronik]
+Mikrocontroller begegnen dir in der [Digitalen Messtechnik](/digitale-messtechnik/) (A/D-Umsetzer), bei
+[Sensoren](/sensoren/) und in der [Leistungselektronik](/leistungselektronik/) (PWM-Ansteuerung von Motoren).
+:::

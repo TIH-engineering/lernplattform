@@ -65,11 +65,16 @@ und eine Platzhalterseite.
 Schema: **Angabe** (sichtbar) → **Gegeben / Gesucht** → **Lösung** Schritt für Schritt
 in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeits-Badge im Titel.
 
-### Gliederung der Seitenleiste (Stand 21.11.2026)
+### Gliederung der Seitenleiste (Stand 22.11.2026)
 
 - **Grundlagen der Elektrotechnik** – Schulbuchthemen ohne eigene Theorie (siehe unten).
 - **Elektronik** – kein Lehrbuch, daher mit ausführlicher Theorieseite: Dioden, Transistoren, Operationsverstärker,
   Filter, Oszillatoren, Thermische Auslegung.
+  Als Ergänzung am Ende: **Programmierung in C** (`programmierung`, Theorie in `theorie/`, Seite „Programmieraufgaben“ =
+  `rechenbeispiele.mdx`, „Werkzeuge & Links“ = `literatur.mdx`). Nur C-Grundlagen für einfache Mikrocontroller-Programme
+  (Beispiele ATmega328P) – laut Lehrer **abgeschlossen, nicht erweitern** (keine weiteren Sprachen/Vertiefungen).
+  Auf der Startseite nur ein kurzer Hinweis, keine eigene Karte. Quelle: `Quellen/SOTE2` (Abgaben, WebUntis,
+  Leistungsbeurteilung, Zusatzprüfungen nicht verwenden). C-Beispiele vor dem Veröffentlichen kompilieren (Visual Studio `cl`).
 - **Energietechnik** – Drehstrom, Leistungselektronik (Theorie in Unterordner `theorie/`).
 - **Projektmanagement** – Sonderaufbau: Übersicht, Theorie, **Fallbeispiele**, Quiz (Seite „Diplomarbeit planen“ auf Wunsch entfernt – gehört in den Unterricht)
   (keine Rechenbeispiele; eigener Eintrag in `astro.config.mjs`).

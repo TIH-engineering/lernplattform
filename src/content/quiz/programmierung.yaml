@@ -1,0 +1,250 @@
+# Quiz: Programmierung in C
+# Aufbau: siehe andere Quizdateien. Code in Fragen als Markdown-Codeblock (```c … ```) im |-Block.
+titel: Programmierung in C
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: 'Was ist der Unterschied zwischen `=` und `==` in C?'
+    optionen:
+      - text: '`=` weist einen Wert zu, `==` vergleicht zwei Werte'
+        richtig: true
+      - text: '`=` vergleicht, `==` weist zu'
+      - text: 'Beide bedeuten dasselbe, `==` ist nur genauer'
+      - text: '`==` wird nur bei Kommazahlen verwendet'
+    erklaerung: '`a = 5;` speichert 5 in `a`. `a == 5` prüft, ob `a` den Wert 5 hat, und liefert wahr (1) oder falsch (0). `if (a = 5)` ist ein häufiger Fehler – die Bedingung ist dann immer wahr.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: |
+      Welchen Wert hat `x` nach dieser Zeile?
+
+      ```c
+      int x = 23 / 4;
+      ```
+    loesung: 5
+    toleranz: 0
+    toleranzArt: absolut
+    erklaerung: 'Beide Werte sind ganze Zahlen → **Ganzzahldivision**: 23 / 4 = 5 Rest 3. Der Rest wird abgeschnitten, nicht gerundet.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Welchen Wert liefert der Ausdruck `23 % 4`?'
+    loesung: 3
+    toleranz: 0
+    toleranzArt: absolut
+    erklaerung: '`%` liefert den **Rest** der Ganzzahldivision: 23 = 5 · 4 + 3.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welcher Datentyp eignet sich für einen Messwert wie 23,5 °C?
+    optionen:
+      - text: '`float` (oder `double`)'
+        richtig: true
+      - text: '`int`'
+      - text: '`char`'
+      - text: '`bool`'
+    erklaerung: 'Kommazahlen brauchen `float` oder `double`. In einem `int` würde 23,5 zu 23 abgeschnitten. Im Code schreibt man `float t = 23.5f;` – mit Punkt.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welche Schleife wird **mindestens einmal** durchlaufen, auch wenn die Bedingung von Anfang an falsch ist?
+    optionen:
+      - text: '`do … while`'
+        richtig: true
+      - text: '`while`'
+      - text: '`for`'
+      - text: 'keine – alle prüfen zuerst die Bedingung'
+    erklaerung: 'Die `do … while`-Schleife ist **fußgesteuert**: Die Bedingung wird erst nach dem Durchlauf geprüft. `while` und `for` sind kopfgesteuert.'
+
+  - typ: zahl
+    stufe: standard
+    frage: |
+      Wie oft wird „Hallo“ ausgegeben?
+
+      ```c
+      for (int i = 0; i < 10; i += 3) {
+          printf("Hallo\n");
+      }
+      ```
+    loesung: 4
+    toleranz: 0
+    toleranzArt: absolut
+    erklaerung: '`i` nimmt die Werte 0, 3, 6, 9 an – viermal. Danach ist `i = 12`, und `12 < 10` ist falsch.'
+
+  - typ: mc
+    stufe: standard
+    frage: |
+      Was gibt dieser Programmteil aus?
+
+      ```c
+      int i = 5;
+      while (i > 0) {
+          printf("%d ", i);
+          i -= 2;
+      }
+      ```
+    optionen:
+      - text: '`5 3 1`'
+        richtig: true
+      - text: '`5 3 1 -1`'
+      - text: '`5 4 3 2 1`'
+      - text: '`3 1`'
+    erklaerung: 'Ausgabe 5, dann `i = 3` → 3, dann `i = 1` → 1, dann `i = -1`: Die Bedingung `-1 > 0` ist falsch, die Schleife endet.'
+
+  - typ: mc
+    stufe: standard
+    frage: |
+      Was passiert in diesem `switch`, wenn `x` den Wert 1 hat?
+
+      ```c
+      switch (x) {
+          case 1: printf("A");
+          case 2: printf("B"); break;
+          default: printf("C");
+      }
+      ```
+    optionen:
+      - text: 'Es wird `AB` ausgegeben.'
+        richtig: true
+      - text: 'Es wird nur `A` ausgegeben.'
+      - text: 'Es wird `ABC` ausgegeben.'
+      - text: 'Der Compiler meldet einen Fehler.'
+    erklaerung: 'Nach `case 1` fehlt das `break` – das Programm „fällt durch“ in `case 2`, gibt B aus und stoppt erst beim `break`.'
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Aussagen über Funktionen in C sind richtig? (mehrere richtig)
+    optionen:
+      - text: Eine Funktion mit Rückgabetyp `void` liefert keinen Wert zurück.
+        richtig: true
+      - text: Parameter einfacher Datentypen (z. B. `int`) werden als Kopie übergeben.
+        richtig: true
+      - text: Steht eine Funktion nach `main`, braucht man vorher einen Prototyp.
+        richtig: true
+      - text: Ändert eine Funktion ihren `int`-Parameter, ändert sich auch die Variable des Aufrufers.
+    erklaerung: 'Übergabe als Kopie (call by value): Die Funktion arbeitet mit einer eigenen Kopie. Soll die Variable des Aufrufers geändert werden, gibt man das Ergebnis mit `return` zurück oder übergibt die Adresse (Zeiger).'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: |
+      Was wird ausgegeben?
+
+      ```c
+      char s[] = "Hallo";
+      printf("%c", s[1]);
+      ```
+    optionen:
+      - text: '`a`'
+        richtig: true
+      - text: '`H`'
+      - text: '`l`'
+      - text: '`Hallo`'
+    erklaerung: 'Der Index beginnt bei 0: `s[0]` ist H, `s[1]` ist a.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Wie viele Byte belegt das Array `char wort[] = "Messung";` im Speicher?'
+    loesung: 8
+    toleranz: 0
+    toleranzArt: absolut
+    einheit: Byte
+    erklaerung: '„Messung“ hat 7 Buchstaben, dazu kommt das **Nullzeichen** `\0`, das das Ende des Strings markiert: 8 Byte.'
+
+  - typ: mc
+    stufe: standard
+    frage: |
+      Warum ist dieser Vergleich falsch?
+
+      ```c
+      char a[] = "Hi", b[] = "Hi";
+      if (a == b) { printf("gleich"); }
+      ```
+    optionen:
+      - text: Es werden die Adressen der beiden Arrays verglichen, nicht ihr Inhalt.
+        richtig: true
+      - text: Strings dürfen nur mit `=` verglichen werden.
+      - text: Der Vergleich ist richtig und gibt „gleich“ aus.
+      - text: Strings mit weniger als 3 Zeichen können nicht verglichen werden.
+    erklaerung: 'Der Name eines Arrays steht für seine Startadresse. Zwei verschiedene Arrays liegen an verschiedenen Adressen – der Vergleich ist immer falsch. Den Inhalt vergleicht man Zeichen für Zeichen in einer Schleife oder mit `strcmp`.'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum steht bei `scanf("%d", &zahl);` ein `&`, bei `scanf("%19s", name);` (name ist ein char-Array) aber nicht?
+    optionen:
+      - text: '`scanf` braucht Adressen. `&zahl` ist die Adresse von `zahl`; der Array-Name `name` ist bereits eine Adresse.'
+        richtig: true
+      - text: '`&` bedeutet „ganze Zahl“ und wird nur bei `%d` gebraucht.'
+      - text: 'Bei Strings ist `&` verboten, weil sie konstant sind.'
+      - text: 'Es ist egal – beides funktioniert gleich.'
+    erklaerung: '`scanf` muss den eingelesenen Wert an die richtige Stelle im Speicher schreiben und braucht deshalb die Adresse. Ein Array-Name steht schon für die Adresse seines ersten Elements.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Welchen **dezimalen** Wert hat die Hexadezimalzahl `0x2C`?'
+    loesung: 44
+    toleranz: 0
+    toleranzArt: absolut
+    erklaerung: '$2 \cdot 16 + 12 = 44$ (C = 12). Binär: `0010 1100`.'
+
+  - typ: mc
+    stufe: standard
+    frage: Mit welcher Anweisung wird **nur** Bit 3 von `PORTB` auf 0 gesetzt, ohne die anderen Bits zu verändern?
+    optionen:
+      - text: '`PORTB &= ~(1 << 3);`'
+        richtig: true
+      - text: '`PORTB |= (1 << 3);`'
+      - text: '`PORTB = 0;`'
+      - text: '`PORTB ^= (1 << 3);`'
+    erklaerung: '`~(1 << 3)` ist `1111 0111` – nur Bit 3 ist 0. UND mit 0 löscht das Bit, UND mit 1 lässt die anderen unverändert. `|=` würde setzen, `^=` umschalten, `= 0` löscht alle Bits.'
+
+  - typ: zahl
+    stufe: standard
+    frage: |
+      Welchen dezimalen Wert hat `value` am Ende?
+
+      ```c
+      uint8_t value = 0x3A;
+      value |= 0x05;
+      value &= 0x0F;
+      ```
+    loesung: 15
+    toleranz: 0
+    toleranzArt: absolut
+    erklaerung: '`0011 1010 | 0000 0101 = 0011 1111` (0x3F), dann `& 0000 1111` = `0000 1111` = 0x0F = 15.'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: |
+      Welchen Wert gibt das Programm aus?
+
+      ```c
+      uint8_t z = 200;
+      z = z + 100;
+      printf("%d", z);
+      ```
+    loesung: 44
+    toleranz: 0
+    toleranzArt: absolut
+    erklaerung: '300 passt nicht in 8 Bit (max. 255). Es kommt zum **Überlauf**: 300 − 256 = 44. Der Compiler warnt nicht – den Datentyp immer passend zum größten Ergebnis wählen.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum endet das Hauptprogramm eines Mikrocontrollers mit einer Endlosschleife `while (1) { … }`?
+    optionen:
+      - text: Das Gerät soll arbeiten, solange es Spannung hat – es gibt kein Betriebssystem, zu dem das Programm zurückkehren könnte.
+        richtig: true
+      - text: Weil der Compiler sonst einen Fehler meldet.
+      - text: Damit der Mikrocontroller weniger Strom verbraucht.
+      - text: Die Endlosschleife ist ein Programmierfehler, der nur selten stört.
+    erklaerung: 'Ein PC-Programm kehrt nach `return` zum Betriebssystem zurück. Auf einem Mikrocontroller läuft nur dieses eine Programm: Nach der Initialisierung werden in der Hauptschleife immer wieder Eingänge gelesen, verarbeitet und Ausgänge gesetzt.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: 'Auf einem 8-Bit-Mikrocontroller (`int` = 16 Bit) wird `int t = adc * 5000 / 1024;` mit `adc = 800` berechnet. Was passiert?'
+    optionen:
+      - text: '`800 · 5000` = 4 000 000 läuft in 16 Bit über – das Ergebnis ist falsch.'
+        richtig: true
+      - text: 'Das Ergebnis ist richtig: 3906.'
+      - text: 'Es kommt 0 heraus, weil zuerst 5000 / 1024 gerechnet wird.'
+      - text: 'Der Compiler rechnet automatisch mit Kommazahlen.'
+    erklaerung: 'Ein 16-Bit-`int` reicht nur bis 32 767. Abhilfe: in 32 Bit rechnen, z. B. `(int32_t)adc * 5000 / 1024` → 3906. Gerechnet wird von links nach rechts, also zuerst die Multiplikation.'

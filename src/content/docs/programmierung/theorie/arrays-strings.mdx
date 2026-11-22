@@ -1,0 +1,199 @@
+---
+title: Arrays, Strings und Zeiger
+description: Arrays deklarieren, initialisieren und mit Schleifen durchlaufen, Mittelwert, Minimum und Maximum, Arrays an Funktionen übergeben, Strings mit Nullzeichen, Strings einlesen und Zeichen für Zeichen verarbeiten, Adressen und Zeiger.
+sidebar:
+  label: 6 · Arrays, Strings und Zeiger
+  order: 6
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Speicher from '../../../../assets/programmierung/string-speicher.svg';
+
+## Arrays
+
+Ein **Array** (Feld) speichert **mehrere Werte desselben Typs** unter einem Namen. Statt `messwert1`, `messwert2`, …
+`messwert10` schreibt man:
+
+```c
+float messwert[10];                    // 10 Kommazahlen, Inhalt noch unbestimmt
+int noten[5] = {1, 3, 2, 2, 4};        // mit Startwerten
+int zaehler[8] = {0};                  // alle 8 Elemente auf 0
+int tage[] = {31, 28, 31, 30};         // Größe ergibt sich aus der Liste: 4
+```
+
+Auf ein einzelnes Element greift man mit dem **Index** in eckigen Klammern zu. **Der erste Index ist 0**, der letzte ist
+Größe − 1:
+
+```c
+noten[0] = 1;              // erstes Element
+noten[4] = 5;              // letztes (fünftes) Element
+printf("%d\n", noten[2]);  // drittes Element: 2
+```
+
+:::danger[Kein Schutz vor falschem Index]
+C prüft den Index **nicht**. `noten[5]` bei einem Array mit 5 Elementen liest oder überschreibt fremden Speicher – das
+Programm rechnet falsch oder stürzt ab, oft erst viel später. Auf einem Mikrocontroller kann so eine Variable plötzlich
+einen „unmöglichen“ Wert haben. Achte genau auf die Schleifengrenze: `i < 5`, nicht `i <= 5`.
+:::
+
+### Arrays mit Schleifen durchlaufen
+
+Arrays und `for`-Schleifen gehören zusammen:
+
+```c
+#include <stdio.h>
+#define ANZAHL 6
+
+int main(void)
+{
+    float u[ANZAHL] = {4.98f, 5.02f, 5.01f, 4.97f, 5.05f, 4.99f};
+    float summe = 0, min = u[0], max = u[0];
+
+    for (int i = 0; i < ANZAHL; i++) {
+        summe += u[i];
+        if (u[i] < min) min = u[i];
+        if (u[i] > max) max = u[i];
+    }
+    printf("Mittelwert: %.3f V\n", summe / ANZAHL);    // 5.003 V
+    printf("Minimum: %.2f V, Maximum: %.2f V\n", min, max);
+    return 0;
+}
+```
+
+Merke: Minimum und Maximum beginnt man mit dem **ersten Element** – nicht mit 0. Sonst wäre bei lauter positiven Werten das
+Minimum fälschlich 0.
+
+### Arrays an Funktionen übergeben
+
+```c
+float mittelwert(float werte[], int anzahl)
+{
+    float summe = 0;
+    for (int i = 0; i < anzahl; i++) {
+        summe += werte[i];
+    }
+    return summe / anzahl;
+}
+```
+
+- Die Funktion kennt die Größe des Arrays **nicht** – deshalb wird die Anzahl als zweiter Parameter mitgegeben.
+- Das Array wird **nicht kopiert**. Übergeben wird nur die **Startadresse**. Ändert die Funktion ein Element, ändert sie
+  das Original.
+
+## Strings
+
+C hat keinen eigenen Datentyp für Text. Ein **String** (Zeichenkette) ist ein `char`-Array, das mit dem **Nullzeichen**
+`'\0'` (Wert 0) endet. Das Nullzeichen markiert das Ende des Textes.
+
+<Abbildung bild={Speicher} unterschrift="Der String „Hallo“ braucht 6 Speicherplätze: 5 Zeichen + Nullzeichen" />
+
+```c
+char wort[] = "Hallo";    // Compiler reserviert 6 Zeichen und hängt '\0' an
+char name[20] = "Eva";    // Platz für 19 Zeichen + '\0'; benutzt sind 4
+char zu_klein[5] = "Hallo";   // FEHLER: kein Platz für das '\0'
+```
+
+- Ein String braucht **immer ein Zeichen mehr**, als Buchstaben sichtbar sind.
+- `"A"` (String: `'A'` und `'\0'`, 2 Byte) ist etwas anderes als `'A'` (ein einzelnes Zeichen, 1 Byte).
+- Ausgabe mit `printf("%s", wort);` – `printf` gibt Zeichen aus, bis es auf `'\0'` stößt.
+- Einzelne Zeichen kann man ändern: `wort[0] = 'B';` ergibt „Ballo“.
+
+### Strings Zeichen für Zeichen verarbeiten
+
+Weil jeder String mit `'\0'` endet, läuft die Schleife, bis dieses Zeichen erreicht ist – die Länge muss man nicht kennen:
+
+```c
+// zählt die Großbuchstaben eines Strings
+int zaehle_gross(char s[])
+{
+    int anzahl = 0;
+    for (int i = 0; s[i] != '\0'; i++) {
+        if (s[i] >= 'A' && s[i] <= 'Z') {
+            anzahl++;
+        }
+    }
+    return anzahl;
+}
+```
+
+Fehlt das Nullzeichen, findet die Schleife kein Ende und liest immer weiter im Speicher. Nach demselben Muster lassen sich
+viele Aufgaben lösen: Länge bestimmen, Ziffern zählen, Kleinbuchstaben in Großbuchstaben umwandeln (`s[i] = s[i] - 32;`
+bzw. `s[i] - 'a' + 'A'`), einen String umdrehen oder prüfen, ob ein Wort ein Palindrom ist.
+
+### Strings einlesen
+
+```c
+char name[20];
+printf("Name: ");
+scanf("%19s", name);      // KEIN & – name ist schon eine Adresse
+```
+
+- Beim Einlesen eines Strings steht **kein `&`**: Der Name eines Arrays steht bereits für seine Startadresse.
+- `%19s` begrenzt die Eingabe auf 19 Zeichen – eines bleibt für `'\0'`. Ohne Begrenzung schreibt eine zu lange Eingabe
+  über das Array hinaus (**Pufferüberlauf**) – eine klassische Sicherheitslücke.
+- `%s` liest nur bis zum ersten **Leerzeichen**. Für ganze Zeilen nimmt man `fgets(name, sizeof(name), stdin);` (das
+  übernimmt allerdings auch das Enter-Zeichen `'\n'` in den String).
+
+### Strings vergleichen und kopieren
+
+Strings kann man **nicht** mit `==` vergleichen und **nicht** mit `=` zuweisen:
+
+```c
+char a[] = "Hi", b[] = "Hi";
+if (a == b) { … }         // vergleicht die ADRESSEN der Arrays – immer falsch!
+a = "Ho";                 // Fehler: einem Array kann man nichts zuweisen
+```
+
+Dafür gibt es Funktionen in `<string.h>`: `strlen(s)` (Länge ohne `'\0'`), `strcpy(ziel, quelle)` (kopieren),
+`strcmp(a, b)` (vergleichen, liefert 0 bei Gleichheit). Zum Üben schreibt man diese Funktionen aber selbst – mit einer
+Schleife bis `'\0'` lernt man am meisten.
+
+## Zeiger
+
+Jede Variable liegt an einer bestimmten **Adresse** im Speicher. Ein **Zeiger** (Pointer) ist eine Variable, die eine
+solche Adresse speichert.
+
+| Schreibweise | Bedeutung |
+| --- | --- |
+| `int *p;` | `p` ist ein Zeiger auf ein `int` |
+| `p = &x;` | `&` liefert die **Adresse** von `x` → `p` „zeigt auf“ `x` |
+| `*p` | der **Wert** an der Adresse, auf die `p` zeigt |
+
+```c
+int x = 5;
+int *p = &x;      // p zeigt auf x
+*p = 7;           // schreibt 7 dorthin, wo p hinzeigt – also in x
+printf("%d\n", x);   // 7
+```
+
+Wozu? Eine Funktion, die eine Variable des Aufrufers ändern soll, bekommt deren Adresse:
+
+```c
+void tausche(int *a, int *b)
+{
+    int hilf = *a;
+    *a = *b;
+    *b = hilf;
+}
+
+int main(void)
+{
+    int x = 1, y = 2;
+    tausche(&x, &y);              // Adressen übergeben
+    printf("%d %d\n", x, y);      // 2 1
+    return 0;
+}
+```
+
+Genau so arbeitet `scanf("%d", &zahl)`. Auch der Name eines Arrays ist nichts anderes als die Adresse seines ersten
+Elements – deshalb wird ein Array nicht kopiert, wenn man es an eine Funktion übergibt.
+
+:::note[Zeiger auf dem Mikrocontroller]
+Die Register eines Mikrocontrollers liegen an festen Adressen. Hinter einem Namen wie `PORTB` steckt nichts anderes als ein
+Zeiger auf diese Adresse: Schreibt das Programm dorthin, ändern sich die Spannungen an den Pins. Mehr im nächsten Teil.
+:::
+
+:::caution[char a[] oder char *b?]
+`char a[] = "Hi";` legt ein **eigenes Array** an, das man verändern darf. `char *b = "Hi";` ist nur ein Zeiger auf einen
+**konstanten** Text, der irgendwo im Programm steht – `b[0] = 'X';` ist verboten und lässt das Programm oft abstürzen.
+:::

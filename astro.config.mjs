@@ -24,9 +24,10 @@ const inArbeit = { text: 'in Arbeit', variant: /** @type {const} */ ('note') };
 /**
  * @param {string} label
  * @param {string} ordner
- * @param {{ theorieOrdner?: boolean, zusatz?: [string, string][] }} [optionen]
+ * @param {{ theorieOrdner?: boolean, zusatz?: [string, string][], rechenLabel?: string }} [optionen]
  */
-const thema = (label, ordner, { theorieOrdner = false, zusatz = [] } = {}) => ({
+// rechenLabel: anderer Name für die Seite „rechenbeispiele“ (z. B. „Programmieraufgaben“)
+const thema = (label, ordner, { theorieOrdner = false, zusatz = [], rechenLabel = 'Rechenbeispiele' } = {}) => ({
 	label,
 	collapsed: true,
 	items: [
@@ -34,7 +35,7 @@ const thema = (label, ordner, { theorieOrdner = false, zusatz = [] } = {}) => ({
 		theorieOrdner
 			? { label: 'Theorie', collapsed: true, items: [{ autogenerate: { directory: `${ordner}/theorie` } }] }
 			: { label: 'Theorie', slug: `${ordner}/theorie` },
-		{ label: 'Rechenbeispiele', slug: `${ordner}/rechenbeispiele` },
+		{ label: rechenLabel, slug: `${ordner}/rechenbeispiele` },
 		{ label: 'Praxisbeispiele', slug: `${ordner}/praxisbeispiele` },
 		{ label: 'Quiz', slug: `${ordner}/quiz` },
 		...zusatz.map(([l, s]) => ({ label: l, slug: `${ordner}/${s}` })),
@@ -117,6 +118,12 @@ export default defineConfig({
 						thema('Filter', 'filter'),
 						thema('Oszillatoren', 'oszillatoren'),
 						thema('Thermische Auslegung', 'thermische-auslegung'),
+						// Ergänzung: nur C-Grundlagen für einfache Mikrocontroller-Programme (wird nicht erweitert)
+						thema('Programmierung in C', 'programmierung', {
+							theorieOrdner: true,
+							rechenLabel: 'Programmieraufgaben',
+							zusatz: [['Werkzeuge & Links', 'literatur']],
+						}),
 					],
 				},
 				// 3) Energietechnik

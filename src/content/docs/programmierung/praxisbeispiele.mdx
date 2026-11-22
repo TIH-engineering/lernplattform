@@ -1,0 +1,354 @@
+---
+title: Praxisbeispiele – Programmierung in C
+description: Mikrocontroller-Programme am Beispiel ATmega328P (Arduino Uno) – LED blinken, Taster mit Pull-up und Flankenerkennung, Lauflicht mit Bitschieben, A/D-Umsetzer auslesen, Temperaturschalter mit Hysterese, Mittelwert aus mehreren Messungen, Ampel als Zustandsautomat, typische Fehler.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+Die Beispiele verwenden den **ATmega328P** (Arduino Uno, 16 MHz, 5 V) und werden in reinem C geschrieben (z. B. mit
+Microchip Studio oder avr-gcc). Die Registernamen stammen aus `<avr/io.h>`. Bei anderen Mikrocontrollern heißen die Register
+anders – die Programmidee bleibt gleich. Grundlagen dazu: [Bitmanipulation und Mikrocontroller](/programmierung/theorie/bitmanipulation/).
+
+:::caution[Strom begrenzen]
+Jede LED braucht einen Vorwiderstand (bei 5 V z. B. 330 Ω … 1 kΩ). Ein Pin des ATmega328P darf nach Datenblatt höchstens
+40 mA liefern (absoluter Grenzwert) – für Dauerbetrieb plant man deutlich weniger, z. B. 10 mA.
+Motoren und Relais nie direkt an einen Pin hängen, sondern über einen [Transistor](/transistoren/).
+:::
+
+## LED blinken lassen
+
+Am Arduino Uno hängt eine LED an Pin **PB5** (Arduino-Pin 13).
+
+```c
+#define F_CPU 16000000UL
+#include <avr/io.h>
+#include <util/delay.h>
+
+int main(void)
+{
+    DDRB |= (1 << PB5);            // PB5 = Ausgang
+
+    while (1) {
+        PORTB |= (1 << PB5);       // LED ein
+        _delay_ms(200);
+        PORTB &= ~(1 << PB5);      // LED aus
+        _delay_ms(800);
+    }
+}
+```
+
+1. Mit welcher Frequenz blinkt die LED, und wie groß ist das Tastverhältnis?
+2. Ändere das Programm so, dass die LED dreimal kurz blitzt und dann 2 s Pause macht.
+
+<Loesung>
+
+1. Periodendauer $T = 200\,\mathrm{ms} + 800\,\mathrm{ms} = 1\,\mathrm{s}$ → $f = 1\,\mathrm{Hz}$. Die LED ist 20 % der Zeit
+   eingeschaltet (Tastverhältnis $D = 0{,}2$).
+2. Eine `for`-Schleife in der Hauptschleife:
+
+```c
+while (1) {
+    for (int i = 0; i < 3; i++) {
+        PORTB |= (1 << PB5);
+        _delay_ms(100);
+        PORTB &= ~(1 << PB5);
+        _delay_ms(150);
+    }
+    _delay_ms(2000);
+}
+```
+
+</Loesung>
+
+## Taster schaltet LED um
+
+Ein Taster liegt zwischen **PB0** und Masse, der interne Pull-up-Widerstand ist eingeschaltet. Jeder Druck soll die LED an PB5
+**umschalten** (einmal drücken = ein, nochmal drücken = aus).
+
+Ein erster Versuch:
+
+```c
+while (1) {
+    if (!(PINB & (1 << PB0))) {    // Taster gedrückt?
+        PORTB ^= (1 << PB5);       // LED umschalten
+    }
+}
+```
+
+1. Warum funktioniert das nicht zuverlässig?
+2. Wie macht man es richtig?
+
+<Loesung>
+
+1. Solange der Taster gedrückt ist, ist die Bedingung bei **jedem** Schleifendurchlauf wahr – die Schleife läuft
+   hunderttausende Male pro Sekunde. Die LED wird ständig umgeschaltet; wie sie beim Loslassen steht, ist Zufall.
+   Dazu kommt das **Prellen**: Mechanische Kontakte federn beim Schließen einige Millisekunden lang und erzeugen mehrere
+   kurze Impulse.
+2. Man reagiert nur auf die **Flanke** – den Moment, in dem der Taster vom losgelassenen in den gedrückten Zustand wechselt –
+   und wartet danach kurz, bis das Prellen vorbei ist:
+
+```c
+#define F_CPU 16000000UL
+#include <avr/io.h>
+#include <util/delay.h>
+#include <stdbool.h>
+
+int main(void)
+{
+    DDRB |= (1 << PB5);            // LED: Ausgang
+    DDRB &= ~(1 << PB0);           // Taster: Eingang
+    PORTB |= (1 << PB0);           // Pull-up ein
+
+    bool vorher = false;           // war der Taster beim letzten Mal gedrückt?
+
+    while (1) {
+        bool jetzt = !(PINB & (1 << PB0));   // aktiv Low: 0 V = gedrückt
+        if (jetzt && !vorher) {              // Flanke: jetzt gedrückt, vorher nicht
+            PORTB ^= (1 << PB5);
+            _delay_ms(20);                   // Prellen abwarten
+        }
+        vorher = jetzt;
+    }
+}
+```
+
+Die Variable `vorher` ist ein **Gedächtnis** des Programms: Nur durch den Vergleich „jetzt“ mit „vorher“ erkennt man eine
+Änderung. Auch beim Loslassen prellt der Taster; die nächste Abfrage kommt aber erst nach den 20 ms. In der Praxis prüft
+man oft zusätzlich, ob der Taster nach der Wartezeit **immer noch** gedrückt ist.
+
+</Loesung>
+
+## Lauflicht mit Bitschieben
+
+An **Port D** (PD0 … PD7) hängen 8 LEDs. Es soll immer genau eine LED leuchten, die von PD0 nach PD7 wandert und dann wieder
+bei PD0 beginnt (100 ms pro Schritt).
+
+<Loesung>
+
+```c
+#define F_CPU 16000000UL
+#include <avr/io.h>
+#include <util/delay.h>
+#include <stdint.h>
+
+int main(void)
+{
+    DDRD = 0xFF;                   // alle 8 Pins von Port D als Ausgang
+    uint8_t muster = 0x01;         // 0000 0001 → LED an PD0
+
+    while (1) {
+        PORTD = muster;            // ganzes Muster auf einmal ausgeben
+        _delay_ms(100);
+        muster = muster << 1;      // eine Stelle weiter
+        if (muster == 0) {         // nach PD7 ist die 1 hinausgeschoben
+            muster = 0x01;
+        }
+    }
+}
+```
+
+Hier ist die direkte Zuweisung `PORTD = muster` erlaubt, weil **alle** Pins des Ports zum Lauflicht gehören.
+Nach `0x80 << 1` ist das Ergebnis 256 – das passt nicht in `uint8_t`, übrig bleibt 0. Genau das nutzt das Programm, um
+wieder von vorne zu beginnen.
+
+Varianten zum Üben: hin und zurück („Knight Rider“), zwei LEDs gleichzeitig (`muster = 0x03`), Geschwindigkeit mit einem
+Taster umschalten.
+
+</Loesung>
+
+## Den A/D-Umsetzer auslesen
+
+Der ATmega328P hat einen 10-Bit-A/D-Umsetzer (Grundlagen: [Digitale Messtechnik](/digitale-messtechnik/theorie/)). Diese zwei
+Funktionen richten ihn ein und lesen einen Kanal aus – Bitmanipulation in Reinform:
+
+```c
+#include <avr/io.h>
+#include <stdint.h>
+
+void adc_init(void)
+{
+    ADMUX = (1 << REFS0);                              // Referenz = AVCC (5 V)
+    ADCSRA = (1 << ADEN)                               // A/D-Umsetzer einschalten
+           | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);   // Takt = 16 MHz / 128 = 125 kHz
+}
+
+uint16_t adc_lesen(uint8_t kanal)
+{
+    ADMUX = (ADMUX & 0xF0) | (kanal & 0x0F);   // Kanal wählen, obere Bits behalten
+    ADCSRA |= (1 << ADSC);                     // Wandlung starten
+    while (ADCSRA & (1 << ADSC)) {             // warten, bis das Bit wieder 0 ist
+    }
+    return ADC;                                // Ergebnis 0 … 1023
+}
+```
+
+1. Erkläre die Zeile `ADMUX = (ADMUX & 0xF0) | (kanal & 0x0F);`.
+2. Ein Potentiometer liefert am Kanal 0 den Wert 614. Welche Spannung liegt an?
+
+<Loesung>
+
+1. `ADMUX & 0xF0` löscht die unteren 4 Bits (die Kanalnummer) und behält die oberen (z. B. die Referenzwahl `REFS0`).
+   `kanal & 0x0F` stellt sicher, dass die Kanalnummer nur die unteren 4 Bits belegt. Mit `|` werden beide Teile
+   zusammengesetzt. So ändert sich nur der Kanal, nicht die Referenz.
+2. $U = 614 \cdot \dfrac{5\,\mathrm{V}}{1024} \approx 3{,}00\,\mathrm{V}$
+
+</Loesung>
+
+## Temperaturschalter mit Hysterese
+
+Ein Temperatursensor mit $10\,\mathrm{mV/K}$ (0 V bei 0 °C) hängt an Kanal 0. Ein Lüfter an PB1 (über einen Transistor)
+soll einschalten, wenn es wärmer als 40 °C wird.
+
+1. Rechne den ADC-Wert in Zehntelgrad um. Warum darf man **nicht** `adc * 5000 / 1024` mit `int` rechnen?
+2. Was passiert, wenn man nur einen Schwellwert verwendet (`if (t > 400) ein; else aus;`)?
+3. Programmiere den Schalter mit Hysterese: ein über 40,0 °C, aus unter 37,0 °C.
+
+<Loesung>
+
+1. $U = \text{adc} \cdot 5\,\mathrm{V}/1024$ und $\vartheta = U/(10\,\mathrm{mV/K})$ → in Zehntelgrad:
+   $\vartheta_{1/10} = \text{adc} \cdot 5000/1024$. Beim ATmega328P ist `int` nur **16 Bit** groß (max. 32 767).
+   Schon $1023 \cdot 5000 = 5\,115\,000$ läuft über – das Ergebnis ist Unsinn. Lösung: in 32 Bit rechnen,
+   `(int32_t)adc * 5000 / 1024` (oder `5000L`). Zuerst multiplizieren, dann dividieren – umgekehrt
+   (`adc / 1024 * 5000`) wäre wegen der Ganzzahldivision fast immer 0.
+2. Liegt die Temperatur genau um 40 °C, schwankt der Messwert durch Rauschen um ein, zwei Stufen. Der Lüfter schaltet dann
+   ständig ein und aus („Flattern“) – das ist schlecht für Relais und Motor. Abhilfe: zwei Schwellen, die **Hysterese**.
+3. Programm:
+
+```c
+#include <avr/io.h>
+#include <stdint.h>
+
+void adc_init(void);                 // wie im Beispiel oben
+uint16_t adc_lesen(uint8_t kanal);
+
+#define T_EIN 400                    // 40,0 °C in Zehntelgrad
+#define T_AUS 370                    // 37,0 °C
+
+int main(void)
+{
+    adc_init();
+    DDRB |= (1 << PB1);              // Lüfter-Ausgang
+
+    while (1) {
+        int32_t t = (int32_t)adc_lesen(0) * 5000 / 1024;   // Zehntelgrad
+
+        if (t > T_EIN) {
+            PORTB |= (1 << PB1);         // ein
+        } else if (t < T_AUS) {
+            PORTB &= ~(1 << PB1);        // aus
+        }
+        // zwischen 37 °C und 40 °C: nichts ändern – Zustand bleibt
+    }
+}
+```
+
+Der Trick: Zwischen den beiden Schwellen wird **gar nichts** getan. Der Ausgang behält seinen letzten Zustand. Mit
+Zehntelgrad als ganzer Zahl braucht man keine (auf kleinen Controllern langsamen) Kommazahlen.
+
+</Loesung>
+
+## Messwerte mitteln
+
+Der ADC-Wert eines Sensors schwankt um einige Stufen. Er soll aus **8 Messungen** gemittelt werden.
+
+1. Welcher Datentyp ist für die Summe nötig?
+2. Warum teilt man gerne durch 8, 16 oder 32?
+
+<Loesung>
+
+```c
+uint16_t adc_mittel(uint8_t kanal)
+{
+    uint16_t summe = 0;              // max. 8 · 1023 = 8184 → passt in 16 Bit
+    for (uint8_t i = 0; i < 8; i++) {
+        summe += adc_lesen(kanal);
+    }
+    return summe >> 3;               // geteilt durch 8 (2 hoch 3)
+}
+```
+
+1. Die Summe kann $8 \cdot 1023 = 8184$ erreichen – das passt nicht in `uint8_t` (255), aber in `uint16_t` (65 535). Bei
+   64 Messungen ($64 \cdot 1023 = 65\,472$) wäre es knapp, bei mehr braucht man `uint32_t`.
+2. Division durch eine Zweierpotenz ist ein einfaches **Rechtsschieben** (`>> 3` = durch 8). Ein 8-Bit-Mikrocontroller hat
+   keinen Hardware-Dividierer; eine echte Division dauert viel länger.
+
+Das Mitteln wirkt wie ein [Tiefpass](/filter/): Schnelle, zufällige Schwankungen werden kleiner. Das Rauschen sinkt bei
+8 Messungen auf etwa $1/\sqrt{8} \approx 35\,\%$ (siehe [Messfehler](/messfehler/theorie/)).
+
+</Loesung>
+
+## Ampel als Zustandsautomat
+
+Eine Verkehrsampel soll die Phasen **Rot (5 s) → Rot-Gelb (1 s) → Grün (5 s) → Gelb (2 s)** endlos
+durchlaufen. Rot an PB0, Gelb an PB1, Grün an PB2.
+
+<Loesung>
+
+Der Ablauf wird in **Zustände** zerlegt; ein `switch` entscheidet, was im aktuellen Zustand passiert und welcher Zustand
+als nächstes kommt:
+
+```c
+#define F_CPU 16000000UL
+#include <avr/io.h>
+#include <util/delay.h>
+
+#define ROT   (1 << PB0)
+#define GELB  (1 << PB1)
+#define GRUEN (1 << PB2)
+#define ALLE  (ROT | GELB | GRUEN)
+
+enum zustand { Z_ROT, Z_ROTGELB, Z_GRUEN, Z_GELB };   // Namen für 0, 1, 2, 3
+
+void zeige(uint8_t lampen)            // nur die Ampel-Bits ändern
+{
+    PORTB = (PORTB & ~ALLE) | lampen;
+}
+
+int main(void)
+{
+    DDRB |= ALLE;
+    enum zustand z = Z_ROT;
+
+    while (1) {
+        switch (z) {
+        case Z_ROT:
+            zeige(ROT);         _delay_ms(5000); z = Z_ROTGELB; break;
+        case Z_ROTGELB:
+            zeige(ROT | GELB);  _delay_ms(1000); z = Z_GRUEN;   break;
+        case Z_GRUEN:
+            zeige(GRUEN);       _delay_ms(5000); z = Z_GELB;    break;
+        case Z_GELB:
+            zeige(GELB);        _delay_ms(2000); z = Z_ROT;     break;
+        }
+    }
+}
+```
+
+- `enum` vergibt sprechende Namen für die Zahlen 0 … 3 – der Code liest sich wie das Ablaufdiagramm.
+- `zeige` löscht zuerst die drei Ampel-Bits und setzt dann die gewünschten. Andere Pins von Port B bleiben unverändert.
+- Ein **Zustandsautomat** lässt sich leicht erweitern: z. B. ein Zustand „Fußgänger:innen-Anforderung“, in den man per
+  Taster wechselt, oder nachts „Gelb blinkt“.
+
+</Loesung>
+
+## Fehlersuche: Das Programm hängt
+
+Ein Mikrocontroller soll 300 Messwerte aufnehmen:
+
+```c
+uint8_t i;
+for (i = 0; i < 300; i++) {
+    werte[i] = adc_lesen(0);
+}
+```
+
+Das Programm kommt aus der Schleife nie heraus. Warum?
+
+<Loesung>
+
+`uint8_t` kann nur bis 255 zählen. Nach 255 folgt durch den **Überlauf** wieder 0 – die Bedingung `i < 300` ist **immer**
+wahr. Die Schleife läuft endlos: Die Elemente 0 … 255 werden immer wieder überschrieben, 256 … 299 nie erreicht.
+Korrektur: `uint16_t i;`. Viele Compiler warnen hier („Vergleich ist immer wahr wegen des begrenzten Wertebereichs“) –
+noch ein Grund, Warnungen ernst zu nehmen.
+
+</Loesung>

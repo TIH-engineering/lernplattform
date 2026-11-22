@@ -1,0 +1,104 @@
+---
+title: Algorithmen und Struktogramme
+description: Was ist ein Algorithmus? Anweisungen, Sequenz, Verzweigung und Schleife – dargestellt als Struktogramm (Nassi-Shneiderman) mit Beispielen.
+sidebar:
+  label: 1 · Algorithmen und Struktogramme
+  order: 1
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Grund from '../../../../assets/programmierung/ns-grundelemente.svg';
+import Schleifen from '../../../../assets/programmierung/ns-schleifen.svg';
+import Summe from '../../../../assets/programmierung/ns-summe.svg';
+
+## Was ist ein Algorithmus?
+
+Ein **Algorithmus** ist eine eindeutige Schritt-für-Schritt-Anleitung, die ein Problem in endlich vielen Schritten löst.
+Ein Kochrezept ist ein (ungenauer) Algorithmus – ein Computer braucht es aber **ganz genau**:
+
+- **eindeutig** – jeder Schritt ist klar, es gibt nichts zu raten,
+- **ausführbar** – jeder Schritt kann wirklich durchgeführt werden,
+- **endlich** – der Ablauf kommt irgendwann zum Ende (Ausnahme: die Endlosschleife eines Mikrocontrollers, siehe Teil 7),
+- **allgemein** – er funktioniert nicht nur für ein einziges Zahlenbeispiel, sondern für alle erlaubten Eingaben.
+
+Ein Computer kann nichts „ungefähr“. „Fahre so lange geradeaus, bis eine Wand kommt“ ist eine brauchbare Anweisung,
+„fahre ein Stück geradeaus“ nicht.
+
+:::tip[Vor dem Programmieren denken]
+Erst den **Ablauf** überlegen (Struktogramm, Notizen), dann programmieren. Wer sofort tippt, verbringt meist mehr Zeit mit
+der Fehlersuche.
+:::
+
+## Die drei Grundbausteine
+
+Jedes Programm – vom Taschenrechner bis zur Motorsteuerung – besteht nur aus drei Bausteinen:
+
+| Baustein | Bedeutung | in C |
+| --- | --- | --- |
+| **Sequenz** (Folge) | Anweisungen werden der Reihe nach ausgeführt | Anweisungen untereinander, jede endet mit `;` |
+| **Verzweigung** (Auswahl) | abhängig von einer Bedingung wird der eine **oder** der andere Weg genommen | `if … else`, `switch` |
+| **Schleife** (Wiederholung) | Anweisungen werden wiederholt, solange eine Bedingung erfüllt ist | `while`, `do … while`, `for` |
+
+Diese Bausteine kann man beliebig **ineinander schachteln**: eine Verzweigung in einer Schleife, eine Schleife in einer
+Verzweigung usw.
+
+## Struktogramme
+
+Ein **Struktogramm** (nach Nassi und Shneiderman, genormt in DIN 66261) stellt einen Ablauf als ineinander geschachtelte
+Rechtecke dar. Es wird von oben nach unten gelesen und ist unabhängig von der Programmiersprache.
+
+<Abbildung bild={Grund} unterschrift="Sequenz, Verzweigung und Mehrfachauswahl im Struktogramm" />
+
+- **Sequenz:** Jede Anweisung ist ein Rechteck, die Rechtecke stehen untereinander.
+- **Verzweigung:** Oben steht die Bedingung im Dreieck. Links geht es weiter, wenn sie wahr ist („ja“), rechts, wenn sie
+  falsch ist („nein“). Ein Zweig darf auch leer bleiben.
+- **Mehrfachauswahl:** Je nach Wert einer Variablen wird einer von mehreren Zweigen ausgeführt; „sonst“ fängt alle übrigen
+  Werte ab.
+
+<Abbildung bild={Schleifen} unterschrift="Schleifen im Struktogramm" />
+
+- **Kopfgesteuerte Schleife:** Die Bedingung wird **vor** jedem Durchlauf geprüft. Ist sie gleich am Anfang falsch, läuft die
+  Schleife kein einziges Mal.
+- **Fußgesteuerte Schleife:** Die Bedingung wird **nach** dem Durchlauf geprüft – der Körper läuft **mindestens einmal**.
+  Typisch für Eingaben: „Frage so lange nach einer Zahl, bis sie gültig ist.“
+- **Zählschleife:** eine kopfgesteuerte Schleife mit Zähler, wenn die Anzahl der Durchläufe vorher feststeht.
+
+Der Balken links zeigt, welche Anweisungen **zur Schleife gehören** – das entspricht in C den geschweiften Klammern `{ }`.
+
+## Beispiel: Summe der Zahlen 1 bis 100
+
+Aufgabe: Berechne $1 + 2 + 3 + \dots + 100$.
+
+<Abbildung bild={Summe} unterschrift="Struktogramm: Summe 1 bis 100" />
+
+Man braucht zwei Variablen: `summe` (das Zwischenergebnis) und `i` (die Zahl, die gerade dazukommt). Spiele den Ablauf für
+die ersten Durchläufe auf Papier durch – diese Methode heißt **Schreibtischtest**:
+
+| Durchlauf | `i` vorher | Bedingung `i <= 100` | `summe` nachher | `i` nachher |
+| --- | --- | --- | --- | --- |
+| 1 | 1 | wahr | 1 | 2 |
+| 2 | 2 | wahr | 3 | 3 |
+| 3 | 3 | wahr | 6 | 4 |
+| … | … | … | … | … |
+| 100 | 100 | wahr | 5050 | 101 |
+| – | 101 | **falsch** → Ende | 5050 | 101 |
+
+Ausgegeben wird 5050. Wie dieses Struktogramm in C aussieht, siehst du bei den
+[Kontrollstrukturen](/programmierung/theorie/kontrollstrukturen/#die-for-schleife).
+
+## Vom Alltag zum Algorithmus
+
+Ein Beispiel aus der Elektronik: Ein Lüfter soll eingeschaltet werden, wenn die Temperatur über 40 °C steigt.
+
+1. **Was ist gegeben (Eingabe)?** Die gemessene Temperatur.
+2. **Was soll herauskommen (Ausgabe)?** Lüfter ein oder aus.
+3. **Welche Schritte?** Temperatur messen → wenn größer als 40 °C, Lüfter ein, sonst Lüfter aus → wieder von vorne.
+
+Daraus wird ein Struktogramm: eine Endlosschleife mit einer Sequenz (messen) und einer Verzweigung (vergleichen) darin.
+Wie man das genau programmiert – und warum ein einziger Schwellwert in der Praxis zu Flackern führt – steht bei den
+[Praxisbeispielen](/programmierung/praxisbeispiele/#temperaturschalter-mit-hysterese).
+
+:::note[Werkzeug]
+Struktogramme kannst du mit Bleistift zeichnen oder online mit einem Struktogramm-Editor erstellen – Links unter
+[Werkzeuge und Links](/programmierung/literatur/).
+:::

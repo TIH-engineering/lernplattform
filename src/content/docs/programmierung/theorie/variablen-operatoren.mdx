@@ -1,0 +1,175 @@
+---
+title: Variablen, Datentypen und Operatoren
+description: Variablen deklarieren und initialisieren, Datentypen int, float, double, char, bool und die Typen mit fester Breite (uint8_t), Wertebereich und Überlauf, Konstanten, arithmetische, Vergleichs- und logische Operatoren, Ganzzahldivision, Typumwandlung.
+sidebar:
+  label: 3 · Variablen, Datentypen, Operatoren
+  order: 3
+---
+
+## Variablen
+
+Eine **Variable** ist ein benannter Speicherplatz, in dem ein Wert eines bestimmten **Datentyps** liegt. Der Wert kann sich
+während des Programms ändern.
+
+```c
+int anzahl;          // Deklaration: Speicherplatz anlegen (Wert noch unbestimmt!)
+anzahl = 5;          // Zuweisung: Wert hineinschreiben
+int alter = 16;      // Deklaration mit Initialisierung (empfohlen)
+float u1 = 1.5f, u2 = 2.25f;   // mehrere Variablen gleichen Typs
+```
+
+- Variablennamen bestehen aus Buchstaben, Ziffern und `_`, beginnen **nicht** mit einer Ziffer und dürfen keine Umlaute,
+  Leerzeichen oder Schlüsselwörter (`int`, `if`, `for` …) sein.
+- Eine Variable ohne Initialisierung enthält einen **zufälligen Wert** („Speichermüll“). Deshalb: immer einen Startwert
+  geben, z. B. `int summe = 0;`.
+
+:::caution[= ist kein Gleichheitszeichen]
+`a = 5` ist eine **Zuweisung**: „a bekommt den Wert 5“. Der Vergleich „ist a gleich 5?“ wird `a == 5` geschrieben. Deshalb
+ist `i = i + 1` in C völlig richtig: Nimm den alten Wert von `i`, zähle 1 dazu und speichere das Ergebnis wieder in `i`.
+:::
+
+## Datentypen
+
+Der Datentyp legt fest, **welche Werte** in der Variable Platz haben und wie viel **Speicher** sie braucht.
+
+| Typ | Inhalt | Größe (PC, typisch) | Beispiel |
+| --- | --- | --- | --- |
+| `int` | ganze Zahl | 4 Byte (≈ ±2,1 Milliarden) | `int zaehler = -3;` |
+| `float` | Kommazahl, ca. 7 gültige Stellen | 4 Byte | `float temperatur = 23.5f;` |
+| `double` | Kommazahl, ca. 15 gültige Stellen | 8 Byte | `double pi = 3.14159265358979;` |
+| `char` | ein Zeichen (intern eine kleine Zahl) | 1 Byte | `char taste = 'A';` |
+| `bool` | wahr oder falsch (`true`/`false`) – braucht `#include <stdbool.h>` | 1 Byte | `bool ledEin = false;` |
+
+- Kommazahlen schreibt man mit **Punkt**. Das `f` bei `23.5f` sagt dem Compiler, dass es ein `float`-Wert ist (ohne `f` ist
+  jede Kommazahl `double`).
+- Ein einzelnes Zeichen steht in **einfachen** Hochkommas: `'A'`. Text (String) steht in **doppelten**: `"Hallo"`.
+- In C gilt: `0` ist **falsch**, jeder andere Wert ist **wahr**.
+- Mit `sizeof(int)` fragt man nach, wie viele Byte ein Typ auf dem jeweiligen System belegt.
+
+### Datentypen mit fester Breite – wichtig für Mikrocontroller
+
+Wie groß ein `int` ist, hängt vom Prozessor ab: Am PC sind es 4 Byte, auf einem kleinen 8-Bit-Mikrocontroller (z. B.
+ATmega328P im Arduino Uno) nur **2 Byte** (−32 768 … 32 767). Darum verwendet man in Mikrocontroller-Programmen die Typen aus
+`<stdint.h>`, deren Größe überall gleich ist:
+
+| Typ | Bit | Wertebereich | typische Verwendung |
+| --- | --- | --- | --- |
+| `uint8_t` | 8 | 0 … 255 | Register, Port-Werte, Zähler bis 255 |
+| `int8_t` | 8 | −128 … 127 | kleine Werte mit Vorzeichen |
+| `uint16_t` | 16 | 0 … 65 535 | ADC-Werte (10 oder 12 Bit), Millisekunden-Zähler |
+| `int16_t` | 16 | −32 768 … 32 767 | Temperatur in Zehntelgrad |
+| `uint32_t` | 32 | 0 … 4 294 967 295 | Zeitstempel, große Zähler |
+
+Das `u` steht für *unsigned* (ohne Vorzeichen), die Zahl für die Anzahl der Bits, `_t` für *type*. Allgemein gilt für
+$n$ Bit ohne Vorzeichen: $0 \dots 2^n - 1$, mit Vorzeichen: $-2^{n-1} \dots 2^{n-1} - 1$.
+
+### Überlauf
+
+Was passiert, wenn der Wertebereich überschritten wird?
+
+```c
+uint8_t z = 250;
+z = z + 10;      // 260 passt nicht in 8 Bit!
+printf("%d\n", z);   // Ausgabe: 4
+```
+
+Bei Typen ohne Vorzeichen fängt die Zählung wieder bei 0 an ($260 - 256 = 4$) – wie ein Kilometerzähler, der von 99 999 auf
+00 000 springt. Der Compiler warnt davor **nicht**. Bei Typen mit Vorzeichen ist ein Überlauf sogar ausdrücklich nicht
+festgelegt (undefiniertes Verhalten). Deshalb: Typ immer so wählen, dass das **größte mögliche Ergebnis** hineinpasst.
+
+## Konstanten
+
+Werte, die sich nie ändern, bekommen einen Namen statt einer „magischen Zahl“ im Code:
+
+```c
+#define LED_PIN 5             // Textersetzung vor dem Übersetzen (kein ; am Ende!)
+const float UREF = 3.3f;      // Variable, die nicht mehr verändert werden darf
+```
+
+Ändert sich später der Wert, muss man ihn nur an einer Stelle anpassen. Konstanten schreibt man üblicherweise in
+GROSSBUCHSTABEN.
+
+## Operatoren
+
+### Arithmetische Operatoren
+
+| Operator | Bedeutung | Beispiel (`int a = 17, b = 5;`) | Ergebnis |
+| --- | --- | --- | --- |
+| `+` `-` | Addition, Subtraktion | `a - b` | 12 |
+| `*` | Multiplikation | `a * b` | 85 |
+| `/` | Division | `a / b` | **3** (!) |
+| `%` | Rest der Ganzzahldivision (Modulo) | `a % b` | 2 |
+
+:::danger[Ganzzahldivision]
+Sind **beide** Werte ganze Zahlen, rechnet C eine **Ganzzahldivision** – der Rest wird einfach abgeschnitten:
+`17 / 5` ergibt `3`, `1 / 2` ergibt `0`. Das ist der häufigste Rechenfehler in C-Programmen!
+Abhilfe: mindestens einen Wert als Kommazahl schreiben – `17.0 / 5` ergibt `3.4` –, oder umwandeln: `(float)a / b`.
+:::
+
+Der **Modulo-Operator** `%` ist sehr nützlich: `zahl % 2 == 0` prüft, ob eine Zahl gerade ist; `sekunden % 60` liefert die
+Sekunden nach den vollen Minuten.
+
+Es gilt **Punkt vor Strich**, Klammern haben Vorrang: `2 + 3 * 4` ergibt 14, `(2 + 3) * 4` ergibt 20.
+
+### Kurzschreibweisen
+
+| Kurz | ausführlich |
+| --- | --- |
+| `i++` | `i = i + 1` |
+| `i--` | `i = i - 1` |
+| `summe += x` | `summe = summe + x` |
+| `wert *= 2` | `wert = wert * 2` |
+| `port \|= maske` | `port = port \| maske` (siehe [Bitmanipulation](/programmierung/theorie/bitmanipulation/)) |
+
+### Vergleichsoperatoren
+
+Sie liefern **wahr** (1) oder **falsch** (0):
+
+| Operator | Bedeutung |
+| --- | --- |
+| `==` | gleich |
+| `!=` | ungleich |
+| `<` `>` | kleiner, größer |
+| `<=` `>=` | kleiner oder gleich, größer oder gleich |
+
+### Logische Operatoren
+
+Sie verknüpfen Bedingungen:
+
+| Operator | Name | wahr, wenn … | Beispiel |
+| --- | --- | --- | --- |
+| `&&` | UND | **beide** Bedingungen wahr sind | `temp > 20 && temp < 25` |
+| `\|\|` | ODER | **mindestens eine** Bedingung wahr ist | `taste == 'j' \|\| taste == 'J'` |
+| `!` | NICHT | die Bedingung falsch ist | `!fertig` |
+
+:::caution[Bereich prüfen]
+„x liegt zwischen 1 und 9“ schreibt man in C `x >= 1 && x <= 9`. Die mathematische Schreibweise `1 <= x <= 9` lässt sich
+zwar übersetzen, ist aber **immer wahr**: `1 <= x` ergibt 0 oder 1, und beides ist kleiner als 9.
+:::
+
+## Typumwandlung
+
+Bei gemischten Rechnungen wandelt C den „kleineren“ Typ automatisch in den „größeren“ um: `int + float` ergibt `float`.
+Bei der **Zuweisung** einer Kommazahl an eine ganzzahlige Variable werden die Nachkommastellen **abgeschnitten** (nicht
+gerundet):
+
+```c
+int n = 3.99;              // n = 3
+float mittel = (float)summe / anzahl;   // erzwungene Umwandlung (Cast) vor der Division
+int gerundet = (int)(x + 0.5f);         // Runden einer positiven Zahl
+```
+
+## ASCII: Zeichen sind Zahlen
+
+Ein `char` speichert in Wahrheit eine Zahl – den **ASCII-Code** des Zeichens: `'A'` = 65, `'a'` = 97, `'0'` = 48. Deshalb
+kann man mit Zeichen rechnen:
+
+```c
+char c = 'A' + 2;            // 'C'
+int ziffer = '7' - '0';      // 7 – aus dem Zeichen '7' wird die Zahl 7
+char klein = 'G' + 32;       // 'g' – Groß- und Kleinbuchstaben liegen 32 auseinander
+printf("%c hat den Code %d\n", c, c);   // C hat den Code 67
+```
+
+Die Großbuchstaben `'A'` … `'Z'` liegen lückenlos hintereinander (65 … 90), ebenso die Kleinbuchstaben (97 … 122) und die
+Ziffern `'0'` … `'9'` (48 … 57). Darauf beruhen viele String-Aufgaben.

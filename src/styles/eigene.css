@@ -40,3 +40,15 @@ figure.abbildung figcaption {
 	color: var(--sl-color-gray-3);
 	margin-top: 0.5rem;
 }
+
+/* Programmierung: Code in Tabellen nicht umbrechen, Codeblöcke im Quiz hervorheben */
+.sl-markdown-content td code {
+	white-space: nowrap;
+}
+.quiz-text pre {
+	background: var(--sl-color-gray-6);
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.25rem;
+	overflow-x: auto;
+	font-size: var(--sl-text-sm);
+}

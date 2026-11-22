@@ -1317,3 +1317,102 @@ speichere('mtrs/wheatstone.svg', 520, 280, 'Wheatstone-Messbrücke mit Diagonals
 		text(x0 + 210, 32, 'zu schwach: schwingt', 'start', 'font-size="12"') + text(x0 + 100, y0 - 20, 'richtig: kurzes Überschwingen', 'start', `font-size="12" fill="${AKZENT}"`) +
 		text(x0 + 300, y0 - 60, 'zu stark: kriecht', 'start', 'font-size="12"'));
 }
+
+// ======================================================================
+// Programmierung in C: Struktogramme (Nassi-Shneiderman), Werkzeugkette, Bits, Strings
+// ======================================================================
+{
+	const MONO = 'font-family="ui-monospace, Consolas, monospace" font-size="14"';
+	const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	const code = (x, y, t, anker = 'middle', extra = '') =>
+		text(x, y, esc(t), anker, extra.includes('font-size') ? `${MONO.replace(' font-size="14"', '')} ${extra}` : `${MONO} ${extra}`);
+	const titel = (x, y, t) => text(x, y, t, 'middle', 'font-size="13" font-weight="600"');
+	const rechteck = (x, y, b, h, extra = '') => `<rect x="${x}" y="${y}" width="${b}" height="${h}" ${extra}/>`;
+	// Sequenz aus mehreren Zeilen (Codezeilen), gibt SVG zurück
+	const sequenz = (x, y, b, hZeile, zeilen) =>
+		zeilen.map((z, i) => rechteck(x, y + i * hZeile, b, hZeile) + code(x + b / 2, y + i * hZeile + hZeile / 2 + 5, z)).join('');
+	// kopfgesteuerte Schleife: Kopfband + linker Balken, Körper als Zeilen
+	const kopfschleife = (x, y, b, kopf, zeilen, hZeile = 40, rand = 28) =>
+		rechteck(x, y, b, 40 + zeilen.length * hZeile) + code(x + 10, y + 26, kopf, 'start') +
+		sequenz(x + rand, y + 40, b - rand, hZeile, zeilen);
+
+	// P1) Grundelemente: Sequenz, Verzweigung, Mehrfachauswahl
+	speichere('programmierung/ns-grundelemente.svg', 760, 240, 'Struktogramm-Grundelemente: Sequenz, Verzweigung, Mehrfachauswahl',
+		titel(110, 24, 'Sequenz (Folge)') +
+		sequenz(10, 40, 200, 60, ['Anweisung 1', 'Anweisung 2', 'Anweisung 3']) +
+		titel(380, 24, 'Verzweigung (if … else)') +
+		rechteck(270, 40, 220, 180) + strich(270, 40, 380, 100) + strich(490, 40, 380, 100) + strich(270, 100, 490, 100) +
+		strich(380, 100, 380, 220) + code(380, 64, 'Bedingung?') + text(282, 94, 'ja', 'start', 'font-size="13"') +
+		text(478, 94, 'nein', 'end', 'font-size="13"') + code(325, 165, 'Anweisung A') + code(435, 165, 'Anweisung B') +
+		titel(640, 24, 'Mehrfachauswahl (switch)') +
+		rechteck(530, 40, 220, 180) + strich(530, 40, 695, 100) + strich(750, 40, 695, 100) + strich(530, 100, 750, 100) +
+		[585, 640, 695].map((x) => strich(x, 100, x, 220)).join('') + code(640, 60, 'x?') +
+		['1', '2', '3'].map((t, i) => text(536 + i * 55, 95, t, 'start', 'font-size="13"')).join('') +
+		text(722, 94, 'sonst', 'middle', 'font-size="12"') +
+		['A', 'B', 'C', 'D'].map((t, i) => code(557 + i * 55, 165, t)).join(''));
+
+	// P2) Schleifen
+	speichere('programmierung/ns-schleifen.svg', 760, 240, 'Struktogramm-Schleifen: kopfgesteuert, fußgesteuert, Zählschleife',
+		titel(125, 24, 'kopfgesteuert (while)') +
+		rechteck(10, 40, 230, 180) + strich(40, 90, 240, 90) + strich(40, 90, 40, 220) +
+		code(20, 70, 'solange Bedingung', 'start') + code(140, 160, 'Schleifenkörper') +
+		titel(380, 24, 'fußgesteuert (do … while)') +
+		rechteck(265, 40, 230, 180) + strich(295, 40, 295, 170) + strich(295, 170, 495, 170) +
+		code(395, 110, 'Schleifenkörper') + code(275, 200, 'solange Bedingung', 'start') +
+		titel(635, 24, 'Zählschleife (for)') +
+		rechteck(520, 40, 230, 180) + strich(550, 90, 750, 90) + strich(550, 90, 550, 220) +
+		code(530, 70, 'für i = 1 bis 10', 'start') + code(650, 160, 'Schleifenkörper'));
+
+	// P3) Beispiel: Summe 1 bis 100
+	speichere('programmierung/ns-summe.svg', 340, 260, 'Struktogramm: Summe der Zahlen 1 bis 100',
+		sequenz(10, 10, 320, 40, ['summe = 0', 'i = 1']) +
+		kopfschleife(10, 90, 320, 'solange i <= 100', ['summe = summe + i', 'i = i + 1']) +
+		sequenz(10, 210, 320, 40, ['Ausgabe: summe']));
+
+	// P4) Hauptschleife eines Mikrocontroller-Programms
+	speichere('programmierung/hauptschleife.svg', 400, 260, 'Struktogramm eines Mikrocontroller-Programms mit Endlosschleife',
+		sequenz(10, 10, 380, 44, ['Initialisierung: Ports, ADC, Timer']) +
+		kopfschleife(10, 54, 380, 'solange 1 (endlos)', ['Eingänge lesen (Taster, Sensor)', 'verarbeiten (vergleichen, rechnen)', 'Ausgänge setzen (LED, Motor)'], 48));
+
+	// P5) Werkzeugkette
+	const box = (x, z, akz = false) => kasten(x, 40, 130, 64, z, akz ? `stroke="${AKZENT}"` : '');
+	speichere('programmierung/werkzeugkette.svg', 760, 150, 'Vom Quellcode zum lauffähigen Programm: Editor, Compiler, Linker, Programm',
+		box(5, ['Quellcode', 'main.c']) + pfeil(135, 72, 160, 72) +
+		box(160, ['Compiler', 'prüft + übersetzt'], true) + pfeil(290, 72, 315, 72) +
+		box(315, ['Linker', '+ Bibliotheken']) + pfeil(445, 72, 470, 72) +
+		box(470, ['Programm', '.exe bzw. .hex']) + pfeil(600, 72, 625, 72) +
+		box(625, ['läuft auf', 'PC / Mikrocontroller']) +
+		text(380, 135, 'Syntaxfehler meldet der Compiler mit Zeilennummer – das Programm wird dann gar nicht erzeugt.', 'middle', 'font-size="12"'));
+
+	// P6) Bits im Register setzen
+	{
+		const x0 = 200, b = 46, h = 34;
+		const zeile = (y, bits, name, akzent = false) =>
+			text(x0 - 12, y + 23, esc(name), 'end', `${MONO}${akzent ? ` fill="${AKZENT}"` : ''}`) +
+			bits.split('').map((c, i) => rechteck(x0 + i * b, y, b, h) + code(x0 + i * b + b / 2, y + 23, c)).join('');
+		let kopf = '';
+		for (let i = 0; i < 8; i++) kopf += text(x0 + i * b + b / 2, 30, `${7 - i}`, 'middle', 'font-size="12"');
+		speichere('programmierung/bits-setzen.svg', 680, 200, 'Bit 1 eines 8-Bit-Registers mit einer ODER-Maske setzen',
+			text(x0 - 12, 30, 'Bit', 'end', 'font-size="12"') + kopf +
+			rechteck(x0 + 6 * b, 38, b, 3 * h + 24, `stroke="${AKZENT}" stroke-width="3"`) +
+			zeile(40, '00101100', 'PORTB') + zeile(80, '00000010', '(1 << 1)') +
+			strich(x0, 124, x0 + 8 * b, 124) + zeile(130, '00101110', 'PORTB | (1 << 1)', true) +
+			text(x0 + 8 * b + 10, 63, '= 0x2C', 'start', MONO) + text(x0 + 8 * b + 10, 103, '= 0x02', 'start', MONO) +
+			text(x0 + 8 * b + 10, 153, '= 0x2E', 'start', `${MONO} fill="${AKZENT}"`) +
+			text(340, 190, 'Nur Bit 1 ändert sich – alle anderen Bits bleiben, wie sie waren.', 'middle', 'font-size="12"'));
+	}
+
+	// P7) String im Speicher
+	{
+		const x0 = 150, b = 52;
+		const z = ["'H'", "'a'", "'l'", "'l'", "'o'", "'\\0'"], asc = ['72', '97', '108', '108', '111', '0'];
+		speichere('programmierung/string-speicher.svg', 500, 140, 'Der String „Hallo“ im Speicher: fünf Zeichen und das Nullzeichen',
+			code(10, 52, 'char s[] =', 'start') + code(10, 72, '"Hallo";', 'start') +
+			z.map((c, i) => rechteck(x0 + i * b, 30, b, 40, i === 5 ? `stroke="${AKZENT}" stroke-width="3"` : '') +
+				code(x0 + i * b + b / 2, 55, c, 'middle', i === 5 ? `fill="${AKZENT}"` : '') +
+				text(x0 + i * b + b / 2, 90, asc[i], 'middle', 'font-size="11"') +
+				code(x0 + i * b + b / 2, 112, `s[${i}]`, 'middle', 'font-size="12"')).join('') +
+			text(x0 - 10, 90, 'ASCII', 'end', 'font-size="11"') +
+			text(x0 + 5.5 * b, 132, 'Ende-Zeichen', 'middle', `font-size="11" fill="${AKZENT}"`));
+	}
+}

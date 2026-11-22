@@ -1,0 +1,165 @@
+---
+title: Bitmanipulation und Mikrocontroller
+description: Dual- und Hexadezimalzahlen, Bitoperatoren UND, ODER, XOR, NICHT und Schieben, Bits setzen, löschen, umschalten und abfragen, Register eines Mikrocontrollers (DDR, PORT, PIN), Aufbau eines Mikrocontroller-Programms mit Endlosschleife.
+sidebar:
+  label: 7 · Bitmanipulation und Mikrocontroller
+  order: 7
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Bits from '../../../../assets/programmierung/bits-setzen.svg';
+import Haupt from '../../../../assets/programmierung/hauptschleife.svg';
+
+Ein Mikrocontroller steuert seine Pins über **Register**: 8, 16 oder 32 Bit breite Speicherstellen, bei denen **jedes Bit**
+eine eigene Bedeutung hat – z. B. „Pin 5 ist Ausgang“ oder „LED an Pin 5 leuchtet“. Wer einen Mikrocontroller programmiert,
+muss also einzelne Bits gezielt ändern, ohne die anderen zu stören.
+
+## Dual- und Hexadezimalzahlen
+
+| dezimal | dual (binär) | hexadezimal |
+| --- | --- | --- |
+| 0 | 0000 | 0 |
+| 5 | 0101 | 5 |
+| 9 | 1001 | 9 |
+| 10 | 1010 | A |
+| 12 | 1100 | C |
+| 15 | 1111 | F |
+| 44 | 0010 1100 | 2C |
+| 255 | 1111 1111 | FF |
+
+- Im **Dualsystem** hat jede Stelle den Wert einer Zweierpotenz. Bit 0 (ganz rechts) zählt 1, Bit 1 zählt 2, Bit 2 zählt 4 …
+  Bit 7 zählt 128. Beispiel: $0010\,1100_2 = 32 + 8 + 4 = 44$.
+- Eine **Hexadezimalziffer** (0 … 9, A … F) steht für genau **4 Bit**. Darum lassen sich Registerwerte hexadezimal kurz und
+  übersichtlich schreiben: Ein Byte sind zwei Hex-Ziffern. Umrechnen: in Vierergruppen teilen – $0010_2 = 2$, $1100_2 = \mathrm{C}$
+  → `0x2C`.
+- In C schreibt man Hexzahlen mit `0x`: `0x2C`. Viele Compiler (auch avr-gcc) verstehen zusätzlich `0b00101100`; offiziell
+  gehört diese Schreibweise erst seit C23 zum Standard.
+
+## Die Bitoperatoren
+
+Sie wirken auf **jedes Bit einzeln** – im Gegensatz zu den logischen Operatoren `&&`, `||`, `!`, die eine ganze Zahl als
+wahr oder falsch ansehen.
+
+| Operator | Name | Regel pro Bit | Beispiel |
+| --- | --- | --- | --- |
+| `&` | UND | 1 nur, wenn **beide** Bits 1 sind | `0b1100 & 0b1010` = `0b1000` |
+| `\|` | ODER | 1, wenn **mindestens ein** Bit 1 ist | `0b1100 \| 0b1010` = `0b1110` |
+| `^` | exklusives ODER (XOR) | 1, wenn die Bits **verschieden** sind | `0b1100 ^ 0b1010` = `0b0110` |
+| `~` | NICHT (Komplement) | jedes Bit umdrehen | `~0b1100` = `…0011` |
+| `<<` | links schieben | Bits nach links, rechts kommen Nullen nach | `0b0001 << 3` = `0b1000` |
+| `>>` | rechts schieben | Bits nach rechts, links rausgeschobene gehen verloren | `0b1100 >> 2` = `0b0011` |
+
+Schieben um eine Stelle nach links verdoppelt eine Zahl, nach rechts halbiert sie (ganzzahlig): `5 << 1` = 10,
+`200 >> 2` = 50. Auf kleinen Mikrocontrollern ist das viel schneller als eine Division.
+
+## Die Maske: `1 << n`
+
+Um Bit Nummer `n` anzusprechen, baut man eine **Maske**, in der nur dieses Bit 1 ist: `(1 << n)`.
+`(1 << 0)` = `0x01`, `(1 << 1)` = `0x02`, `(1 << 5)` = `0x20`, `(1 << 7)` = `0x80`.
+
+<Abbildung bild={Bits} unterschrift="Bit 1 setzen: PORTB | (1 << 1) – alle anderen Bits bleiben erhalten" />
+
+### Die vier Grundoperationen
+
+| Aufgabe | Code | Warum? |
+| --- | --- | --- |
+| Bit `n` **setzen** (auf 1) | `x \|= (1 << n);` | ODER mit 1 ergibt immer 1, ODER mit 0 lässt das Bit unverändert |
+| Bit `n` **löschen** (auf 0) | `x &= ~(1 << n);` | `~` dreht die Maske um (nur Bit `n` ist 0); UND mit 0 ergibt 0, UND mit 1 lässt unverändert |
+| Bit `n` **umschalten** | `x ^= (1 << n);` | XOR mit 1 dreht das Bit um, XOR mit 0 lässt es |
+| Bit `n` **abfragen** | `if (x & (1 << n)) { … }` | Ergebnis ist ≠ 0 genau dann, wenn Bit `n` gesetzt ist |
+
+Als Funktionen geschrieben:
+
+```c
+#include <stdint.h>
+#include <stdbool.h>
+
+uint8_t bit_setzen(uint8_t wert, int n)    { return wert | (1 << n); }
+uint8_t bit_loeschen(uint8_t wert, int n)  { return wert & ~(1 << n); }
+uint8_t bit_umschalten(uint8_t wert, int n){ return wert ^ (1 << n); }
+bool    bit_gesetzt(uint8_t wert, int n)   { return (wert >> n) & 1; }
+```
+
+Beispiel mit `wert = 5` (`0000 0101`) und `n = 1`: setzen → 7, löschen → 5 (Bit 1 war schon 0), umschalten → 7,
+abfragen → 0 (falsch).
+
+### Mehrere Bits auf einmal
+
+```c
+x |= (1 << 2) | (1 << 3);    // Bits 2 und 3 setzen
+x &= 0xF0;                   // unteres Halbbyte (Bits 0–3) löschen, oberes behalten
+wert = (x >> 4) & 0x0F;      // oberes Halbbyte herausholen
+```
+
+Mit `& 0x0F` werden alle Bits außer den unteren vier **ausgeblendet** – man spricht von **maskieren**.
+
+## Register eines Mikrocontrollers
+
+Als Beispiel dient der **ATmega328P** (8-Bit-Mikrocontroller im Arduino Uno). Jeder Port (B, C, D) hat drei 8-Bit-Register;
+jedes Bit gehört zu einem Pin (z. B. Bit 5 von Port B → Pin PB5):
+
+| Register | Aufgabe | Bit = 0 | Bit = 1 |
+| --- | --- | --- | --- |
+| `DDRB` | Datenrichtung | Eingang | Ausgang |
+| `PORTB` | Ausgang: Pegel · Eingang: Pull-up | Low (0 V) · kein Pull-up | High (5 V) · Pull-up ein |
+| `PINB` | Pegel einlesen (nur lesen) | Pin ist Low | Pin ist High |
+
+Andere Mikrocontroller (z. B. STM32, ESP32, PIC) haben andere Registernamen, das Prinzip ist aber dasselbe: Bits setzen,
+löschen und abfragen.
+
+```c
+#include <avr/io.h>             // Registernamen DDRB, PORTB, PINB, PB0 …
+
+DDRB  |=  (1 << PB5);           // PB5 als Ausgang (LED)
+PORTB |=  (1 << PB5);           // LED ein
+PORTB &= ~(1 << PB5);           // LED aus
+PORTB ^=  (1 << PB5);           // LED umschalten
+
+DDRB  &= ~(1 << PB0);           // PB0 als Eingang (Taster gegen Masse)
+PORTB |=  (1 << PB0);           // internen Pull-up-Widerstand einschalten
+if (!(PINB & (1 << PB0))) {     // Pin ist Low → Taster gedrückt
+    …
+}
+```
+
+:::caution[Warum nicht einfach PORTB = 0x20?]
+Eine direkte Zuweisung überschreibt **alle 8 Bits**. Hängen an den anderen Pins des Ports ein Relais oder ein Display,
+werden sie unbeabsichtigt mit ausgeschaltet. Mit `|=`, `&= ~` und `^=` ändert sich **nur** das gewünschte Bit.
+:::
+
+Beim Taster mit Pull-up ist die Logik **umgekehrt** („aktiv Low“): Der Pull-up-Widerstand zieht den Pin auf High; drückt man
+den Taster, verbindet er den Pin mit Masse → Low. Deshalb das `!` in der Abfrage.
+
+## Aufbau eines Mikrocontroller-Programms
+
+Ein PC-Programm endet irgendwann. Ein Mikrocontroller-Programm darf **nie** enden – sonst steht das Gerät still. Darum hat
+es immer diesen Aufbau:
+
+<Abbildung bild={Haupt} unterschrift="Struktogramm eines Mikrocontroller-Programms" />
+
+```c
+#define F_CPU 16000000UL        // Taktfrequenz 16 MHz (für die Wartefunktion)
+#include <avr/io.h>
+#include <util/delay.h>         // _delay_ms()
+
+int main(void)
+{
+    // 1) Initialisierung: einmal beim Einschalten
+    DDRB |= (1 << PB5);         // LED-Pin als Ausgang
+
+    // 2) Hauptschleife: läuft, solange Spannung anliegt
+    while (1) {
+        PORTB ^= (1 << PB5);    // LED umschalten
+        _delay_ms(500);         // 0,5 s warten → LED blinkt mit 1 Hz
+    }
+    // wird nie erreicht – deshalb kein return nötig
+}
+```
+
+Die **Endlosschleife** `while (1)` ist hier kein Fehler, sondern Absicht. Weiter geht es mit Tastern, Lauflichtern und
+Sensoren bei den [Praxisbeispielen](/programmierung/praxisbeispiele/).
+
+:::note[Ausblick]
+In echten Geräten vermeidet man lange Wartezeiten mit `_delay_ms`, weil der Controller währenddessen nichts anderes tun kann.
+Stattdessen verwendet man **Timer** und **Interrupts** – das geht über diese Einführung hinaus.
+:::

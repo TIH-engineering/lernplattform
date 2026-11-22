@@ -1,0 +1,472 @@
+---
+title: Programmieraufgaben – Programmierung in C
+description: Aufgaben mit Musterlösung – Ausgabe vorhersagen, Datentyp wählen, Fehler finden, Struktogramm umsetzen, Ohmsches Gesetz, Tabellen mit printf, Funktionen, Arrays, Strings ohne string.h, Bitmanipulation, Zahlenraten.
+sidebar:
+  label: Programmieraufgaben
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+
+Versuche jede Aufgabe zuerst **selbst** – auf Papier oder am Rechner – und schau erst dann in die Lösung. Bei Programmen gibt
+es fast immer **mehrere richtige Lösungen**; die Musterlösung ist nur eine davon. Teste dein Programm mit Werten, deren
+Ergebnis du kennst.
+
+## Ausgabe vorhersagen: Rechnen mit int
+
+<Stufe wert="grundlagen" />
+
+Was gibt das Programm aus?
+
+```c
+#include <stdio.h>
+
+int main(void)
+{
+    int a = 17, b = 5;
+    printf("%d\n", a / b);
+    printf("%d\n", a % b);
+    printf("%.1f\n", (float)a / b);
+    printf("%d\n", a / b * b + a % b);
+    printf("%d\n", 2 + 3 * 4);
+    return 0;
+}
+```
+
+<Loesung>
+
+```text
+3
+2
+3.4
+17
+14
+```
+
+- `17 / 5` ist eine **Ganzzahldivision** → 3 (der Rest wird abgeschnitten).
+- `17 % 5` ist der **Rest** → 2.
+- `(float)a` macht aus 17 eine Kommazahl, deshalb wird mit Komma gerechnet → 3,4.
+- $3 \cdot 5 + 2 = 17$ – Quotient mal Teiler plus Rest ergibt wieder die ursprüngliche Zahl.
+- Punkt vor Strich: $2 + 12 = 14$.
+
+</Loesung>
+
+## Den passenden Datentyp wählen
+
+<Stufe wert="grundlagen" />
+
+Welchen Datentyp wählst du (PC bzw. Mikrocontroller)? Schreibe jeweils eine Deklaration mit Startwert.
+
+1. Raumtemperatur, z. B. 23,5 °C
+2. Anzahl der Schüler:innen einer Klasse
+3. die gedrückte Taste eines Menüs, z. B. `q`
+4. Ergebnis eines 10-Bit-A/D-Umsetzers (0 … 1023) auf einem Mikrocontroller
+5. Merker, ob eine LED leuchtet
+6. Zustand der 8 Pins eines Ports
+
+<Loesung>
+
+1. `float temperatur = 23.5f;` (Kommazahl)
+2. `int anzahl = 24;` (ganze Zahl)
+3. `char taste = 'q';` (einzelnes Zeichen, einfache Hochkommas)
+4. `uint16_t adcWert = 0;` – 1023 passt **nicht** in `uint8_t` (max. 255), 16 Bit reichen bis 65 535
+5. `bool ledEin = false;` (mit `#include <stdbool.h>`)
+6. `uint8_t port = 0x00;` – genau 8 Bit, ein Bit pro Pin
+
+</Loesung>
+
+## Gerade oder ungerade?
+
+<Stufe wert="grundlagen" />
+
+Schreibe ein Programm, das eine ganze Zahl einliest und ausgibt, ob sie gerade oder ungerade ist.
+**Eingabe:** eine ganze Zahl · **Ausgabe:** „… ist gerade“ bzw. „… ist ungerade“. Zeichne zuerst das Struktogramm.
+
+<Loesung>
+
+Struktogramm: Sequenz „Zahl einlesen“, dann Verzweigung „Rest von zahl / 2 gleich 0?“ mit „ja: gerade ausgeben“ und
+„nein: ungerade ausgeben“.
+
+```c
+#include <stdio.h>
+
+int main(void)
+{
+    int zahl;
+    printf("Ganze Zahl: ");
+    scanf("%d", &zahl);
+
+    if (zahl % 2 == 0) {
+        printf("%d ist gerade\n", zahl);
+    } else {
+        printf("%d ist ungerade\n", zahl);
+    }
+    return 0;
+}
+```
+
+Teste auch mit 0 und einer negativen Zahl: −7 % 2 ergibt in C −1, also ≠ 0 → „ungerade“. Richtig!
+
+</Loesung>
+
+## Fehler finden
+
+<Stufe wert="standard" />
+
+Das Programm soll aus Spannung und Widerstand den Strom in mA berechnen. Es enthält **vier Fehler**. Finde, beschreibe und
+korrigiere sie.
+
+```c
+#include <stdio.h>
+
+int main(void)
+{
+    float u, r, i
+    printf("Spannung in V: ");
+    scanf("%f", u);
+    printf("Widerstand in Ohm: ");
+    scanf("%f", &r);
+    if (r = 0) {
+        printf("Widerstand darf nicht 0 sein!\n");
+    } else {
+        i = u / r * 1000;
+        printf("I = %d mA\n", i);
+    }
+    return 0;
+}
+```
+
+<Loesung>
+
+| Zeile | Fehler | richtig |
+| --- | --- | --- |
+| `float u, r, i` | Strichpunkt fehlt (Syntaxfehler) | `float u, r, i;` |
+| `scanf("%f", u);` | `&` fehlt – `scanf` braucht die Adresse | `scanf("%f", &u);` |
+| `if (r = 0)` | Zuweisung statt Vergleich: `r` wird 0, die Bedingung ist immer falsch, danach Division durch 0 | `if (r == 0)` |
+| `printf("I = %d mA\n", i);` | `%d` ist für `int`, `i` ist `float` → Unsinn wird ausgegeben | `printf("I = %.2f mA\n", i);` |
+
+Der erste Fehler verhindert das Übersetzen. Die anderen drei findet der Compiler höchstens als **Warnung** – das Programm
+läuft, rechnet aber falsch. Darum Warnungen immer lesen!
+
+</Loesung>
+
+## Schleifen lesen
+
+<Stufe wert="standard" />
+
+Was geben die beiden Programmteile aus?
+
+```c
+// Teil a
+int x = 1;
+while (x < 100) {
+    printf("%d ", x);
+    x = x * 3;
+}
+
+// Teil b
+for (int i = 10; i > 0; i -= 2) {
+    if (i == 4) {
+        continue;
+    }
+    printf("%d ", i);
+}
+```
+
+<Loesung>
+
+- **a)** `1 3 9 27 81` – nach 81 ist `x = 243`, die Bedingung `x < 100` ist falsch.
+- **b)** `10 8 6 2` – `i` läuft 10, 8, 6, 4, 2; bei 4 überspringt `continue` die Ausgabe. Nach 2 wird `i = 0`, und
+  `0 > 0` ist falsch.
+
+</Loesung>
+
+## Tabelle mit printf: Leistung an einem Widerstand
+
+<Stufe wert="standard" />
+
+Gib eine Tabelle aus, die für einen Widerstand $R = 47\,\Omega$ und die Spannungen 0 V, 1 V, …, 10 V den Strom in mA und die
+Leistung in mW zeigt. Die Spalten sollen sauber untereinander stehen. Bei welcher Spannung wird ein 0,25-W-Widerstand
+überlastet?
+
+<Loesung>
+
+```c
+#include <stdio.h>
+#define R 47.0f     // Widerstand in Ohm
+
+int main(void)
+{
+    printf("  U/V    I/mA     P/mW\n");
+    printf("-----------------------\n");
+    for (int u = 0; u <= 10; u++) {
+        float i = u / R;          // A (R ist float → keine Ganzzahldivision)
+        float p = u * i;          // W
+        printf("%5d %7.1f %8.1f%s\n", u, i * 1000, p * 1000, p > 0.25f ? "  zu viel!" : "");
+    }
+    return 0;
+}
+```
+
+Ausschnitt der Ausgabe:
+
+```text
+  U/V    I/mA     P/mW
+-----------------------
+    3    63.8    191.5
+    4    85.1    340.4  zu viel!
+```
+
+Ab **4 V** wird es zu viel: $P = U^2/R = (4\,\mathrm{V})^2/47\,\Omega \approx 340\,\mathrm{mW} > 250\,\mathrm{mW}$.
+Die Grenze liegt bei $U = \sqrt{P \cdot R} = \sqrt{0{,}25\,\mathrm{W} \cdot 47\,\Omega} \approx 3{,}43\,\mathrm{V}$.
+
+Der Ausdruck `bedingung ? a : b` liefert `a`, wenn die Bedingung wahr ist, sonst `b` – eine Kurzform von `if … else`.
+
+</Loesung>
+
+## Funktion: Ziffern in einem String
+
+<Stufe wert="standard" />
+
+Schreibe – **ohne** `string.h` – eine Funktion `int ziffernsumme(char s[])`, die alle Ziffern in einem String addiert. Für
+`"Raum 2B17"` soll sie $2 + 1 + 7 = 10$ liefern. Teste sie in `main`.
+
+<Loesung>
+
+```c
+#include <stdio.h>
+
+int ziffernsumme(char s[])
+{
+    int summe = 0;
+    for (int i = 0; s[i] != '\0'; i++) {        // bis zum Nullzeichen
+        if (s[i] >= '0' && s[i] <= '9') {       // ist es eine Ziffer?
+            summe += s[i] - '0';                // Zeichen '7' → Zahl 7
+        }
+    }
+    return summe;
+}
+
+int main(void)
+{
+    printf("%d\n", ziffernsumme("Raum 2B17"));   // 10
+    printf("%d\n", ziffernsumme("keine"));       // 0
+    return 0;
+}
+```
+
+Wichtig ist `s[i] - '0'`: Das Zeichen `'7'` hat den ASCII-Code 55, `'0'` hat 48 – die Differenz ist die Zahl 7. Ohne diese
+Umrechnung würde man die ASCII-Codes addieren.
+
+</Loesung>
+
+## Array: Temperaturen einer Woche
+
+<Stufe wert="standard" />
+
+Ein Datenlogger hat an sieben Tagen die Höchsttemperatur gespeichert: 18,5 · 21,0 · 24,5 · 23,0 · 19,5 · 26,0 · 22,5 °C.
+Schreibe ein Programm, das den Mittelwert, die höchste Temperatur und den **Tag** (1 … 7) der höchsten Temperatur ausgibt.
+
+<Loesung>
+
+```c
+#include <stdio.h>
+#define TAGE 7
+
+int main(void)
+{
+    float t[TAGE] = {18.5f, 21.0f, 24.5f, 23.0f, 19.5f, 26.0f, 22.5f};
+    float summe = 0;
+    int maxTag = 0;                    // Index des bisher wärmsten Tages
+
+    for (int i = 0; i < TAGE; i++) {
+        summe += t[i];
+        if (t[i] > t[maxTag]) {
+            maxTag = i;
+        }
+    }
+    printf("Mittelwert: %.1f Grad C\n", summe / TAGE);
+    printf("Maximum: %.1f Grad C am Tag %d\n", t[maxTag], maxTag + 1);
+    return 0;
+}
+```
+
+Ausgabe: Mittelwert 22,1 °C (genau $155/7 \approx 22{,}14$), Maximum 26,0 °C am Tag 6.
+Man merkt sich den **Index** statt des Wertes – dann kennt man beides. `+ 1`, weil der Index bei 0 beginnt, die Tage aber
+bei 1.
+
+</Loesung>
+
+## Bitmanipulation berechnen
+
+<Stufe wert="standard" />
+
+Welchen Wert hat `value` jeweils am Ende (hexadezimal und dezimal)?
+
+```c
+uint8_t value;
+value = 0x5A;  value |= 0x05;          // a
+value = 0xF3;  value &= ~0x30;         // b
+value = 0x3C;  value ^= 0xFF;          // c
+value = 0x96;  value = (value >> 4) & 0x03;   // d
+value = 7;     value = value << 2;     // e
+```
+
+<Loesung>
+
+| | Rechnung (binär) | Ergebnis |
+| --- | --- | --- |
+| a | `0101 1010` ODER `0000 0101` = `0101 1111` | `0x5F` = 95 |
+| b | `1111 0011` UND `1100 1111` (= `~0x30`) = `1100 0011` | `0xC3` = 195 |
+| c | `0011 1100` XOR `1111 1111` = `1100 0011` (alle Bits umgedreht) | `0xC3` = 195 |
+| d | `1001 0110 >> 4` = `0000 1001`; UND `0000 0011` = `0000 0001` | `0x01` = 1 |
+| e | `0000 0111 << 2` = `0001 1100` | `0x1C` = 28 ($7 \cdot 4$) |
+
+Tipp: Immer zuerst in **Binär** umschreiben (jede Hexziffer = 4 Bit), dann Bit für Bit rechnen.
+
+</Loesung>
+
+## Bits als Funktion ausgeben
+
+<Stufe wert="vertiefung" />
+
+`printf` kann Zahlen nicht binär ausgeben. Schreibe eine Funktion `void binaer(uint8_t x)`, die die 8 Bits von `x` ausgibt –
+Bit 7 zuerst, nach 4 Bits ein Leerzeichen. `binaer(44)` soll `0010 1100` ausgeben.
+
+<Loesung>
+
+```c
+#include <stdio.h>
+#include <stdint.h>
+
+void binaer(uint8_t x)
+{
+    for (int n = 7; n >= 0; n--) {
+        printf("%d", (x >> n) & 1);    // Bit n nach rechts schieben, ausmaskieren
+        if (n == 4) {
+            printf(" ");
+        }
+    }
+    printf("\n");
+}
+
+int main(void)
+{
+    binaer(44);       // 0010 1100
+    binaer(0xA5);     // 1010 0101
+    return 0;
+}
+```
+
+Die Schleife läuft **rückwärts** von Bit 7 bis Bit 0, weil man Zahlen von links (höchstwertiges Bit) nach rechts liest.
+So eine Funktion ist beim Testen von Bitmanipulationen am PC sehr praktisch.
+
+</Loesung>
+
+## Palindrom ohne string.h
+
+<Stufe wert="vertiefung" />
+
+Ein **Palindrom** liest sich vorwärts und rückwärts gleich, z. B. „rentner“ oder „Anna“. Schreibe eine Funktion
+`int ist_palindrom(char s[])`, die 1 oder 0 liefert. Groß- und Kleinschreibung soll keine Rolle spielen. Verwende keine
+Funktionen aus `string.h`.
+
+<Loesung>
+
+Idee: Zuerst die Länge bestimmen (bis `'\0'` zählen). Dann das erste mit dem letzten Zeichen vergleichen, das zweite mit
+dem vorletzten usw. – bis zur Mitte.
+
+```c
+#include <stdio.h>
+
+char klein(char c)                         // Großbuchstaben in Kleinbuchstaben
+{
+    if (c >= 'A' && c <= 'Z') {
+        return c + ('a' - 'A');            // + 32
+    }
+    return c;
+}
+
+int ist_palindrom(char s[])
+{
+    int laenge = 0;
+    while (s[laenge] != '\0') {
+        laenge++;
+    }
+    for (int i = 0; i < laenge / 2; i++) {
+        if (klein(s[i]) != klein(s[laenge - 1 - i])) {
+            return 0;                      // Unterschied gefunden → sofort fertig
+        }
+    }
+    return 1;
+}
+
+int main(void)
+{
+    char wort[30];
+    printf("Wort: ");
+    scanf("%29s", wort);
+    if (ist_palindrom(wort)) {
+        printf("%s ist ein Palindrom\n", wort);
+    } else {
+        printf("%s ist kein Palindrom\n", wort);
+    }
+    return 0;
+}
+```
+
+Das letzte Zeichen hat den Index `laenge - 1`, nicht `laenge` – dort steht schon das Nullzeichen.
+Bei ungerader Länge (rentner: 7) bleibt das mittlere Zeichen übrig; es muss nicht verglichen werden.
+
+</Loesung>
+
+## Zahlenraten
+
+<Stufe wert="vertiefung" />
+
+Das Programm denkt sich eine Zufallszahl von 1 bis 100. Der:die Spieler:in rät; das Programm antwortet „zu groß“ oder „zu
+klein“, bis die Zahl getroffen ist, und gibt dann die Anzahl der Versuche aus. Ungültige Eingaben (außerhalb 1 … 100) sollen
+nicht als Versuch zählen.
+
+<Loesung>
+
+```c
+#include <stdio.h>
+#include <stdlib.h>     // rand, srand
+#include <time.h>       // time
+
+int main(void)
+{
+    srand((unsigned)time(NULL));          // Zufallsgenerator mit der Uhrzeit starten
+    int geheim = rand() % 100 + 1;        // 1 … 100
+    int tipp, versuche = 0;
+
+    do {
+        printf("Dein Tipp (1-100): ");
+        if (scanf("%d", &tipp) != 1) {    // keine Zahl eingegeben
+            return 1;
+        }
+        if (tipp < 1 || tipp > 100) {
+            printf("Nur Zahlen von 1 bis 100!\n");
+            continue;                     // springt zur Bedingung, zählt nicht
+        }
+        versuche++;
+        if (tipp > geheim) {
+            printf("zu gross\n");
+        } else if (tipp < geheim) {
+            printf("zu klein\n");
+        }
+    } while (tipp != geheim);
+
+    printf("Richtig! Du hast %d Versuche gebraucht.\n", versuche);
+    return 0;
+}
+```
+
+- `rand() % 100` liefert 0 … 99, `+ 1` verschiebt auf 1 … 100.
+- Ohne `srand(time(NULL))` wäre die „Zufallszahl“ bei jedem Start dieselbe.
+- `do … while`, weil mindestens einmal geraten werden muss. `continue` springt in einer `do … while`-Schleife direkt zur
+  Bedingung – eine ungültige Zahl ist nie gleich `geheim`, also geht es weiter.
+- Mit der Strategie „immer die Mitte raten“ (50, 25 oder 75, …) braucht man höchstens 7 Versuche, weil $2^7 = 128 \geq 100$.
+
+</Loesung>

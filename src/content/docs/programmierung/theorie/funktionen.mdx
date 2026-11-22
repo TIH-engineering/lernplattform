@@ -1,0 +1,162 @@
+---
+title: Funktionen
+description: Warum Funktionen? Aufbau mit Rückgabetyp, Name, Parametern und return, void-Funktionen, Funktionsprototyp, Wertübergabe (call by value), lokale und globale Variablen, Bibliotheksfunktionen.
+sidebar:
+  label: 5 · Funktionen
+  order: 5
+---
+
+## Wozu Funktionen?
+
+Eine **Funktion** ist ein Programmteil mit eigenem Namen, das eine abgeschlossene Aufgabe erledigt. Du kennst schon
+`main`, `printf` und `scanf`. Eigene Funktionen
+
+- **zerlegen** ein großes Problem in kleine, überschaubare Teile,
+- vermeiden **doppelten Code** – einmal schreiben, oft aufrufen,
+- lassen sich **einzeln testen**,
+- machen das Hauptprogramm lesbar: `led_ein();` sagt mehr als drei Zeilen Bitmanipulation.
+
+## Aufbau einer Funktion
+
+```c
+//  Rückgabetyp  Name     Parameterliste
+    float        mittelwert(float a, float b)
+{
+    float m = (a + b) / 2;   // Funktionskörper
+    return m;                // Ergebnis zurückgeben
+}
+```
+
+| Teil | Bedeutung |
+| --- | --- |
+| **Rückgabetyp** | Datentyp des Ergebnisses. `void` = die Funktion liefert nichts zurück |
+| **Name** | wie bei Variablen; am besten ein Verb: `berechne_flaeche`, `led_ein` |
+| **Parameter** | Eingangswerte mit Typ und Namen, durch Komma getrennt. `(void)` = keine Parameter |
+| `return` | beendet die Funktion **sofort** und gibt den Wert an den Aufrufer zurück |
+
+### Aufruf
+
+```c
+float x = mittelwert(3.0f, 4.0f);              // x = 3.5
+printf("%.1f\n", mittelwert(x, 10.0f));         // 6.8 (gerundet ausgegeben)
+```
+
+Beim Aufruf werden die **Argumente** (hier `3.0f` und `4.0f`) der Reihe nach in die **Parameter** `a` und `b` kopiert. Anzahl,
+Reihenfolge und Typ müssen passen.
+
+### Funktionen ohne Rückgabewert
+
+```c
+void linie(int laenge)
+{
+    for (int i = 0; i < laenge; i++) {
+        printf("-");
+    }
+    printf("\n");
+}
+
+int main(void)
+{
+    linie(20);       // zeichnet 20 Striche
+    return 0;
+}
+```
+
+## Ein vollständiges Beispiel mit Prototyp
+
+Der Compiler liest die Datei von oben nach unten. Steht eine Funktion **nach** `main`, muss sie vorher mit einem
+**Prototyp** (nur der Kopf mit Strichpunkt) angekündigt werden:
+
+```c
+#include <stdio.h>
+
+// Prototypen: Kopf der Funktion + ;
+float parallel(float r1, float r2);
+int ist_gerade(int zahl);
+
+int main(void)
+{
+    float rg = parallel(100.0f, 150.0f);
+    printf("Gesamtwiderstand: %.1f Ohm\n", rg);     // 60.0 Ohm
+
+    for (int i = 1; i <= 5; i++) {
+        if (ist_gerade(i)) {
+            printf("%d ist gerade\n", i);
+        }
+    }
+    return 0;
+}
+
+// Parallelschaltung zweier Widerstände
+float parallel(float r1, float r2)
+{
+    return r1 * r2 / (r1 + r2);
+}
+
+// liefert 1, wenn die Zahl gerade ist, sonst 0
+int ist_gerade(int zahl)
+{
+    return zahl % 2 == 0;
+}
+```
+
+In größeren Projekten stehen die Prototypen in einer eigenen **Header-Datei** (`.h`), die mit `#include "meine_datei.h"`
+eingebunden wird – genau so, wie `stdio.h` die Prototypen von `printf` und `scanf` enthält.
+
+## Übergabe als Kopie (call by value)
+
+Parameter sind **Kopien** der übergebenen Werte. Ändert die Funktion ihren Parameter, ändert sich die Variable des
+Aufrufers **nicht**:
+
+```c
+void verdopple(int x)
+{
+    x = 2 * x;           // ändert nur die Kopie
+}
+
+int main(void)
+{
+    int a = 5;
+    verdopple(a);
+    printf("%d\n", a);   // Ausgabe: 5 – nicht 10!
+    return 0;
+}
+```
+
+Richtig ist: das Ergebnis **zurückgeben** (`return 2 * x;` und `a = verdopple(a);`). Soll eine Funktion wirklich eine
+Variable des Aufrufers ändern, übergibt man ihre **Adresse** – das ist ein Zeiger (siehe
+[Arrays, Strings und Zeiger](/programmierung/theorie/arrays-strings/#zeiger)). Genau deshalb braucht `scanf` das `&`.
+
+**Ausnahme Arrays:** Ein Array wird nicht kopiert – die Funktion bekommt seine Startadresse und arbeitet direkt mit dem
+Original. Mehr dazu im nächsten Teil.
+
+## Gültigkeitsbereich von Variablen
+
+- **Lokale Variablen** werden innerhalb einer Funktion (oder eines Blocks `{ }`) angelegt. Sie existieren nur dort und
+  verschwinden, wenn die Funktion endet. Zwei Funktionen können ohne Probleme beide eine Variable `i` haben – es sind
+  verschiedene Variablen.
+- **Globale Variablen** stehen außerhalb aller Funktionen und sind überall sichtbar. Sie sind bequem, aber gefährlich:
+  Jede Funktion kann sie verändern, Fehler sind schwer zu finden. Verwende sie sparsam. (Auf Mikrocontrollern braucht man sie
+  für Daten, die eine Interrupt-Routine mit dem Hauptprogramm teilt.)
+- Eine lokale Variable mit `static` behält ihren Wert zwischen zwei Aufrufen – z. B. ein Zähler, wie oft die Funktion schon
+  aufgerufen wurde.
+
+## Bibliotheksfunktionen
+
+Viele Funktionen gibt es schon fertig – man muss nur die passende Header-Datei einbinden:
+
+| Header | Beispiele |
+| --- | --- |
+| `<stdio.h>` | `printf`, `scanf`, `getchar`, `putchar` |
+| `<math.h>` | `sqrt(x)`, `pow(x, y)`, `sin(x)` (Winkel im Bogenmaß), `fabs(x)` |
+| `<stdlib.h>` | `abs(n)`, `rand()`, `srand(…)` |
+| `<string.h>` | `strlen`, `strcpy`, `strcmp` (siehe Strings) |
+| `<stdint.h>` | Datentypen `uint8_t`, `int16_t` … |
+| `<stdbool.h>` | `bool`, `true`, `false` |
+
+:::tip[Gute Funktionen]
+- Eine Funktion erledigt **eine** Aufgabe – lässt sich ihr Zweck nicht in einem Satz sagen, ist sie zu groß.
+- Sie bekommt ihre Daten über **Parameter** und liefert das Ergebnis mit **return** – statt mit globalen Variablen.
+- Berechnungsfunktionen geben nichts mit `printf` aus. Die Ausgabe macht `main`. So kann man die Funktion überall
+  verwenden – auch auf einem Mikrocontroller ohne Bildschirm.
+:::
