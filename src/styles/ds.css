@@ -805,6 +805,10 @@ details.loesung > :last-child {
 .ds-raster--kompakt .ds-thema--breit {
 	padding: 0.8rem 1rem;
 }
+/* Die breite Karte hat genug Platz: ganze Wörter umbrechen statt trennen („Elektro-technik“) */
+.ds-thema--breit .ds-thema__titel {
+	hyphens: manual;
+}
 .ds-raster--kompakt ~ .ds-bereich,
 .ds-zusatz + .ds-bereich {
 	margin-top: 1.75rem;
