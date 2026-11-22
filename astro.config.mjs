@@ -170,6 +170,7 @@ export default defineConfig({
 						{ label: 'Quiz', slug: 'projektmanagement/quiz' },
 					],
 				},
+				{ label: 'Impressum und Datenschutz', slug: 'impressum' },
 			],
 		}),
 	],
