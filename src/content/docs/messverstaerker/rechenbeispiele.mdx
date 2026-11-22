@@ -1,0 +1,144 @@
+---
+title: Rechenbeispiele – Messverstärker und Schnittstellen
+description: Rechenbeispiele zu Differenz- und Gleichtaktspannung, Fehler durch begrenzte Gleichtaktunterdrückung, Verstärkungswiderstand eines Instrumentenverstärkers für eine DMS-Brücke, Shunt und Strommessverstärker, Offsetfehler, Messwert und Spannungsbilanz einer 4–20-mA-Stromschleife.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+
+## Differenz- und Gleichtaktspannung
+
+<Stufe wert="grundlagen" />
+
+An einer Brücke misst man gegen Masse $U_1 = 2{,}508\,\mathrm{V}$ und $U_2 = 2{,}500\,\mathrm{V}$.
+
+**Gesucht:** $U_\mathrm{D}$ und $U_\mathrm{CM}$
+
+<Loesung>
+
+$U_\mathrm{D} = U_1 - U_2 = 8\,\mathrm{mV}$ · $U_\mathrm{CM} = (U_1 + U_2)/2 = 2{,}504\,\mathrm{V}$
+
+Das Nutzsignal ist rund 300-mal kleiner als die Gleichtaktspannung.
+
+</Loesung>
+
+## Fehler durch die Gleichtaktunterdrückung
+
+<Stufe wert="standard" />
+
+Das Signal aus dem vorigen Beispiel wird mit einem Instrumentenverstärker mit $\mathrm{CMRR} = 100\,\mathrm{dB}$ verstärkt.
+Zum Vergleich: ein einfacher Differenzverstärker mit 1-%-Widerständen erreicht nur etwa 34 dB.
+
+**Gesucht:** Fehler bezogen auf den Eingang und relativ zum Nutzsignal – für beide Verstärker
+
+<Loesung>
+
+1. $100\,\mathrm{dB}$ → $\mathrm{CMRR} = 10^{100/20} = 10^5$ → Fehler $2{,}504\,\mathrm{V}/10^5 \approx 25\,\mathrm{\mu V}$ →
+   $25\,\mathrm{\mu V}/8\,\mathrm{mV} \approx 0{,}31\,\%$
+2. $34\,\mathrm{dB}$ → $\mathrm{CMRR} \approx 50$ → Fehler $2{,}504\,\mathrm{V}/50 \approx 50\,\mathrm{mV}$ – **sechsmal größer als
+   das Nutzsignal**. Der einfache Differenzverstärker ist für Brückensignale unbrauchbar.
+
+</Loesung>
+
+## Instrumentenverstärker für eine Wägezelle
+
+<Stufe wert="standard" />
+
+Eine Wägezelle (2 mV/V, gespeist mit 5 V) soll an einen A/D-Umsetzer mit 0 … 3,3 V angeschlossen werden. Bei Nennlast sollen
+etwa 3,0 V am Ausgang anliegen. Der Instrumentenverstärker hat laut Datenblatt $V = 1 + 50\,\mathrm{k\Omega}/R_\mathrm{G}$,
+REF liegt an Masse.
+
+**Gesucht:** Verstärkung, $R_\mathrm{G}$ (Normwert E96) und tatsächliche Ausgangsspannung bei Nennlast
+
+<Loesung>
+
+1. Brückenspannung bei Nennlast: $2\,\mathrm{mV/V} \cdot 5\,\mathrm{V} = 10\,\mathrm{mV}$
+2. $V = 3{,}0\,\mathrm{V}/10\,\mathrm{mV} = 300$
+3. $R_\mathrm{G} = \dfrac{50\,\mathrm{k\Omega}}{V - 1} = \dfrac{50\,\mathrm{k\Omega}}{299} \approx 167\,\Omega$ → Normwert $169\,\Omega$
+4. $V = 1 + 50\,000/169 \approx 296{,}9$ → $U_\mathrm{a} \approx 2{,}97\,\mathrm{V}$ (die Restabweichung gleicht man durch
+   Kalibrieren aus)
+
+Da die Last nur in eine Richtung wirkt, darf REF an Masse liegen. Bei einer Kraftmessdose für Zug **und** Druck legt man
+REF auf die Mitte des Bereichs.
+
+</Loesung>
+
+## Shunt und Strommessverstärker
+
+<Stufe wert="grundlagen" />
+
+Der Strom eines Motors (max. 20 A) wird High-Side mit einem Shunt von $2\,\mathrm{m\Omega}$ und einem Strommessverstärker mit
+$V = 50$ gemessen.
+
+**Gesucht:** Shuntspannung und Verlustleistung bei 20 A, Ausgangsspannung des Verstärkers
+
+<Loesung>
+
+$U_\mathrm{S} = 20\,\mathrm{A} \cdot 2\,\mathrm{m\Omega} = 40\,\mathrm{mV}$ · $P = (20\,\mathrm{A})^2 \cdot 2\,\mathrm{m\Omega} = 0{,}8\,\mathrm{W}$ ·
+$U_\mathrm{a} = 50 \cdot 40\,\mathrm{mV} = 2{,}0\,\mathrm{V}$
+
+Der Shunt muss mindestens für 1 W ausgelegt sein (besser mit Reserve, z. B. 2 W), und die Leiterplatte muss die Wärme
+abführen.
+
+</Loesung>
+
+## Offsetfehler bei kleinem Shunt
+
+<Stufe wert="standard" />
+
+Im vorigen Beispiel wird statt des Strommessverstärkers ein Standard-OPV-Differenzverstärker mit einer Offsetspannung von
+$\pm 0{,}5\,\mathrm{mV}$ verwendet.
+
+1. Welchem Stromfehler entspricht der Offset?
+2. Wie groß ist der relative Fehler bei 20 A und bei 1 A?
+
+<Loesung>
+
+1. $\Delta I = 0{,}5\,\mathrm{mV}/2\,\mathrm{m\Omega} = \pm 0{,}25\,\mathrm{A}$
+2. Bei 20 A: $0{,}25/20 = 1{,}25\,\%$ · bei 1 A: **25 %**
+
+Der Offset ist ein **absoluter** Fehler – bei kleinen Strömen wirkt er sich besonders stark aus. Ein Auto-Zero-Verstärker
+(Offset z. B. 10 µV → 5 mA) löst das Problem.
+
+</Loesung>
+
+## Messwert aus der Stromschleife
+
+<Stufe wert="grundlagen" />
+
+Ein Temperaturmessumformer hat den Messbereich 0 … 150 °C → 4 … 20 mA.
+
+1. Welche Temperatur gehört zu 12,8 mA?
+2. Welcher Strom gehört zu 60 °C?
+3. Was bedeutet ein Strom von 0 mA?
+
+<Loesung>
+
+1. $\vartheta = \dfrac{12{,}8\,\mathrm{mA} - 4\,\mathrm{mA}}{16\,\mathrm{mA}} \cdot 150\,°\mathrm{C} = 82{,}5\,°\mathrm{C}$
+2. $I = 4\,\mathrm{mA} + 16\,\mathrm{mA} \cdot \dfrac{60}{150} = 10{,}4\,\mathrm{mA}$
+3. Kein gültiger Messwert: Drahtbruch, fehlende Versorgung oder defekter Messumformer. Genau dafür gibt es den lebenden
+   Nullpunkt bei 4 mA.
+
+</Loesung>
+
+## Spannungsbilanz einer Stromschleife
+
+<Stufe wert="vertiefung" />
+
+Ein Zweileiter-Messumformer braucht mindestens $U_\mathrm{MU,min} = 10\,\mathrm{V}$. Er ist über ein 50 m langes Kabel
+(Kupfer, $0{,}5\,\mathrm{mm^2}$, $\gamma = 56\,\mathrm{m/(\Omega\,mm^2)}$) angeschlossen. Die Steuerung hat eine Bürde von
+$250\,\Omega$, die Versorgung beträgt 24 V. Gerechnet wird mit dem größten Fehlerstrom 22 mA.
+
+1. Wie groß ist die notwendige Versorgungsspannung?
+2. Wie groß darf die Bürde (einschließlich weiterer Anzeigegeräte in der Schleife) höchstens sein?
+
+<Loesung>
+
+1. Leitungswiderstand (Hin und zurück, 100 m): $R_\mathrm{L} = \dfrac{100\,\mathrm{m}}{56 \cdot 0{,}5}\,\Omega \approx 3{,}6\,\Omega$
+   $U_\mathrm{V} \geq 10\,\mathrm{V} + 22\,\mathrm{mA} \cdot (250 + 3{,}6)\,\Omega \approx 15{,}6\,\mathrm{V}$ → 24 V reichen.
+2. $R_\mathrm{B,max} = \dfrac{24\,\mathrm{V} - 10\,\mathrm{V}}{22\,\mathrm{mA}} - 3{,}6\,\Omega \approx 633\,\Omega$
+
+Die Leitung spielt hier kaum eine Rolle – und selbst wenn ihr Widerstand sich ändert, ändert sich der **Strom** nicht. Das
+ist der große Vorteil der Stromschleife.
+
+</Loesung>

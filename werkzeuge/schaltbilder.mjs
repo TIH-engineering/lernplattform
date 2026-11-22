@@ -1416,3 +1416,370 @@ speichere('mtrs/wheatstone.svg', 520, 280, 'Wheatstone-Messbrücke mit Diagonals
 			text(x0 + 5.5 * b, 132, 'Ende-Zeichen', 'middle', `font-size="11" fill="${AKZENT}"`));
 	}
 }
+
+// ======================================================================
+// MTRS – weitere Themen: Leistung/Impedanz, Frequenzmessung, Messverstärker, A/D-D/A, Aktuatoren, Regelungstechnik
+// ======================================================================
+{
+	const ORANGE = '#d97706';
+	const klein = 'font-size="12"';
+	const linie = (pts, extra = '') => `<polyline points="${p(pts)}" ${extra}/>`;
+	const kurve = (f, t0, t1, X, Y, n = 300) => {
+		const pts = [];
+		for (let i = 0; i <= n; i++) { const t = t0 + ((t1 - t0) * i) / n; pts.push([+X(t).toFixed(2), +Y(f(t)).toFixed(2)]); }
+		return pts;
+	};
+	const achsen = (x0, y0, x1, yTop, xl, yl, yUnten = null) =>
+		pfeil(x0, yUnten ?? y0, x0, yTop) + pfeil(x0, y0, x1, y0) +
+		text(x1, y0 - 8, xl, 'end', klein) + text(x0 + 8, yTop + 8, yl, 'start', klein);
+	const gestrichelt = (x1, y1, x2, y2, farbe = 'currentColor') =>
+		strich(x1, y1, x2, y2, `stroke-dasharray="6 4" stroke-width="1.5" stroke="${farbe}"`);
+	const legende = (x, y, eintraege) =>
+		eintraege.map(([t, f, dash], i) =>
+			strich(x, y + i * 18, x + 24, y + i * 18, `stroke="${f}" stroke-width="2.5"${dash ? ' stroke-dasharray="6 4"' : ''}`) +
+			text(x + 30, y + i * 18 + 4, t, 'start', klein)).join('');
+
+	// L1) Leistung im Zeitverlauf
+	{
+		const x0 = 50, y0 = 140, sx = 520 / (4 * Math.PI), X = (t) => x0 + t * sx;
+		const u = (t) => Math.sin(t), i = (t) => 0.8 * Math.sin(t - Math.PI / 3), pp = (t) => u(t) * i(t);
+		const P = 0.4 * 0.5;
+		speichere('mtrs/leistung-zeitverlauf.svg', 620, 280, 'Spannung, Strom und Augenblicksleistung bei 60 Grad Phasenverschiebung',
+			achsen(x0, y0, 590, 20, sym('t'), '', 230) +
+			linie(kurve(u, 0, 4 * Math.PI, X, (v) => y0 - 95 * v), 'stroke-width="2"') +
+			linie(kurve(i, 0, 4 * Math.PI, X, (v) => y0 - 95 * v), `stroke="${AKZENT}" stroke-width="2"`) +
+			linie(kurve(pp, 0, 4 * Math.PI, X, (v) => y0 - 150 * v), `stroke="${ORANGE}" stroke-width="2.5"`) +
+			gestrichelt(x0, y0 - 150 * P, 580, y0 - 150 * P, ORANGE) +
+			text(585, y0 - 150 * P - 6, sym('P'), 'end', `fill="${ORANGE}"`) +
+			legende(70, 245, [[sym('u') + '(' + sym('t') + ')', 'currentColor'], [sym('i') + '(' + sym('t') + ')', AKZENT]]) +
+			legende(240, 245, [[sym('p') + '(' + sym('t') + ') = ' + sym('u') + ' · ' + sym('i'), ORANGE], ['Mittelwert = Wirkleistung', ORANGE, true]]));
+	}
+
+	// L2) Realer Kondensator: ESB und |Z|(f)
+	{
+		const C = 100e-9, R = 0.02, L = 5e-9;
+		const Z = (f) => { const w = 2 * Math.PI * f; return Math.hypot(R, w * L - 1 / (w * C)); };
+		const x0 = 330, y0 = 240, bx = 280, lf0 = 4, lf1 = 8, lz0 = -2, lz1 = 2;
+		const X = (lf) => x0 + ((lf - lf0) / (lf1 - lf0)) * bx, Y = (lz) => y0 - ((lz - lz0) / (lz1 - lz0)) * 200;
+		let g = '';
+		for (let d = lf0; d <= lf1; d++) g += strich(X(d), y0, X(d), y0 + 5) + text(X(d), y0 + 18, ['10 k', '100 k', '1 M', '10 M', '100 M'][d - 4], 'middle', 'font-size="11"');
+		for (let d = lz0; d <= lz1; d++) g += strich(x0 - 5, Y(d), x0, Y(d)) + text(x0 - 8, Y(d) + 4, ['10 m', '0,1', '1', '10', '100'][d + 2], 'end', 'font-size="11"');
+		const pts = []; for (let k = 0; k <= 300; k++) { const lf = lf0 + (k / 300) * (lf1 - lf0); pts.push([+X(lf).toFixed(2), +Y(Math.log10(Z(10 ** lf))).toFixed(2)]); }
+		const f0 = 1 / (2 * Math.PI * Math.sqrt(L * C));
+		speichere('mtrs/kondensator-impedanz.svg', 640, 290, 'Realer Kondensator: Ersatzschaltbild mit ESR und ESL und Impedanzbetrag über der Frequenz',
+			klemme(20, 90) + draht([24, 90], [40, 90]) + kondensator(40, 90, 100, 90) + ueber(70, 90, 'C', '') + widerstand(100, 90, 180, 90) + ueber(140, 90, 'R', 'ESR') +
+			spule(180, 90, 250, 90) + ueber(215, 90, 'L', 'ESL') + draht([250, 90], [262, 90]) + klemme(266, 90) +
+			text(140, 150, 'unterhalb ' + sym('f', '0') + ': kapazitiv', 'middle', klein) + text(140, 170, 'oberhalb ' + sym('f', '0') + ': induktiv', 'middle', klein) +
+			achsen(x0, y0, 630, 20, sym('f') + ' in Hz', sym('Z') + ' in Ω') + g +
+			`<polyline points="${p(pts)}" stroke="${AKZENT}" stroke-width="2.5"/>` +
+			gestrichelt(X(Math.log10(f0)), y0, X(Math.log10(f0)), Y(-1.7)) + text(X(Math.log10(f0)) + 6, Y(-1.85), sym('f', '0') + ' ≈ 7 MHz', 'start', klein) +
+			text(X(5.3), Y(1.6), '∼ 1/' + sym('f'), 'start', klein) + text(X(7.6), Y(0.9), '∼ ' + sym('f'), 'end', klein));
+	}
+
+	// F1) Komparator mit Rauschen, ohne und mit Hysterese
+	{
+		const x0 = 110, b = 470, N = 600;
+		const sig = (t) => -1 + 2 * t + 0.09 * Math.sin(2 * Math.PI * 23 * t) + 0.06 * Math.sin(2 * Math.PI * 61 * t + 1) + 0.04 * Math.sin(2 * Math.PI * 137 * t + 2);
+		const X = (t) => x0 + t * b, ys = (v) => 60 - v * 40;
+		const ohne = [], mit = []; let zMit = 0;
+		for (let k = 0; k <= N; k++) {
+			const t = k / N, v = sig(t);
+			ohne.push([+X(t).toFixed(2), v > 0 ? 140 : 170]);
+			if (v > 0.15) zMit = 1; if (v < -0.15) zMit = 0;
+			mit.push([+X(t).toFixed(2), zMit ? 220 : 250]);
+		}
+		const stufen = (pts) => { const q = [pts[0]]; for (let k = 1; k < pts.length; k++) { if (pts[k][1] !== pts[k - 1][1]) q.push([pts[k][0], pts[k - 1][1]]); q.push(pts[k]); } return q; };
+		speichere('mtrs/komparator-rauschen.svg', 640, 280, 'Verrauschtes Signal am Komparator: ohne Hysterese mehrfaches Umschalten, mit Hysterese einmal',
+			text(x0 - 12, 64, 'Signal', 'end', klein) + linie(kurve(sig, 0, 1, X, ys, N), 'stroke-width="1.5"') +
+			gestrichelt(x0, 54, x0 + b, 54, ORANGE) + gestrichelt(x0, 66, x0 + b, 66, ORANGE) + gestrichelt(x0, 60, x0 + b, 60, AKZENT) +
+			text(x0 + b + 4, 48, 'Schwelle', 'start', `font-size="11" fill="${AKZENT}"`) + text(x0 + b + 4, 80, 'Hysterese', 'start', `font-size="11" fill="${ORANGE}"`) +
+			text(x0 - 12, 155, 'ohne', 'end', klein) + text(x0 - 12, 170, 'Hysterese', 'end', klein) + linie(stufen(ohne), 'stroke-width="2"') +
+			text(x0 - 12, 235, 'mit', 'end', klein) + text(x0 - 12, 250, 'Hysterese', 'end', klein) + linie(stufen(mit), `stroke="${AKZENT}" stroke-width="2"`));
+	}
+
+	// F2) Torzeitverfahren
+	speichere('mtrs/torzeit.svg', 700, 190, 'Frequenzzähler nach dem Torzeitverfahren: Komparator, Tor, Zähler, Zeitbasis',
+		text(8, 60, 'Signal', 'start', klein) + pfeil(10, 70, 60, 70) +
+		kasten(60, 45, 110, 50, ['Komparator', 'mit Hysterese']) + pfeil(170, 70, 230, 70) +
+		kasten(230, 45, 90, 50, ['Tor', '(UND)'], `stroke="${AKZENT}"`) + pfeil(320, 70, 380, 70) +
+		kasten(380, 45, 110, 50, ['Zähler', sym('N')]) + pfeil(490, 70, 550, 70) + kasten(550, 45, 140, 50, ['Anzeige', sym('f') + ' = ' + sym('N') + '/' + sym('T', 'Tor')]) +
+		kasten(60, 125, 110, 50, ['Quarz-', 'oszillator']) + pfeil(170, 150, 230, 150) + kasten(230, 125, 90, 50, ['Teiler', sym('T', 'Tor')]) +
+		draht([320, 150], [345, 150], [345, 112], [275, 112]) + pfeil(275, 112, 275, 95) + text(355, 140, 'öffnet das Tor', 'start', klein));
+
+	// F3) Periodendauermessung (Zeitdiagramm)
+	{
+		const x0 = 160;
+		const tx = linie([[x0, 60], [x0 + 40, 60], [x0 + 40, 30], [x0 + 340, 30], [x0 + 340, 60], [x0 + 420, 60]], `stroke="${AKZENT}" stroke-width="2"`);
+		let ref = '', gez = '';
+		for (let k = 0; k < 24; k++) {
+			const x = x0 + 10 + k * 18;
+			ref += linie([[x, 120], [x, 100], [x + 9, 100], [x + 9, 120]], 'stroke-width="1.5"');
+			if (x > x0 + 40 && x + 9 < x0 + 340) gez += linie([[x, 180], [x, 160], [x + 9, 160], [x + 9, 180]], `stroke="${ORANGE}" stroke-width="1.5"`);
+		}
+		speichere('mtrs/periodendauer.svg', 640, 230, 'Periodendauermessung: Referenzimpulse während einer Periode des Messsignals zählen',
+			text(x0 - 12, 50, 'Messsignal (Tor)', 'end', klein) + tx + mass(x0 + 40, 76, x0 + 340, 76) + text(x0 + 190, 92, sym('T', 'x'), 'middle', klein) +
+			text(x0 - 12, 115, 'Referenztakt ' + sym('f', 'ref'), 'end', klein) + strich(x0, 120, x0 + 440, 120, 'stroke-width="1.5"') + ref +
+			text(x0 - 12, 175, 'gezählt: ' + sym('N'), 'end', klein) + strich(x0, 180, x0 + 440, 180, 'stroke-width="1.5"') + gez +
+			text(x0 + 190, 215, sym('T', 'x') + ' = ' + sym('N') + '/' + sym('f', 'ref'), 'middle', klein));
+	}
+
+	// V1) Instrumentenverstärker
+	speichere('mtrs/instrumentenverstaerker.svg', 620, 300, 'Instrumentenverstärker aus drei Operationsverstärkern mit Verstärkungswiderstand RG',
+		klemme(40, 64) + text(32, 69, sym('U', '1'), 'end') + draht([44, 64], [140, 64]) + opv(170, 80, true) + text(180, 84, '1', 'middle', klein) +
+		draht([140, 96], [120, 96], [120, 120]) + punkt(120, 120) + widerstand(120, 120, 120, 200) + neben(120, 160, 'R', 'G', 'links') +
+		draht([212, 80], [230, 80], [230, 120]) + widerstand(230, 120, 120, 120) + text(175, 145, sym('R'), 'middle') + punkt(230, 80) +
+		klemme(40, 256) + text(32, 261, sym('U', '2'), 'end') + draht([44, 256], [140, 256]) + opv(170, 240, false) + text(180, 244, '2', 'middle', klein) +
+		draht([140, 224], [120, 224], [120, 200]) + punkt(120, 200) +
+		draht([212, 240], [230, 240], [230, 200]) + widerstand(230, 200, 120, 200) + ueber(175, 200, 'R', '') + punkt(230, 240) +
+		draht([230, 80], [300, 80], [300, 144]) + widerstand(300, 144, 390, 144) + ueber(345, 144, 'R', '1') + draht([390, 144], [420, 144]) + punkt(400, 144) +
+		draht([230, 240], [300, 240], [300, 176]) + widerstand(300, 176, 390, 176) + text(345, 200, sym('R', '1')) + draht([390, 176], [420, 176]) + punkt(400, 176) +
+		opv(450, 160) + text(462, 164, '3', 'middle', klein) +
+		draht([400, 144], [400, 100]) + widerstand(400, 100, 520, 100) + ueber(460, 100, 'R', '2') + draht([520, 100], [520, 160]) +
+		draht([492, 160], [570, 160]) + punkt(520, 160) + klemme(574, 160) + text(582, 165, sym('U', 'a'), 'start') +
+		widerstand(400, 176, 400, 262) + neben(400, 222, 'R', '2') + klemme(400, 266) + text(400, 290, 'REF', 'middle', klein));
+
+	// V2) Low-Side und High-Side
+	{
+		const teil = (x, high) => {
+			let s = text(x + 110, 22, high ? 'High-Side' : 'Low-Side', 'middle', 'font-weight="600"') +
+				text(x + 20, 48, '+' + sym('U', 'B'), 'start', klein) + draht([x + 20, 56], [x + 110, 56]);
+			if (!high) {
+				s += widerstand(x + 110, 56, x + 110, 140) + text(x + 126, 102, 'Last', 'start', klein) +
+					`<g stroke="${AKZENT}">${widerstand(x + 110, 140, x + 110, 215)}</g>` + text(x + 94, 182, sym('R', 'S'), 'end', `fill="${AKZENT}"`) + masse(x + 110, 215) +
+					pfeil(x + 145, 150, x + 145, 205, AKZENT) + text(x + 153, 175, sym('U', 'S'), 'start', `fill="${AKZENT}"`) +
+					text(x + 153, 195, 'nahe 0 V', 'start', 'font-size="11"');
+			} else {
+				s += `<g stroke="${AKZENT}">${widerstand(x + 110, 56, x + 110, 130)}</g>` + text(x + 94, 98, sym('R', 'S'), 'end', `fill="${AKZENT}"`) +
+					widerstand(x + 110, 130, x + 110, 215) + text(x + 126, 177, 'Last', 'start', klein) + masse(x + 110, 215) +
+					pfeil(x + 145, 66, x + 145, 120, AKZENT) + text(x + 153, 90, sym('U', 'S'), 'start', `fill="${AKZENT}"`) +
+					text(x + 153, 110, 'auf ' + sym('U', 'B') + '-Potential', 'start', 'font-size="11"');
+			}
+			return s;
+		};
+		speichere('mtrs/shunt-low-high.svg', 600, 245, 'Strommessung mit Shunt: Low-Side an Masse und High-Side an der Versorgung', teil(10, false) + teil(300, true));
+	}
+
+	// V3) 4–20-mA-Stromschleife
+	speichere('mtrs/stromschleife.svg', 660, 230, 'Zweileiter-Messumformer in einer 4-20-mA-Stromschleife mit Bürdenwiderstand',
+		gquelle(60, 50, 190, 'U', 'V') + text(60, 215, '24 V', 'middle', klein) +
+		draht([60, 50], [450, 50], [450, 90], [490, 90]) + stromspitze(300, 50, 'r') + text(300, 40, sym('I') + ' = 4 … 20 mA', 'middle', klein) +
+		kasten(490, 70, 150, 100, ['Messumformer', '(Zweileiter)', 'mit Sensor'], `stroke="${AKZENT}"`) +
+		draht([490, 150], [450, 150], [450, 190], [310, 190]) + widerstand(310, 190, 190, 190) + text(250, 215, sym('R', 'B') + ' = 250 Ω', 'middle', klein) +
+		draht([190, 190], [60, 190]) + pfeil(300, 165, 200, 165) + text(250, 155, '1 … 5 V → Steuerung', 'middle', klein) +
+		text(380, 120, 'Leitung', 'middle', klein) + text(380, 136, '(Hunderte m)', 'middle', klein));
+
+	// A1) R-2R-D/A-Umsetzer (3 Bit, Code 101)
+	{
+		const knoten = [[160, 'Bit 0', 1], [280, 'Bit 1', 0], [400, 'Bit 2', 1]];
+		let s = klemme(524, 60) + text(532, 65, sym('U', 'ref'), 'start') + draht([160, 60], [520, 60]) +
+			widerstand(160, 60, 280, 60) + ueber(220, 60, 'R', '') + widerstand(280, 60, 400, 60) + ueber(340, 60, 'R', '') +
+			draht([160, 60], [80, 60]) + widerstand(80, 60, 80, 150) + text(64, 110, '2' + sym('R'), 'end') + draht([80, 150], [80, 240]) +
+			draht([80, 240], [440, 240]) + masse(440, 240) + draht([144, 200], [570, 200]) + text(130, 204, 'Σ', 'end', klein);
+		for (const [x, name, bit] of knoten) {
+			const ca = [x - 16, 176], cb = [x + 16, 176];
+			s += punkt(x, 60) + widerstand(x, 60, x, 140) + text(x + 14, 104, '2' + sym('R'), 'start') + draht([x, 140], [x, 146]) +
+				`<circle cx="${x}" cy="149" r="3"/>` + `<circle cx="${ca[0]}" cy="${ca[1]}" r="2.5"/><circle cx="${cb[0]}" cy="${cb[1]}" r="2.5"/>` +
+				strich(x, 152, bit ? ca[0] + 1 : cb[0] - 1, 174) + draht([ca[0], 179], [ca[0], 200]) + punkt(ca[0], 200) +
+				draht([cb[0], 179], [cb[0], 240]) + punkt(cb[0], 240) + text(x, 280, `${name} = ${bit}`, 'middle', klein);
+		}
+		s += opv(600, 216) + draht([570, 232], [555, 232], [555, 252]) + masse(555, 252) + punkt(560, 200) + draht([560, 200], [560, 150]) +
+			widerstand(560, 150, 680, 150) + ueber(620, 150, 'R', '') + draht([680, 150], [680, 216]) + draht([642, 216], [700, 216]) + punkt(680, 216) +
+			text(704, 240, sym('U', 'a'), 'end');
+		speichere('mtrs/r2r.svg', 720, 300, 'D/A-Umsetzer mit R-2R-Netzwerk, 3 Bit, Code 101', s);
+	}
+
+	// A2) Dual-Slope
+	{
+		const x0 = 60, y0 = 210, T1 = 200, k = 140;
+		const kurveDS = (ue) => [[x0, y0], [x0 + T1, y0 - k * ue], [x0 + T1 + T1 * ue, y0]];
+		speichere('mtrs/dual-slope.svg', 560, 250, 'Dual-Slope-Verfahren: Aufintegrieren für feste Zeit, Abintegrieren mit fester Steigung',
+			achsen(x0, y0, 540, 20, sym('t'), sym('u', 'Int')) +
+			linie(kurveDS(1), 'stroke-width="2.5"') + linie(kurveDS(0.55), `stroke="${AKZENT}" stroke-width="2.5"`) +
+			gestrichelt(x0 + T1, y0, x0 + T1, y0 - k) + mass(x0, y0 + 14, x0 + T1, y0 + 14) + text(x0 + T1 / 2, y0 + 30, sym('T', '1') + ' (fest)', 'middle', klein) +
+			mass(x0 + T1, y0 + 14, x0 + T1 + T1 * 0.55, y0 + 14) + text(x0 + T1 + T1 * 0.275, y0 + 30, sym('T', '2'), 'middle', `${klein} fill="${AKZENT}"`) +
+			text(x0 + 95, y0 - k * 0.5 - 12, 'großes ' + sym('U', 'e'), 'end', klein) + text(x0 + 130, y0 - k * 0.36 + 22, 'kleines ' + sym('U', 'e'), 'start', `${klein} fill="${AKZENT}"`) +
+			text(x0 + T1 + 100, y0 - k + 10, 'gleiche Steigung (' + sym('U', 'ref') + ')', 'start', klein));
+	}
+
+	// A3) Offset- und Verstärkungsfehler
+	{
+		const x0 = 60, y0 = 230, s = 22;
+		const stufen = []; for (let z = 0; z < 8; z++) stufen.push([x0 + z * s, y0 - z * s], [x0 + (z + 1) * s, y0 - z * s]);
+		speichere('mtrs/adc-fehler.svg', 560, 270, 'Kennlinie eines A/D-Umsetzers: ideal, mit Offsetfehler und mit Verstärkungsfehler',
+			achsen(x0, y0, 280, 20, sym('U', 'e'), 'Code') + linie(stufen, 'stroke-width="1.5"') +
+			strich(x0, y0 + s / 2, x0 + 8 * s, y0 - 7.5 * s, 'stroke-width="2"') +
+			strich(x0, y0 + s / 2 - 30, x0 + 8 * s, y0 - 7.5 * s - 30, `stroke="${AKZENT}" stroke-width="2.5"`) +
+			strich(x0, y0 + s / 2, x0 + 8 * s, y0 - 5.6 * s, `stroke="${ORANGE}" stroke-width="2.5"`) +
+			legende(300, 60, [['ideal (Treppe und Gerade)', 'currentColor'], ['Offsetfehler: verschoben', AKZENT], ['Verstärkungsfehler: Steigung', ORANGE]]) +
+			text(300, 140, 'DNL: einzelne Stufen ungleich breit', 'start', klein) + text(300, 160, 'INL: Kennlinie gekrümmt', 'start', klein));
+	}
+
+	// AK1) Magnetkreis
+	{
+		const kern = [[360, 130], [360, 40], [60, 40], [60, 240], [360, 240], [360, 150], [310, 150], [310, 190], [110, 190], [110, 90], [310, 90], [310, 130]];
+		let wick = ''; for (let y = 96; y <= 184; y += 11) wick += strich(46, y, 124, y + 6, 'stroke-width="2.5"');
+		speichere('mtrs/magnetkreis.svg', 470, 280, 'Magnetkreis: Eisenkern mit Spule und Luftspalt',
+			`<polygon points="${p(kern)}" fill="currentColor" fill-opacity="0.12"/>` + wick +
+			draht([46, 100], [20, 100]) + draht([46, 180], [20, 180]) + klemme(16, 100) + klemme(16, 180) + stromspitze(32, 100, 'r') + text(28, 90, sym('I'), 'middle', klein) +
+			text(140, 145, sym('N'), 'start') + text(210, 30, 'Eisen, ' + sym('μ', 'r') + ' groß', 'middle', klein) +
+			`<rect x="85" y="65" width="250" height="150" rx="8" stroke="${AKZENT}" stroke-dasharray="7 5" stroke-width="1.5"/>` +
+			spitze(200, 215, 190, 215, AKZENT) + text(200, 262, sym('Φ'), 'middle', `fill="${AKZENT}"`) +
+			text(375, 144, 'Luftspalt ' + sym('δ'), 'start', klein));
+	}
+
+	// AK2) Relais mit Freilaufdiode
+	speichere('mtrs/freilauf.svg', 330, 270, 'Relaisspule am Transistor mit Freilaufdiode',
+		text(190, 20, '+' + sym('U', 'B'), 'middle', klein) + draht([150, 34], [230, 34]) + punkt(190, 34) + draht([190, 26], [190, 34]) +
+		spule(150, 34, 150, 130) + text(132, 86, 'Relais', 'end', klein) + diode(230, 130, 230, 34) + text(250, 86, 'Freilauf-', 'start', klein) + text(250, 102, 'diode', 'start', klein) +
+		draht([150, 130], [230, 130]) + punkt(150, 130) + draht([150, 130], [150, 158]) + npn(150, 190) +
+		widerstand(40, 190, 118, 190) + ueber(79, 190, 'R', 'B') + klemme(36, 190) + text(30, 225, 'µC-Pin', 'start', klein) + masse(150, 222));
+
+	// AK3) Ersatzschaltbild Gleichstrommotor
+	speichere('mtrs/dc-motor-esb.svg', 480, 230, 'Ersatzschaltbild des Gleichstrommotors: Ankerwiderstand, Ankerinduktivität, Gegenspannung',
+		gquelle(50, 50, 190, 'U', '') + draht([50, 50], [100, 50]) + stromspitze(85, 50, 'r') + text(85, 40, sym('I'), 'middle') +
+		widerstand(100, 50, 200, 50) + ueber(150, 50, 'R', 'A') + spule(200, 50, 300, 50) + ueber(250, 50, 'L', 'A') + draht([300, 50], [360, 50]) +
+		quelle(360, 190, 360, 50) + pfeil(410, 80, 410, 160) +
+		text(418, 116, sym('U', 'q'), 'start') + text(418, 136, '= ' + sym('k') + ' ' + sym('ω'), 'start', klein) + draht([50, 190], [360, 190]));
+
+	// AK4) Kennlinien Gleichstrommotor
+	{
+		const x0 = 60, y0 = 240, b = 400, h = 200;
+		speichere('mtrs/dc-motor-kennlinie.svg', 540, 290, 'Kennlinien des Gleichstrommotors: Drehzahl, Strom und mechanische Leistung über dem Moment',
+			achsen(x0, y0, x0 + b + 40, 20, sym('M'), '') +
+			strich(x0, y0 - h, x0 + b, y0, 'stroke-width="2.5"') + text(x0 + 8, y0 - h - 8, sym('n', '0'), 'start') + text(x0 + 70, y0 - h + 30, sym('n'), 'start') +
+			strich(x0, y0 - 12, x0 + b, y0 - h, `stroke="${AKZENT}" stroke-width="2.5"`) + text(x0 + b + 6, y0 - h + 4, sym('I', 'A'), 'start', `fill="${AKZENT}"`) +
+			text(x0 + 330, y0 - 150, sym('I'), 'start', `fill="${AKZENT}"`) +
+			linie(kurve((m) => 4 * m * (1 - m), 0, 1, (m) => x0 + m * b, (v) => y0 - v * h * 0.75), `stroke="${ORANGE}" stroke-width="2.5"`) +
+			text(x0 + b / 2, y0 - h * 0.75 - 8, sym('P', 'mech') + ' max. bei ' + sym('n', '0') + '/2', 'middle', `${klein} fill="${ORANGE}"`) +
+			text(x0 + b, y0 + 20, sym('M', 'A'), 'middle', klein) + gestrichelt(x0 + b, y0, x0 + b, y0 - h));
+	}
+
+	// AK5) Asynchronmotor M(n)
+	{
+		const x0 = 60, y0 = 250, b = 420, h = 200, sk = 0.25;
+		const M = (n) => { const s = Math.max(1 - n, 1e-6); return 2 / (s / sk + sk / s); };
+		const ML = (n) => 0.08 + 0.3 * n * n;
+		let nB = 0.9; for (let n = 0.8; n < 1; n += 0.0005) if (M(n) < ML(n)) { nB = n; break; }
+		speichere('mtrs/asm-kennlinie.svg', 540, 300, 'Drehmoment-Drehzahl-Kennlinie eines Asynchronmotors mit Lastkennlinie und Betriebspunkt',
+			achsen(x0, y0, x0 + b + 40, 20, sym('n'), sym('M')) +
+			linie(kurve(M, 0, 1, (n) => x0 + n * b, (v) => y0 - v * h * 0.85), 'stroke-width="2.5"') +
+			linie(kurve(ML, 0, 1, (n) => x0 + n * b, (v) => y0 - v * h * 0.85), `stroke="${AKZENT}" stroke-width="2" stroke-dasharray="7 4"`) +
+			text(x0 + 6, y0 - M(0) * h * 0.85 - 8, sym('M', 'A'), 'start', klein) +
+			text(x0 + (1 - sk) * b, y0 - h * 0.85 - 10, sym('M', 'K') + ' (Kippmoment)', 'middle', klein) + punkt(x0 + (1 - sk) * b, y0 - h * 0.85) +
+			punkt(x0 + nB * b, y0 - M(nB) * h * 0.85) + text(x0 + nB * b - 10, y0 - M(nB) * h * 0.85 - 10, 'Betriebspunkt', 'end', klein) +
+			text(x0 + 0.5 * b, y0 - ML(0.5) * h * 0.85 + 22, 'Last', 'middle', `${klein} fill="${AKZENT}"`) +
+			text(x0 + b, y0 + 20, sym('n', 's'), 'middle', klein));
+	}
+
+	// R1) Regelkreis
+	{
+		const k = (x, y, b, h, z, akz) => kasten(x, y, b, h, z, akz ? `stroke="${AKZENT}"` : '');
+		speichere('mtrs/regelkreis.svg', 720, 240, 'Blockschaltbild eines Regelkreises mit Regler, Stellglied, Strecke und Messglied',
+			pfeil(20, 90, 76, 90) + text(40, 80, sym('w'), 'middle') + `<circle cx="90" cy="90" r="14"/>` + strich(80, 80, 100, 100) + strich(80, 100, 100, 80) +
+			text(100, 125, '−', 'start', 'font-size="18"') + pfeil(104, 90, 150, 90) + text(127, 80, sym('e'), 'middle') +
+			k(150, 65, 100, 50, ['Regler'], true) + pfeil(250, 90, 300, 90) + text(275, 80, sym('u'), 'middle') +
+			k(300, 65, 110, 50, ['Stellglied']) + pfeil(410, 90, 460, 90) +
+			k(460, 65, 110, 50, ['Strecke']) + pfeil(515, 20, 515, 65) + text(525, 30, sym('z'), 'start') +
+			pfeil(570, 90, 700, 90) + text(690, 80, sym('y'), 'middle') + punkt(630, 90) +
+			draht([630, 90], [630, 185], [570, 185]) + spitze(580, 185, 570, 185) + k(460, 160, 110, 50, ['Messglied']) +
+			draht([460, 185], [90, 185], [90, 104]) + spitze(90, 114, 90, 104) + text(100, 175, sym('r'), 'start'));
+	}
+
+	// R2) Kennwerte der Sprungantwort
+	{
+		const x0 = 60, y0 = 240, b = 460, h = 160, D = 0.4, w0 = 1.6;
+		const wd = w0 * Math.sqrt(1 - D * D), phi = Math.acos(D);
+		const y = (t) => 1 - (Math.exp(-D * w0 * t) / Math.sqrt(1 - D * D)) * Math.sin(wd * t + phi);
+		const T = 12, X = (t) => x0 + (t / T) * b, Y = (v) => y0 - v * h;
+		let tan = 0, taus = 0; for (let t = 0; t < T; t += 0.001) { if (!tan && y(t) >= 0.98) tan = t; if (Math.abs(y(t) - 1) > 0.02) taus = t; }
+		const tmax = Math.PI / wd, ymax = y(tmax);
+		speichere('mtrs/regel-kennwerte.svg', 560, 290, 'Kennwerte der Sprungantwort: Überschwingweite, Anregelzeit, Ausregelzeit, Toleranzband',
+			achsen(x0, y0, x0 + b + 20, 20, sym('t'), sym('y')) +
+			gestrichelt(x0, Y(1.02), x0 + b, Y(1.02), ORANGE) + gestrichelt(x0, Y(0.98), x0 + b, Y(0.98), ORANGE) +
+			text(x0 + b, Y(1.02) - 6, 'Toleranzband ±2 %', 'end', `font-size="11" fill="${ORANGE}"`) +
+			text(x0 - 6, Y(1) + 4, sym('w'), 'end') +
+			linie(kurve(y, 0, T, X, Y), `stroke="${AKZENT}" stroke-width="2.5"`) +
+			mass(X(tmax), Y(1), X(tmax), Y(ymax)) + text(X(tmax) + 8, Y((1 + ymax) / 2) + 4, 'Δ' + sym('h'), 'start') +
+			gestrichelt(X(tan), Y(0.98), X(tan), y0) + text(X(tan), y0 + 18, sym('t', 'an'), 'middle', klein) +
+			gestrichelt(X(taus), Y(1), X(taus), y0) + text(X(taus), y0 + 18, sym('t', 'aus'), 'middle', klein));
+	}
+
+	// R3) Sprungantworten der Grundglieder
+	{
+		const feld = (gx, gy, titel, f, tmax = 5) => {
+			const x0 = gx + 20, y0 = gy + 115, b = 170, h = 58;
+			const X = (t) => x0 + ((t + 0.5) / (tmax + 0.5)) * b, Y = (v) => y0 - v * h;
+			const ein = [[x0, y0], [X(0), y0], [X(0), Y(1)], [x0 + b, Y(1)]];
+			return text(gx + 105, gy + 18, titel, 'middle', 'font-weight="600" font-size="13"') +
+				strich(x0, y0, x0 + b + 6, y0, 'stroke-width="1.5"') + strich(x0, y0 + 4, x0, gy + 28, 'stroke-width="1.5"') +
+				linie(ein, 'stroke-width="1.2" stroke-dasharray="4 3"') +
+				linie(kurve((t) => (t < 0 ? 0 : f(t)), -0.5, tmax, X, Y), `stroke="${AKZENT}" stroke-width="2.5"`);
+		};
+		const pt2 = (t) => { const D = 0.3, w = 2, wd = w * Math.sqrt(1 - D * D); return 1 - (Math.exp(-D * w * t) / Math.sqrt(1 - D * D)) * Math.sin(wd * t + Math.acos(D)); };
+		speichere('mtrs/sprungantworten.svg', 680, 300, 'Sprungantworten der Übertragungsglieder P, I, PT1, PT2 schwingend, PT2 aperiodisch und Totzeit',
+			feld(0, 0, 'P', () => 0.7) + feld(225, 0, 'I', (t) => Math.min(t * 0.25, 1.35)) + feld(450, 0, 'PT1', (t) => 1 - Math.exp(-t)) +
+			feld(0, 140, 'PT2 (D &lt; 1)', pt2) + feld(225, 140, 'PT2 (D ≥ 1)', (t) => 1 - (1 + t / 0.6) * Math.exp(-t / 0.6)) +
+			feld(450, 140, 'Totzeit', (t) => (t >= 1.5 ? 1 : 0)) + text(340, 292, 'gestrichelt: Eingangssprung · farbig: Ausgang', 'middle', 'font-size="11"'));
+	}
+
+	// R4) Wendetangente
+	{
+		const x0 = 60, y0 = 240, b = 440, h = 180, T = 9, X = (t) => x0 + (t / T) * b, Y = (v) => y0 - v * h;
+		const y = (t) => 1 - Math.exp(-t) * (1 + t + (t * t) / 2);
+		const tw = 2, m = (tw * tw * Math.exp(-tw)) / 2, yw = y(tw), Tu = tw - yw / m, Te = tw + (1 - yw) / m;
+		speichere('mtrs/wendetangente.svg', 560, 285, 'Wendetangentenverfahren: Verzugszeit Tu und Ausgleichszeit Tg',
+			achsen(x0, y0, x0 + b + 20, 20, sym('t'), sym('y')) + strich(x0, Y(1), x0 + b, Y(1), 'stroke-width="1" stroke-dasharray="4 3"') +
+			text(x0 + b, Y(1) - 6, 'Endwert', 'end', klein) +
+			linie(kurve(y, 0, T, X, Y), `stroke="${AKZENT}" stroke-width="2.5"`) +
+			strich(X(Tu), Y(0), X(Te), Y(1), `stroke="${ORANGE}" stroke-width="2"`) + punkt(X(tw), Y(yw)) + text(X(tw) + 12, Y(yw) + 14, 'Wendepunkt', 'start', klein) +
+			mass(x0, y0 + 14, X(Tu), y0 + 14) + text((x0 + X(Tu)) / 2, y0 + 32, sym('T', 'u'), 'middle', klein) +
+			mass(X(Tu), y0 + 14, X(Te), y0 + 14) + text((X(Tu) + X(Te)) / 2, y0 + 32, sym('T', 'g'), 'middle', klein) +
+			gestrichelt(X(Te), Y(1), X(Te), y0));
+	}
+
+	// R5) Bode-Diagramm des offenen Kreises: G0 = 1/(s(1+0,5 s))
+	{
+		const x0 = 80, b = 440, l0 = -1.3, l1 = 1.3, X = (lw) => x0 + ((lw - l0) / (l1 - l0)) * b;
+		const betrag = (w) => -20 * Math.log10(w * Math.hypot(1, 0.5 * w)), phase = (w) => -90 - (Math.atan(0.5 * w) * 180) / Math.PI;
+		const Yb = (db) => 110 - db * 2.2;
+		const Yp = (deg) => 200 - (deg + 90) * 1.2;
+		const wD = 0.91, xD = X(Math.log10(wD));
+		let g = '';
+		for (const lw of [-1, 0, 1]) g += strich(X(lw), 330, X(lw), 336) + text(X(lw), 350, ['0,1', '1', '10'][lw + 1], 'middle', 'font-size="11"');
+		speichere('mtrs/bode-phasenreserve.svg', 560, 370, 'Bode-Diagramm des offenen Kreises mit Durchtrittsfrequenz und Phasenreserve',
+			strich(x0, 15, x0, 330) + strich(x0, 330, x0 + b, 330) + g + text(x0 + b, 364, sym('ω') + ' in 1/s', 'end', klein) +
+			strich(x0, Yb(0), x0 + b, Yb(0), 'stroke-width="1"') + text(x0 - 6, Yb(0) + 4, '0 dB', 'end', 'font-size="11"') +
+			text(x0 - 6, Yb(20) + 4, '20 dB', 'end', 'font-size="11"') + text(x0 - 6, Yb(-20) + 4, '−20 dB', 'end', 'font-size="11"') +
+			linie(kurve((lw) => betrag(10 ** lw), l0, l1, X, Yb), `stroke="${AKZENT}" stroke-width="2.5"`) +
+			text(X(-1.15), Yb(betrag(10 ** -1.15)) + 22, '|' + sym('G', '0') + '|', 'start', `fill="${AKZENT}"`) +
+			strich(x0, Yp(-90), x0 + b, Yp(-90), 'stroke-width="1" stroke-dasharray="4 3"') + text(x0 - 6, Yp(-90) + 4, '−90°', 'end', 'font-size="11"') +
+			strich(x0, Yp(-180), x0 + b, Yp(-180), 'stroke-width="1.5"') + text(x0 - 6, Yp(-180) + 4, '−180°', 'end', 'font-size="11"') +
+			linie(kurve((lw) => phase(10 ** lw), l0, l1, X, Yp), `stroke="${ORANGE}" stroke-width="2.5"`) +
+			text(X(1.1), Yp(phase(10 ** 1.1)) - 10, sym('φ', '0'), 'middle', `fill="${ORANGE}"`) +
+			gestrichelt(xD, Yb(0), xD, 330) + punkt(xD, Yb(0)) + text(xD + 6, Yb(0) - 8, sym('ω', 'D'), 'start') +
+			mass(xD + 14, Yp(phase(wD)), xD + 14, Yp(-180)) +
+			text(xD + 22, (Yp(phase(wD)) + Yp(-180)) / 2 + 4, sym('φ', 'R') + ' ≈ 65°', 'start', klein));
+	}
+
+	// R6) Regelverlauf P und PI (Simulation PT2-Strecke Ks = 2, T1 = 2 s, T2 = 0,5 s)
+	{
+		const sim = (KP, TN) => {
+			const dt = 0.002; let x1 = 0, x2 = 0, I = 0; const pts = [];
+			for (let k = 0; k <= 5000; k++) {
+				const t = k * dt, e = 1 - x2; if (TN) I += (KP / TN) * e * dt; const u = KP * e + I;
+				x1 += (dt * (2 * u - x1)) / 2; x2 += (dt * (x1 - x2)) / 0.5;
+				if (k % 10 === 0) pts.push([t, x2]);
+			}
+			return pts;
+		};
+		const x0 = 60, y0 = 240, b = 440, h = 180, X = (t) => x0 + (t / 10) * b, Y = (v) => y0 - v * h;
+		const zu = (pts) => pts.map(([t, v]) => [+X(t).toFixed(2), +Y(v).toFixed(2)]);
+		speichere('mtrs/regelverlauf-p-pi.svg', 560, 290, 'Sollwertsprung: P-Regler mit bleibender Regelabweichung, PI-Regler ohne',
+			achsen(x0, y0, x0 + b + 20, 20, sym('t') + ' in s', sym('y')) +
+			strich(x0, Y(1), x0 + b, Y(1), 'stroke-width="1.5" stroke-dasharray="6 4"') + text(x0 - 6, Y(1) + 4, sym('w'), 'end', klein) +
+			linie(zu(sim(2, 0)), 'stroke-width="2.5"') + linie(zu(sim(1, 2)), `stroke="${AKZENT}" stroke-width="2.5"`) +
+			mass(X(9), Y(1), X(9), Y(0.8)) + text(X(9) - 8, Y(0.9) + 4, sym('e', '∞') + ' = 20 %', 'end', klein) +
+			text(X(10), y0 + 20, '10', 'middle', 'font-size="11"') + text(X(5), y0 + 20, '5', 'middle', 'font-size="11"') +
+			legende(300, 170, [['P-Regler, ' + sym('K', 'P') + ' = 2', 'currentColor'], ['PI-Regler (Betragsoptimum)', AKZENT]]));
+	}
+}

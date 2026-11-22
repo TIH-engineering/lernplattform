@@ -1,0 +1,181 @@
+---
+title: Theorie – Leistungs- und Impedanzmessung
+description: Augenblicksleistung und Wirkleistung als Mittelwert, Leistungen bei Sinusgrößen, Leistungsfaktor und Verzerrungsblindleistung, digitale Leistungsmessung, Strom- und Spannungserfassung, Impedanzmessung nach Betrag und Phase, LCR-Meter, Güte und Verlustfaktor, parasitäre Elemente und Eigenresonanz.
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Zeitverlauf from '../../../assets/mtrs/leistung-zeitverlauf.svg';
+import Kondensator from '../../../assets/mtrs/kondensator-impedanz.svg';
+
+## 1 · Augenblicksleistung und Wirkleistung
+
+Zu jedem Zeitpunkt ist die Leistung das Produkt aus Spannung und Strom – die **Augenblicksleistung**:
+
+$$
+p(t) = u(t) \cdot i(t)
+$$
+
+Die **Wirkleistung** $P$ ist ihr **Mittelwert** über eine Periode $T$ (oder über viele ganze Perioden):
+
+$$
+P = \frac{1}{T} \int_0^T u(t) \cdot i(t) \, \mathrm{d}t
+$$
+
+Diese Definition gilt **immer** – für Sinus, Rechteck, Pulse, Gleichstrom. Alle anderen Formeln sind Sonderfälle.
+
+<Abbildung bild={Zeitverlauf} unterschrift="Spannung, Strom und Augenblicksleistung bei einer Phasenverschiebung von 60°" />
+
+Bei sinusförmiger Spannung und sinusförmigem Strom mit der Phasenverschiebung $\varphi$ schwingt $p(t)$ mit der
+**doppelten Frequenz** um den Mittelwert $P = U I \cos\varphi$. Ist $p(t)$ zeitweise negativ, fließt Energie vom
+Verbraucher zurück zur Quelle – das ist die Energie, die Spule oder Kondensator zwischenspeichern. Bei $\varphi = 90°$ ist
+der Mittelwert null: Es wird nur Energie hin- und hergeschoben, die **Blindleistung** $Q = U I \sin\varphi$.
+
+| Größe | Formel (Sinus) | Einheit |
+| --- | --- | --- |
+| Wirkleistung | $P = U I \cos\varphi$ | W |
+| Blindleistung | $Q = U I \sin\varphi$ | var |
+| Scheinleistung | $S = U I = \sqrt{P^2 + Q^2}$ | VA |
+| Leistungsfaktor | $\lambda = P/S = \cos\varphi$ | – |
+
+$U$ und $I$ sind **Effektivwerte**.
+
+## 2 · Nicht sinusförmiger Strom: Verzerrungsblindleistung
+
+Viele Geräte – Netzteile mit Gleichrichter und Ladekondensator, LED-Lampen, Ladegeräte – nehmen den Strom nur in kurzen
+**Pulsen** um den Scheitel der Netzspannung auf (siehe [Dioden – Glättung](/dioden/theorie/)). Der Strom ist dann nicht
+sinusförmig, er enthält **Oberschwingungen** (150 Hz, 250 Hz, …).
+
+Bei sinusförmiger Netzspannung trägt nur die **Grundschwingung** $I_1$ des Stroms (50 Hz) zur Wirkleistung bei. Die
+Oberschwingungen erhöhen aber den Effektivwert $I$ und damit die Scheinleistung. Man zerlegt deshalb:
+
+$$
+S^2 = P^2 + Q^2 + D^2 \qquad P = U I_1 \cos\varphi_1 \qquad Q = U I_1 \sin\varphi_1
+$$
+
+- $\varphi_1$: Phasenverschiebung zwischen Spannung und **Grundschwingung** des Stroms,
+- $D$: **Verzerrungsblindleistung** (Einheit var) – der Anteil, den die Oberschwingungen verursachen.
+
+Der **Leistungsfaktor** ist dann nicht mehr $\cos\varphi$:
+
+$$
+\lambda = \frac{P}{S} = \frac{I_1}{I} \cdot \cos\varphi_1
+$$
+
+Der Faktor $I_1/I$ beschreibt, wie „sinusförmig“ der Strom ist. Schon ein Strom ohne jede Phasenverschiebung
+($\cos\varphi_1 = 1$) kann einen schlechten Leistungsfaktor haben. Geräte über 75 W müssen deshalb eine
+**Leistungsfaktorkorrektur** (PFC) haben, die den Strom sinusförmig macht.
+
+:::caution[cos φ ist nicht λ]
+Viele Messgeräte zeigen beides an. $\cos\varphi$ (genauer $\cos\varphi_1$) beschreibt nur die Verschiebung der
+Grundschwingung, $\lambda$ das Verhältnis von Wirk- zu Scheinleistung. Nur bei reinem Sinus sind beide gleich.
+:::
+
+## 3 · Digitale Leistungsmessung
+
+Ein modernes Leistungsmessgerät (auch der Stromzähler im Haus und das Steckdosen-Messgerät) tastet Spannung und Strom
+**gleichzeitig** ab und rechnet die Definitionen einfach nach. Bei $N$ Abtastwerten über ganze Perioden:
+
+$$
+P = \frac{1}{N} \sum_{k=1}^{N} u_k \, i_k \qquad
+U = \sqrt{\frac{1}{N} \sum_{k=1}^{N} u_k^2} \qquad
+I = \sqrt{\frac{1}{N} \sum_{k=1}^{N} i_k^2} \qquad
+S = U I
+$$
+
+Daraus folgen $\lambda = P/S$ und die gesamte Blindleistung $\sqrt{S^2 - P^2}$. Die **Energie** ist die über die Zeit
+aufsummierte Leistung (W · h).
+
+Worauf es ankommt:
+
+- **Gleichzeitig abtasten:** Ein Zeitversatz zwischen $u$- und $i$-Kanal wirkt wie eine zusätzliche Phasenverschiebung
+  und verfälscht vor allem bei kleinem $\cos\varphi$ die Wirkleistung.
+- **Ganze Perioden:** Wird über eine angeschnittene Periode gemittelt, schwankt das Ergebnis. Messgeräte bestimmen die
+  Periode deshalb mit einem [Komparator](/frequenzmessung/theorie/).
+- **Abtasttheorem:** Die Abtastrate muss für die höchste noch relevante Oberschwingung reichen – bei Netzgeräten bis
+  etwa zur 40. Oberschwingung (2 kHz).
+
+### Strom und Spannung erfassen
+
+| Größe | Verfahren | Eigenschaften |
+| --- | --- | --- |
+| Spannung | ohmscher Spannungsteiler | einfach, aber keine galvanische Trennung |
+| Spannung | Spannungswandler (Transformator) | galvanisch getrennt, nur Wechselspannung |
+| Strom | **Shunt** + Verstärker | genau, Gleich- und Wechselstrom, keine Trennung, Verlustleistung |
+| Strom | **Stromwandler** | getrennt, nur Wechselstrom, Sekundärseite nie offen betreiben |
+| Strom | **Hall-Sensor** / Stromzange | getrennt, Gleich- und Wechselstrom, Offset und Drift |
+| Strom | Rogowski-Spule | getrennt, sehr schnell, kein Gleichstrom, braucht Integrierer |
+
+Mehr zu Shunt-Verstärkern und Trennverstärkern: [Messverstärker und Schnittstellen](/messverstaerker/theorie/).
+
+:::danger[Sicherheit bei Netzspannung]
+Messungen am Netz nur mit Messgeräten und Tastköpfen der passenden **Messkategorie** (z. B. CAT III 300 V) und mit
+galvanischer Trennung (Differenztastkopf, Trenntransformator). Nie die Masseklemme eines Oszilloskops an einen
+netzführenden Punkt (siehe [Digitale Messtechnik – Praxis](/digitale-messtechnik/praxisbeispiele/)).
+:::
+
+## 4 · Impedanzmessung
+
+Die Impedanz $\underline{Z} = \underline{U}/\underline{I}$ hat einen **Betrag** $Z = U/I$ und einen **Phasenwinkel**
+$\varphi$. Ein Multimeter liefert nur Beträge – für die Phase braucht man mehr.
+
+### Strom-Spannungs-Verfahren mit Oszilloskop
+
+Ein Funktionsgenerator speist die Schaltung, ein kleiner **Messwiderstand** $R_\mathrm{M}$ in Reihe liefert eine Spannung,
+die proportional zum Strom ist. Mit zwei Kanälen misst man:
+
+- den Betrag: $Z = \dfrac{\hat{u}_Z}{\hat{u}_{R}/R_\mathrm{M}}$,
+- die Phase aus dem **Zeitversatz** $\Delta t$ der Nulldurchgänge: $\varphi = 360° \cdot \dfrac{\Delta t}{T}$.
+
+Eilt der Strom der Spannung voraus, ist die Last kapazitiv ($\varphi < 0$), eilt er nach, induktiv. Beide Kanäle müssen
+dieselbe Masse haben – deshalb liegt $R_\mathrm{M}$ an Masse, und die Spannung am Prüfling ergibt sich als Differenz
+(Rechenfunktion „CH1 − CH2“) oder wird mit einem Differenztastkopf gemessen.
+
+### LCR-Meter
+
+Ein **LCR-Meter** speist den Prüfling mit einer Wechselspannung fester Frequenz (typisch 100 Hz, 1 kHz, 10 kHz, 100 kHz) und
+misst Betrag und Phase. Daraus rechnet es Werte für ein **Ersatzschaltbild** aus – entweder Reihen- oder Parallelschaltung:
+
+| Anzeige | Bedeutung |
+| --- | --- |
+| $C_\mathrm{s}$, $R_\mathrm{s}$ | Reihenersatzschaltbild: Kapazität und Reihenwiderstand (ESR) |
+| $C_\mathrm{p}$, $R_\mathrm{p}$ | Parallelersatzschaltbild |
+| $D = \tan\delta$ | **Verlustfaktor**: $D = R_\mathrm{s}/X_C$; $\delta = 90° - \lvert\varphi\rvert$ ist der Verlustwinkel |
+| $Q$ | **Güte** (meist bei Spulen): $Q = X_L/R_\mathrm{s} = 1/D$ |
+
+Kleine Impedanzen (wenige mΩ bis Ω) werden in **Vierleitertechnik** (Kelvin-Klemmen) gemessen, damit Leitungs- und
+Übergangswiderstände nicht mitgemessen werden – dasselbe Prinzip wie bei der [Thomson-Brücke](/messbruecken/theorie/).
+Vor der Messung führt man einen **Leerlauf- und Kurzschlussabgleich** durch, der die Messleitungen herausrechnet.
+
+:::note[Messfrequenz und Pegel angeben]
+Kapazität und Verluste vieler Bauteile hängen von Frequenz, Spannung und Temperatur ab. Keramikkondensatoren der Klasse 2
+(X7R, X5R) verlieren mit steigender Gleichspannung deutlich an Kapazität. Ein Messwert ohne Messfrequenz ist daher
+unvollständig.
+:::
+
+## 5 · Parasitäre Elemente
+
+Kein Bauteil ist ideal. Zuleitungen und Aufbau bringen kleine zusätzliche Induktivitäten, Kapazitäten und Widerstände mit –
+die **parasitären Elemente**. Bei niedrigen Frequenzen merkt man sie nicht, bei hohen bestimmen sie das Verhalten.
+
+| Bauteil | Ersatzschaltbild | Folge |
+| --- | --- | --- |
+| Widerstand | $R$ mit Reihen-$L$ (Anschlüsse, Wendel) und Parallel-$C$ | hochohmige Widerstände wirken bei hohen Frequenzen kapazitiv, niederohmige induktiv |
+| Kondensator | $C$ mit Reihen-$R$ (**ESR**) und Reihen-$L$ (**ESL**) | oberhalb der Eigenresonanz wirkt er wie eine Spule |
+| Spule | $L$ mit Reihen-$R$ (Drahtwiderstand) und Parallel-$C$ (Wicklungskapazität) | oberhalb der Eigenresonanz wirkt sie wie ein Kondensator |
+
+<Abbildung bild={Kondensator} unterschrift="Realer Kondensator: Ersatzschaltbild und Betrag der Impedanz über der Frequenz (doppelt logarithmisch)" />
+
+Beim Kondensator bilden $C$ und ESL einen **Reihenschwingkreis**. Bei der **Eigenresonanzfrequenz**
+
+$$
+f_0 = \frac{1}{2\pi\sqrt{L_\mathrm{ESL} \cdot C}}
+$$
+
+heben sich die Blindwiderstände auf, und es bleibt nur der ESR übrig – die Impedanz ist minimal. Darunter fällt $Z$ mit
+$1/f$ (kapazitiv), darüber steigt sie mit $f$ (induktiv). Deshalb setzt man zum Abblocken einer Versorgung oft mehrere
+Kondensatoren verschiedener Größe parallel und platziert sie mit kurzen Leitungen direkt am IC (siehe
+[Leistungselektronik – Layout](/leistungselektronik/theorie/layout-emv/)).
+
+Der **ESR** verursacht Verluste: $P = I_\mathrm{eff}^2 \cdot R_\mathrm{ESR}$ mit dem Effektivwert des Rippelstroms. Er wird
+mit dem Alter eines Elektrolytkondensators (Austrocknen) größer – ein ESR-Messgerät erkennt defekte Elkos oft, bevor die
+Kapazität merklich sinkt.

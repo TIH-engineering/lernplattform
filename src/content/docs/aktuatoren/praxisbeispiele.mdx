@@ -1,0 +1,112 @@
+---
+title: Praxisbeispiele – Aktuatoren
+description: Relais am Mikrocontroller mit Transistor und Freilaufdiode, Magnetventil mit PWM-Haltestrom, Akkuschrauber mit Drehmomentstufen, blockierter Scheibenwischermotor, Schrittverluste am 3D-Drucker, Pumpe am Frequenzumrichter, Motor falsch angeschlossen.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Relais am Mikrocontroller
+
+Ein 5-V-Relais (Spulenwiderstand 70 Ω) soll von einem 3,3-V-Mikrocontroller geschaltet werden.
+
+1. Warum geht das nicht direkt am Pin?
+2. Wie sieht die Schaltung aus?
+3. Das Relais fällt verzögert ab. Stört das?
+
+<Loesung>
+
+1. Die Spule braucht $5\,\mathrm{V}/70\,\Omega \approx 71\,\mathrm{mA}$ bei 5 V – der Pin liefert nur 3,3 V und höchstens etwa
+   20 mA. Außerdem würde die Abschaltspannung der Spule den Pin zerstören.
+2. NPN-Transistor oder kleiner N-Kanal-MOSFET als **Low-Side-Schalter**: Relais zwischen +5 V und Kollektor/Drain,
+   Basiswiderstand (z. B. 1 kΩ, siehe [Transistoren](/transistoren/theorie/)) bzw. Gate direkt am Pin, und eine
+   **Freilaufdiode** (z. B. 1N4148) parallel zur Spule, Kathode an +5 V.
+3. Meist nicht. Wenn doch (schnelles Abschalten nötig), eine Z-Diode in Reihe zur Freilaufdiode – der Transistor muss dann die
+   höhere Spannung aushalten.
+
+</Loesung>
+
+## Magnetventil sparsam halten
+
+Ein 24-V-Magnetventil braucht laut Datenblatt 1 A zum Anziehen, hält aber schon mit 0,35 A sicher. Die Spule hat 24 Ω.
+
+1. Wie groß ist die Verlustleistung bei Dauerstrom 1 A und bei 0,35 A Haltestrom?
+2. Wie stellt man den Haltestrom ein?
+
+<Loesung>
+
+1. $P = I^2 R$: 1 A → 24 W · 0,35 A → $0{,}35^2 \cdot 24\,\Omega \approx 2{,}9\,\mathrm{W}$ – nur noch ein Achtel.
+2. Nach dem Anzug (z. B. 50 ms volle Spannung) auf PWM umschalten. Der mittlere Strom ist etwa $D \cdot U_\mathrm{B}/R$ →
+   $D = 0{,}35\,\mathrm{A} \cdot 24\,\Omega/24\,\mathrm{V} = 0{,}35$. Die Spule glättet den Strom, die Freilaufdiode führt ihn
+   in den Pausen weiter. Besser ist eine **Stromregelung** – sie gleicht die Erwärmung der Spule aus. Es gibt fertige
+   ICs dafür.
+
+</Loesung>
+
+## Akkuschrauber mit Drehmomentstufen
+
+Ein Akkuschrauber hat einen Gleichstrommotor (bzw. BLDC-Motor), ein Getriebe und einen Einstellring für das Drehmoment.
+
+1. Warum dreht er langsamer, wenn die Schraube fester sitzt?
+2. Wie kann eine elektronische Drehmomentbegrenzung funktionieren?
+3. Warum wird der Motor heiß, wenn man ihn längere Zeit blockiert?
+
+<Loesung>
+
+1. Mit steigendem Moment steigt der Strom ($M = k I$); der Spannungsabfall $R_\mathrm{A} I$ wird größer, und die Drehzahl sinkt
+   entlang der Kennlinie.
+2. Weil das Moment proportional zum Strom ist, misst die Elektronik den Motorstrom (Shunt) und schaltet ab bzw. begrenzt,
+   sobald ein eingestellter Strom erreicht ist.
+3. Blockiert gilt $U_\mathrm{q} = 0$ – es fließt der Anlaufstrom, und die gesamte Leistung $I^2 R_\mathrm{A}$ wird in der Wicklung
+   in Wärme umgesetzt; mechanische Leistung wird keine abgegeben.
+
+</Loesung>
+
+## Schrittverluste am 3D-Drucker
+
+Beim schnellen Drucken verschieben sich plötzlich alle oberen Schichten um einige Millimeter in X-Richtung.
+
+1. Was ist passiert?
+2. Nenne vier mögliche Abhilfen.
+
+<Loesung>
+
+1. Der X-Motor hat **Schritte verloren**: Das benötigte Moment (Beschleunigung, Reibung, Düse stößt an) war größer als das
+   verfügbare. Da kein Sensor die Position überwacht, druckt der Drucker versetzt weiter.
+2. Beschleunigung und Höchstgeschwindigkeit verringern (Rampen), Motorstrom am Treiber richtig einstellen (nicht zu klein),
+   Mechanik prüfen (Riemenspannung, Leichtgängigkeit), Treiber kühlen (Übertemperaturabschaltung), höhere
+   Versorgungsspannung (Moment bei hoher Drehzahl), stärkerer Motor oder Motor mit Encoder.
+
+</Loesung>
+
+## Pumpe am Frequenzumrichter
+
+Eine Heizungsumwälzpumpe mit Asynchronmotor läuft bisher direkt am Netz; der Durchfluss wird mit einem Drosselventil
+eingestellt. Sie soll einen Frequenzumrichter bekommen.
+
+1. Warum spart das Energie?
+2. Was muss man beim Betrieb mit kleiner Drehzahl beachten?
+
+<Loesung>
+
+1. Bei Kreiselpumpen und Lüftern gilt näherungsweise: Durchfluss ~ $n$, Druck ~ $n^2$, Leistung ~ $n^3$. Halbe Drehzahl
+   braucht nur etwa ein Achtel der Leistung. Mit Drosselventil läuft der Motor dagegen immer mit voller Drehzahl, und die
+   überschüssige Energie wird im Ventil „verheizt“.
+2. Die Eigenkühlung des Motors nimmt ab – bei Pumpen ist das unkritisch, weil auch das Lastmoment stark sinkt. Außerdem: Der
+   Umrichter erzeugt steile Spannungsflanken (Störungen, Lagerströme) – geschirmte Motorleitung und EMV-gerechter Aufbau.
+
+</Loesung>
+
+## Motor läuft falsch herum oder brummt
+
+1. Ein Drehstrommotor läuft nach dem Anschluss in die falsche Richtung. Was tun?
+2. Ein anderer Motor brummt nur und läuft nicht an, wird aber warm. Woran kann das liegen?
+
+<Loesung>
+
+1. **Zwei Außenleiter tauschen** – dadurch kehrt sich die Drehrichtung des Drehfelds um (nur durch eine Elektrofachkraft!).
+2. Eine Phase fehlt (Sicherung ausgelöst, Kontakt locker): Mit nur zwei Phasen entsteht kein Drehfeld, sondern ein
+   Wechselfeld – kein Anlaufmoment, aber großer Strom. Möglich ist auch, dass das Lastmoment größer als das Anzugsmoment
+   ist (blockierte Pumpe) oder der Motor im Stern statt im Dreieck angeschlossen wurde. Sofort abschalten – der Motorschutz
+   sollte auslösen.
+
+</Loesung>

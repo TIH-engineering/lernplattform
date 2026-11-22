@@ -1,0 +1,38 @@
+---
+title: Messverstärker und Schnittstellen
+description: "Differenz- und Gleichtaktspannung, Gleichtaktunterdrückung, Instrumentenverstärker, Strommessung mit Shunt (Low-Side und High-Side), Strommessverstärker, Auto-Zero-Verstärker, Trennverstärker, 4–20-mA-Stromschleife."
+sidebar:
+  label: Übersicht
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Viele Sensoren liefern nur wenige Millivolt – eine DMS-Brücke 10 mV, ein Shunt 40 mV, ein Thermoelement 4 mV – und oft
+liegt dieses kleine Signal auf einer großen **Gleichtaktspannung**. Ein normaler OPV-Verstärker reicht dann nicht.
+**Messverstärker** verstärken genau die kleine Differenz, unterdrücken Störungen und trennen bei Bedarf gefährliche
+Potentiale. Und damit das Signal über viele Meter Leitung in einer Industrieanlage sicher ankommt, verwendet man genormte
+**Schnittstellen** wie die 4–20-mA-Stromschleife.
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- Differenz- und Gleichtaktspannung unterscheiden und die **Gleichtaktunterdrückung** (CMRR) anwenden,
+- Aufbau und Verstärkung eines **Instrumentenverstärkers** erklären und ihn für eine Messbrücke bemessen,
+- einen **Shunt** auswählen und Low-Side- und High-Side-Strommessung vergleichen,
+- erklären, wann man **Auto-Zero**-Verstärker und **Trennverstärker** braucht,
+- eine **4–20-mA-Stromschleife** berechnen (Messwert, Bürde, Versorgungsspannung) und Fehler erkennen.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="Gleichtakt, CMRR, Instrumentenverstärker, Shunt-Messung, Auto-Zero, Trennverstärker, 4–20 mA" href="/messverstaerker/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="Verstärkung einstellen, CMRR-Fehler, Shunt auswählen, Stromschleife berechnen" href="/messverstaerker/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Waage am Mikrocontroller, Akkustrom messen, Strom im Wechselrichter, Drucksensor in der Anlage" href="/messverstaerker/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen" href="/messverstaerker/quiz/" />
+</CardGrid>
+
+:::tip[Voraussetzungen]
+[Operationsverstärker](/operationsverstaerker/) (Grundschaltungen, Differenzverstärker), [Messbrücken](/messbruecken/),
+[Sensoren](/sensoren/).
+:::

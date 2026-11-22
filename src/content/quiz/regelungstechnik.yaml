@@ -1,0 +1,132 @@
+titel: Regelungstechnik
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Was unterscheidet eine Regelung von einer Steuerung?
+    optionen:
+      - text: Bei der Regelung wird die Regelgröße gemessen und zurückgeführt (geschlossener Wirkungskreis).
+        richtig: true
+      - text: Eine Regelung kommt ohne Sensor aus.
+      - text: Eine Steuerung gleicht Störungen automatisch aus.
+      - text: Es gibt keinen Unterschied.
+    erklaerung: 'Nur durch die Rückführung „merkt“ die Regelung, wenn eine Störung den Istwert verändert.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie wird die Regelabweichung gebildet?
+    optionen:
+      - text: $e = w - r$ (Sollwert minus Rückführgröße)
+        richtig: true
+      - text: $e = r - w$
+      - text: $e = u - y$
+      - text: $e = w \cdot r$
+    erklaerung: 'Ist der Istwert zu klein, ist $e$ positiv und der Regler erhöht die Stellgröße – Gegenkopplung.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein PT1-Glied hat $K = 5$ und $T = 2\,\mathrm{s}$. Welchen Wert hat der Ausgang nach $t = 2\,\mathrm{s}$, wenn der Eingang von 0 auf 1 springt?'
+    loesung: 3.16
+    erklaerung: '$x_\mathrm{a} = K(1 - \mathrm{e}^{-t/T}) = 5 \cdot (1 - \mathrm{e}^{-1}) \approx 5 \cdot 0{,}632 = 3{,}16$'
+
+  - typ: mc
+    stufe: standard
+    frage: Welches Übertragungsglied ändert den Betrag des Frequenzgangs nicht, verschiebt aber die Phase mit steigender Frequenz immer weiter?
+    optionen:
+      - text: Totzeitglied
+        richtig: true
+      - text: PT1-Glied
+      - text: P-Glied
+      - text: I-Glied
+    erklaerung: 'Die Totzeit verschiebt das Signal nur zeitlich: Betrag 1, Phase $-\omega T_\mathrm{t}$ – ohne Grenze. Deshalb ist sie für Regelkreise so kritisch.'
+
+  - typ: mc
+    stufe: standard
+    frage: Zwei Glieder sind in Reihe geschaltet. Wie erhält man das Bode-Diagramm der Reihenschaltung?
+    optionen:
+      - text: Beträge in dB addieren und Phasen addieren
+        richtig: true
+      - text: Beträge in dB multiplizieren
+      - text: Nur das langsamere Glied zählt.
+      - text: Beträge in dB subtrahieren
+    erklaerung: 'Übertragungsfunktionen werden multipliziert; im logarithmischen Maßstab wird daraus eine Addition.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein P-Regler mit $K_\mathrm{P} = 4$ regelt eine Strecke mit $K_\mathrm{S} = 1{,}5$. Wie groß ist die bleibende Regelabweichung in % des Sollwertsprungs?'
+    loesung: 14.3
+    einheit: '%'
+    erklaerung: '$K_0 = 6$ → $e_\infty = 1/(1 + 6) \approx 0{,}143 = 14{,}3\,\%$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welcher Regleranteil beseitigt die bleibende Regelabweichung?
+    optionen:
+      - text: der I-Anteil
+        richtig: true
+      - text: der P-Anteil
+      - text: der D-Anteil
+      - text: keiner, sie bleibt immer
+    erklaerung: 'Der I-Anteil wächst, solange eine Abweichung besteht, und bleibt erst bei $e = 0$ stehen.'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum wird der D-Anteil eines Reglers in der Praxis oft weggelassen oder gefiltert?
+    optionen:
+      - text: Er verstärkt Messrauschen stark, weil er auf schnelle Änderungen reagiert.
+        richtig: true
+      - text: Er erzeugt eine bleibende Regelabweichung.
+      - text: Er macht den Regler langsamer.
+      - text: Er funktioniert nur mit analogen Reglern.
+    erklaerung: 'Rauschen besteht aus schnellen Änderungen – die Ableitung macht daraus große Stellgrößenspitzen.'
+
+  - typ: mc
+    stufe: standard
+    frage: Woran erkennt man im Bode-Diagramm des offenen Kreises, dass der geschlossene Kreis stabil ist?
+    optionen:
+      - text: Bei der Durchtrittsfrequenz ($\lvert G_0 \rvert = 0\,\mathrm{dB}$) liegt die Phase noch über −180°.
+        richtig: true
+      - text: Der Betrag ist bei allen Frequenzen größer als 0 dB.
+      - text: Die Phase ist bei allen Frequenzen 0°.
+      - text: Die Durchtrittsfrequenz ist größer als 1 kHz.
+    erklaerung: 'Vereinfachtes Nyquist-Kriterium. Der Abstand zu −180° ist die Phasenreserve.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Bei der Durchtrittsfrequenz hat der offene Kreis die Phase −125°. Wie groß ist die Phasenreserve in Grad?'
+    loesung: 55
+    einheit: '°'
+    erklaerung: '$\varphi_\mathrm{R} = 180° + (-125°) = 55°$ – ein gut gedämpfter Regelkreis.'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Eine Strecke hat $K_\mathrm{S} = 4$, $T_1 = 1\,\mathrm{s}$ und $T_\sigma = 50\,\mathrm{ms}$. Wie groß ist $K_\mathrm{P}$ eines PI-Reglers nach dem Betragsoptimum?'
+    loesung: 2.5
+    erklaerung: '$K_\mathrm{P} = T_1/(2 K_\mathrm{S} T_\sigma) = 1/(2 \cdot 4 \cdot 0{,}05) = 2{,}5$, $T_\mathrm{N} = T_1 = 1\,\mathrm{s}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Beim Schwingversuch ergibt sich $K_\mathrm{krit} = 10$. Welches $K_\mathrm{P}$ empfiehlt Ziegler-Nichols für einen PI-Regler?'
+    loesung: 4.5
+    erklaerung: '$K_\mathrm{P} = 0{,}45 \cdot K_\mathrm{krit} = 4{,}5$'
+
+  - typ: mc
+    stufe: standard
+    frage: Was ist „Windup“ bei einem Regler mit I-Anteil?
+    optionen:
+      - text: Der I-Anteil wächst weiter, während die Stellgröße an ihrer Grenze ist – danach schießt die Regelgröße über.
+        richtig: true
+      - text: Der Regler wird beim Einschalten zu langsam.
+      - text: Der P-Anteil wird zu groß.
+      - text: Der Sensor driftet mit der Temperatur.
+    erklaerung: 'Anti-Windup: den I-Anteil anhalten, solange die Stellgröße begrenzt wird.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum verschlechtert eine zu große Abtastzeit die Stabilität eines digitalen Regelkreises?
+    optionen:
+      - text: Das Halten der Stellgröße wirkt wie eine Totzeit von etwa $T_\mathrm{s}/2$ und kostet Phasenreserve.
+        richtig: true
+      - text: Weil der A/D-Umsetzer dann weniger Bits hat.
+      - text: Weil der I-Anteil dann null wird.
+      - text: Die Abtastzeit hat keinen Einfluss auf die Stabilität.
+    erklaerung: 'Faustregel: $\omega_\mathrm{D} T_\mathrm{s} \leq 0{,}1 \dots 0{,}2$, damit der Phasenverlust klein bleibt.'

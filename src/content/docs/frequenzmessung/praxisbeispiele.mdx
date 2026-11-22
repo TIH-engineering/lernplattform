@@ -1,0 +1,110 @@
+---
+title: Praxisbeispiele – Komparator und Frequenzmessung
+description: Tacho-Signal eines Lüfters mit Pull-up auswerten, Netzfrequenz sicher erfassen, Durchflusssensor mit Impulsen pro Liter, kapazitiver Füllstandssensor mit Oszillator, Störimpulse an einem Drehzahleingang, springende Frequenzanzeige am Oszilloskop.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Tacho-Signal eines Lüfters
+
+Ein 12-V-Lüfter hat drei Anschlüsse: +12 V, Masse und „Tacho“. Am Tacho-Pin misst das Multimeter gegen Masse 0 V, egal ob der
+Lüfter läuft oder nicht.
+
+1. Warum? Was fehlt?
+2. Wie schließt man das Signal an einen 3,3-V-Mikrocontroller an?
+
+<Loesung>
+
+1. Der Tacho-Ausgang ist meist ein **Open-Collector**-Ausgang: Ein Transistor kann den Pin nur nach Masse ziehen. Ohne
+   **Pull-up-Widerstand** gibt es keinen High-Pegel.
+2. Pull-up (z. B. 10 kΩ) nach **3,3 V** – nicht nach 12 V, sonst bekommt der Mikrocontroller-Eingang 12 V. Das ist gerade
+   der Vorteil eines Open-Collector-Ausgangs: Man wählt den High-Pegel selbst. Ein kleiner Kondensator (z. B. 1 nF) gegen
+   Masse filtert Störspitzen.
+
+</Loesung>
+
+## Netzfrequenz messen
+
+Ein Datenlogger soll die Netzfrequenz aufzeichnen (Netzfrequenz schwankt im europäischen Verbundnetz normalerweise nur um
+wenige hundertstel Hertz).
+
+1. Wie bekommt man das Signal sicher an den Mikrocontroller?
+2. Welches Verfahren und welche Auflösung braucht man?
+
+<Loesung>
+
+1. **Galvanisch getrennt**: über einen kleinen Transformator (z. B. 230 V/9 V) mit Spannungsteiler und Komparator mit
+   Hysterese, oder über einen Optokoppler mit Vorwiderständen, die für Netzspannung zugelassen sind. Nie direkt.
+2. Periodendauermessung: Bei 1 MHz Timertakt gibt es $N = 20\,000$ Takte pro Periode → Auflösung $\pm 5 \cdot 10^{-5}$
+   (±2,5 mHz). Mittelt man über 50 Perioden (1 s), wird es noch feiner. Der Quarz des Mikrocontrollers muss dafür genau
+   genug sein – ein Keramikresonator (±0,5 %) wäre viel zu ungenau, ein Quarz mit ±20 ppm reicht (±1 mHz).
+
+</Loesung>
+
+## Durchflusssensor
+
+Ein Turbinen-Durchflusssensor für Wasser liefert laut Datenblatt 450 Impulse pro Liter.
+
+1. Der Mikrocontroller zählt in 1 s genau 63 Impulse. Wie groß ist der Durchfluss in l/min?
+2. Wie viel Wasser ist nach 12 600 Impulsen durchgeflossen?
+
+<Loesung>
+
+1. $63/450 = 0{,}14\,\mathrm{l}$ pro Sekunde → $8{,}4\,\mathrm{l/min}$. Bei so wenigen Impulsen pro Sekunde ist der ±1-Fehler
+   1,6 % – Periodendauermessung wäre genauer.
+2. $12\,600/450 = 28\,\mathrm{l}$ – zum Messen der Menge zählt man einfach alle Impulse (hier ist der ±1-Fehler bedeutungslos).
+
+</Loesung>
+
+## Kapazitiver Füllstandssensor
+
+Zwei Elektroden an einem Kunststofftank bilden eine Kapazität, die mit dem Füllstand von 100 pF (leer) auf 150 pF (voll)
+steigt. Sie bestimmt die Frequenz eines Timer-ICs 555 im astabilen Betrieb: $f = \dfrac{1{,}44}{(R_1 + 2 R_2) \cdot C}$ mit
+$R_1 = 10\,\mathrm{k\Omega}$, $R_2 = 100\,\mathrm{k\Omega}$.
+
+1. Welche Frequenzen ergeben sich für leer und voll?
+2. Warum misst man hier lieber eine Frequenz als z. B. eine Spannung?
+
+<Loesung>
+
+1. leer: $f = 1{,}44/(210\,\mathrm{k\Omega} \cdot 100\,\mathrm{pF}) \approx 68{,}6\,\mathrm{kHz}$ ·
+   voll: $f \approx 45{,}7\,\mathrm{kHz}$
+2. Kleine Kapazitäten lassen sich kaum direkt als Spannung messen. Als Frequenz ist die Auswertung einfach (Zähler), genau
+   und unempfindlich gegen Störspannungen auf der Leitung. Allerdings gehen Streukapazitäten und Kabelkapazität voll mit
+   ein – deshalb sitzt der Oszillator direkt am Sensor, und man kalibriert leer und voll.
+
+</Loesung>
+
+## Zu hohe Drehzahl durch Störimpulse
+
+Ein Mikrocontroller misst die Drehzahl eines Gleichstrommotors über einen Hall-Sensor. Läuft der Motor unter Last, springt
+die Anzeige gelegentlich auf unsinnig hohe Werte.
+
+1. Was ist die wahrscheinlichste Ursache?
+2. Nenne drei Gegenmaßnahmen.
+
+<Loesung>
+
+1. Störimpulse vom Motor (Bürstenfeuer, PWM-Schaltflanken) koppeln auf die Sensorleitung ein. Jede Störflanke wird als
+   zusätzlicher Impuls erkannt und erzeugt eine sehr kurze „Periode“ – also eine riesige Drehzahl.
+2. Zum Beispiel:
+   - Hardware: RC-Tiefpass und Komparator bzw. Schmitt-Trigger-Eingang mit Hysterese, verdrillte oder geschirmte
+     Leitung, getrennte Masseführung für Motor und Sensor.
+   - Software: Perioden kürzer als physikalisch möglich verwerfen (Plausibilitätsprüfung), mehrere Perioden mitteln
+     (Median gegen Ausreißer).
+
+</Loesung>
+
+## Springende Frequenzanzeige am Oszilloskop
+
+Die automatische Frequenzmessung eines Oszilloskops zeigt bei einem langsamen, verrauschten Sinus (100 Hz) Werte zwischen
+100 Hz und mehreren kHz.
+
+<Loesung>
+
+Die Messfunktion zählt Durchgänge durch einen Pegel (meist 50 % der Amplitude). Das Rauschen erzeugt dort mehrere
+Durchgänge – derselbe Effekt wie beim Komparator ohne Hysterese. Abhilfe: Bandbreitenbegrenzung (z. B. 20 MHz) oder
+„HF Reject“ beim Trigger einschalten, Mittelwertbildung (Average), Rauschunterdrückung am Trigger (Hysterese) aktivieren.
+Viele Oszilloskope haben zusätzlich einen genaueren Hardware-Frequenzzähler, der das Triggersignal nutzt.
+
+</Loesung>

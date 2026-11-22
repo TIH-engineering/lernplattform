@@ -1,12 +1,49 @@
 ---
 title: Regelungstechnik
-description: "Regelkreis, Streckenarten, P-, I-, PI- und PID-Regler, Stabilität."
+description: "Übersicht: Regelkreis und Blockschaltbild, Übertragungsglieder mit Sprungantwort und Bode-Diagramm, Streckenmodellierung, P-, I-, PI- und PID-Regler, Stabilität und Reglerentwurf, digitale Regelung mit Mikrocontroller."
+sidebar:
+  label: Übersicht
 ---
 
-:::note[In Arbeit]
-Dieser Themenbereich wird gerade erstellt. Schau bald wieder vorbei!
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Der Backofen hält 180 °C, das Netzteil liefert genau 5 V, egal wie viel Strom gebraucht wird, der Tempomat hält die
+Geschwindigkeit auch am Berg: Hinter all dem steckt ein **Regelkreis**. Er misst ständig, wie weit der Istwert vom Sollwert
+entfernt ist, und greift so ein, dass die Abweichung verschwindet. Die Regelungstechnik verbindet alles, was es auf dieser
+Seite gibt: [Sensoren](/sensoren/) messen, [Aktuatoren](/aktuatoren/) stellen, [Operationsverstärker](/operationsverstaerker/)
+oder [Mikrocontroller](/programmierung/) rechnen.
+
+## Lernziele
+
+Nach diesem Themenbereich kannst du …
+
+- Steuerung und Regelung unterscheiden und einen Regelkreis als **Blockschaltbild** darstellen,
+- die wichtigsten **Übertragungsglieder** (P, I, D, PT1, PT2, Totzeit) an Sprungantwort und Bode-Diagramm erkennen,
+- eine Regelstrecke **modellieren** – aus der Physik oder aus einer gemessenen Sprungantwort,
+- das Verhalten von **P-, I-, PI- und PID-Reglern** beschreiben und die bleibende Regelabweichung berechnen,
+- die **Stabilität** eines Regelkreises mit der Phasenreserve beurteilen und einen Regler mit Einstellregeln bemessen,
+- einen **digitalen Regler** auf einem Mikrocontroller umsetzen und die Abtastzeit sinnvoll wählen.
+
+## Theorie
+
+<CardGrid>
+	<LinkCard title="1 · Grundbegriffe" description="Steuerung und Regelung, Blockschaltbild, Führungs- und Störverhalten, Gütekriterien" href="/regelungstechnik/theorie/grundbegriffe/" />
+	<LinkCard title="2 · Übertragungsglieder" description="P, I, D, PT1, PT2, Totzeit – Sprungantwort, Bode, Zusammenschalten" href="/regelungstechnik/theorie/uebertragungsglieder/" />
+	<LinkCard title="3 · Streckenmodellierung" description="Top-down aus der Physik, Bottom-up aus der Messung, Wendetangente, Simulation" href="/regelungstechnik/theorie/streckenmodellierung/" />
+	<LinkCard title="4 · Reglertypen" description="Zweipunkt, P, I, PI, PD, PID, bleibende Regelabweichung, Kaskade" href="/regelungstechnik/theorie/regler/" />
+	<LinkCard title="5 · Stabilität und Reglerentwurf" description="Offener Kreis, Phasenreserve, Betragsoptimum, Ziegler-Nichols" href="/regelungstechnik/theorie/stabilitaet-entwurf/" />
+	<LinkCard title="6 · Digitale Regelung" description="Abtastzeit, Diskretisierung, PI-Regler in C, Anti-Windup, Datenformate" href="/regelungstechnik/theorie/digitale-regelung/" />
+</CardGrid>
+
+## Üben
+
+<CardGrid>
+	<LinkCard title="Rechenbeispiele" description="Bleibende Regelabweichung, PT1 aus Messung, Phasenreserve, Einstellregeln, Abtastzeit" href="/regelungstechnik/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Lötstation, Drehzahlregelung, Raumheizung, Akku-Laderegler, Simulation" href="/regelungstechnik/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen" href="/regelungstechnik/quiz/" />
+</CardGrid>
+
+:::tip[Voraussetzungen]
+[Filter](/filter/theorie/) (Bode-Diagramm, Tiefpass), Grundlagen-Thema [Kondensator](/grundlagen/kondensator/) (Lade- und
+Entladekurven), [Aktuatoren](/aktuatoren/) (Gleichstrommotor). Für die digitale Regelung: [Programmierung in C](/programmierung/).
 :::
-
-**Geplante Inhalte:** Regelkreis, Streckenarten, P-, I-, PI- und PID-Regler, Stabilität.
-
-Wie bei allen Themenbereichen wird es **Theorie**, **Rechenbeispiele**, **Praxisbeispiele** und ein **Quiz** geben.

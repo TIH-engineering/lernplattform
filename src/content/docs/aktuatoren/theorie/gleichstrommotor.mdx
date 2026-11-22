@@ -1,0 +1,105 @@
+---
+title: Gleichstrommotor
+description: Aufbau und Funktion des bürstenbehafteten Gleichstrommotors, Ersatzschaltbild, Motorgleichungen mit Motorkonstante, Leerlauf und Anlauf, Drehzahl-Drehmoment-Kennlinie, Leistung und Wirkungsgrad, Drehzahlsteuerung, Getriebe, elektrische und mechanische Zeitkonstante, Datenblattwerte.
+sidebar:
+  label: 2 · Gleichstrommotor
+  order: 2
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import ESB from '../../../../assets/mtrs/dc-motor-esb.svg';
+import Kennlinie from '../../../../assets/mtrs/dc-motor-kennlinie.svg';
+
+## Aufbau und Funktion
+
+Der klassische **Gleichstrommotor** (mit Bürsten) besteht aus
+
+- dem **Stator** mit Permanentmagneten (bei kleinen Motoren) oder einer Feldwicklung,
+- dem drehbaren **Rotor** (Anker) mit mehreren Wicklungen,
+- dem **Kommutator** mit Kohle- oder Edelmetallbürsten, der den Strom in den Ankerwicklungen bei jeder Teildrehung umpolt –
+  so zeigt die Kraft immer in Drehrichtung.
+
+Auf einen stromdurchflossenen Leiter im Magnetfeld wirkt eine Kraft → **Drehmoment**. Gleichzeitig wird in den
+bewegten Leitern eine Spannung induziert, die der angelegten Spannung entgegenwirkt: die **Gegenspannung** (Gegen-EMK)
+$U_\mathrm{q}$.
+
+## Ersatzschaltbild und Motorgleichungen
+
+<Abbildung bild={ESB} unterschrift="Ersatzschaltbild des Gleichstrommotors mit Permanentmagneten" />
+
+$$
+U = R_\mathrm{A} \cdot I + L_\mathrm{A} \frac{\mathrm{d}I}{\mathrm{d}t} + U_\mathrm{q} \qquad U_\mathrm{q} = k \cdot \omega \qquad M = k \cdot I
+$$
+
+- $R_\mathrm{A}$: Ankerwiderstand (Wicklung und Bürsten), $L_\mathrm{A}$: Ankerinduktivität,
+- $\omega = 2\pi n$: Winkelgeschwindigkeit in rad/s ($n$ in 1/s),
+- $k$: **Motorkonstante**. In SI-Einheiten ist die Spannungskonstante (V/(rad/s)) gleich der Drehmomentkonstante (Nm/A).
+  Datenblätter geben oft $k_\mathrm{n}$ in min⁻¹/V und $k_\mathrm{M}$ in mNm/A an.
+
+Im stationären Betrieb (Strom konstant) fällt der $L$-Term weg. Mit Reibung im Motor fließt auch im Leerlauf ein kleiner
+**Leerlaufstrom** $I_0$; das nutzbare Moment ist $M = k\,(I - I_0)$.
+
+### Wichtige Betriebspunkte
+
+| Betriebspunkt | Bedingung | Ergebnis |
+| --- | --- | --- |
+| **Leerlauf** | $M = 0$ | $\omega_0 \approx U/k$ – die Drehzahl ist proportional zur Spannung |
+| **Anlauf / Blockieren** | $\omega = 0$, also $U_\mathrm{q} = 0$ | $I_\mathrm{A} = U/R_\mathrm{A}$ – sehr groß! $M_\mathrm{A} = k\,I_\mathrm{A}$ |
+| Belastung | dazwischen | Drehzahl sinkt linear mit dem Moment, Strom steigt linear |
+
+<Abbildung bild={Kennlinie} unterschrift="Kennlinien des Gleichstrommotors bei konstanter Spannung" />
+
+Aus den Gleichungen folgt die lineare **Drehzahl-Drehmoment-Kennlinie**:
+
+$$
+\omega = \frac{U - R_\mathrm{A} I}{k} = \frac{U}{k} - \frac{R_\mathrm{A}}{k^2} \cdot M \quad(\text{ohne Reibung})
+$$
+
+Der Anlaufstrom ist oft das 5- bis 20-Fache des Nennstroms. Eine Ansteuerung muss ihn begrenzen oder aushalten. Ein
+**blockierter** Motor nimmt dauernd den Anlaufstrom auf und überhitzt – Motortreiber haben deshalb eine Strombegrenzung.
+
+## Leistung und Wirkungsgrad
+
+$$
+P_\mathrm{el} = U \cdot I \qquad P_\mathrm{mech} = M \cdot \omega \qquad \eta = \frac{P_\mathrm{mech}}{P_\mathrm{el}}
+$$
+
+Verluste: Kupferverluste $I^2 R_\mathrm{A}$ (bei großem Moment), Reibung und Eisenverluste (Leerlaufanteil). Die mechanische
+Leistung ist bei der **halben Leerlaufdrehzahl** maximal, der **Wirkungsgrad** dagegen bei deutlich höherer Drehzahl (kleiner
+Last). Für den Dauerbetrieb wählt man den Motor so, dass er nahe dem Punkt besten Wirkungsgrades läuft.
+
+## Drehzahl steuern
+
+- **Spannung ändern:** Die Leerlaufdrehzahl ist proportional zu $U$. In der Elektronik geschieht das mit **PWM** – der Motor
+  „sieht“ wegen seiner Induktivität und Trägheit den Mittelwert $U = D \cdot U_\mathrm{B}$ (siehe
+  [Motorbrücken](/leistungselektronik/theorie/motorbruecken/)).
+- **Drehrichtung umkehren:** Spannung umpolen – mit einer **H-Brücke**.
+- **Bremsen:** Wird der Motor kurzgeschlossen, treibt die Gegenspannung einen Strom, der ein bremsendes Moment erzeugt. Der
+  Motor arbeitet dann als **Generator**.
+
+### Getriebe
+
+Kleine Gleichstrommotoren drehen schnell (einige Tausend min⁻¹) mit kleinem Moment. Ein Getriebe mit der Übersetzung $i$
+setzt um: $n_\mathrm{ab} = n_\mathrm{Motor}/i$, $M_\mathrm{ab} = M_\mathrm{Motor} \cdot i \cdot \eta_\mathrm{G}$.
+
+## Dynamik: zwei Zeitkonstanten
+
+- **Elektrische Zeitkonstante** $\tau_\mathrm{el} = L_\mathrm{A}/R_\mathrm{A}$ (typisch 0,1 … einige ms): so schnell folgt der Strom
+  einer Spannungsänderung. Die PWM-Frequenz muss viel höher sein ($T_\mathrm{PWM} \ll \tau_\mathrm{el}$), sonst schwankt der
+  Strom stark.
+- **Mechanische Zeitkonstante** $\tau_\mathrm{m} = \dfrac{R_\mathrm{A} J}{k^2}$ (typisch 10 … 100 ms, $J$ Trägheitsmoment): so
+  schnell erreicht der Motor nach einem Spannungssprung etwa 63 % seiner Enddrehzahl. Mit Last wird $J$ größer.
+
+Für die Regelung ist der Motor näherungsweise ein **PT1-Glied** (Spannung → Drehzahl) bzw. mit beiden Zeitkonstanten ein
+PT2-Glied (siehe [Regelungstechnik – Übertragungsglieder](/regelungstechnik/theorie/uebertragungsglieder/)).
+
+## Datenblattwerte
+
+Typische Angaben: Nennspannung, Leerlaufdrehzahl und -strom, Nenndrehzahl und -moment, Anhaltemoment (Anlaufmoment),
+Anlaufstrom, Anschlusswiderstand, Induktivität, Drehzahl- und Drehmomentkonstante, mechanische Zeitkonstante,
+Rotorträgheitsmoment, maximaler Wirkungsgrad. Aus Leerlauf- und Anlaufwerten lässt sich die Kennlinie zeichnen.
+
+:::note[Bürsten verschleißen]
+Bürsten und Kommutator nutzen sich ab und erzeugen Funken (Störungen, Kohlestaub). Wo lange Lebensdauer gefragt ist, setzt man
+bürstenlose Motoren ein – nächste Seite.
+:::

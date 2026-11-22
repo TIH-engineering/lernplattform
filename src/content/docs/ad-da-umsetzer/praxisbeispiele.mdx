@@ -1,0 +1,102 @@
+---
+title: Praxisbeispiele – A/D- und D/A-Umsetzer
+description: Den passenden A/D-Umsetzer auswählen, hochohmigen Spannungsteiler am ADC-Eingang, Referenz aus der Versorgungsspannung, verrauschter Messwert, Zweipunkt-Kalibrierung, Sinus aus dem Mikrocontroller mit Tabelle und D/A-Umsetzer.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Welcher Umsetzer passt?
+
+Ordne jeder Anwendung ein Verfahren zu (Flash, SAR, Dual-Slope, Sigma-Delta) und begründe:
+
+1. Digitale Personenwaage (Auflösung 50 g bei 150 kg)
+2. Stromregelung eines Motors, 20 kHz PWM, drei Phasenströme
+3. Handmultimeter mit 4½ Stellen
+4. Digitales Speicheroszilloskop mit 1 GS/s
+
+<Loesung>
+
+1. **Sigma-Delta** – 1 : 3000 klingt wenig, aber das Brückensignal ist winzig; hohe Auflösung, langsam genügt.
+2. **SAR** – schnell (µs), keine Latenz durch Digitalfilter, mehrere Kanäle synchron abtastbar.
+3. **Dual-Slope** (oder Sigma-Delta) – genau, Netzbrummunterdrückung, wenige Messungen pro Sekunde reichen.
+4. **Flash** (meist mehrere verschachtelte Flash-Umsetzer) – nur so sind GS/s möglich, bei 8 Bit.
+
+</Loesung>
+
+## Akkuspannung mit großem Teiler
+
+Ein Mikrocontroller misst eine Akkuspannung über einen Teiler aus 1 MΩ und 330 kΩ (wenig Ruhestrom). Die Messwerte sind
+um einige Prozent zu klein und schwanken, je nachdem, welcher Kanal vorher gemessen wurde.
+
+<Loesung>
+
+Der Innenwiderstand des Teilers ist $1\,\mathrm{M\Omega} \parallel 330\,\mathrm{k\Omega} \approx 248\,\mathrm{k\Omega}$ – viel mehr
+als der zulässige Quellwiderstand (oft 10 kΩ). Der Abtastkondensator wird in der kurzen Abtastzeit nicht vollständig geladen
+und behält zum Teil die Ladung des vorherigen Kanals. Abhilfe: **Kondensator (z. B. 100 nF) direkt am ADC-Eingang** – er
+liefert die Ladung beim Abtasten; bei einer langsam veränderlichen Akkuspannung stört die große Zeitkonstante nicht. Oder
+längere Abtastzeit einstellen bzw. einen OPV-Puffer verwenden.
+
+</Loesung>
+
+## Messwert hängt vom USB-Kabel ab
+
+Ein Arduino misst eine Sensorspannung mit der Versorgung (5 V) als Referenz. Am Laptop zeigt er 2,50 V, am Steckernetzteil
+2,58 V – die Sensorspannung ist laut Multimeter in beiden Fällen 2,50 V.
+
+<Loesung>
+
+Die Versorgungsspannung ist nicht genau 5 V: Am Laptop-USB ist sie z. B. 5,00 V, am Netzteil durch Kabel und Toleranz nur
+etwa 4,85 V. Weil der Umsetzer relativ zur Referenz misst, ändert sich der Code – das Programm rechnet aber mit 5,00 V.
+Abhilfe: interne oder externe **Spannungsreferenz** verwenden, oder die Versorgung mitmessen. Ausnahme: **ratiometrische**
+Sensoren (Potentiometer, Brücke), die selbst an der Versorgung hängen – da ist die Versorgung als Referenz gerade richtig.
+
+</Loesung>
+
+## Verrauschter Messwert
+
+Der ADC-Wert eines ruhigen Temperatursensors springt um ±3 LSB. Was kann man tun?
+
+<Loesung>
+
+- **Hardware:** RC-Tiefpass vor dem Eingang, getrennte analoge Versorgung (AVCC mit LC-Filter), saubere Masseführung,
+  Abblockkondensator an der Referenz.
+- **Messung:** Während der Wandlung keine Störer schalten (manche Controller haben einen „ADC Noise Reduction“-Schlafmodus).
+- **Software:** Mehrere Werte mitteln oder gleitenden Mittelwert bilden – bei einer langsamen Temperatur ist das ideal und
+  erhöht sogar die Auflösung (Überabtastung).
+
+</Loesung>
+
+## Zweipunkt-Kalibrierung
+
+Ein Messkanal (12 Bit, 0 … 10 V) liefert bei 0,000 V den Code 18 und bei 10,000 V den Code 4071. Wie rechnet man einen Code in
+eine Spannung um, und welche Spannung gehört zu Code 2000?
+
+<Loesung>
+
+Steigung: $\dfrac{10\,\mathrm{V}}{4071 - 18} = 2{,}4673\,\mathrm{mV}$ pro Code. $U = (Z - 18) \cdot 2{,}4673\,\mathrm{mV}$ →
+$Z = 2000$: $U = 1982 \cdot 2{,}4673\,\mathrm{mV} \approx 4{,}890\,\mathrm{V}$
+
+Damit sind Offset (18 Codes) und Verstärkungsfehler korrigiert. Ohne Kalibrierung hätte man $2000 \cdot 10\,\mathrm{V}/4096
+\approx 4{,}883\,\mathrm{V}$ gerechnet.
+
+</Loesung>
+
+## Sinus aus dem Mikrocontroller
+
+Ein Mikrocontroller soll mit einem 8-Bit-D/A-Umsetzer einen 50-Hz-Sinus für einen Prüfaufbau erzeugen. Er gibt dazu
+64 Werte pro Periode aus einer Tabelle aus.
+
+1. Mit welcher Rate müssen die Werte ausgegeben werden?
+2. Warum braucht man danach einen Tiefpass?
+3. Wie sieht die Tabelle aus (Mittelwert in der Mitte des Bereichs)?
+
+<Loesung>
+
+1. $64 \cdot 50\,\mathrm{Hz} = 3200$ Werte pro Sekunde – am besten aus einem Timer-Interrupt, damit der Abstand genau gleich ist.
+2. Der Ausgang ist eine Treppe. Die Stufen enthalten Anteile bei 3200 Hz und darüber; ein Tiefpass (z. B. 2. Ordnung,
+   $f_\mathrm{g} \approx 500\,\mathrm{Hz}$) glättet sie.
+3. $Z_k = 128 + 127 \cdot \sin(2\pi k/64)$, gerundet, für $k = 0 \dots 63$ – also Werte von 1 bis 255 mit dem Mittelwert 128.
+   Die Tabelle wird einmal berechnet (oder im Programm als Konstante abgelegt), damit der Mikrocontroller im Interrupt
+   nicht rechnen muss.
+
+</Loesung>

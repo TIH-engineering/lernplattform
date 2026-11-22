@@ -1,0 +1,177 @@
+---
+title: Theorie – A/D- und D/A-Umsetzer
+description: D/A-Umsetzer mit gewichteten Widerständen und R-2R-Netzwerk, PWM als D/A-Umsetzer, Einschwingzeit; A/D-Verfahren Flash, SAR, Dual-Slope und Sigma-Delta im Vergleich; Offset, Verstärkungsfehler, DNL, INL und fehlende Codes; SNR, SINAD und ENOB; Überabtastung, Abtast-Halte-Glied, Ansteuerung des Eingangs und Taktjitter.
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import R2R from '../../../assets/mtrs/r2r.svg';
+import DualSlope from '../../../assets/mtrs/dual-slope.svg';
+import Fehler from '../../../assets/mtrs/adc-fehler.svg';
+
+## 1 · D/A-Umsetzer
+
+Ein **D/A-Umsetzer** (DAC) macht aus einer Zahl $Z$ mit $n$ Bit eine Spannung:
+
+$$
+U_\mathrm{a} = Z \cdot \frac{U_\mathrm{ref}}{2^n} = Z \cdot U_\mathrm{LSB}
+$$
+
+### Gewichtete Widerstände
+
+Die naheliegende Idee: Jedes Bit schaltet einen Strom in einen Summierer (invertierender Addierer). Bit 0 über $R$, Bit 1
+über $R/2$, Bit 2 über $R/4$ usw. – jedes höhere Bit liefert den doppelten Strom. Problem: Bei 12 Bit braucht man Widerstände
+von $R$ bis $R/2048$, die alle **genau** im Verhältnis stehen müssen. Das ist kaum herstellbar.
+
+### R-2R-Netzwerk
+
+<Abbildung bild={R2R} unterschrift="D/A-Umsetzer mit R-2R-Netzwerk (3 Bit)" />
+
+Das **R-2R-Netzwerk** kommt mit nur **zwei Widerstandswerten** aus. Der Trick: Von jedem Knoten aus gesehen ist der Widerstand
+nach rechts (in Richtung der niedrigeren Bits) immer $2R$ – parallel zum $2R$-Zweig des Bits ergibt das $R$. An jedem Knoten
+teilt sich der Strom daher **genau zur Hälfte**. So entstehen binär gewichtete Ströme $I/2$, $I/4$, $I/8$ …, die je nach
+Bit auf den Summierpunkt des OPV oder nach Masse geschaltet werden. Weil die Schalter immer zwischen zwei Punkten mit
+0 V Potential umschalten (virtuelle Masse und Masse), ändert sich der Strom in den Widerständen nicht – das macht den
+Umsetzer schnell und genau.
+
+### PWM als D/A-Umsetzer
+
+Mikrocontroller haben oft keinen DAC, aber PWM-Ausgänge. Ein PWM-Signal mit Tastgrad $D$ hat den **Mittelwert**
+$U = D \cdot U_\mathrm{H}$. Ein Tiefpass glättet es zu einer Gleichspannung.
+
+- **Auflösung und Frequenz** hängen zusammen: Bei einem Timertakt $f_\mathrm{clk}$ und $n$ Bit Auflösung ist
+  $f_\mathrm{PWM} = f_\mathrm{clk}/2^n$. Mehr Bits → niedrigere PWM-Frequenz → schwerer zu filtern.
+- Der Tiefpass muss den Rippel unter ein LSB drücken, ist dann aber langsam. Ein Filter 2. Ordnung hilft.
+- Für den Rippel eines RC-Tiefpasses (mit $f_\mathrm{PWM} \gg f_\mathrm{g}$) gilt näherungsweise
+  $U_\mathrm{ss} \approx \dfrac{U_\mathrm{H} \cdot D(1-D)}{f_\mathrm{PWM} \cdot RC}$ – am größten bei $D = 0{,}5$.
+
+### Kennwerte von D/A-Umsetzern
+
+- **Einschwingzeit** (settling time): Zeit, bis der Ausgang nach einem Sprung innerhalb von ±½ LSB des Endwerts liegt.
+- **Glitch:** Beim Umschalten vieler Bits gleichzeitig (z. B. von 0111 1111 auf 1000 0000) schalten die Schalter nicht exakt
+  gleichzeitig – kurz erscheint ein falscher Wert.
+- **Monotonie:** Ein größerer Code muss immer eine größere Spannung liefern – wichtig, wenn der DAC in einer Regelschleife
+  sitzt.
+
+## 2 · A/D-Verfahren im Vergleich
+
+| Verfahren | Prinzip | Auflösung | Geschwindigkeit | typische Anwendung |
+| --- | --- | --- | --- | --- |
+| **Flash** (Parallel) | $2^n - 1$ Komparatoren vergleichen gleichzeitig | 6 … 8 Bit | sehr schnell (GS/s) | Oszilloskop, Radar |
+| **SAR** | Wägeverfahren, ein Komparator, $n$ Schritte | 8 … 18 Bit | mittel (kS/s … einige MS/s) | Mikrocontroller, Datenerfassung |
+| **Dual-Slope** | Integration, Zeitmessung | 12 … 20 Bit | langsam (einige Messungen/s) | Digitalmultimeter, Schalttafelinstrumente |
+| **Sigma-Delta** | 1-Bit-Umsetzer, Überabtastung, Digitalfilter | 16 … 24 Bit | langsam bis mittel | Waage, Audio, Temperatur |
+
+Die SAR-Wandlung ist bei der [Digitalen Messtechnik](/digitale-messtechnik/theorie/) Schritt für Schritt erklärt.
+
+### Flash-Umsetzer
+
+Ein Widerstandsteiler erzeugt $2^n - 1$ Vergleichsspannungen, und genauso viele Komparatoren vergleichen gleichzeitig mit
+dem Eingang. Ein Dekoder macht aus dem „Thermometercode“ (alle Komparatoren unterhalb der Eingangsspannung sind High) die
+Binärzahl. Die Wandlung braucht nur einen Schritt. Für 8 Bit braucht man aber schon 255 Komparatoren, für 10 Bit 1023 – der
+Aufwand und der Stromverbrauch verdoppeln sich mit jedem Bit.
+
+### Dual-Slope-Umsetzer (Zweirampenverfahren)
+
+<Abbildung bild={DualSlope} unterschrift="Spannung am Integrator beim Dual-Slope-Verfahren für zwei verschiedene Eingangsspannungen" />
+
+1. **Aufintegrieren:** Der Integrator integriert die Eingangsspannung für eine **feste** Zeit $T_1$ (z. B. $N_1$ Taktimpulse).
+   Am Ende ist seine Spannung proportional zum **Mittelwert** von $U_\mathrm{e}$.
+2. **Abintegrieren:** Nun wird eine Referenzspannung mit umgekehrtem Vorzeichen angelegt. Der Integrator läuft mit
+   **fester Steigung** zurück auf null; ein Zähler misst die dafür nötige Zeit $T_2$.
+
+$$
+T_2 = T_1 \cdot \frac{U_\mathrm{e}}{U_\mathrm{ref}} \qquad\Rightarrow\qquad N_2 = N_1 \cdot \frac{U_\mathrm{e}}{U_\mathrm{ref}}
+$$
+
+Bemerkenswert: Die Werte von $R$, $C$ und die genaue Taktfrequenz **kürzen sich heraus** – nur $U_\mathrm{ref}$ muss genau sein.
+Und weil über $T_1$ gemittelt wird, verschwinden Störungen, deren Periode genau in $T_1$ passt: Mit $T_1 = 20\,\mathrm{ms}$
+(oder einem Vielfachen) wird **50-Hz-Brummen vollständig unterdrückt**. Darum arbeiten viele Digitalmultimeter so.
+
+### Sigma-Delta-Umsetzer
+
+Ein Sigma-Delta-Umsetzer besteht aus einem Integrator, einem **1-Bit-Komparator** und einer Rückkopplung über einen 1-Bit-DAC.
+Er arbeitet mit sehr hoher Taktfrequenz (**Überabtastung**, z. B. 64- bis 256-fach) und liefert einen Bitstrom, dessen
+**Anteil an Einsen** dem Eingangssignal entspricht. Ein **Digitalfilter** mittelt den Bitstrom zu hochaufgelösten Messwerten
+und senkt dabei die Datenrate (Dezimation).
+
+- Die Rückkopplung schiebt das Quantisierungsrauschen zu hohen Frequenzen (**Rauschformung**), wo das Digitalfilter es
+  entfernt.
+- Vorteile: sehr hohe Auflösung, einfaches analoges Anti-Aliasing-Filter (wegen der hohen Abtastrate), gute Linearität.
+- Nachteil: Das Digitalfilter braucht Zeit (**Latenz**) – nach einem Kanalwechsel dauert es mehrere Ausgabewerte, bis der
+  Messwert stimmt. Für schnelle Regelungen mit vielen Kanälen ist ein SAR-Umsetzer oft besser.
+
+## 3 · Statische Fehler
+
+Ein realer Umsetzer weicht von der idealen Treppenkennlinie ab:
+
+<Abbildung bild={Fehler} unterschrift="Offset- und Verstärkungsfehler eines A/D-Umsetzers (vereinfacht als Geraden)" />
+
+| Fehler | Bedeutung | Abhilfe |
+| --- | --- | --- |
+| **Offset** | die ganze Kennlinie ist verschoben | Nullpunkt-Kalibrierung (Wert bei 0 V abziehen) |
+| **Verstärkungsfehler** (Gain) | die Steigung stimmt nicht – oft durch die Referenz | Kalibrierung mit bekannter Spannung am Bereichsende |
+| **DNL** (differentielle Nichtlinearität) | einzelne Stufen sind breiter oder schmaler als 1 LSB | nicht kalibrierbar; DNL < −1 LSB → **fehlende Codes** |
+| **INL** (integrale Nichtlinearität) | größte Abweichung der Kennlinie von einer Geraden | Kennlinie vermessen und Tabelle hinterlegen (aufwendig) |
+
+Offset und Verstärkungsfehler lassen sich mit einer **Zweipunkt-Kalibrierung** beseitigen (wie in der
+[Messtechnik](/messtechnik/theorie/)), DNL und INL nicht. Ein Umsetzer mit 12 Bit und ±4 LSB INL ist für absolute Messungen
+also nur etwa so genau wie ein idealer 10-Bit-Umsetzer.
+
+Oft unterschätzt wird die **Referenzspannung**: Eine Referenz mit 0,5 % Toleranz oder die ungenaue Versorgungsspannung als
+Referenz verursacht Verstärkungsfehler von vielen LSB. Ihre Temperaturdrift (ppm/K) begrenzt die Genauigkeit über den
+Temperaturbereich.
+
+## 4 · Dynamische Kennwerte
+
+Auch ein idealer Umsetzer hat **Quantisierungsrauschen**. Für ein Sinussignal über den vollen Bereich ergibt sich der
+größtmögliche **Signal-Rausch-Abstand**
+
+$$
+\mathrm{SNR_{ideal}} = 6{,}02 \cdot n + 1{,}76\,\mathrm{dB}
+$$
+
+Jedes zusätzliche Bit bringt etwa 6 dB. Ein realer Umsetzer hat zusätzlich Rauschen und Verzerrungen; das Datenblatt gibt
+den gemessenen **SINAD** (Signal zu Rauschen plus Verzerrungen) an. Daraus folgt die **effektive Bitzahl**
+
+$$
+\mathrm{ENOB} = \frac{\mathrm{SINAD} - 1{,}76\,\mathrm{dB}}{6{,}02\,\mathrm{dB}}
+$$
+
+– die Zahl der Bits, die ein idealer Umsetzer mit gleichem Rauschen hätte. Ein 16-Bit-Umsetzer mit 86 dB SINAD liefert nur
+etwa 14 effektive Bits.
+
+## 5 · Abtastung in der Praxis
+
+### Abtast-Halte-Glied und Eingangsbeschaltung
+
+Während einer SAR-Wandlung darf sich die Eingangsspannung nicht ändern. Ein **Abtast-Halte-Glied** (Sample & Hold) lädt dazu
+einen kleinen Kondensator (wenige pF) auf die Eingangsspannung und trennt ihn dann ab. Folge für die Schaltung:
+
+- Beim Abtasten fließt kurz ein Ladestrom. Eine **hochohmige** Quelle (z. B. Spannungsteiler mit 1 MΩ) schafft es nicht,
+  den Kondensator in der Abtastzeit genau zu laden – der Messwert ist zu klein.
+- Abhilfe: niederohmige Quelle, **Pufferkondensator** direkt am Eingang (viel größer als der interne, z. B. 10 … 100 nF) oder
+  ein OPV als Treiber. Das Datenblatt nennt den maximal zulässigen Quellwiderstand.
+
+### Überabtastung und Mittelwertbildung
+
+Ist dem Signal ein wenig Rauschen überlagert (mindestens etwa 1 LSB), kann man durch Mitteln vieler Werte die Auflösung
+erhöhen: Für **jedes zusätzliche Bit** braucht man die **vierfache** Zahl an Abtastwerten. Aus einem 12-Bit-Umsetzer mit
+16-facher Überabtastung werden so 14 Bit – bei einem Sechzehntel der Ausgaberate. Ohne Rauschen funktioniert das nicht:
+Dann liefert jede Messung denselben Code. Linearitätsfehler (INL) werden durch Mitteln nicht kleiner.
+
+### Taktjitter
+
+Schwankt der Abtastzeitpunkt um $t_\mathrm{j}$ (Jitter), entsteht bei schnell veränderlichen Signalen ein Fehler, denn
+$\mathrm{d}u/\mathrm{d}t$ ist groß. Für einen Sinus mit der Frequenz $f$ begrenzt der Jitter den Signal-Rausch-Abstand auf
+
+$$
+\mathrm{SNR_{jitter}} = -20 \lg\left(2\pi f t_\mathrm{j}\right)
+$$
+
+Bei schnellen Umsetzern ist deshalb ein sehr sauberer Takt genauso wichtig wie die Zahl der Bits.
+
+### Anti-Aliasing
+
+Vor jedem Umsetzer gehört ein **Tiefpass**, der alle Frequenzen oberhalb der halben Abtastrate ausreichend dämpft (siehe
+[Abtasttheorem](/digitale-messtechnik/theorie/) und [Filter](/filter/)). Bei Sigma-Delta-Umsetzern genügt wegen der hohen
+Überabtastung meist ein einfaches RC-Glied.

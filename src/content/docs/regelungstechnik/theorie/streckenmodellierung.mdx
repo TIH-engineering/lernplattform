@@ -1,0 +1,82 @@
+---
+title: Streckenmodellierung
+description: Regelstrecken mit und ohne Ausgleich, Top-down-Modellierung aus physikalischen Gleichungen (thermische Strecke, Gleichstrommotor), Bottom-up-Modellierung aus dem Sprungversuch, Zeitkonstante eines PT1, Wendetangentenverfahren mit Verzugszeit und Ausgleichszeit, Ersatzmodell PT1 mit Totzeit, Regelbarkeit, Simulation.
+sidebar:
+  label: 3 · Streckenmodellierung
+  order: 3
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Wendetangente from '../../../../assets/mtrs/wendetangente.svg';
+
+Um einen Regler zu entwerfen, braucht man ein **Modell der Strecke**: eine möglichst einfache Beschreibung, wie die
+Regelgröße auf die Stellgröße reagiert. Es gibt zwei Wege – aus der Physik (top-down) oder aus einer Messung (bottom-up).
+
+## Strecken mit und ohne Ausgleich
+
+- **Mit Ausgleich:** Nach einem Stellgrößensprung stellt sich ein neuer, fester Wert ein (P-, PT1-, PT2-Verhalten). Beispiel:
+  Heizung auf 50 % → der Raum erreicht irgendwann eine feste Temperatur.
+- **Ohne Ausgleich:** Die Regelgröße läuft immer weiter (I-Verhalten). Beispiel: Füllstand eines Behälters mit konstantem
+  Zufluss, Position eines Motorschlittens bei konstanter Drehzahl.
+
+## Top-down: aus der Physik
+
+Man stellt die Gleichungen der Energiespeicher auf. Jeder Energiespeicher bringt eine Zeitkonstante.
+
+**Thermische Strecke** (z. B. Lötspitze, Heizblock): Die Heizleistung $P$ erwärmt eine Wärmekapazität $C_\mathrm{th}$, über den
+Wärmewiderstand $R_\mathrm{th}$ fließt Wärme an die Umgebung ab (siehe [Thermische Auslegung](/thermische-auslegung/theorie/)):
+
+$$
+C_\mathrm{th} \frac{\mathrm{d}\Delta\vartheta}{\mathrm{d}t} = P - \frac{\Delta\vartheta}{R_\mathrm{th}}
+\quad\Rightarrow\quad
+\Delta\vartheta(t) = R_\mathrm{th} P \left(1 - \mathrm{e}^{-t/\tau}\right), \quad \tau = R_\mathrm{th} C_\mathrm{th}
+$$
+
+Das ist ein **PT1-Glied** mit $K = R_\mathrm{th}$ (in K/W) und $T = R_\mathrm{th} C_\mathrm{th}$ – genau wie ein RC-Glied.
+
+**Gleichstrommotor** (Spannung → Drehzahl): Aus den [Motorgleichungen](/aktuatoren/theorie/gleichstrommotor/) folgt
+näherungsweise ein PT1 mit $K = 1/k$ und der mechanischen Zeitkonstante $T = R_\mathrm{A} J/k^2$; berücksichtigt man auch die
+elektrische Zeitkonstante $L_\mathrm{A}/R_\mathrm{A}$, ein PT2.
+
+Vorteil: Man versteht, wovon die Parameter abhängen (z. B. größeres Trägheitsmoment → langsamer). Nachteil: Viele Werte
+(Wärmeübergang, Reibung) kennt man nur ungenau.
+
+## Bottom-up: aus der Messung
+
+Man macht einen **Sprungversuch**: Die Anlage läuft im eingeschwungenen Zustand, der Regler ist abgeschaltet (Handbetrieb).
+Dann ändert man die Stellgröße sprunghaft (z. B. von 30 % auf 50 %) und zeichnet die Regelgröße auf.
+
+- **Streckenverstärkung:** $K_\mathrm{S} = \dfrac{\Delta y}{\Delta u}$ (Änderung des Endwerts durch Änderung der Stellgröße).
+- **PT1:** Die Zeitkonstante ist die Zeit, nach der 63 % der Änderung erreicht sind.
+- Der Sprung sollte so groß sein, dass die Änderung deutlich über dem Rauschen liegt, aber so klein, dass die Anlage im
+  normalen Arbeitsbereich bleibt (Nichtlinearitäten).
+
+### Wendetangentenverfahren
+
+Viele reale Strecken haben mehrere Energiespeicher und eine S-förmige Sprungantwort. Man legt eine Tangente an den
+**Wendepunkt** (Punkt der größten Steigung):
+
+<Abbildung bild={Wendetangente} unterschrift="Wendetangente: Verzugszeit und Ausgleichszeit" />
+
+- **Verzugszeit** $T_\mathrm{u}$: vom Sprung bis zum Schnittpunkt der Tangente mit dem Anfangswert,
+- **Ausgleichszeit** $T_\mathrm{g}$: zwischen den Schnittpunkten der Tangente mit Anfangs- und Endwert.
+
+Die Strecke wird dann durch ein **PT1-Glied mit Totzeit** ersetzt: $T_\mathrm{t} \approx T_\mathrm{u}$, $T \approx T_\mathrm{g}$. Aus
+$T_\mathrm{u}$, $T_\mathrm{g}$ und $K_\mathrm{S}$ lassen sich mit Einstellregeln direkt Reglerparameter berechnen (siehe
+[Stabilität und Reglerentwurf](/regelungstechnik/theorie/stabilitaet-entwurf/)).
+
+Das Verhältnis zeigt, wie gut sich die Strecke regeln lässt:
+
+| $T_\mathrm{g}/T_\mathrm{u}$ | Regelbarkeit |
+| --- | --- |
+| > 10 | gut regelbar |
+| 3 … 10 | noch regelbar |
+| < 3 | schwer regelbar |
+
+## Simulation
+
+Ist ein Modell gefunden, prüft man es, indem man den gemessenen Sprungversuch mit der Simulation vergleicht. Dann kann man
+Regler am Rechner ausprobieren, ohne die Anlage zu gefährden. Werkzeuge: MATLAB/Simulink (mit Simscape auch physikalische
+Modelle aus Bauteilen), Python, oder eine Schaltungssimulation wie LTspice mit Ersatzschaltungen (RC-Glieder,
+OPV-Integrierer). Wichtig: Das Modell muss nur so genau sein, wie es der Reglerentwurf braucht. Ein PT1 mit Totzeit reicht
+erstaunlich oft.

@@ -1,0 +1,104 @@
+---
+title: Stabilität und Reglerentwurf
+description: Wann wird ein Regelkreis instabil? Offener Kreis, Durchtrittsfrequenz, Phasenreserve und Amplitudenreserve im Bode-Diagramm (vereinfachtes Nyquist-Kriterium), Zusammenhang mit dem Überschwingen, Reglerentwurf durch Kompensation und Betragsoptimum, Einstellregeln nach Ziegler und Nichols, praktisches Einstellen.
+sidebar:
+  label: 5 · Stabilität und Reglerentwurf
+  order: 5
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Bode from '../../../../assets/mtrs/bode-phasenreserve.svg';
+
+## Warum wird ein Regelkreis instabil?
+
+Jede Strecke reagiert **verzögert**. Ist die Verzögerung so groß, dass die Gegenkopplung bei einer bestimmten Frequenz um
+180° phasenverschoben ankommt, wird aus der Gegenkopplung eine **Mitkopplung**. Ist die Kreisverstärkung bei dieser Frequenz
+noch mindestens 1, schaukelt sich eine Schwingung auf – der Regelkreis ist zum
+[Oszillator](/oszillatoren/theorie/) geworden (Barkhausen-Kriterium).
+
+## Stabilität im Bode-Diagramm
+
+Man untersucht den **offenen Kreis** $G_0 = G_\mathrm{R} \cdot G_\mathrm{S}$ – also Regler und Strecke hintereinander, ohne den
+Kreis zu schließen. Für die üblichen Strecken (ohne instabile Anteile) gilt das **vereinfachte Nyquist-Kriterium**:
+
+> Der geschlossene Kreis ist stabil, wenn die Phase von $G_0$ bei der **Durchtrittsfrequenz** $\omega_\mathrm{D}$
+> (dort, wo $\lvert G_0 \rvert = 1 = 0\,\mathrm{dB}$) noch **über −180°** liegt.
+
+<Abbildung bild={Bode} unterschrift="Bode-Diagramm des offenen Kreises mit Durchtrittsfrequenz und Phasenreserve" />
+
+- **Phasenreserve** $\varphi_\mathrm{R} = 180° + \varphi_0(\omega_\mathrm{D})$: der Abstand der Phase von −180° bei der
+  Durchtrittsfrequenz.
+- **Amplitudenreserve:** um wie viel dB der Betrag unter 0 dB liegt, wenn die Phase −180° erreicht.
+
+Die Phasenreserve bestimmt das **Überschwingen** des geschlossenen Kreises:
+
+| Phasenreserve | Verhalten nach einem Sollwertsprung |
+| --- | --- |
+| 0° | Dauerschwingung (Stabilitätsgrenze) |
+| ≈ 30° | stark schwingend (über 30 % Überschwingen) |
+| ≈ 45° | deutliches Überschwingen (etwa 20 … 25 %) |
+| ≈ 60 … 65° | gut gedämpft, wenige Prozent Überschwingen |
+| ≈ 75° und mehr | kein Überschwingen, aber langsam |
+
+Übliche Forderung: $\varphi_\mathrm{R} \approx 45° \dots 65°$. Die Durchtrittsfrequenz bestimmt die **Schnelligkeit**: Die
+Anregelzeit beträgt grob $t_\mathrm{an} \approx 1{,}5 \dots 3/\omega_\mathrm{D}$.
+
+Die Gleichungen zeigen auch, warum **Totzeiten** so gefährlich sind: Sie kosten bei $\omega_\mathrm{D}$ die Phase
+$\omega_\mathrm{D} T_\mathrm{t}$ (im Bogenmaß), ohne den Betrag zu verringern. Man muss $\omega_\mathrm{D}$ – und damit die
+Schnelligkeit – so weit senken, bis wieder genug Phasenreserve bleibt.
+
+## Reglerentwurf durch Kompensation
+
+Ein bewährter Weg für Strecken aus PT1-Gliedern (Zeitkonstanten $T_1 > T_2 > \dots$):
+
+1. Man wählt einen **PI-Regler** und setzt die Nachstellzeit gleich der **größten** Zeitkonstante: $T_\mathrm{N} = T_1$. Damit
+   „kürzt“ der Regler diese langsame Verzögerung heraus (Kompensation).
+2. Übrig bleibt ein offener Kreis aus einem I-Glied und den kleinen Zeitkonstanten (zusammengefasst als
+   Summenzeitkonstante $T_\sigma = T_2 + T_3 + \dots$):
+   $G_0 = \dfrac{K_\mathrm{P} K_\mathrm{S}}{T_1 s (1 + T_\sigma s)}$
+3. $K_\mathrm{P}$ wird nach dem **Betragsoptimum** gewählt:
+
+$$
+K_\mathrm{P} = \frac{T_1}{2\,K_\mathrm{S}\,T_\sigma} \qquad T_\mathrm{N} = T_1
+$$
+
+Ergebnis: Phasenreserve etwa 65°, Überschwingen etwa 4 %, Anregelzeit etwa $4{,}7\,T_\sigma$. Diese Regel ist in der
+Antriebstechnik (Stromregler) Standard. Sie gilt für das **Führungsverhalten**; bei sehr unterschiedlichen Zeitkonstanten regelt
+sie Störungen nur langsam aus – dann verwendet man das symmetrische Optimum (hier nicht behandelt).
+
+## Einstellregeln nach Ziegler und Nichols
+
+Wenn kein genaues Modell vorliegt, helfen empirische Regeln.
+
+### Aus der Sprungantwort (Wendetangente)
+
+Mit $K_\mathrm{S}$, $T_\mathrm{u}$ und $T_\mathrm{g}$ aus dem [Wendetangentenverfahren](/regelungstechnik/theorie/streckenmodellierung/):
+
+| Regler | $K_\mathrm{P}$ | $T_\mathrm{N}$ | $T_\mathrm{V}$ |
+| --- | --- | --- | --- |
+| P | $\dfrac{T_\mathrm{g}}{K_\mathrm{S} T_\mathrm{u}}$ | – | – |
+| PI | $0{,}9\,\dfrac{T_\mathrm{g}}{K_\mathrm{S} T_\mathrm{u}}$ | $3{,}33\,T_\mathrm{u}$ | – |
+| PID | $1{,}2\,\dfrac{T_\mathrm{g}}{K_\mathrm{S} T_\mathrm{u}}$ | $2\,T_\mathrm{u}$ | $0{,}5\,T_\mathrm{u}$ |
+
+### Schwingversuch
+
+Man betreibt die Anlage mit einem reinen P-Regler und erhöht $K_\mathrm{P}$, bis eine **Dauerschwingung** mit konstanter Amplitude
+entsteht. Abgelesen werden die kritische Verstärkung $K_\mathrm{krit}$ und die Periodendauer $T_\mathrm{krit}$:
+
+| Regler | $K_\mathrm{P}$ | $T_\mathrm{N}$ | $T_\mathrm{V}$ |
+| --- | --- | --- | --- |
+| P | $0{,}5\,K_\mathrm{krit}$ | – | – |
+| PI | $0{,}45\,K_\mathrm{krit}$ | $0{,}85\,T_\mathrm{krit}$ | – |
+| PID | $0{,}6\,K_\mathrm{krit}$ | $0{,}5\,T_\mathrm{krit}$ | $0{,}12\,T_\mathrm{krit}$ |
+
+Die Regeln nach Ziegler und Nichols ergeben einen recht „scharfen“ Regler mit deutlichem Überschwingen. Sie sind ein
+**Startwert**, der anschließend verfeinert wird. Der Schwingversuch ist nur erlaubt, wo eine Dauerschwingung keinen Schaden
+anrichtet.
+
+## Praktisches Einstellen
+
+1. Zuerst nur P-Anteil: $K_\mathrm{P}$ klein beginnen und erhöhen, bis der Kreis schnell reagiert, aber noch gut gedämpft ist.
+2. I-Anteil dazu: $T_\mathrm{N}$ groß beginnen (schwacher I-Anteil) und verkleinern, bis die bleibende Abweichung schnell genug
+   verschwindet, ohne dass es stark überschwingt.
+3. Falls nötig, D-Anteil vorsichtig dazu, um das Überschwingen zu dämpfen.
+4. Immer **Führungs- und Störverhalten** prüfen, und auch große Sprünge testen (Stellgrößenbegrenzung!).

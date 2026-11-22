@@ -1,0 +1,131 @@
+---
+title: Praxisbeispiele – Regelungstechnik
+description: Lötstation mit Zweipunkt- und PI-Regelung, Drehzahlregelung eines Lüfters mit Mikrocontroller, Raumheizung mit großer Totzeit, Konstantstrom-Laderegler, Tempomat, Regelkreis simulieren, Windup nach dem Aufheizen.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Lötstation
+
+Eine Lötstation misst die Spitzentemperatur mit einem Thermoelement in der Spitze und heizt mit PWM.
+
+1. Eine einfache Station schaltet die Heizung bei 350 °C aus und bei 345 °C wieder ein. Warum schwankt die Temperatur trotzdem
+   um etwa ±10 K?
+2. Eine bessere Station verwendet einen PI-Regler. Welche Vorteile hat das?
+3. Warum misst die Station die Temperatur oft nur in den kurzen Pausen, in denen die Heizung ausgeschaltet ist?
+
+<Loesung>
+
+1. Zweipunktregler mit Verzögerung: Nach dem Ausschalten fließt noch Wärme vom Heizelement zur Spitze, die Temperatur steigt
+   weiter (Überschwingen). Nach dem Einschalten dauert es, bis die Wärme ankommt – die Temperatur fällt weiter.
+2. Der PI-Regler stellt die Heizleistung stetig ein: wenig Leistung im Leerlauf, viel beim Löten großer Massestücke. Die
+   Temperatur bleibt nahe am Sollwert, und es bleibt keine Abweichung (I-Anteil). Beim Auflegen auf eine große Lötstelle
+   (Störung) regelt er schneller nach.
+3. Thermoelement und Heizung sitzen eng beisammen; der Heizstrom würde die winzige Thermospannung (µV) stören. In der
+   PWM-Pause misst man störungsfrei – ein Beispiel für Abtastung im Regelkreis.
+
+</Loesung>
+
+## Lüfterdrehzahl mit dem Mikrocontroller regeln
+
+Ein 4-Pin-PC-Lüfter (PWM-Eingang, Tacho-Ausgang) soll auf eine einstellbare Drehzahl geregelt werden.
+
+1. Zeichne den Regelkreis: Was ist Sollwert, Istwert, Stellgröße, Stellglied, Strecke, Messglied?
+2. Warum ist ein PI-Regler sinnvoll und kein reiner P-Regler?
+3. Bei niedrigen Drehzahlen schwankt die gemessene Drehzahl stark, und der Regler „zappelt“. Was hilft?
+
+<Loesung>
+
+1. Sollwert: gewünschte Drehzahl · Istwert: gemessene Drehzahl (Periodendauer des Tacho-Signals, siehe
+   [Frequenzmessung](/frequenzmessung/theorie/)) · Stellgröße: PWM-Tastgrad · Stellglied: Lüfterelektronik ·
+   Strecke: Motor mit Lüfterrad (≈ PT1) · Störgrößen: Versorgungsspannung, Luftwiderstand (Staubfilter).
+2. Der Lüfter braucht für jede Drehzahl einen bestimmten Tastgrad. Ein P-Regler bräuchte dafür eine bleibende Abweichung; der
+   I-Anteil findet den nötigen Tastgrad selbst.
+3. Bei niedriger Drehzahl kommen nur wenige Tacho-Impulse pro Regeltakt – die Messung ist grob. Abhilfe: Periodendauer
+   messen statt Impulse zählen, über mehrere Impulse mitteln, Abtastzeit des Reglers passend zur Messung wählen, $K_\mathrm{P}$
+   verkleinern.
+
+</Loesung>
+
+## Raumheizung mit großer Totzeit
+
+Eine Fußbodenheizung reagiert extrem träge: Nach einer Änderung der Vorlauftemperatur dauert es eine Stunde, bis sich die
+Raumtemperatur merklich ändert.
+
+1. Warum ist eine scharf eingestellte Regelung hier gefährlich?
+2. Wie regelt man solche Anlagen in der Praxis?
+
+<Loesung>
+
+1. Große Totzeit → große Phasenverschiebung → ein schneller Regler würde überheizen, dann zu stark zurückregeln, und die
+   Temperatur würde stundenlang pendeln.
+2. Mit einer **Vorsteuerung** (Steuerung): Die Vorlauftemperatur wird aus der **Außentemperatur** über eine Heizkurve
+   eingestellt – die Hauptstörgröße wird gemessen, bevor sie wirkt. Der Raumregler korrigiert nur langsam (kleines $K_\mathrm{P}$,
+   großes $T_\mathrm{N}$) den Rest.
+
+</Loesung>
+
+## Konstantstrom-Laderegler
+
+Ein Ladegerät lädt einen Akku zuerst mit konstantem Strom (1 A), dann mit konstanter Spannung (4,2 V).
+
+1. Welche Größe wird in welcher Phase geregelt?
+2. Wie kann ein Mikrocontroller zwischen beiden Reglern umschalten, ohne dass die Stellgröße springt?
+
+<Loesung>
+
+1. Phase 1: Regelgröße = Ladestrom (Messung mit Shunt), Phase 2: Regelgröße = Akkuspannung. Stellgröße ist in beiden Fällen
+   der Tastgrad des Schaltwandlers.
+2. Beide Regler laufen parallel; verwendet wird die **kleinere** der beiden Stellgrößen (Minimumauswahl). Der nicht aktive
+   Regler darf dabei nicht „aufziehen“ – sein I-Anteil wird auf die tatsächlich ausgegebene Stellgröße nachgeführt
+   (Anti-Windup). So erfolgt der Übergang stoßfrei.
+
+</Loesung>
+
+## Tempomat am Berg
+
+Ein Tempomat hält 100 km/h. Am Beginn einer Steigung sinkt die Geschwindigkeit kurz auf 96 km/h und erreicht dann wieder 100 km/h.
+
+1. Welches Verhalten (Führungs- oder Störverhalten) ist das, und welcher Regleranteil sorgt dafür, dass wieder genau 100 km/h
+   erreicht werden?
+2. Was würde mit einem reinen P-Regler passieren?
+
+<Loesung>
+
+1. **Störverhalten** – die Steigung ist eine Störgröße. Der **I-Anteil** erhöht die Motorleistung, bis die Abweichung null ist.
+2. Es bliebe eine bleibende Abweichung: Der Motor braucht am Berg mehr Leistung, die der P-Regler nur bei einer dauerhaften
+   Geschwindigkeitsabweichung liefert (z. B. 98 km/h).
+
+</Loesung>
+
+## Windup nach dem Aufheizen
+
+Ein Ofen wird von 20 °C auf 200 °C aufgeheizt; die Heizung läuft dabei lange mit 100 %. Danach schießt die Temperatur auf
+240 °C hinaus, obwohl der Regler bei kleinen Sollwertänderungen gut funktioniert.
+
+<Loesung>
+
+Während des langen Aufheizens war die Stellgröße begrenzt (100 %), der I-Anteil wuchs aber weiter (**Windup**). Bei Erreichen
+des Sollwerts ist der I-Anteil riesig; erst eine lange negative Regelabweichung baut ihn wieder ab – das Überschwingen. Abhilfe:
+**Anti-Windup** (I-Anteil anhalten, solange begrenzt wird, siehe
+[Digitale Regelung](/regelungstechnik/theorie/digitale-regelung/)), oder den I-Anteil erst kurz vor dem Sollwert
+freigeben.
+
+</Loesung>
+
+## Regelkreis vorher simulieren
+
+Bevor ein Regler an eine teure Anlage geht, wird er simuliert.
+
+1. Was braucht man dafür?
+2. Welche Effekte muss das Simulationsmodell enthalten, damit das Ergebnis realistisch ist?
+
+<Loesung>
+
+1. Ein Modell der Strecke (aus der Physik oder aus einem Sprungversuch, siehe
+   [Streckenmodellierung](/regelungstechnik/theorie/streckenmodellierung/)) und ein Simulationswerkzeug (MATLAB/Simulink,
+   Python, LTspice mit Ersatzschaltungen).
+2. Stellgrößenbegrenzung, Totzeiten (auch Abtastung und Rechenzeit), Messrauschen und Auflösung von Sensor und A/D-Umsetzer,
+   die wichtigsten Störgrößen. Ein Regler, der nur im idealen Modell gut aussieht, schwingt an der echten Anlage oft.
+
+</Loesung>

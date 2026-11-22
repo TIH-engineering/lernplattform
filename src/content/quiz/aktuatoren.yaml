@@ -1,0 +1,136 @@
+titel: Aktuatoren
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Warum bestimmt in einem Magnetkreis meist der Luftspalt den Fluss?
+    optionen:
+      - text: Luft hat $\mu_\mathrm{r} = 1$, Eisen einige Tausend – schon 1 mm Luft hat einen viel größeren magnetischen Widerstand als viele Zentimeter Eisen.
+        richtig: true
+      - text: Im Luftspalt ist die Flussdichte null.
+      - text: Der Luftspalt leitet den Fluss besser als Eisen.
+      - text: Der Luftspalt hat keinen Einfluss.
+    erklaerung: '$R_\mathrm{m} = l/(\mu_0\mu_\mathrm{r}A)$ – bei $\mu_\mathrm{r} = 1$ ist der Widerstand pro Millimeter Tausende Male größer als im Eisen.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Eine Spule mit 200 Windungen sitzt auf einem Kern mit $R_\mathrm{m} = 4 \cdot 10^6\,\mathrm{A/(Vs)}$. Wie groß ist ihre Induktivität in mH?'
+    loesung: 10
+    einheit: mH
+    erklaerung: '$L = N^2/R_\mathrm{m} = 40\,000/(4 \cdot 10^6)\,\mathrm{H} = 10\,\mathrm{mH}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wozu dient die Freilaufdiode parallel zu einer Relaisspule?
+    optionen:
+      - text: Sie begrenzt die Induktionsspannung beim Abschalten und schützt den Transistor.
+        richtig: true
+      - text: Sie lässt das Relais schneller anziehen.
+      - text: Sie schützt die Spule vor Verpolung beim Einschalten.
+      - text: Sie verringert den Spulenstrom im Betrieb.
+    erklaerung: 'Beim Abschalten fließt der Spulenstrom über die Diode weiter und klingt langsam ab, statt eine Spannungsspitze von vielen hundert Volt zu erzeugen.'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum braucht ein Elektromagnet zum Anziehen mehr Strom als zum Halten?
+    optionen:
+      - text: Bei offenem Anker ist der Luftspalt groß, $B$ und damit die Kraft ($\sim B^2$) sind bei gleichem Strom klein.
+        richtig: true
+      - text: Weil die Spule beim Anziehen kalt ist.
+      - text: Weil die Induktivität beim Halten null ist.
+      - text: Das stimmt nicht – Anzugs- und Haltestrom sind gleich.
+    erklaerung: 'Mit geschlossenem Luftspalt ist der magnetische Widerstand klein, der Fluss groß – ein kleiner Strom genügt zum Halten. Das nutzt die Sparschaltung.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Gleichstrommotor hat $R_\mathrm{A} = 0{,}8\,\Omega$ und liegt an 24 V. Wie groß ist der Anlaufstrom in A?'
+    loesung: 30
+    einheit: A
+    erklaerung: 'Im Stillstand ist die Gegenspannung null: $I_\mathrm{A} = U/R_\mathrm{A} = 24\,\mathrm{V}/0{,}8\,\Omega = 30\,\mathrm{A}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Motor hat $k = 0{,}05\,\mathrm{Nm/A}$ und nimmt 3 A auf (Leerlaufstrom vernachlässigt). Welches Drehmoment in Nm gibt er ab?'
+    loesung: 0.15
+    einheit: Nm
+    erklaerung: '$M = k \cdot I = 0{,}05\,\mathrm{Nm/A} \cdot 3\,\mathrm{A} = 0{,}15\,\mathrm{Nm}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wovon hängt die Leerlaufdrehzahl eines Gleichstrommotors mit Permanentmagneten ab?
+    optionen:
+      - text: im Wesentlichen proportional von der angelegten Spannung
+        richtig: true
+      - text: nur von der Last
+      - text: von der Netzfrequenz
+      - text: vom Anlaufstrom
+    erklaerung: '$\omega_0 \approx U/k$ – deshalb stellt man die Drehzahl mit PWM über die mittlere Spannung ein.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was ersetzt beim BLDC-Motor den Kommutator mit Bürsten?
+    optionen:
+      - text: eine Elektronik, die die Statorwicklungen abhängig von der Rotorlage umschaltet
+        richtig: true
+      - text: ein Getriebe
+      - text: ein Kondensator
+      - text: gar nichts, der Motor läuft am Netz
+    erklaerung: 'Hall-Sensoren oder die Messung der Gegenspannung liefern die Rotorlage; eine dreifache Halbbrücke schaltet die Phasen.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein sechspoliger Asynchronmotor (p = 3) läuft am 50-Hz-Netz mit 960 1/min. Wie groß ist der Schlupf in %?'
+    loesung: 4
+    einheit: '%'
+    erklaerung: '$n_\mathrm{s} = 50\,\mathrm{s^{-1}}/3 \cdot 60 = 1000\,\mathrm{min^{-1}}$ → $s = (1000 - 960)/1000 = 4\,\%$'
+
+  - typ: mc
+    stufe: standard
+    frage: Was gibt die Leistung auf dem Typenschild eines Motors an?
+    optionen:
+      - text: die mechanische Abgabeleistung an der Welle im Nennbetrieb
+        richtig: true
+      - text: die aufgenommene elektrische Wirkleistung
+      - text: die Scheinleistung
+      - text: die Verlustleistung
+    erklaerung: 'Die aufgenommene Leistung ist größer: $P_\mathrm{zu} = P_\mathrm{N}/\eta$.'
+
+  - typ: mc
+    stufe: standard
+    frage: Ein Motor trägt die Angabe „230/400 V Δ/Y“. Wie wird er am 400-V-Drehstromnetz geschaltet?
+    optionen:
+      - text: im Stern
+        richtig: true
+      - text: im Dreieck
+      - text: gar nicht, er passt nicht ans 400-V-Netz
+      - text: egal
+    erklaerung: 'Jeder Strang verträgt 230 V. Im Stern liegt an jedem Strang $400\,\mathrm{V}/\sqrt{3} = 230\,\mathrm{V}$.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Schrittmotor mit 0,9° Schrittwinkel wird im Halbschritt betrieben. Wie viele Schritte braucht er für eine Umdrehung?'
+    loesung: 800
+    toleranz: 0
+    toleranzArt: absolut
+    erklaerung: '$360°/0{,}9° = 400$ Vollschritte → Halbschritt: 800 Schritte.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Warum betreibt man einen Schrittmotor mit einer viel höheren Spannung als seiner Nennspannung und regelt den Strom?
+    optionen:
+      - text: Der Strom steigt in der Wicklungsinduktivität schneller an – so bleibt auch bei hoher Schrittfrequenz genug Moment.
+        richtig: true
+      - text: Damit er im Stillstand kein Haltemoment hat.
+      - text: Damit er ohne Treiber direkt am Netz laufen kann.
+      - text: Damit er weniger Schritte pro Umdrehung macht.
+    erklaerung: 'Die Stromregelung (Chopper) verhindert, dass der Strom zu groß wird; die hohe Spannung sorgt für schnelle Stromanstiege.'
+
+  - typ: mc
+    stufe: standard
+    frage: Was passiert bei einem Schrittverlust?
+    optionen:
+      - text: Der Rotor folgt dem Feld nicht, und die Steuerung kennt die tatsächliche Position nicht mehr.
+        richtig: true
+      - text: Der Motor bleibt sofort stehen und meldet einen Fehler.
+      - text: Der Motor wird schneller.
+      - text: Der Treiber zählt die fehlenden Schritte automatisch nach.
+    erklaerung: 'Ohne Positionssensor bemerkt die Steuerung den Fehler nicht. Abhilfe: Rampen, Momentreserve, Referenzfahrt oder Encoder.'

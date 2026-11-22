@@ -1,0 +1,128 @@
+---
+title: Rechenbeispiele – A/D- und D/A-Umsetzer
+description: Rechenbeispiele zur Ausgangsspannung eines R-2R-D/A-Umsetzers, Auflösung und Rippel eines PWM-D/A-Umsetzers, Dual-Slope-Wandlung, Anzahl der Komparatoren eines Flash-Umsetzers, idealem SNR und ENOB, Überabtastung und Jitter.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+
+## Ausgangsspannung eines D/A-Umsetzers
+
+<Stufe wert="grundlagen" />
+
+Ein 8-Bit-D/A-Umsetzer mit $U_\mathrm{ref} = 5\,\mathrm{V}$ erhält den Code `0xA3`.
+
+**Gesucht:** $U_\mathrm{LSB}$ und $U_\mathrm{a}$
+
+<Loesung>
+
+`0xA3` $= 10 \cdot 16 + 3 = 163$ · $U_\mathrm{LSB} = 5\,\mathrm{V}/256 \approx 19{,}5\,\mathrm{mV}$ ·
+$U_\mathrm{a} = 163 \cdot 19{,}53\,\mathrm{mV} \approx 3{,}18\,\mathrm{V}$
+
+</Loesung>
+
+## Flash-Umsetzer
+
+<Stufe wert="grundlagen" />
+
+Wie viele Komparatoren braucht ein Flash-Umsetzer mit 6, 8 und 10 Bit?
+
+<Loesung>
+
+$2^n - 1$: 6 Bit → 63 · 8 Bit → 255 · 10 Bit → 1023. Jedes zusätzliche Bit verdoppelt den Aufwand – deshalb haben schnelle
+Oszilloskope meist „nur“ 8 Bit.
+
+</Loesung>
+
+## PWM als D/A-Umsetzer
+
+<Stufe wert="standard" />
+
+Ein Mikrocontroller (Timertakt 16 MHz, Ausgang 0/5 V) soll mit PWM und einem RC-Tiefpass eine Steuerspannung erzeugen.
+
+1. Welche PWM-Frequenz ergibt sich bei 8 Bit und bei 10 Bit Auflösung?
+2. Bei 8 Bit wird ein RC-Tiefpass mit $f_\mathrm{g} = 500\,\mathrm{Hz}$ verwendet. Wie groß ist der Rippel bei $D = 0{,}5$?
+   Ist er kleiner als 1 LSB?
+3. Was kann man tun?
+
+<Loesung>
+
+1. 8 Bit: $16\,\mathrm{MHz}/256 = 62{,}5\,\mathrm{kHz}$ · 10 Bit: $16\,\mathrm{MHz}/1024 \approx 15{,}6\,\mathrm{kHz}$
+2. $RC = 1/(2\pi \cdot 500\,\mathrm{Hz}) \approx 318\,\mathrm{\mu s}$ →
+   $U_\mathrm{ss} \approx \dfrac{5\,\mathrm{V} \cdot 0{,}25}{62{,}5\,\mathrm{kHz} \cdot 318\,\mathrm{\mu s}} \approx 63\,\mathrm{mV}$.
+   1 LSB $= 5\,\mathrm{V}/256 \approx 19{,}5\,\mathrm{mV}$ – der Rippel ist **dreimal zu groß**.
+3. Grenzfrequenz auf 100 Hz senken (Rippel ≈ 13 mV, aber langsamer), einen Tiefpass 2. Ordnung verwenden (zwei RC-Glieder
+   oder aktiv), oder einen echten D/A-Umsetzer einsetzen.
+
+</Loesung>
+
+## Dual-Slope-Wandlung
+
+<Stufe wert="standard" />
+
+Ein Dual-Slope-Umsetzer hat einen Takt von 100 kHz und integriert die Eingangsspannung für $N_1 = 2000$ Takte. Die Referenz
+ist $U_\mathrm{ref} = 2{,}000\,\mathrm{V}$. Beim Abintegrieren zählt er $N_2 = 1234$ Takte.
+
+1. Wie groß ist $T_1$, und wie groß ist die Eingangsspannung?
+2. Warum unterdrückt dieser Umsetzer Netzbrummen?
+3. Der Integrationskondensator altert und verliert 5 % Kapazität. Was passiert mit dem Messwert?
+
+<Loesung>
+
+1. $T_1 = 2000/100\,\mathrm{kHz} = 20\,\mathrm{ms}$ · $U_\mathrm{e} = U_\mathrm{ref} \cdot N_2/N_1 = 2\,\mathrm{V} \cdot 1234/2000 = 1{,}234\,\mathrm{V}$
+2. $T_1 = 20\,\mathrm{ms}$ ist genau eine Periode der Netzfrequenz. Das Integral einer 50-Hz-Störung über eine ganze Periode
+   ist null.
+3. Nichts. Mit kleinerem $C$ steigt die Integratorspannung schneller an, fällt aber auch schneller wieder ab – $N_2$ bleibt
+   gleich. $R$, $C$ und Taktfrequenz kürzen sich heraus (solange sie während einer Messung konstant sind).
+
+</Loesung>
+
+## SNR und effektive Bitzahl
+
+<Stufe wert="standard" />
+
+1. Welchen Signal-Rausch-Abstand hat ein idealer 12-Bit- bzw. 16-Bit-Umsetzer?
+2. Das Datenblatt eines 12-Bit-Umsetzers nennt SINAD = 68 dB. Wie viele effektive Bits hat er?
+
+<Loesung>
+
+1. 12 Bit: $6{,}02 \cdot 12 + 1{,}76 = 74{,}0\,\mathrm{dB}$ · 16 Bit: $98{,}1\,\mathrm{dB}$
+2. $\mathrm{ENOB} = (68 - 1{,}76)/6{,}02 \approx 11{,}0\,\mathrm{Bit}$ – ein Bit geht durch Rauschen und Verzerrungen verloren.
+
+</Loesung>
+
+## Auflösung durch Überabtastung
+
+<Stufe wert="vertiefung" />
+
+Ein Mikrocontroller hat einen 12-Bit-Umsetzer mit 100 kS/s. Benötigt werden 14 Bit Auflösung; dem Signal ist etwas Rauschen
+überlagert.
+
+1. Wie viele Werte müssen gemittelt werden, und welche Ausgaberate bleibt?
+2. Wird damit auch die Genauigkeit besser?
+
+<Loesung>
+
+1. 2 zusätzliche Bits → $4^2 = 16$ Werte. Ausgaberate $100\,\mathrm{kS/s}/16 = 6{,}25\,\mathrm{kS/s}$. Die Summe von 16
+   12-Bit-Werten hat 16 Bit; um 2 Bit nach rechts geschoben ergibt sie den 14-Bit-Wert.
+2. Nur die **Auflösung** (das Rauschen sinkt). Offset, Verstärkungsfehler und INL bleiben – die Genauigkeit wird nicht
+   besser. Dafür braucht man Kalibrierung und eine gute Referenz.
+
+</Loesung>
+
+## Jitter begrenzt die Auflösung
+
+<Stufe wert="vertiefung" />
+
+Ein Sinus mit 1 MHz wird abgetastet. Der Takt hat einen Jitter von 100 ps. Welcher Signal-Rausch-Abstand ist höchstens möglich,
+und wie viele effektive Bits entspricht das?
+
+<Loesung>
+
+$\mathrm{SNR} = -20\lg(2\pi \cdot 10^6\,\mathrm{Hz} \cdot 10^{-10}\,\mathrm{s}) \approx 64\,\mathrm{dB}$ →
+$\mathrm{ENOB} \approx (64 - 1{,}76)/6{,}02 \approx 10{,}3\,\mathrm{Bit}$
+
+Ein 14-Bit-Umsetzer wäre an diesem Takt verschwendet. Bei 10 kHz Signalfrequenz wäre der Jitter dagegen bedeutungslos
+(104 dB).
+
+</Loesung>

@@ -1,0 +1,87 @@
+---
+title: Grundbegriffe der Regelungstechnik
+description: Steuerung und Regelung, Begriffe nach DIN IEC 60050-351 (Führungsgröße, Regelgröße, Regelabweichung, Stellgröße, Störgröße), Blockschaltbild des Regelkreises, Führungs- und Störverhalten, Anforderungen und Kennwerte der Sprungantwort.
+sidebar:
+  label: 1 · Grundbegriffe
+  order: 1
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Kreis from '../../../../assets/mtrs/regelkreis.svg';
+import Kennwerte from '../../../../assets/mtrs/regel-kennwerte.svg';
+
+## Steuerung oder Regelung?
+
+- Bei einer **Steuerung** wirkt ein Eingangssignal in einer Richtung auf den Prozess, ohne dass das Ergebnis kontrolliert
+  wird (**offene Wirkungskette**). Beispiel: Ein Heizlüfter läuft auf Stufe 2 – ob es im Raum 18 °C oder 25 °C hat, weiß er
+  nicht. Eine Störung (Fenster offen) wird nicht ausgeglichen.
+- Bei einer **Regelung** wird die zu beeinflussende Größe **gemessen**, mit dem Sollwert verglichen und abhängig von der
+  Abweichung nachgestellt (**geschlossener Wirkungskreis**). Beispiel: Ein Thermostat misst die Raumtemperatur und schaltet
+  die Heizung so lange, bis 21 °C erreicht sind – auch wenn das Fenster offen ist.
+
+Eine Regelung braucht einen Sensor, kann aber Störungen und Änderungen des Prozesses ausgleichen. Eine Steuerung ist
+einfacher und reagiert schneller, verlässt sich aber darauf, dass sich der Prozess genau so verhält wie erwartet. In der
+Praxis kombiniert man oft beides (Vorsteuerung + Regelung).
+
+## Der Regelkreis
+
+<Abbildung bild={Kreis} unterschrift="Blockschaltbild eines Regelkreises" />
+
+| Größe | Zeichen | Bedeutung | Beispiel Raumheizung |
+| --- | --- | --- | --- |
+| Führungsgröße (Sollwert) | $w$ | gewünschter Wert | 21 °C |
+| Regelgröße (Istwert) | $y$ (bzw. $x$) | die geregelte, gemessene Größe | Raumtemperatur |
+| Rückführgröße | $r$ | gemessener Istwert nach dem Messglied | Spannung des Temperatursensors |
+| Regelabweichung | $e = w - r$ | Differenz von Soll und Ist | 21 °C − 19,5 °C = 1,5 K |
+| Stellgröße | $u$ | Ausgang des Reglers | Ventilöffnung 60 % |
+| Störgröße | $z$ | ungewollte Einflüsse von außen | offenes Fenster, Sonne |
+
+Die Blöcke:
+
+- **Regler:** bildet aus der Regelabweichung die Stellgröße (z. B. PI-Regler in einem Mikrocontroller).
+- **Stellglied (Aktuator):** setzt die Stellgröße in Energie oder Bewegung um (Ventil, Transistorstufe, Motor).
+- **Regelstrecke:** der Teil des Prozesses, dessen Ausgang geregelt wird (Raum mit Heizkörper).
+- **Messglied:** erfasst die Regelgröße (Sensor mit Messverstärker).
+
+Im Vergleichspunkt wird die Rückführung **subtrahiert** – das ist die **Gegenkopplung**. Ist die Regelgröße zu groß, wird die
+Regelabweichung negativ, und der Regler stellt zurück. (Bei Mitkopplung würde sich eine Abweichung verstärken – das ist der
+Weg zum [Oszillator](/oszillatoren/theorie/).)
+
+Blockschaltbilder zeigen nur den **Signalfluss**: Jeder Block hat einen Eingang und einen Ausgang; seine Wirkung wird durch
+eine Übertragungsfunktion oder eine Sprungantwort im Block beschrieben (nächste Seite).
+
+## Führungs- und Störverhalten
+
+Ein Regelkreis hat zwei Aufgaben:
+
+- **Führungsverhalten:** Die Regelgröße soll einer **Änderung des Sollwerts** schnell und ohne großes Überschwingen folgen
+  (Backofen von 20 °C auf 180 °C).
+- **Störverhalten:** Die Regelgröße soll trotz **Störungen** beim Sollwert bleiben (Backofentür wird geöffnet). Für
+  viele Anwendungen (Netzteil, Drehzahl unter Last) ist das die wichtigere Aufgabe.
+
+## Anforderungen an einen Regelkreis
+
+1. **Stabilität:** Die Regelgröße muss nach einer Änderung zur Ruhe kommen. Ein instabiler Regelkreis schwingt mit
+   wachsender Amplitude oder läuft an eine Grenze – das ist das K.-o.-Kriterium.
+2. **Genauigkeit:** Im eingeschwungenen Zustand soll keine (oder nur eine kleine) **bleibende Regelabweichung** übrig bleiben.
+3. **Schnelligkeit:** Der neue Wert soll rasch erreicht werden.
+4. **Dämpfung:** Möglichst wenig Überschwingen.
+
+Schnelligkeit und Dämpfung widersprechen sich: Ein „scharf“ eingestellter Regler ist schnell, schwingt aber über; ein
+„sanfter“ ist gut gedämpft, aber langsam. Reglerentwurf ist immer ein Kompromiss.
+
+## Kennwerte der Sprungantwort
+
+Die Güte eines Regelkreises beurteilt man meist an seiner Antwort auf einen **Sollwertsprung**:
+
+<Abbildung bild={Kennwerte} unterschrift="Kennwerte der Sprungantwort eines Regelkreises" />
+
+| Kennwert | Bedeutung |
+| --- | --- |
+| **Überschwingweite** $\Delta h$ (bzw. $\ddot{u}$ in %) | wie weit die Regelgröße über den Endwert hinausschießt |
+| **Anregelzeit** $t_\mathrm{an}$ | Zeit, bis die Regelgröße den Toleranzbereich (z. B. ±2 %) zum ersten Mal erreicht |
+| **Ausregelzeit** $t_\mathrm{aus}$ | Zeit, ab der die Regelgröße den Toleranzbereich nicht mehr verlässt |
+| **bleibende Regelabweichung** $e_\infty$ | Differenz zwischen Soll- und Istwert, wenn alles eingeschwungen ist |
+
+Typische Forderungen: Überschwingen höchstens 5 … 20 %, keine bleibende Regelabweichung, Ausregelzeit so kurz wie möglich –
+ohne dass die Stellgröße an ihre Grenzen stößt.

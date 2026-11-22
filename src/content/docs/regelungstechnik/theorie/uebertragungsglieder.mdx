@@ -1,0 +1,96 @@
+---
+title: Übertragungsglieder
+description: Beschreibung von Regelkreisgliedern durch Sprungantwort, Frequenzgang und Übertragungsfunktion, Grundglieder P, I, D, PT1, PT2 und Totzeit mit Sprungantwort und Bode-Diagramm, Reihen-, Parallel- und Kreisschaltung, zusammengesetzte Systeme im Bode-Diagramm.
+sidebar:
+  label: 2 · Übertragungsglieder
+  order: 2
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Sprung from '../../../../assets/mtrs/sprungantworten.svg';
+
+## Wie beschreibt man ein Glied?
+
+Jeder Block im Regelkreis hat einen Eingang $x_\mathrm{e}$ und einen Ausgang $x_\mathrm{a}$. Sein Verhalten lässt sich auf drei
+Arten beschreiben:
+
+1. **Sprungantwort:** Man ändert den Eingang schlagartig um einen festen Betrag und zeichnet den Ausgang über der Zeit auf.
+   Das ist auch der einfachste **Versuch** an einer echten Anlage.
+2. **Frequenzgang:** Man legt Sinussignale verschiedener Frequenz an und misst Verstärkung und Phasenverschiebung – das
+   **Bode-Diagramm** kennst du von den [Filtern](/filter/theorie/).
+3. **Übertragungsfunktion** $G(s) = X_\mathrm{a}(s)/X_\mathrm{e}(s)$: eine Formel in der Variablen $s$ (Laplace-Transformation).
+   Für Sinussignale setzt man einfach $s = \mathrm{j}\omega$ ein und erhält den komplexen Frequenzgang – so wie bei der
+   komplexen Wechselstromrechnung. Ein Faktor $s$ bedeutet „ableiten“, ein Faktor $1/s$ „integrieren“.
+
+Der Vorteil der Übertragungsfunktion: Hintereinandergeschaltete Glieder werden einfach **multipliziert**.
+
+## Die Grundglieder
+
+<Abbildung bild={Sprung} unterschrift="Sprungantworten der Grundglieder (Eingangssprung der Höhe 1)" />
+
+| Glied | Übertragungsfunktion | Sprungantwort | Beispiel |
+| --- | --- | --- | --- |
+| **P** (proportional) | $K$ | springt sofort auf $K$ | Spannungsteiler, Hebel, Verstärker |
+| **I** (integrierend) | $\dfrac{1}{T_\mathrm{I}\,s}$ | steigt linear, ohne Ende | Füllstand eines Behälters, Position bei konstanter Geschwindigkeit |
+| **D** (differenzierend) | $T_\mathrm{D}\,s$ | kurzer Impuls | idealer Differenzierer (nur theoretisch) |
+| **PT1** (Verzögerung 1. Ordnung) | $\dfrac{K}{1 + T s}$ | $K\,(1 - \mathrm{e}^{-t/T})$ | RC-Tiefpass, Erwärmung, Motor (Spannung → Drehzahl) |
+| **PT2** (2. Ordnung) | $\dfrac{K}{1 + 2D T s + T^2 s^2}$ | aperiodisch ($D \geq 1$) oder gedämpft schwingend ($D < 1$) | RLC-Kreis, Feder-Masse, Motor mit Stromanstieg |
+| **Tt** (Totzeit) | $\mathrm{e}^{-T_\mathrm{t} s}$ | um $T_\mathrm{t}$ verschobene Kopie des Eingangs | Förderband, Rohrleitung, Rechenzeit |
+
+### PT1-Glied
+
+Das wichtigste Glied überhaupt. Nach der Zeit $T$ hat der Ausgang **63 %** des Endwerts erreicht, nach $3T$ 95 %, nach $5T$
+99 %. Die Tangente im Ursprung schneidet den Endwert bei $t = T$. Die Konstante $K$ ist die **Streckenverstärkung**
+(Endwert durch Eingangssprung, mit Einheit, z. B. K/W oder min⁻¹/V).
+
+Im Bode-Diagramm: bis zur **Eckfrequenz** $\omega_\mathrm{E} = 1/T$ waagrecht, danach Abfall mit −20 dB/Dekade; die Phase geht
+von 0° über −45° (bei $\omega_\mathrm{E}$) auf −90°.
+
+### PT2-Glied
+
+Zwei Energiespeicher. Die **Dämpfung** $D$ entscheidet über die Form:
+
+- $D \geq 1$: kein Überschwingen (z. B. zwei PT1-Glieder hintereinander, $K/((1+T_1 s)(1+T_2 s))$),
+- $D < 1$: gedämpfte Schwingung mit Überschwingen, das umso größer ist, je kleiner $D$ (bei $D = 0{,}7$ etwa 5 %),
+- im Bode-Diagramm Abfall mit −40 dB/Dekade, Phase bis −180°; bei kleinem $D$ eine Resonanzüberhöhung bei $\omega_0 = 1/T$.
+
+### I-Glied
+
+Der Ausgang ist das Integral des Eingangs: $x_\mathrm{a} = \dfrac{1}{T_\mathrm{I}} \displaystyle\int x_\mathrm{e}\,\mathrm{d}t$. Er bleibt nur
+stehen, wenn der Eingang null ist. Im Bode-Diagramm: Gerade mit −20 dB/Dekade über alle Frequenzen, Phase konstant −90°.
+Strecken mit I-Verhalten heißen **Strecken ohne Ausgleich** – sie finden ohne Regler keinen neuen Ruhezustand.
+
+### Totzeit
+
+Eine Totzeit verschiebt das Signal nur, ohne es zu verändern: Die Temperatur am Ende einer Rohrleitung ändert sich erst,
+wenn das Wasser dort angekommen ist. Im Bode-Diagramm ändert sie den Betrag **nicht**, aber die Phase sinkt mit
+$-\omega T_\mathrm{t}$ – ohne Grenze. Totzeiten machen Regelkreise deshalb schnell instabil und sind die schwierigste
+Eigenschaft einer Strecke.
+
+## Zusammenschalten
+
+| Schaltung | Ergebnis | im Bode-Diagramm |
+| --- | --- | --- |
+| **Reihenschaltung** | $G = G_1 \cdot G_2$ | Beträge in dB **addieren**, Phasen addieren |
+| **Parallelschaltung** | $G = G_1 + G_2$ | (komplex addieren) |
+| **Kreisschaltung** (Gegenkopplung) | $G_\mathrm{w} = \dfrac{G_\mathrm{V}}{1 + G_\mathrm{V} G_\mathrm{R}}$ | – |
+
+Die Reihenschaltung ist der große Vorteil des Bode-Diagramms: Die Kennlinie eines zusammengesetzten Systems entsteht durch
+**Addieren der Asymptoten** der einzelnen Glieder. Beispiel: PT1 mit $T = 1\,\mathrm{s}$ und PT1 mit $T = 0{,}1\,\mathrm{s}$ in
+Reihe – bis 1 rad/s waagrecht, zwischen 1 und 10 rad/s −20 dB/Dekade, darüber −40 dB/Dekade.
+
+Für den geschlossenen Regelkreis mit Regler $G_\mathrm{R}$ und Strecke $G_\mathrm{S}$ (Rückführung 1) gilt:
+
+$$
+G_\mathrm{w} = \frac{Y}{W} = \frac{G_\mathrm{R} G_\mathrm{S}}{1 + G_\mathrm{R} G_\mathrm{S}} = \frac{G_0}{1 + G_0}
+$$
+
+$G_0 = G_\mathrm{R} G_\mathrm{S}$ heißt **offener Kreis** (Kreisverstärkung). Ist $\lvert G_0 \rvert \gg 1$, wird $G_\mathrm{w} \approx 1$:
+Der Istwert folgt dem Sollwert – egal, wie die Strecke genau aussieht. Das ist dieselbe Idee wie bei der Gegenkopplung
+eines [Operationsverstärkers](/operationsverstaerker/theorie/).
+
+:::tip[Simulation]
+Sprungantworten und Bode-Diagramme zusammengesetzter Systeme lassen sich mit MATLAB/Simulink, mit freien Werkzeugen
+(z. B. Python) oder sogar mit LTspice berechnen: Jedes Glied wird durch eine Ersatzschaltung (RC-Glied für PT1,
+Integrierer mit OPV für I) oder eine spannungsgesteuerte Quelle mit Laplace-Ausdruck nachgebildet.
+:::

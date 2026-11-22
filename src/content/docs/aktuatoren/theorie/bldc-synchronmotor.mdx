@@ -1,0 +1,82 @@
+---
+title: BLDC- und Synchronmotor
+description: Bürstenloser Gleichstrommotor (BLDC) mit elektronischer Kommutierung, Hall-Sensoren und Blockkommutierung, sensorlose Kommutierung, Sinuskommutierung, Polpaarzahl und elektrische Frequenz, Synchronmotor am Netz und am Umrichter, Modellbau-Servo.
+sidebar:
+  label: 3 · BLDC- und Synchronmotor
+  order: 3
+---
+
+## Der bürstenlose Gleichstrommotor (BLDC)
+
+Beim **BLDC-Motor** (Brushless DC) sind die Rollen vertauscht: Die **Permanentmagnete** sitzen auf dem Rotor, die
+**Wicklungen** im Stator. Es gibt keine Bürsten und keinen Kommutator – das Umschalten der Wicklungen übernimmt eine
+**Elektronik**. Vorteile: kein Verschleiß, keine Bürstenfunken, besserer Wirkungsgrad, die Wärme entsteht im gut kühlbaren
+Stator. Man findet BLDC-Motoren in PC-Lüftern, Akkuschraubern, Drohnen, E-Bikes und Festplatten.
+
+Elektrisch verhält sich ein BLDC-Motor wie ein Gleichstrommotor: Die Drehzahl ist proportional zur (mittleren) Spannung, das
+Moment proportional zum Strom – die Gleichungen von der [vorigen Seite](/aktuatoren/theorie/gleichstrommotor/) gelten
+weiter.
+
+### Elektronische Kommutierung
+
+Der Stator hat meist **drei Wicklungen** (Phasen U, V, W), angesteuert von einer **dreifachen Halbbrücke** (sechs
+Transistoren). Damit das Moment immer in Drehrichtung zeigt, muss die Elektronik wissen, wo der Rotor gerade steht:
+
+- **Hall-Sensoren:** Drei Sensoren, um 120° (elektrisch) versetzt, liefern je nach Rotorlage eine von sechs Kombinationen.
+- Bei der **Blockkommutierung** sind in jedem der sechs Abschnitte zwei Phasen bestromt (eine an Plus, eine an Minus), die
+  dritte ist offen. Nach jeder Hall-Änderung wird weitergeschaltet – sechs Schritte pro elektrischer Umdrehung.
+
+| Schritt | Hall (A B C) | Phase U | Phase V | Phase W |
+| --- | --- | --- | --- | --- |
+| 1 | 1 0 1 | + | − | offen |
+| 2 | 1 0 0 | + | offen | − |
+| 3 | 1 1 0 | offen | + | − |
+| 4 | 0 1 0 | − | + | offen |
+| 5 | 0 1 1 | − | offen | + |
+| 6 | 0 0 1 | offen | − | + |
+
+(Die genaue Zuordnung hängt vom Motor ab und steht im Datenblatt.) Die Drehzahl wird über PWM der eingeschalteten
+Transistoren gestellt.
+
+- **Sensorlos:** Viele Antriebe (Drohnen, Lüfter) sparen die Hall-Sensoren. Die Elektronik misst in der gerade offenen
+  Phase die induzierte Gegenspannung und erkennt deren Nulldurchgang. Nachteil: Im Stillstand gibt es keine Gegenspannung –
+  der Anlauf erfolgt „blind“ und ist bei großer Last schwierig.
+- **Sinuskommutierung / feldorientierte Regelung (FOC):** Alle drei Phasen werden mit sinusförmigen Strömen betrieben, die
+  der Rotorlage nachgeführt werden. Ergebnis: sehr ruhiger Lauf ohne Drehmomentwelligkeit, aber aufwendigere Regelung
+  (Mikrocontroller, Strommessung in den Phasen).
+
+### Polpaare und elektrische Frequenz
+
+Hat der Rotor $p$ **Polpaare**, wiederholt sich das Kommutierungsmuster $p$-mal pro mechanischer Umdrehung:
+
+$$
+f_\mathrm{el} = p \cdot n
+$$
+
+Ein Motor mit 7 Polpaaren bei 3000 min⁻¹ (50 s⁻¹) hat $f_\mathrm{el} = 350\,\mathrm{Hz}$ – und damit 2100 Kommutierungsschritte
+pro Sekunde. Bei einem Lüfter mit Tacho-Ausgang liefert der Hall-Sensor meist 2 Impulse pro Umdrehung.
+
+## Der Synchronmotor
+
+Ein **Synchronmotor** hat denselben Aufbau (Magnete oder erregte Wicklung im Rotor, Drehstromwicklung im Stator). Wird der
+Stator mit Drehstrom gespeist, entsteht ein **Drehfeld** (siehe [Drehstrom](/drehstrom/theorie/)), und der Rotor läuft **genau
+synchron** mit:
+
+$$
+n = \frac{f}{p}
+$$
+
+Am 50-Hz-Netz mit $p = 2$: 1500 min⁻¹ – unabhängig von der Last (bis zum Kippen). Direkt am Netz kann ein Synchronmotor nicht
+von selbst anlaufen; heute betreibt man ihn fast immer an einem **Frequenzumrichter**, der die Frequenz langsam hochfährt.
+Damit ist der Unterschied zum BLDC-Motor fließend: Ein „permanenterregter Synchronmotor“ (PMSM) mit Sinusansteuerung und ein
+BLDC-Motor mit FOC sind praktisch dasselbe. Große Generatoren in Kraftwerken sind ebenfalls Synchronmaschinen.
+
+## Servoantriebe
+
+Ein **Servo** ist ein Antrieb mit eingebauter **Lageregelung**: Motor, Getriebe, Positionssensor und Regler in einem.
+
+- **Industrie-Servo:** Synchronmotor mit genauem Drehgeber (Encoder) und einem Servoumrichter, der Lage, Drehzahl und Strom
+  regelt (Kaskadenregelung, siehe [Regelungstechnik](/regelungstechnik/)).
+- **Modellbau-Servo:** kleiner Gleichstrommotor, Getriebe, Potentiometer als Lagesensor. Die Sollposition kommt als
+  Impuls alle 20 ms: etwa 1 ms → eine Endlage, 1,5 ms → Mitte, 2 ms → andere Endlage. Die genauen Grenzen und der Winkel
+  (oft ±45° bis ±90°) hängen vom Servo ab.

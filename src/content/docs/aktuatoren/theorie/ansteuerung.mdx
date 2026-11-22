@@ -1,0 +1,75 @@
+---
+title: Ansteuerung und Auswahl
+description: Aktuatoren elektronisch ansteuern – Low-Side-Schalter, PWM, Halbbrücke, H-Brücke und dreiphasige Brücke, Stromregelung, Bremsen und Rückspeisung, Schutzfunktionen von Motortreibern, pneumatische und hydraulische Aktorik, Vergleich und Auswahl von Aktuatoren.
+sidebar:
+  label: 6 · Ansteuerung und Auswahl
+  order: 6
+---
+
+Die Leistungsbauteile (MOSFET, Halbbrücke, H-Brücke, Gate-Treiber) sind in der [Leistungselektronik](/leistungselektronik/)
+ausführlich erklärt. Hier geht es darum, welche Ansteuerung zu welchem Aktuator passt.
+
+## Welcher Aktuator braucht welche Endstufe?
+
+| Aktuator | Endstufe | Bemerkung |
+| --- | --- | --- |
+| Relais, Magnetventil, Hubmagnet | ein Transistor (Low-Side) + Freilauf | evtl. PWM für Haltestrom |
+| Gleichstrommotor, eine Richtung | ein Transistor (Low-Side) + Freilaufdiode, PWM | Lüfter, Pumpen |
+| Gleichstrommotor, zwei Richtungen | **H-Brücke** mit PWM | Fensterheber, Roboterantrieb |
+| BLDC- / Synchronmotor | **dreifache Halbbrücke** + Kommutierung | Lüfter, Akkuwerkzeug, E-Mobilität |
+| Asynchronmotor | Frequenzumrichter (dreifache Halbbrücke am Zwischenkreis) | Industrie |
+| Schrittmotor (bipolar) | zwei H-Brücken mit Stromregelung | fertige Treiber-ICs |
+
+Für alle gilt: Der Mikrocontroller liefert nur **Logiksignale**. Dazwischen sitzen Treiber (Gate-Treiber, Motortreiber-IC),
+die die Leistungstransistoren schnell und sicher schalten (siehe [Transistoren](/transistoren/theorie/) und
+[Gate-Treiber](/leistungselektronik/theorie/gate-treiber/)).
+
+## PWM und Stromregelung
+
+Mit **PWM** wird die mittlere Spannung am Aktuator eingestellt: $U = D \cdot U_\mathrm{B}$. Die Induktivität der Wicklung glättet
+den Strom. Wichtige Punkte:
+
+- **PWM-Frequenz:** deutlich über dem Hörbereich (> 20 kHz), damit der Motor nicht pfeift, und so hoch, dass der Strom
+  kaum schwankt ($T_\mathrm{PWM} \ll L/R$). Zu hoch steigert die Schaltverluste.
+- **Stromregelung:** Statt der Spannung wird der **Strom** vorgegeben und gemessen (Shunt, siehe
+  [Messverstärker](/messverstaerker/theorie/)). Da das Moment proportional zum Strom ist, regelt man so direkt das Moment –
+  und begrenzt gleichzeitig den Anlauf- und Blockierstrom. Bei Magnetventilen hält eine Stromregelung die Kraft unabhängig von
+  der Spulenerwärmung konstant (der Widerstand von Kupfer steigt um etwa 0,4 % pro Kelvin).
+- In der Regelungstechnik ist die Stromregelung die **innerste** Schleife einer Kaskade: Strom → Drehzahl → Position.
+
+## Bremsen und Rückspeisung
+
+Ein drehender Motor ist ein Generator. Beim Bremsen fließt Energie zurück:
+
+- **Kurzschlussbremsung:** Beide unteren Transistoren der H-Brücke ein – die Energie wird im Motorwiderstand verheizt.
+- **Rückspeisung:** Die Energie fließt über die Freilaufdioden in die Versorgung. Batterien nehmen sie auf; ein Netzteil
+  kann das meist nicht – die Zwischenkreisspannung steigt gefährlich. Abhilfe: **Bremschopper** mit Bremswiderstand, oder
+  bidirektionale Wandler, die die Energie in einen Akku laden.
+- **Vier-Quadranten-Betrieb:** Antreiben und Bremsen in beiden Drehrichtungen – möglich mit der H-Brücke (siehe
+  [Motorbrücken](/leistungselektronik/theorie/motorbruecken/)).
+
+## Schutzfunktionen
+
+Motortreiber-ICs enthalten typischerweise: **Überstromabschaltung** (Kurzschluss, Blockieren), **Übertemperaturabschaltung**,
+**Unterspannungsabschaltung** (damit die Transistoren nicht halb leitend werden), Schutz vor **Brückenkurzschluss** (Totzeit
+zwischen oberem und unterem Schalter) und eine **Fehlermeldung** an den Mikrocontroller. Bei induktiven Lasten zusätzlich
+die Begrenzung der Abschaltspannung (active clamping).
+
+## Pneumatik und Hydraulik
+
+Nicht jeder Aktuator ist ein Elektromotor. In der Automatisierung sind **pneumatische Zylinder** (Druckluft, 6 bar) weit
+verbreitet: schnell, robust, einfach, aber schwer genau zu positionieren. **Hydraulik** (Öl, 100 … 300 bar) liefert sehr große
+Kräfte (Bagger, Pressen). Gesteuert werden beide elektrisch – über **Magnetventile**, die die Luft- bzw. Ölzufuhr schalten,
+oder über **Proportionalventile**, deren Öffnung mit dem Spulenstrom stufenlos verstellt wird.
+
+## Aktuatoren im Vergleich
+
+| Aktuator | Stärken | Schwächen |
+| --- | --- | --- |
+| Gleichstrommotor (Bürsten) | billig, einfach anzusteuern | Bürstenverschleiß, Funken |
+| BLDC-Motor | wartungsfrei, effizient, kompakt | Elektronik nötig |
+| Asynchronmotor | robust, billig, groß | ohne Umrichter feste Drehzahl |
+| Schrittmotor | Position ohne Sensor, hohes Moment bei kleiner Drehzahl | Schrittverlust, Resonanzen, wird warm |
+| Servoantrieb | dynamisch und genau | teuer, Regler muss eingestellt werden |
+| Magnet / Ventil | einfach, schnell | nur zwei Stellungen (außer Proportionalventil) |
+| Pneumatik | schnell, robust, explosionsgeschützt möglich | Druckluft nötig, schwer positionierbar |

@@ -1,12 +1,49 @@
 ---
 title: Aktuatoren
-description: "Gleichstrom- und Schrittmotoren, Servos, Relais, Magnetventile."
+description: "Übersicht: Magnetkreis, Elektromagnet, Relais und Magnetventil, Gleichstrommotor, BLDC- und Synchronmotor, Asynchronmotor, Schrittmotor und ihre elektronische Ansteuerung."
+sidebar:
+  label: Übersicht
 ---
 
-:::note[In Arbeit]
-Dieser Themenbereich wird gerade erstellt. Schau bald wieder vorbei!
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+**Aktuatoren** (auch Aktoren oder Stellglieder) sind das Gegenstück zu den Sensoren: Sie wandeln ein elektrisches Signal in
+eine **Bewegung** oder Kraft um. Ein Relais schaltet, ein Magnetventil öffnet, ein Motor dreht, ein Schrittmotor fährt eine
+Position an. In einem Regelkreis sind sie das Glied, das in den Prozess eingreift. Fast alle elektrischen Aktuatoren
+beruhen auf dem **Magnetfeld** – deshalb beginnt das Thema mit dem Magnetkreis.
+
+## Lernziele
+
+Nach diesem Themenbereich kannst du …
+
+- einen einfachen **Magnetkreis** mit Luftspalt berechnen (Fluss, Flussdichte, Induktivität, Haltekraft),
+- Relais, Elektromagnete und Magnetventile richtig ansteuern und **Abschaltüberspannungen** beherrschen,
+- mit den Gleichungen des **Gleichstrommotors** Drehzahl, Strom, Drehmoment und Wirkungsgrad berechnen,
+- die Funktion von **BLDC-, Synchron- und Asynchronmotoren** erklären und Typenschilder auswerten,
+- **Schrittmotoren** mit Voll-, Halb- und Mikroschritt ansteuern und Schrittverluste vermeiden,
+- für eine Anwendung einen passenden Aktuator und seine **Ansteuerung** auswählen.
+
+## Theorie
+
+<CardGrid>
+	<LinkCard title="1 · Magnetkreis und Elektromagnet" description="Durchflutung, magnetischer Widerstand, Luftspalt, Induktivität, Kraft, Relais, Magnetventil" href="/aktuatoren/theorie/magnetkreis/" />
+	<LinkCard title="2 · Gleichstrommotor" description="Aufbau, Motorgleichungen, Kennlinien, Leistung, Wirkungsgrad, Zeitkonstanten" href="/aktuatoren/theorie/gleichstrommotor/" />
+	<LinkCard title="3 · BLDC- und Synchronmotor" description="Elektronische Kommutierung, Hall-Sensoren, Polpaare, Servo" href="/aktuatoren/theorie/bldc-synchronmotor/" />
+	<LinkCard title="4 · Asynchronmotor" description="Drehfeld, Schlupf, Drehmomentkennlinie, Typenschild, Frequenzumrichter" href="/aktuatoren/theorie/asynchronmotor/" />
+	<LinkCard title="5 · Schrittmotor" description="Aufbau, Voll-, Halb- und Mikroschritt, Treiber, Schrittverlust" href="/aktuatoren/theorie/schrittmotor/" />
+	<LinkCard title="6 · Ansteuerung und Auswahl" description="PWM, H-Brücke, Stromregelung, Schutz, Vergleich der Aktuatoren" href="/aktuatoren/theorie/ansteuerung/" />
+</CardGrid>
+
+## Üben
+
+<CardGrid>
+	<LinkCard title="Rechenbeispiele" description="Magnetkreis, Abschaltspannung, Motorkennlinie, Typenschild, Schrittmotor-Spindel" href="/aktuatoren/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Relais am Mikrocontroller, Akkuschrauber, Magnetventil sparsam halten, 3D-Drucker, Pumpe am Umrichter" href="/aktuatoren/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen" href="/aktuatoren/quiz/" />
+</CardGrid>
+
+:::tip[Voraussetzungen]
+Grundlagen-Themen [Magnetisches Feld](/grundlagen/magnetfeld/) und [Induktion](/grundlagen/induktion/),
+[Drehstrom](/drehstrom/), [Transistoren](/transistoren/) und [Leistungselektronik](/leistungselektronik/)
+(Halbbrücke, H-Brücke).
 :::
-
-**Geplante Inhalte:** Gleichstrom- und Schrittmotoren, Servos, Relais, Magnetventile.
-
-Wie bei allen Themenbereichen wird es **Theorie**, **Rechenbeispiele**, **Praxisbeispiele** und ein **Quiz** geben.

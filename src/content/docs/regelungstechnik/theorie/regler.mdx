@@ -1,0 +1,94 @@
+---
+title: Reglertypen
+description: Unstetige Regler (Zweipunktregler mit Hysterese), stetige Regler P, I, PI, PD und PID mit Gleichungen und Sprungantworten, bleibende Regelabweichung beim P-Regler, Wirkung der Anteile, Stellgrößenbegrenzung, analoge Realisierung mit Operationsverstärker, Kaskadenregelung.
+sidebar:
+  label: 4 · Reglertypen
+  order: 4
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Verlauf from '../../../../assets/mtrs/regelverlauf-p-pi.svg';
+
+## Zweipunktregler
+
+Der einfachste Regler kennt nur **Ein** und **Aus**: Ist der Istwert zu klein, wird eingeschaltet, sonst ausgeschaltet. Damit
+er nicht ständig umschaltet, hat er eine **Hysterese** (Schaltdifferenz) – wie der [Komparator](/frequenzmessung/theorie/).
+
+- Beispiele: Bügeleisen, Kühlschrank, Wasserkocher, einfache Heizungsthermostate.
+- Die Regelgröße **pendelt** dauernd um den Sollwert. Die Schwankungsbreite ist größer als die Hysterese, weil die Strecke
+  verzögert reagiert und nach dem Umschalten noch weiterläuft.
+- Kleine Hysterese → kleine Schwankung, aber häufiges Schalten (Verschleiß von Relais und Verdichtern).
+
+Für genauere Regelungen braucht man **stetige** Regler, deren Stellgröße beliebige Werte annehmen kann.
+
+## Die stetigen Regler
+
+| Regler | Gleichung | Eigenschaften |
+| --- | --- | --- |
+| **P** | $u = K_\mathrm{P} \cdot e$ | reagiert sofort; **bleibende Regelabweichung** bei Strecken mit Ausgleich |
+| **I** | $u = \dfrac{1}{T_\mathrm{I}} \displaystyle\int e\,\mathrm{d}t$ | keine bleibende Abweichung, aber langsam und schwingfreudig |
+| **PI** | $u = K_\mathrm{P}\left(e + \dfrac{1}{T_\mathrm{N}} \displaystyle\int e\,\mathrm{d}t\right)$ | schnell **und** ohne bleibende Abweichung – der Standardregler |
+| **PD** | $u = K_\mathrm{P}\left(e + T_\mathrm{V} \dfrac{\mathrm{d}e}{\mathrm{d}t}\right)$ | reagiert auf die Änderungsgeschwindigkeit, dämpft, bleibende Abweichung bleibt |
+| **PID** | $u = K_\mathrm{P}\left(e + \dfrac{1}{T_\mathrm{N}} \displaystyle\int e\,\mathrm{d}t + T_\mathrm{V} \dfrac{\mathrm{d}e}{\mathrm{d}t}\right)$ | schnell, genau, gut gedämpft – aber am schwierigsten einzustellen |
+
+- $K_\mathrm{P}$: **Proportionalbeiwert** (Verstärkung),
+- $T_\mathrm{N}$: **Nachstellzeit** – nach dieser Zeit hat der I-Anteil bei konstanter Regelabweichung genauso viel beigetragen
+  wie der P-Anteil,
+- $T_\mathrm{V}$: **Vorhaltezeit** – um so viel „früher“ reagiert der PD-Regler auf eine linear ansteigende Abweichung.
+
+### Was die Anteile bewirken
+
+- **P-Anteil:** Je größer die Abweichung, desto stärker greift der Regler ein. Größeres $K_\mathrm{P}$ macht den Kreis schneller
+  und genauer – aber auch schwingfreudiger.
+- **I-Anteil:** Er summiert die Abweichung auf und wächst, **solange** eine Abweichung besteht. Erst wenn $e = 0$ ist, bleibt er
+  stehen. Darum beseitigt er die bleibende Regelabweichung. Zu kleines $T_\mathrm{N}$ (starker I-Anteil) führt zu Schwingungen.
+- **D-Anteil:** Er „sieht voraus“: Steigt der Istwert schnell auf den Sollwert zu, bremst er schon vorher. Er verstärkt aber
+  auch Messrauschen stark – deshalb wird er in der Praxis mit einem Tiefpass kombiniert oder nur auf den Istwert
+  (nicht auf den Sollwertsprung) angewendet. Viele Regelkreise kommen ohne D-Anteil aus.
+
+## Die bleibende Regelabweichung beim P-Regler
+
+Ein P-Regler braucht eine Abweichung, um eine Stellgröße zu erzeugen: $u = K_\mathrm{P} e$. Ist für den Sollwert eine
+Stellgröße ungleich null nötig (die Heizung muss ja weiter heizen), bleibt eine Restabweichung. Mit der
+**Kreisverstärkung** $K_0 = K_\mathrm{P} K_\mathrm{S}$ gilt bei einer Strecke mit Ausgleich:
+
+$$
+e_\infty = \frac{w}{1 + K_0} \qquad y_\infty = \frac{K_0}{1 + K_0} \cdot w
+$$
+
+Je größer $K_0$, desto kleiner die Abweichung – aber $K_0$ lässt sich wegen der Stabilität nicht beliebig erhöhen.
+
+<Abbildung bild={Verlauf} unterschrift="Sollwertsprung bei einer PT2-Strecke: P-Regler mit bleibender Abweichung, PI-Regler ohne" />
+
+Bei Strecken **ohne** Ausgleich (I-Verhalten, z. B. Positionsregelung) hat schon der P-Regler beim Führungssprung keine
+bleibende Abweichung – die Strecke integriert selbst.
+
+## Stellgrößenbegrenzung
+
+Jedes Stellglied hat Grenzen: Ein Ventil ist maximal ganz offen, ein PWM-Tastgrad maximal 100 %. Fordert der Regler mehr, wird
+die Stellgröße begrenzt, und der Kreis ist vorübergehend „offen“. Der I-Anteil wächst dann trotzdem weiter
+(**Windup**) und führt später zu großem Überschwingen. Gute Regler stoppen in diesem Fall den I-Anteil
+(**Anti-Windup**, siehe [Digitale Regelung](/regelungstechnik/theorie/digitale-regelung/)).
+
+## Analoge Regler mit Operationsverstärker
+
+Regler lassen sich mit OPV-Schaltungen aufbauen (Grundschaltungen siehe [Operationsverstärker](/operationsverstaerker/theorie/)):
+
+- **P-Regler:** invertierender Verstärker, $K_\mathrm{P} = R_2/R_1$.
+- **I-Regler:** Integrierer, $T_\mathrm{I} = R_1 C$.
+- **PI-Regler:** invertierender Verstärker mit $R_2$ **in Reihe** mit $C$ in der Rückführung: $K_\mathrm{P} = R_2/R_1$,
+  $T_\mathrm{N} = R_2 C$.
+
+Ein Subtrahierer bildet vorher die Regelabweichung $e = w - r$. Analoge Regler sind sehr schnell (z. B. in Schaltnetzteilen,
+siehe [Leistungselektronik](/leistungselektronik/)), heute werden aber die meisten Regler digital in einem Mikrocontroller
+gerechnet.
+
+## Kaskadenregelung
+
+Bei Antrieben schaltet man mehrere Regelkreise **ineinander**: Der äußere Lageregler gibt den Sollwert für den
+Drehzahlregler vor, dieser den Sollwert für den Stromregler.
+
+- Der **innere** Kreis ist der schnellste (Strom, µs bis ms), der äußere der langsamste (Lage).
+- Jeder innere Kreis regelt Störungen aus, bevor sie den äußeren erreichen, und lässt sich begrenzen (Strombegrenzung =
+  Momentbegrenzung).
+- Man stellt die Kreise **von innen nach außen** ein.

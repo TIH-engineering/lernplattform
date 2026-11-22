@@ -1,0 +1,156 @@
+---
+title: Theorie – Komparator und Frequenzmessung
+description: Komparator als Schnittstelle zwischen analoger und digitaler Welt, Mehrfachschalten bei Rauschen, Hysterese, Kennwerte von Komparatoren, Torzeitverfahren, Periodendauermessung, ±1-Zählfehler, Zeitbasisfehler, Grenzfrequenz, reziprokes Zählen, Input Capture, Drehzahl- und Tastgradmessung.
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Rauschen from '../../../assets/mtrs/komparator-rauschen.svg';
+import Torzeit from '../../../assets/mtrs/torzeit.svg';
+import Periode from '../../../assets/mtrs/periodendauer.svg';
+
+## 1 · Der Komparator: von analog zu digital
+
+Ein **Komparator** vergleicht zwei Spannungen und liefert nur zwei Zustände: High, wenn $U_+ > U_-$, sonst Low. Er ist die
+einfachste Form eines A/D-Umsetzers (1 Bit) und die Schnittstelle zwischen einem analogen Sensorsignal und einem Zähler
+oder Mikrocontroller. Wie ein OPV als Komparator arbeitet, steht bei den
+[Operationsverstärkern](/operationsverstaerker/theorie/).
+
+Echte **Komparator-ICs** unterscheiden sich vom OPV:
+
+| Eigenschaft | Komparator-IC | OPV als Komparator |
+| --- | --- | --- |
+| Schaltzeit (Verzögerung) | wenige ns bis µs | oft mehrere µs (Erholung aus der Sättigung) |
+| Ausgang | oft **Open-Collector/Open-Drain** – braucht Pull-up, passt an jeden Logikpegel | Gegentakt, Pegel der Versorgung |
+| Gegenkopplung | nicht vorgesehen | für lineare Schaltungen gebaut |
+
+Weitere Kennwerte: **Offsetspannung** (verschiebt die Schaltschwelle) und **Verzögerungszeit** $t_\mathrm{pd}$ (zwischen
+Schwellendurchgang und Ausgangsflanke). Bei der Zeitmessung ist nicht die Verzögerung selbst schlimm, sondern dass sie von
+der Flankensteilheit und Übersteuerung abhängt.
+
+### Rauschen und Hysterese
+
+Ein reales Signal ist verrauscht. Läuft es langsam durch die Schaltschwelle, kreuzt das Rauschen die Schwelle mehrmals –
+der Komparator schaltet **mehrfach hin und her**. Ein Zähler zählt dann zu viele Flanken.
+
+<Abbildung bild={Rauschen} unterschrift="Verrauschtes Signal: ohne Hysterese mehrere Umschaltungen, mit Hysterese genau eine" />
+
+Abhilfe ist die **Hysterese** (Schmitt-Trigger): Durch Mitkopplung gibt es eine obere Schwelle $U_\mathrm{T+}$ zum Einschalten
+und eine untere $U_\mathrm{T-}$ zum Ausschalten. Nach dem Umschalten muss das Signal erst um die ganze Hysterese
+$U_\mathrm{H}$ zurücklaufen, bevor der Komparator wieder schaltet.
+
+- Faustregel: $U_\mathrm{H}$ **größer als die Rauschspannung (Spitze-Spitze)** wählen, aber deutlich kleiner als die
+  Signalamplitude.
+- Bei Mitkopplung über einen Spannungsteiler mit dem Teilerfaktor $\beta = R_2/(R_1 + R_2)$ gilt
+  $U_\mathrm{H} = \beta \cdot \Delta U_\mathrm{a}$, wobei $\Delta U_\mathrm{a}$ der Spannungshub des Ausgangs ist.
+- Die Hysterese verschiebt die Schaltzeitpunkte (das Signal muss die Schwelle weiter überschreiten). Für Frequenzmessung
+  ist das egal – jede Periode wird gleich verschoben. Für genaue Phasenmessung muss man es berücksichtigen.
+
+Zusätzlich hilft ein **Tiefpass** vor dem Komparator, das Rauschen zu verringern; er darf aber das Nutzsignal nicht zu stark
+dämpfen.
+
+## 2 · Torzeitverfahren (Frequenzmessung)
+
+<Abbildung bild={Torzeit} unterschrift="Frequenzzähler nach dem Torzeitverfahren" />
+
+Ein **Tor** (UND-Gatter) wird für eine genau bekannte **Torzeit** $T_\mathrm{Tor}$ geöffnet, die aus einem Quarzoszillator
+abgeleitet ist. Währenddessen zählt der Zähler die Impulse des Messsignals:
+
+$$
+f_\mathrm{x} = \frac{N}{T_\mathrm{Tor}}
+$$
+
+Bei $T_\mathrm{Tor} = 1\,\mathrm{s}$ zeigt der Zähler direkt die Frequenz in Hz, bei 0,1 s in Zehner-Hz usw.
+
+### Der ±1-Zählfehler
+
+Tor und Messsignal sind nicht synchron. Je nachdem, wo die erste Flanke liegt, passt ein Impuls mehr oder weniger in das
+Tor. Der Fehler ist **±1 Impuls** (±1 Digit), relativ:
+
+$$
+F_\mathrm{r} = \pm \frac{1}{N} = \pm \frac{1}{f_\mathrm{x} \cdot T_\mathrm{Tor}}
+$$
+
+Das Torzeitverfahren ist daher bei **hohen Frequenzen** genau und bei niedrigen schlecht: 50 Hz bei 1 s Torzeit ergibt
+50 Impulse – ±2 %. Längere Torzeit hilft, kostet aber Messzeit.
+
+## 3 · Periodendauermessung
+
+<Abbildung bild={Periode} unterschrift="Periodendauermessung: Ein Referenztakt wird während einer Periode des Messsignals gezählt" />
+
+Hier wird umgekehrt das **Messsignal** zum Tor: Während einer Periode $T_\mathrm{x}$ zählt der Zähler die Impulse eines schnellen
+Referenztakts $f_\mathrm{ref}$:
+
+$$
+T_\mathrm{x} = \frac{N}{f_\mathrm{ref}} \qquad f_\mathrm{x} = \frac{f_\mathrm{ref}}{N} \qquad
+F_\mathrm{r} = \pm\frac{1}{N} = \pm\frac{f_\mathrm{x}}{f_\mathrm{ref}}
+$$
+
+Je **niedriger** die Messfrequenz, desto mehr Impulse – desto genauer. 50 Hz mit $f_\mathrm{ref} = 10\,\mathrm{MHz}$:
+$N = 200\,000$, Fehler $\pm 5 \cdot 10^{-6}$. Man kann auch über $m$ Perioden messen – der Fehler wird $m$-mal kleiner.
+
+### Welches Verfahren wann?
+
+Beide Verfahren sind bei der **Grenzfrequenz** gleich genau. Aus $\dfrac{1}{f T_\mathrm{Tor}} = \dfrac{f}{f_\mathrm{ref}}$ folgt
+
+$$
+f_\mathrm{g} = \sqrt{\frac{f_\mathrm{ref}}{T_\mathrm{Tor}}}
+$$
+
+Unterhalb von $f_\mathrm{g}$ misst man die Periodendauer, oberhalb verwendet man das Torzeitverfahren.
+
+Moderne Zähler arbeiten **reziprok**: Sie öffnen das Tor ungefähr für die gewünschte Messzeit, schließen es aber erst
+**synchron mit einer Flanke** des Messsignals. Gezählt werden gleichzeitig die ganzen Perioden $m$ des Messsignals und die
+Referenzimpulse $N$. Dann ist $f_\mathrm{x} = m \cdot f_\mathrm{ref}/N$ – mit dem kleinen relativen Fehler $1/N$ über den
+gesamten Frequenzbereich.
+
+### Fehler der Zeitbasis
+
+Alle Verfahren sind nur so genau wie der Referenzquarz. Ein Standardquarz hat eine Toleranz von z. B. ±50 ppm
+($\pm 50 \cdot 10^{-6}$) und driftet mit Temperatur und Alter. Der Gesamtfehler ist die Summe:
+
+$$
+F_\mathrm{r,ges} = \pm\left(\frac{1}{N} + \frac{\Delta f_\mathrm{ref}}{f_\mathrm{ref}}\right)
+$$
+
+Mehr Stellen in der Anzeige helfen nichts, wenn der Quarz ungenau ist. Labor-Zähler verwenden deshalb temperaturkompensierte
+(TCXO) oder beheizte (OCXO) Quarzoszillatoren oder einen externen 10-MHz-Referenzeingang (z. B. von einem GPS-Empfänger).
+
+## 4 · Frequenz- und Zeitmessung mit dem Mikrocontroller
+
+Mikrocontroller haben **Timer** mit einer Funktion **Input Capture**: Bei einer Flanke am Eingang wird der aktuelle
+Zählerstand des Timers automatisch in ein Register kopiert. Die Differenz zweier aufeinanderfolgender Werte ist die
+Periodendauer in Timer-Takten – eine Periodendauermessung in Hardware, unabhängig davon, was das Programm gerade tut.
+
+```c
+// Ausschnitt: Periodendauer aus zwei Capture-Werten (Timer mit 1 MHz → 1 Takt = 1 µs)
+volatile uint16_t letzter = 0, periode = 0;
+
+void bei_flanke(uint16_t capture)      // wird bei jeder steigenden Flanke aufgerufen (Interrupt)
+{
+    periode = capture - letzter;       // funktioniert auch beim Zählerüberlauf (Rechnung modulo 2^16)
+    letzter = capture;
+}
+
+// im Hauptprogramm:
+float f = 1.0e6f / periode;            // Frequenz in Hz
+```
+
+Weil mit `uint16_t` gerechnet wird, stimmt die Differenz auch dann, wenn der Timer zwischen den beiden Flanken
+übergelaufen ist – solange die Periode kürzer als $2^{16}$ Takte ist (bei 1 MHz: 65,5 ms). Für längere Perioden zählt man
+die Überläufe mit oder wählt einen langsameren Timertakt.
+
+### Drehzahl und Tastgrad
+
+- **Drehzahl:** Ein Hall-Sensor, eine Gabellichtschranke oder der Tacho-Ausgang eines Lüfters liefert $z$ Impulse pro
+  Umdrehung. Mit der Impulsperiode $T_\mathrm{p}$ gilt $n = \dfrac{1}{z \cdot T_\mathrm{p}}$ (in 1/s; mal 60 für 1/min).
+  Bei niedriger Drehzahl ist die Periodendauermessung viel schneller und genauer als „Impulse pro Sekunde zählen“.
+- **Tastgrad:** Man speichert die Zeitpunkte der steigenden und der fallenden Flanke. $D = t_\mathrm{ein}/T$. So liest ein
+  Mikrocontroller z. B. ein PWM-Signal eines Sensors oder eines Funkempfängers.
+- **Plausibilität:** Einzelne Störimpulse erzeugen extrem kurze „Perioden“. Werte, die physikalisch unmöglich sind
+  (z. B. eine Drehzahl über dem Maximum), verwirft man; zusätzlich mittelt man über mehrere Perioden.
+
+:::note[Messgröße in Frequenz umwandeln]
+Viele Sensoren geben ihr Ergebnis als Frequenz aus: Ein kapazitiver Sensor bestimmt die Frequenz eines
+[Relaxationsoszillators](/oszillatoren/theorie/), ein Durchflusssensor erzeugt Impulse pro Liter. Frequenzsignale sind
+unempfindlich gegen Spannungsabfälle auf langen Leitungen und lassen sich ohne A/D-Umsetzer genau auswerten.
+:::

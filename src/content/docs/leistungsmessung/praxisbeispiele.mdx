@@ -1,0 +1,105 @@
+---
+title: Praxisbeispiele – Leistungs- und Impedanzmessung
+description: Steckdosen-Messgerät an LED-Lampe und Heizlüfter, Standby-Verbrauch messen, Stromzange an Gleich- und Wechselstrom, ESR-Messung eines Elkos, Kapazitätsverlust eines Keramikkondensators, Phasenmessung im Labor.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Das Steckdosen-Messgerät
+
+Ein günstiges Energiekosten-Messgerät zeigt:
+
+| Gerät | $P$ | $S$ | $\lambda$ |
+| --- | --- | --- | --- |
+| Heizlüfter | 1985 W | 1990 VA | 1,00 |
+| LED-Lampe | 8,5 W | 17 VA | 0,50 |
+| Ladegerät im Standby | 0,3 W | 4,6 VA | 0,07 |
+
+1. Warum hat die LED-Lampe einen so schlechten Leistungsfaktor, obwohl sie keine Spule und keinen Motor enthält?
+2. Zahlt man im Haushalt für die Scheinleistung?
+3. Warum ist die Standby-Anzeige mit Vorsicht zu genießen?
+
+<Loesung>
+
+1. Die Lampe hat einen Gleichrichter mit Ladekondensator. Strom fließt nur in kurzen Pulsen um den Scheitel der Spannung →
+   große **Verzerrungsblindleistung**. Bei kleinen Leistungen (unter 25 W) ist das nach Norm erlaubt.
+2. Nein – der Haushaltszähler misst **Wirkenergie** (kWh). Die Blind- und Verzerrungsströme belasten aber Leitungen und
+   Transformatoren. Gewerbebetriebe zahlen deshalb oft zusätzlich für Blindarbeit.
+3. Bei so kleinen Leistungen ist der Strom winzig und stark verzerrt; günstige Geräte haben dort große Messfehler
+   (oft ± 0,5 W oder mehr). Für genaue Standby-Messungen braucht man ein Leistungsmessgerät mit kleinem Strombereich.
+
+</Loesung>
+
+## Stromzange richtig verwenden
+
+Mit einer Stromzange soll der Strom eines Wasserkochers gemessen werden.
+
+1. Was zeigt die Zange, wenn man das ganze Anschlusskabel umschließt?
+2. Warum zeigt eine einfache Stromzange (Stromwandler) an der Gleichstromleitung eines Solarmoduls nichts an?
+
+<Loesung>
+
+1. **Null** (oder fast null): Hin- und Rückleiter führen gleich große, entgegengesetzte Ströme, ihre Magnetfelder heben sich
+   auf. Man muss **einen** Leiter umschließen – dafür gibt es Adapter, die L und N getrennt herausführen. (Genau dieses
+   Prinzip nutzt der FI-Schutzschalter: Er misst die Differenz.)
+2. Ein Stromwandler arbeitet nach dem Transformatorprinzip und braucht ein **sich änderndes** Magnetfeld. Für Gleichstrom
+   braucht man eine Zange mit **Hall-Sensor** (Aufschrift „AC/DC“). Vor der Messung Nullabgleich drücken – der Hall-Sensor
+   hat einen Offset.
+
+</Loesung>
+
+## ESR eines Elkos prüfen
+
+Ein Schaltnetzteil pfeift und liefert eine unruhige Ausgangsspannung. Am Ausgangselko (1000 µF, 16 V) wird mit einem
+ESR-Messgerät (100 kHz) 1,8 Ω gemessen. Ein neuer Elko gleicher Bauart hat laut Datenblatt höchstens 0,04 Ω.
+
+1. Ist der Elko defekt, obwohl ein Kapazitätsmessgerät noch 920 µF anzeigt?
+2. Warum misst man den ESR bei 100 kHz?
+
+<Loesung>
+
+1. Ja. Der ESR ist etwa 45-mal zu groß – der Elektrolyt ist ausgetrocknet. Die Kapazität sinkt erst später merklich.
+   Bei 1 A Rippelstrom ergäbe sich allein durch den ESR eine Rippelspannung von etwa 1,8 V statt 40 mV.
+2. Bei 100 kHz ist $X_C = 1/(2\pi \cdot 100\,\mathrm{kHz} \cdot 1000\,\mathrm{\mu F}) \approx 1{,}6\,\mathrm{m\Omega}$ –
+   vernachlässigbar. Man misst praktisch nur den ESR. Außerdem liegt die Schaltfrequenz vieler Netzteile in diesem Bereich.
+
+</Loesung>
+
+## Wo ist die Kapazität geblieben?
+
+Ein Keramikkondensator 10 µF, 6,3 V, X5R, Bauform 0603, wird am Ausgang eines 5-V-Reglers eingesetzt. Ein LCR-Meter mit
+eingebauter Gleichspannungsvorspannung misst bei 0 V noch 9,6 µF, bei 5 V aber nur 3,1 µF.
+
+1. Ist der Kondensator defekt?
+2. Was tun?
+
+<Loesung>
+
+1. Nein, das ist bei Klasse-2-Keramik (X5R, X7R) normal: Die Kapazität sinkt mit der **Gleichspannung** stark – je
+   kleiner die Bauform und je näher an der Nennspannung, desto mehr. Die Datenblätter enthalten dazu Kurven
+   („DC bias characteristics“).
+2. Höhere Nennspannung (z. B. 16 V) und/oder größere Bauform wählen, oder mehrere Kondensatoren parallel. Bei der
+   Auslegung immer mit der **wirksamen** Kapazität bei Betriebsspannung rechnen.
+
+</Loesung>
+
+## Impedanz einer Spule im Labor messen
+
+Eine Spule wird mit einem Funktionsgenerator (1 kHz) und einem 10-Ω-Messwiderstand in Reihe betrieben. Das Oszilloskop zeigt
+an der Spule $\hat{u}_L = 2{,}0\,\mathrm{V}$, am Messwiderstand $\hat{u}_R = 0{,}5\,\mathrm{V}$; der Strom eilt der
+Spulenspannung um $0{,}22\,\mathrm{ms}$ nach.
+
+1. Berechne $Z$, $\varphi$, $L$ und den Drahtwiderstand.
+2. Wie kann man die Spulenspannung messen, wenn beide Tastkopf-Massen an Masse liegen müssen?
+
+<Loesung>
+
+1. $\hat{\imath} = 0{,}5\,\mathrm{V}/10\,\Omega = 50\,\mathrm{mA}$ → $Z = 2{,}0\,\mathrm{V}/50\,\mathrm{mA} = 40\,\Omega$ ·
+   $\varphi = 360° \cdot 0{,}22\,\mathrm{ms}/1\,\mathrm{ms} \approx 79°$ ·
+   $X_L = Z \sin\varphi \approx 39{,}3\,\Omega$ → $L = X_L/(2\pi f) \approx 6{,}3\,\mathrm{mH}$ ·
+   $R = Z \cos\varphi \approx 7{,}5\,\Omega$
+2. Messwiderstand an Masse, Spule darüber. Kanal 1 misst die Spannung über beiden, Kanal 2 die am Messwiderstand. Die
+   Spulenspannung ist die Differenz – Rechenfunktion „CH1 − CH2“ des Oszilloskops. Beide Tastköpfe gleich einstellen und
+   abgleichen, sonst ist die Differenz ungenau.
+
+</Loesung>

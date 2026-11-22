@@ -1,0 +1,109 @@
+---
+title: Praxisbeispiele – Messverstärker und Schnittstellen
+description: Küchenwaage mit Wägezelle und 24-Bit-A/D-Umsetzer, Lade- und Entladestrom eines Akkus bidirektional messen, Low-Side-Messung mit Masseproblem, Strommessung im Wechselrichter mit Trennverstärker, Drucksensor mit 4–20 mA in der Anlage, Brummen durch Masseschleife.
+---
+
+import Loesung from '../../../components/Loesung.astro';
+
+## Küchenwaage mit Mikrocontroller
+
+Für eine Waage gibt es fertige Module: eine Wägezelle (1 mV/V) und ein Baustein, der Brückenspeisung, programmierbaren
+Verstärker (z. B. $V = 128$) und einen 24-Bit-Sigma-Delta-A/D-Umsetzer enthält.
+
+1. Warum braucht man hier keinen getrennten Instrumentenverstärker?
+2. Warum ist die Waage **ratiometrisch** aufgebaut?
+3. Die Anzeige wandert nach dem Einschalten langsam um einige Gramm. Woran liegt das?
+
+<Loesung>
+
+1. Der Baustein hat einen Differenzeingang mit hoher Gleichtaktunterdrückung und eine einstellbare Verstärkung eingebaut –
+   er **ist** ein Messverstärker mit A/D-Umsetzer.
+2. Die Brückenspeisung dient gleichzeitig als Referenz des A/D-Umsetzers. Die Brückenspannung ist proportional zur
+   Speisung, der Umsetzer teilt durch die Referenz – Schwankungen der Versorgung kürzen sich heraus (siehe
+   [Messbrücken – Praxis](/messbruecken/praxisbeispiele/)).
+3. **Erwärmung**: Wägezelle, Brückenwiderstände und Verstärker erwärmen sich nach dem Einschalten; Offset und Empfindlichkeit
+   driften. Abhilfe: Aufwärmzeit abwarten, regelmäßig tarieren (Nullpunkt neu setzen), Speisung nur während der Messung
+   einschalten.
+
+</Loesung>
+
+## Akkustrom in beide Richtungen
+
+Ein 12-V-Akku wird geladen (bis +10 A) und entladen (bis −10 A). Der Strom soll mit einem bidirektionalen
+Strommessverstärker ($V = 50$, Referenzeingang) und einem 3,3-V-A/D-Umsetzer gemessen werden.
+
+1. Wie groß darf der Shunt höchstens sein, wenn die Referenz auf 1,65 V liegt?
+2. Welche Spannung zeigt der Ausgang bei −4 A mit diesem Shunt?
+
+<Loesung>
+
+1. Der Ausgang darf um höchstens ±1,65 V schwanken (sicherheitshalber etwas weniger, z. B. ±1,5 V):
+   $R_\mathrm{S} \leq \dfrac{1{,}5\,\mathrm{V}}{50 \cdot 10\,\mathrm{A}} = 3\,\mathrm{m\Omega}$
+2. $U_\mathrm{a} = 1{,}65\,\mathrm{V} + 50 \cdot (-4\,\mathrm{A}) \cdot 3\,\mathrm{m\Omega} = 1{,}65\,\mathrm{V} - 0{,}6\,\mathrm{V} = 1{,}05\,\mathrm{V}$
+
+Die Referenz sollte die gleiche sein wie die des A/D-Umsetzers (oder der Mikrocontroller misst sie mit), sonst wird ein
+Fehler der 1,65 V als Stromfehler sichtbar.
+
+</Loesung>
+
+## Low-Side-Messung mit Überraschung
+
+Ein Motor (bis 30 A) wird Low-Side über einen 5-mΩ-Shunt gemessen. Ein Temperatursensor sitzt am Motor und ist mit der
+Motormasse verbunden; ausgewertet wird er von der Steuerung, deren Masse vor dem Shunt liegt. Bei hohem Strom zeigt der
+Temperatursensor um mehrere Grad falsche Werte.
+
+<Loesung>
+
+Bei 30 A fallen am Shunt $30\,\mathrm{A} \cdot 5\,\mathrm{m\Omega} = 150\,\mathrm{mV}$ ab. Die Motormasse liegt um diese Spannung
+höher als die Steuerungsmasse – der Sensor „sieht“ eine andere Masse, und sein Signal ist um bis zu 150 mV verschoben
+(bei 10 mV/K sind das 15 K). Abhilfe: High-Side-Messung, Sensor auf die Steuerungsmasse beziehen, oder das Sensorsignal
+differentiell messen.
+
+</Loesung>
+
+## Phasenstrom im Wechselrichter
+
+In einem Motorumrichter (Zwischenkreis 560 V) soll der Strom in einer Motorphase mit einem Shunt gemessen werden.
+
+1. Warum geht das nicht mit einem normalen Strommessverstärker?
+2. Welche Lösungen gibt es?
+
+<Loesung>
+
+1. Der Shunt liegt am Ausgang der Halbbrücke. Dessen Potential springt mit jeder Schaltflanke zwischen 0 und 560 V – mit
+   Flankensteilheiten von vielen kV/µs. Das überschreitet den Gleichtaktbereich jedes normalen Verstärkers, und die
+   Steuerung muss aus Sicherheitsgründen ohnehin vom Zwischenkreis getrennt sein.
+2. Ein **isolierter Sigma-Delta-Modulator** oder **Trennverstärker** direkt am Shunt (mit isolierter Versorgung) und hoher
+   CMTI, oder ein **Hall-Stromsensor** (kompensierter Stromwandler), der den Leiter galvanisch getrennt umschließt.
+
+</Loesung>
+
+## Drucksensor in der Anlage
+
+Ein Drucktransmitter (0 … 10 bar, 4–20 mA, Zweileiter) wird an den Analogeingang einer SPS angeschlossen. Die SPS zeigt
+dauerhaft −25 % an.
+
+1. Welcher Strom entspricht −25 %?
+2. Was ist die wahrscheinlichste Ursache?
+
+<Loesung>
+
+1. $-25\,\%$ von 16 mA sind −4 mA, also $I = 4\,\mathrm{mA} - 4\,\mathrm{mA} = 0\,\mathrm{mA}$ – es fließt kein Strom.
+2. Die Schleife ist unterbrochen: Leitung nicht angeschlossen oder gebrochen, Versorgung fehlt, oder der Transmitter ist
+   verpolt. Eine gute Steuerung meldet das als Fehler (Strom < 3,6 mA) und nicht als Messwert.
+
+</Loesung>
+
+## Brummen durch Masseschleife
+
+Ein Thermoelement-Messverstärker in einem Prüfstand zeigt einen schwankenden Wert; am Oszilloskop sieht man ein 50-Hz-Signal
+auf dem Ausgang. Der Messverstärker ist über das USB-Kabel des Laptops und über den Schutzleiter des Prüfstands geerdet.
+
+<Loesung>
+
+Es gibt zwei Verbindungen zur Erde → eine **Masseschleife**. Magnetische Wechselfelder induzieren in dieser Schleife eine
+Spannung, und Ausgleichsströme über die Signalmasse erzeugen 50-Hz-Störspannungen. Abhilfe: Schleife auftrennen –
+Laptop im Akkubetrieb, USB-Isolator oder ein **Trennverstärker**; außerdem differentielle Messung und verdrillte
+Sensorleitungen.
+
+</Loesung>

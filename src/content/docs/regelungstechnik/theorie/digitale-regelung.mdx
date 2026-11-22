@@ -1,0 +1,116 @@
+---
+title: Digitale Regelung
+description: Vor- und Nachteile digitaler Regler, Abtastregelkreis mit A/D-Umsetzer und PWM, Wahl der Abtastzeit, Phasenverlust durch Abtastung, Diskretisierung von I- und D-Anteil (Euler, Tustin), Emulationsprinzip, PI-Regler in C mit Anti-Windup, Datenformate und Festkommarechnung, Ausblick z-Transformation.
+sidebar:
+  label: 6 · Digitale Regelung
+  order: 6
+---
+
+## Warum digital?
+
+Heute rechnet fast jeder Regler in einem Mikrocontroller oder Signalprozessor.
+
+| Vorteile | Nachteile |
+| --- | --- |
+| Parameter per Software änderbar, keine Bauteiltoleranzen und keine Drift | Abtastung und Rechenzeit verzögern (Phasenverlust) |
+| beliebig komplexe Regler, Kennlinien, Begrenzungen, Fehlerüberwachung | Auflösung von A/D-Umsetzer und PWM begrenzt |
+| Kommunikation, Datenaufzeichnung, Diagnose | Programmierfehler, Überläufe |
+| ein Controller regelt viele Kreise – wirtschaftlich | für sehr schnelle Kreise (MHz) zu langsam |
+
+## Der Abtastregelkreis
+
+Der Regler arbeitet im festen Takt der **Abtastzeit** $T_\mathrm{s}$:
+
+1. Ein Timer-Interrupt startet die Wandlung: Der A/D-Umsetzer misst den Istwert.
+2. Der Controller berechnet die Regelabweichung und die neue Stellgröße.
+3. Die Stellgröße wird ausgegeben (PWM-Tastgrad, D/A-Umsetzer) und bis zum nächsten Takt **gehalten**.
+
+Der Takt muss **genau gleichmäßig** sein (Timer-Interrupt, nicht `delay()` in einer Schleife), weil $T_\mathrm{s}$ in die
+Berechnung von I- und D-Anteil eingeht.
+
+### Wahl der Abtastzeit
+
+Das Halten der Stellgröße wirkt im Mittel wie eine **Totzeit** von $T_\mathrm{s}/2$, dazu kommt die Rechenzeit. Bei der
+Durchtrittsfrequenz kostet das die Phase $\omega_\mathrm{D} \cdot T_\mathrm{s}/2$. Faustregeln:
+
+- $T_\mathrm{s}$ höchstens etwa **ein Zehntel** der kleinsten wichtigen Zeitkonstante bzw. der Anregelzeit des geschlossenen
+  Kreises,
+- oder $\omega_\mathrm{D} T_\mathrm{s} \leq 0{,}1 \dots 0{,}2$ (Phasenverlust höchstens 3 … 6°).
+
+Viel kleiner als nötig ist auch nicht gut: Der Controller ist ausgelastet, und bei sehr kleinem $T_\mathrm{s}$ werden die
+Änderungen pro Takt so klein, dass Rundungsfehler (Festkomma) und Rauschen den D-Anteil unbrauchbar machen. Vor dem A/D-Umsetzer
+gehört ein Anti-Aliasing-Filter (siehe [A/D-Umsetzer](/ad-da-umsetzer/theorie/)).
+
+## Vom analogen zum digitalen Regler
+
+Am einfachsten ist das **Emulationsprinzip**: Man entwirft den Regler wie einen analogen (Bode-Diagramm, Einstellregeln) und
+ersetzt dann Integral und Ableitung durch einfache Rechenvorschriften. Das funktioniert gut, solange die Abtastzeit klein
+genug ist.
+
+| analog | digital (Rückwärts-Euler) | Bedeutung |
+| --- | --- | --- |
+| $\displaystyle\int e\,\mathrm{d}t$ | $S_k = S_{k-1} + T_\mathrm{s} \cdot e_k$ | Fläche als Summe von Rechtecken |
+| $\dfrac{\mathrm{d}e}{\mathrm{d}t}$ | $\dfrac{e_k - e_{k-1}}{T_\mathrm{s}}$ | Steigung aus zwei Werten |
+
+Damit wird der PI-Regler zu
+
+$$
+u_k = K_\mathrm{P} \cdot e_k + \frac{K_\mathrm{P}\,T_\mathrm{s}}{T_\mathrm{N}} \sum_{i=0}^{k} e_i
+$$
+
+Genauer ist die **Trapezregel** (Tustin-Verfahren, bilineare Transformation): Statt $T_\mathrm{s} e_k$ addiert man
+$T_\mathrm{s}\,(e_k + e_{k-1})/2$.
+
+## PI-Regler in C mit Anti-Windup
+
+```c
+// PI-Regler, wird im Timer-Interrupt alle TS Sekunden aufgerufen
+#define TS     0.01f      // Abtastzeit 10 ms
+#define KP     2.0f
+#define TN     0.5f       // Nachstellzeit in s
+#define U_MIN  0.0f       // Stellgrößenbereich (z. B. PWM-Tastgrad 0 … 1)
+#define U_MAX  1.0f
+
+static float i_anteil = 0.0f;
+
+float pi_regler(float sollwert, float istwert)
+{
+    float e = sollwert - istwert;
+    float p_anteil = KP * e;
+    float i_neu = i_anteil + KP * TS / TN * e;
+
+    float u = p_anteil + i_neu;
+
+    if (u > U_MAX) {
+        u = U_MAX;                 // begrenzen …
+    } else if (u < U_MIN) {
+        u = U_MIN;
+    } else {
+        i_anteil = i_neu;          // … und I-Anteil nur weiterführen, wenn nicht begrenzt (Anti-Windup)
+    }
+    return u;
+}
+```
+
+Das **Anti-Windup** verhindert, dass der I-Anteil weiter anwächst, während die Stellgröße an der Grenze klebt. Ohne diese
+Maßnahme schießt die Regelgröße nach einem großen Sollwertsprung weit über, weil der aufgeladene I-Anteil erst wieder
+„abgebaut“ werden muss.
+
+## Datenformate und Grenzen
+
+- **Gleitkomma** (`float`) ist bequem. Auf kleinen Controllern ohne Gleitkommaeinheit ist es aber langsam – ein Regeltakt kann
+  dann zu lange dauern.
+- **Festkomma:** Man rechnet mit ganzen Zahlen in festen Einheiten (z. B. Strom in mA, Temperatur in Zehntelgrad, Faktoren
+  mal 1024 und danach `>> 10`). Schnell, aber man muss auf **Überläufe** und **Auflösung** achten (siehe
+  [Programmierung – Variablen und Datentypen](/programmierung/theorie/variablen-operatoren/)). Ein zu kleiner I-Beitrag pro Takt
+  wird auf null gerundet – der I-Anteil wächst nie, und es bleibt eine Regelabweichung.
+- **Quantisierung:** Ein 10-Bit-A/D-Umsetzer kann den Istwert nur in 1024 Stufen messen, eine 8-Bit-PWM nur 256 Stellwerte
+  ausgeben. Das erzeugt kleine Grenzschwingungen um den Sollwert.
+- **Sicherheit:** Sensorfehler (Kabelbruch → Messwert 0 → Regler heizt voll) erkennen und in einen sicheren Zustand gehen.
+
+## Ausblick: z-Transformation
+
+Für Abtastsysteme gibt es eine eigene Beschreibung: die **z-Transformation**. Ein Faktor $z^{-1}$ bedeutet „Wert aus dem
+vorigen Takt“. Damit lassen sich digitale Regler und abgetastete Strecken exakt berechnen und Regler entwerfen, die es analog
+gar nicht gibt – z. B. den **Deadbeat-Regler**, der den Sollwert nach einer festen Zahl von Abtastschritten erreicht.
+Werkzeuge wie MATLAB übernehmen dabei die Rechenarbeit (Befehle für Abtastsysteme, Simulink mit diskreten Blöcken).

@@ -1,0 +1,110 @@
+titel: A/D- und D/A-Umsetzer
+fragen:
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein 10-Bit-D/A-Umsetzer mit $U_\mathrm{ref} = 4{,}096\,\mathrm{V}$ erhält den Code 300. Welche Ausgangsspannung (in V) liefert er?'
+    loesung: 1.2
+    einheit: V
+    erklaerung: '$U_\mathrm{LSB} = 4{,}096\,\mathrm{V}/1024 = 4\,\mathrm{mV}$ → $U_\mathrm{a} = 300 \cdot 4\,\mathrm{mV} = 1{,}2\,\mathrm{V}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Warum verwendet man für D/A-Umsetzer das R-2R-Netzwerk statt binär gewichteter Widerstände?
+    optionen:
+      - text: Es braucht nur zwei Widerstandswerte, die sich auf dem Chip leicht genau herstellen lassen.
+        richtig: true
+      - text: Es braucht keine Referenzspannung.
+      - text: Es ist nichtlinear und daher genauer.
+      - text: Es funktioniert ohne Operationsverstärker immer besser.
+    erklaerung: 'Gewichtete Widerstände bräuchten bei 12 Bit Verhältnisse bis 1 : 2048. Beim R-2R-Netzwerk teilt sich der Strom an jedem Knoten genau zur Hälfte – mit nur R und 2R.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Timer läuft mit 20 MHz. Welche PWM-Frequenz (in kHz) ergibt sich bei 10 Bit Auflösung?'
+    loesung: 19.53
+    einheit: kHz
+    erklaerung: '$f_\mathrm{PWM} = 20\,\mathrm{MHz}/2^{10} = 20\,\mathrm{MHz}/1024 \approx 19{,}5\,\mathrm{kHz}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welches A/D-Verfahren ist am schnellsten?
+    optionen:
+      - text: Flash (Parallelumsetzer)
+        richtig: true
+      - text: sukzessive Approximation
+      - text: Dual-Slope
+      - text: Sigma-Delta
+    erklaerung: 'Beim Flash-Umsetzer vergleichen $2^n - 1$ Komparatoren gleichzeitig – die Wandlung braucht nur einen Schritt. Dafür ist die Auflösung begrenzt.'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum unterdrückt ein Dual-Slope-Umsetzer mit $T_1 = 20\,\mathrm{ms}$ das 50-Hz-Netzbrummen?
+    optionen:
+      - text: Das Integral einer 50-Hz-Schwingung über genau eine Periode ist null.
+        richtig: true
+      - text: Er hat einen eingebauten Hochpass.
+      - text: Er tastet nur einmal pro Sekunde ab.
+      - text: Die Referenzspannung enthält ebenfalls 50 Hz und hebt die Störung auf.
+    erklaerung: 'Der Umsetzer misst den Mittelwert über $T_1$. Jede Störung, deren Periode ganzzahlig in $T_1$ passt, hat den Mittelwert null.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Dual-Slope-Umsetzer integriert $N_1 = 1000$ Takte lang. Mit $U_\mathrm{ref} = 1\,\mathrm{V}$ zählt er beim Abintegrieren $N_2 = 735$ Takte. Wie groß ist $U_\mathrm{e}$ in V?'
+    loesung: 0.735
+    einheit: V
+    erklaerung: '$U_\mathrm{e} = U_\mathrm{ref} \cdot N_2/N_1 = 1\,\mathrm{V} \cdot 735/1000 = 0{,}735\,\mathrm{V}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Welcher Fehler lässt sich durch eine Zweipunkt-Kalibrierung NICHT beseitigen?
+    optionen:
+      - text: integrale Nichtlinearität (INL)
+        richtig: true
+      - text: Offsetfehler
+      - text: Verstärkungsfehler
+      - text: Fehler der Referenzspannung (konstant)
+    erklaerung: 'Zwei Punkte legen eine Gerade fest – Offset und Steigung. Die Krümmung der Kennlinie (INL) bleibt.'
+
+  - typ: mc
+    stufe: vertiefung
+    frage: Was bedeutet eine differentielle Nichtlinearität (DNL) kleiner als −1 LSB?
+    optionen:
+      - text: Es gibt fehlende Codes – einzelne Ausgabewerte kommen nie vor.
+        richtig: true
+      - text: Der Umsetzer ist besonders genau.
+      - text: Der Umsetzer ist doppelt so schnell.
+      - text: Der Offset ist negativ.
+    erklaerung: 'Eine Stufe mit der Breite 0 ($\mathrm{DNL} = -1\,\mathrm{LSB}$) wird übersprungen – dieser Code tritt nie auf.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Welchen Signal-Rausch-Abstand (in dB) hat ein idealer 10-Bit-Umsetzer?'
+    loesung: 61.96
+    einheit: dB
+    erklaerung: '$\mathrm{SNR} = 6{,}02 \cdot 10 + 1{,}76 = 61{,}96\,\mathrm{dB}$'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein 16-Bit-Umsetzer hat laut Datenblatt einen SINAD von 80 dB. Wie viele effektive Bits (ENOB) hat er?'
+    loesung: 13
+    einheit: Bit
+    erklaerung: '$\mathrm{ENOB} = (80 - 1{,}76)/6{,}02 \approx 13{,}0\,\mathrm{Bit}$'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Wie viele Abtastwerte muss man mitteln, um aus einem 10-Bit-Umsetzer 13 Bit Auflösung zu gewinnen (Rauschen vorausgesetzt)?'
+    loesung: 64
+    toleranz: 0
+    toleranzArt: absolut
+    erklaerung: '3 zusätzliche Bits → $4^3 = 64$ Werte.'
+
+  - typ: mc
+    stufe: standard
+    frage: Ein Spannungsteiler mit 1 MΩ liefert am ADC-Eingang eines Mikrocontrollers zu kleine Werte. Was hilft am einfachsten?
+    optionen:
+      - text: ein Kondensator (z. B. 100 nF) direkt am ADC-Eingang gegen Masse
+        richtig: true
+      - text: ein größerer Teilerwiderstand
+      - text: eine kürzere Abtastzeit
+      - text: eine höhere Referenzspannung
+    erklaerung: 'Der Abtastkondensator braucht beim Abtasten kurz einen Ladestrom. Ein großer externer Kondensator liefert diese Ladung, ohne dass seine Spannung merklich sinkt.'

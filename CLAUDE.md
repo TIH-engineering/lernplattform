@@ -80,8 +80,12 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
   (keine Rechenbeispiele; eigener Eintrag in `astro.config.mjs`).
 - **Mess- und Regelungstechnik (MTRS)** – kein eigenes Lehrbuch, daher mit Theorie (Quellen: `Quellen/MTRS/MTRS2`,
   Teile auch in GET1/GET2 – im Übersichtstext darauf verweisen): Grundlagen der Messtechnik (`messtechnik`), Messfehler,
-  Signalkennwerte, Sensoren, Messwerke und Messbereiche, Messbrücken, Digitale Messtechnik; Aktuatoren und
-  Regelungstechnik noch „in Arbeit“. Schaltbilder in `src/assets/mtrs/`.
+  Signalkennwerte, Sensoren, Messwerke und Messbereiche, Messbrücken, Digitale Messtechnik. Ab dem 3. Jahrgang gibt es
+  keine Unterlagen – diese Themen sind eigenständig nach `Quellen/MTRS - weitere Themen` (Grobplanung/Lehrplan) erstellt:
+  Leistungs- und Impedanzmessung (`leistungsmessung`), Komparator und Frequenzmessung (`frequenzmessung`),
+  Messverstärker und Schnittstellen (`messverstaerker`), A/D- und D/A-Umsetzer (`ad-da-umsetzer`), Aktuatoren und
+  Regelungstechnik (beide mit Theorie im Unterordner `theorie/`). Was es schon gibt (OPV, Filter/Bode, Leistungselektronik,
+  Drehstrom) nicht doppeln, sondern verlinken. Schaltbilder in `src/assets/mtrs/`.
 - MTRS-Unterlagen mit Schülernamen (z. B. Referats-/Themenvergaben, Leistungsbeurteilung, WebUntis) nicht verwenden.
 - Grenzfall Grundlagen/Elektronik: Was im Schulbuch GET1/GET2 steht → Grundlagen; Bauteile, Schaltungen und
   Auslegung (Halbleiter, OPV, aktive Filter, Oszillatoren, Wärme) → Elektronik. Wechselstrom-Praxisaufgaben aus

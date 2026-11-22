@@ -1,0 +1,129 @@
+---
+title: Rechenbeispiele – Komparator und Frequenzmessung
+description: Rechenbeispiele zu Torzeit und ±1-Zählfehler, notwendiger Torzeit, Periodendauermessung, Grenzfrequenz beider Verfahren, Gesamtfehler mit Quarztoleranz, Drehzahl aus Input-Capture-Werten und Bemessung der Hysterese.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+
+## Frequenzzähler mit Torzeit
+
+<Stufe wert="grundlagen" />
+
+Ein Zähler zählt während einer Torzeit von $0{,}1\,\mathrm{s}$ genau 4537 Impulse.
+
+**Gesucht:** Frequenz und relativer ±1-Zählfehler
+
+<Loesung>
+
+$f = N/T_\mathrm{Tor} = 4537/0{,}1\,\mathrm{s} = 45\,370\,\mathrm{Hz}$ ·
+$F_\mathrm{r} = \pm 1/N = \pm 1/4537 \approx \pm 0{,}022\,\%$ (das sind ±10 Hz – die letzte Stelle ist unsicher).
+
+</Loesung>
+
+## Welche Torzeit ist nötig?
+
+<Stufe wert="standard" />
+
+Ein Signal von etwa $2\,\mathrm{kHz}$ soll mit einem relativen Zählfehler von höchstens $\pm 0{,}01\,\%$ gemessen werden. Der
+Zähler bietet die Torzeiten 0,01 s · 0,1 s · 1 s · 10 s.
+
+<Loesung>
+
+$\dfrac{1}{N} \leq 10^{-4}$ → $N \geq 10\,000$ → $T_\mathrm{Tor} \geq \dfrac{10\,000}{2000\,\mathrm{Hz}} = 5\,\mathrm{s}$
+
+Gewählt: **10 s**. Eine Messung dauert dann 10 Sekunden – mit Periodendauermessung ginge es viel schneller (siehe unten).
+
+</Loesung>
+
+## Netzfrequenz über die Periodendauer
+
+<Stufe wert="standard" />
+
+Die Netzfrequenz soll gemessen werden. Ein Mikrocontroller-Timer läuft mit $f_\mathrm{ref} = 2\,\mathrm{MHz}$ und zählt
+zwischen zwei steigenden Flanken $N = 39\,980$ Takte.
+
+1. Wie groß sind Periodendauer und Frequenz?
+2. Wie groß ist der relative ±1-Zählfehler? Vergleiche mit dem Torzeitverfahren bei 1 s.
+
+<Loesung>
+
+1. $T = N/f_\mathrm{ref} = 39\,980/2\,\mathrm{MHz} = 19{,}99\,\mathrm{ms}$ → $f = 1/T \approx 50{,}025\,\mathrm{Hz}$
+2. $F_\mathrm{r} = \pm 1/39\,980 \approx \pm 2{,}5 \cdot 10^{-5}$ (±0,0013 Hz) – nach nur 20 ms Messzeit.
+   Torzeitverfahren: $N \approx 50$ → ±2 % (±1 Hz) nach 1 s. Für niedrige Frequenzen ist die Periodendauermessung klar
+   überlegen.
+
+</Loesung>
+
+## Grenzfrequenz der beiden Verfahren
+
+<Stufe wert="standard" />
+
+Ein Zähler hat einen 10-MHz-Referenzoszillator und eine Torzeit von 1 s. Ab welcher Frequenz ist das Torzeitverfahren
+genauer als die Periodendauermessung (über eine Periode)?
+
+<Loesung>
+
+$$
+f_\mathrm{g} = \sqrt{\frac{f_\mathrm{ref}}{T_\mathrm{Tor}}} = \sqrt{\frac{10^7\,\mathrm{Hz}}{1\,\mathrm{s}}} \approx 3{,}16\,\mathrm{kHz}
+$$
+
+Kontrolle: Bei 3,16 kHz zählt das Torzeitverfahren 3162 Impulse, die Periodendauermessung $10^7/3162 = 3162$ Impulse –
+beide haben $\pm 1/3162 \approx 0{,}03\,\%$. Darüber gewinnt das Torzeitverfahren.
+
+</Loesung>
+
+## Gesamtfehler mit Quarztoleranz
+
+<Stufe wert="vertiefung" />
+
+Ein Zähler mit einem Quarz von ±30 ppm misst bei 1 s Torzeit eine Frequenz von 12 345 678 Hz.
+
+1. Wie groß ist der Gesamtfehler in Hz?
+2. Lohnt sich eine Torzeit von 10 s?
+
+<Loesung>
+
+1. Zählfehler: $\pm 1/N \approx \pm 8 \cdot 10^{-8}$ (±1 Hz). Zeitbasis: $\pm 30 \cdot 10^{-6}$ (±370 Hz).
+   Gesamt: $\pm(1 + 370)\,\mathrm{Hz} \approx \pm 371\,\mathrm{Hz}$
+2. Nein. Der Zählfehler sinkt auf ±0,1 Hz, der Quarzfehler bleibt bei ±370 Hz. Die vielen angezeigten Stellen täuschen eine
+   Genauigkeit vor, die es nicht gibt. Hier hilft nur eine bessere Zeitbasis (TCXO, OCXO, externe Referenz).
+
+</Loesung>
+
+## Drehzahl eines Lüfters
+
+<Stufe wert="standard" />
+
+Ein PC-Lüfter liefert am Tacho-Ausgang **2 Impulse pro Umdrehung**. Ein Timer mit 1 MHz liefert bei zwei
+aufeinanderfolgenden steigenden Flanken die Capture-Werte 61 200 und 3 164 (der 16-Bit-Zähler ist dazwischen übergelaufen).
+
+**Gesucht:** Impulsperiode und Drehzahl in 1/min
+
+<Loesung>
+
+1. Differenz modulo $2^{16} = 65\,536$: $3164 - 61\,200 + 65\,536 = 7500$ Takte → $T_\mathrm{p} = 7{,}5\,\mathrm{ms}$
+   (im Programm erledigt das die `uint16_t`-Subtraktion automatisch).
+2. Eine Umdrehung = 2 Impulse → $T_\mathrm{U} = 15\,\mathrm{ms}$ → $n = 1/15\,\mathrm{ms} \approx 66{,}7\,\mathrm{s^{-1}}$
+   $= 4000\,\mathrm{min^{-1}}$
+
+</Loesung>
+
+## Hysterese bemessen
+
+<Stufe wert="vertiefung" />
+
+Ein Sensorsignal (Sinus, $\hat{u} = 1\,\mathrm{V}$) ist von Rauschen mit etwa $60\,\mathrm{mV}$ Spitze-Spitze überlagert. Ein
+Komparator mit Gegentaktausgang (0 V / 5 V) soll daraus ein Rechteck machen. Die Mitkopplung erfolgt über einen
+Spannungsteiler $R_1$ (vom Ausgang) und $R_2$ (nach der Referenz).
+
+Wähle die Widerstände so, dass die Hysterese etwa 100 mV beträgt.
+
+<Loesung>
+
+1. Hysterese > Rauschen: 100 mV > 60 mV ✓, und deutlich kleiner als 2 V Signalhub ✓
+2. $U_\mathrm{H} = \beta \cdot \Delta U_\mathrm{a}$ → $\beta = 0{,}1\,\mathrm{V}/5\,\mathrm{V} = 0{,}02$
+3. $\beta = \dfrac{R_2}{R_1 + R_2} = 0{,}02$ → $R_1 = 49 \cdot R_2$. Mit $R_2 = 1\,\mathrm{k\Omega}$: $R_1 = 49\,\mathrm{k\Omega}$ →
+   Normwert $47\,\mathrm{k\Omega}$ ergibt $\beta = 1/48$ und $U_\mathrm{H} \approx 104\,\mathrm{mV}$.
+
+</Loesung>

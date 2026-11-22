@@ -1,0 +1,169 @@
+---
+title: Theorie – Messverstärker und Schnittstellen
+description: Differenz- und Gleichtaktspannung, Gleichtaktunterdrückung (CMRR), Instrumentenverstärker mit drei Operationsverstärkern, Strommessung mit Shunt in Low-Side- und High-Side-Anordnung, Strommessverstärker, Offset und Drift, Auto-Zero- und Chopper-Verstärker, Trennverstärker, 4–20-mA-Stromschleife und Spannungsschnittstelle 0–10 V.
+---
+
+import Abbildung from '../../../components/Abbildung.astro';
+import Inst from '../../../assets/mtrs/instrumentenverstaerker.svg';
+import Shunt from '../../../assets/mtrs/shunt-low-high.svg';
+import Schleife from '../../../assets/mtrs/stromschleife.svg';
+
+## 1 · Differenz- und Gleichtaktspannung
+
+Zwischen den beiden Eingängen eines Messverstärkers liegen zwei Spannungen gegen Masse, $U_1$ und $U_2$. Man zerlegt sie in
+
+$$
+U_\mathrm{D} = U_1 - U_2 \qquad\text{(Differenzspannung – das Nutzsignal)}
+$$
+
+$$
+U_\mathrm{CM} = \frac{U_1 + U_2}{2} \qquad\text{(Gleichtaktspannung – liegt auf beiden Eingängen gleich)}
+$$
+
+Beispiel DMS-Vollbrücke an 5 V: Beide Diagonalpunkte liegen bei etwa 2,5 V (Gleichtakt), ihre Differenz ist nur wenige mV.
+Ein Messverstärker soll $U_\mathrm{D}$ verstärken und $U_\mathrm{CM}$ möglichst vollständig ignorieren.
+
+Wie gut das gelingt, beschreibt die **Gleichtaktunterdrückung** (Common Mode Rejection Ratio):
+
+$$
+\mathrm{CMRR} = \frac{V_\mathrm{D}}{V_\mathrm{CM}} \qquad \mathrm{CMRR_{dB}} = 20 \lg \mathrm{CMRR}
+$$
+
+Eine Gleichtaktspannung wirkt so, als läge am Eingang eine zusätzliche Differenzspannung $U_\mathrm{CM}/\mathrm{CMRR}$. Bei
+100 dB ($10^5$) erzeugen 2,5 V Gleichtakt einen Fehler von 25 µV.
+
+Der einfache [Differenzverstärker](/operationsverstaerker/theorie/) mit einem OPV und vier Widerständen hat zwei Schwächen:
+Seine Gleichtaktunterdrückung hängt von der **Gleichheit der Widerstände** ab (1 % Toleranz → nur etwa 34 dB), und sein
+**Eingangswiderstand** ist klein, sodass er die Brücke belastet.
+
+## 2 · Der Instrumentenverstärker
+
+<Abbildung bild={Inst} unterschrift="Instrumentenverstärker aus drei Operationsverstärkern" />
+
+Der **Instrumentenverstärker** (In-Amp) besteht aus zwei Teilen:
+
+1. **Eingangsstufe:** Zwei nichtinvertierende Verstärker (OPV 1 und 2) – der Eingangswiderstand ist sehr hoch. Sie sind über
+   den **Verstärkungswiderstand** $R_\mathrm{G}$ verbunden. Die Differenzspannung erscheint an $R_\mathrm{G}$ und wird um den
+   Faktor $1 + 2R/R_\mathrm{G}$ verstärkt, die Gleichtaktspannung dagegen nur mit dem Faktor 1 durchgereicht.
+2. **Differenzstufe:** OPV 3 bildet die Differenz und unterdrückt den Gleichtakt. Der Eingang **REF** legt fest, auf welche
+   Spannung sich der Ausgang bezieht.
+
+$$
+U_\mathrm{a} = \left(1 + \frac{2R}{R_\mathrm{G}}\right) \cdot (U_1 - U_2) + U_\mathrm{REF}
+$$
+
+Als integrierter Baustein sind alle Widerstände außer $R_\mathrm{G}$ auf dem Chip genau abgeglichen. Mit **einem einzigen**
+Widerstand stellt man die Verstärkung ein; die Formel steht im Datenblatt (z. B. $V = 1 + 50\,\mathrm{k\Omega}/R_\mathrm{G}$).
+Typische Werte: CMRR 100 … 130 dB, Verstärkung 1 … 10 000.
+
+:::tip[REF-Anschluss bei einfacher Versorgung]
+Wird der Verstärker nur mit 0 … 5 V versorgt, kann der Ausgang nicht negativ werden. Legt man REF z. B. auf 2,5 V, kann man
+auch negative Differenzspannungen messen (Kraft in beide Richtungen, Strom in beide Richtungen). REF muss niederohmig
+angesteuert werden (Spannungsfolger), sonst stimmt die Verstärkung nicht mehr.
+:::
+
+Achtung beim **Aussteuerbereich**: Auch wenn der Ausgang in Ordnung ist, können die internen Ausgänge von OPV 1 und 2 bei
+großer Verstärkung und großer Gleichtaktspannung schon in die Begrenzung gehen. Datenblätter enthalten dafür Diagramme
+des zulässigen Gleichtakt- und Ausgangsbereichs.
+
+## 3 · Strommessung mit Shunt
+
+Ein **Shunt** ist ein kleiner, genauer Widerstand, über dem eine stromproportionale Spannung abfällt: $U = I \cdot R_\mathrm{S}$.
+Die Wahl ist ein Kompromiss:
+
+- **großer** Shunt → große Messspannung, wenig Einfluss von Offset und Rauschen,
+- **kleiner** Shunt → wenig Verlustleistung $P = I^2 R_\mathrm{S}$ und wenig Spannungsabfall für die Last.
+
+Typisch sind 10 … 100 mV bei Nennstrom. Shunts für größere Ströme haben **vier Anschlüsse** (Kelvin): zwei für den Strom,
+zwei für die Messspannung – sonst messen Lötstellen und Leiterbahn mit.
+
+<Abbildung bild={Shunt} unterschrift="Low-Side- und High-Side-Strommessung" />
+
+| | Low-Side (Shunt an Masse) | High-Side (Shunt an der Versorgung) |
+| --- | --- | --- |
+| Gleichtaktspannung | fast 0 V – einfacher OPV genügt | so hoch wie die Versorgung – spezieller Verstärker nötig |
+| Masse der Last | um $I \cdot R_\mathrm{S}$ angehoben | bleibt echte Masse |
+| Kurzschluss der Last gegen Masse | wird **nicht** erkannt (Strom fließt am Shunt vorbei) | wird erkannt |
+
+**Strommessverstärker** (Current Sense Amplifier) sind auf High-Side-Messung spezialisiert: Sie vertragen Gleichtaktspannungen
+von z. B. −4 … +80 V, obwohl sie selbst nur mit 3,3 V oder 5 V versorgt werden, und haben eine feste Verstärkung
+(z. B. 20, 50, 100 oder 200 V/V). **Bidirektionale** Typen messen mit einem Referenzeingang Strom in beide Richtungen
+(Laden und Entladen eines Akkus, Motorstrom in einer H-Brücke).
+
+Bei PWM-gesteuerten Lasten springt die Gleichtaktspannung im Takt der Schaltflanken. Dann zählt die Gleichtaktunterdrückung
+bei **hohen Frequenzen** (AC-CMRR) und eine Unterdrückung von Spannungssprüngen – im Datenblatt nachsehen.
+
+## 4 · Offset und Drift: Auto-Zero-Verstärker
+
+Bei kleinen Signalen ist die **Offsetspannung** des Verstärkers oft der größte Fehler. Ein Standard-OPV hat 1 … 5 mV –
+bei 40 mV Messspannung sind das bis über 10 %! Man kann den Offset abgleichen, aber er **driftet** mit der Temperatur
+(typisch einige µV/K).
+
+**Auto-Zero-** und **Chopper-Verstärker** messen ihren eigenen Offset in sehr kurzen Abständen (einige kHz bis 100 kHz) und
+ziehen ihn ab. Ergebnis: Offset wenige µV, Drift im Bereich von nV/K, kein Abgleich nötig, und auch das niederfrequente
+$1/f$-Rauschen verschwindet. Nachteile: Störanteile bei der Umschaltfrequenz, teilweise höherer Stromverbrauch und
+begrenzte Bandbreite. Sie sind ideal für langsame, sehr kleine Signale: Waagen, Thermoelemente, Shunts mit kleinem
+Widerstand.
+
+## 5 · Trennverstärker
+
+Ein **Trennverstärker** (isolierender Messverstärker) überträgt ein Messsignal über eine **galvanische Trennung**: Eingang und
+Ausgang haben keine leitende Verbindung und eigene Massen. Man braucht ihn,
+
+- wenn der Messpunkt auf **gefährlichem Potential** liegt (Netzspannung, Zwischenkreis eines Umrichters mit 400 … 800 V) –
+  Schutz von Menschen und Elektronik,
+- wenn Sender und Empfänger **verschiedene Erdpotentiale** haben – die Trennung unterbricht **Masseschleifen**,
+- wenn ein Shunt im **springenden Potential** sitzt, z. B. im Brückenzweig eines Wechselrichters.
+
+Die Übertragung über die Isolationsbarriere erfolgt
+
+- **optisch** (Leuchtdiode und Fotodiode, Optokoppler),
+- **kapazitiv** (über Kondensatoren aus Siliziumoxid im Gehäuse) oder
+- **magnetisch** (kleine Transformatoren oder magnetoresistive Kopplung).
+
+Weil sich analoge Spannungen schlecht über eine Barriere übertragen lassen, wird das Signal vorher **moduliert** – oft mit
+einem Sigma-Delta-Modulator, der direkt einen Bitstrom liefert, den ein Mikrocontroller auswertet. Wichtige Kennwerte:
+**Isolationsspannung** (z. B. 5 kV eff für 1 min), **Arbeitsspannung**, und die Festigkeit gegen schnelle Potentialsprünge
+(CMTI in kV/µs). Die Eingangsseite braucht eine eigene, ebenfalls **isolierte Versorgung** (kleiner isolierter DC/DC-Wandler).
+
+## 6 · Die 4–20-mA-Stromschleife
+
+In der Industrie werden Messwerte oft über Dutzende bis Hunderte Meter übertragen. Eine Spannung würde durch den
+Leitungswiderstand und eingekoppelte Störungen verfälscht. Deshalb überträgt man einen **eingeprägten Strom**:
+
+<Abbildung bild={Schleife} unterschrift="Zweileiter-Messumformer in einer 4–20-mA-Stromschleife" />
+
+$$
+I = 4\,\mathrm{mA} + 16\,\mathrm{mA} \cdot \frac{x - x_\mathrm{min}}{x_\mathrm{max} - x_\mathrm{min}}
+$$
+
+- Der Strom ist in der ganzen Schleife **gleich groß** – Leitungswiderstände ändern ihn nicht, solange die
+  Versorgungsspannung reicht.
+- Am Empfänger wandelt ein **Bürdenwiderstand** den Strom wieder in eine Spannung um: 250 Ω ergeben 1 … 5 V.
+- Der **„lebende Nullpunkt“** 4 mA erlaubt Fehlererkennung: 0 mA bedeutet Drahtbruch oder fehlende Versorgung, nicht
+  „Messwert null“. Nach NAMUR-Empfehlung NE 43 meldet ein Messumformer Fehler mit Strömen unter 3,6 mA oder über 21 mA.
+- **Zweileitertechnik:** Der Messumformer versorgt sich aus den 4 mA, die immer fließen – zwei Adern reichen für Versorgung
+  und Signal.
+
+### Spannungsbilanz der Schleife
+
+Die Versorgungsspannung muss auch beim größten Strom alle Spannungsabfälle decken:
+
+$$
+U_\mathrm{V} \geq U_\mathrm{MU,min} + I_\mathrm{max} \cdot \left(R_\mathrm{B} + R_\mathrm{L}\right)
+$$
+
+$U_\mathrm{MU,min}$ ist die Mindestspannung am Messumformer (Datenblatt, oft 8 … 12 V), $R_\mathrm{B}$ die Bürde, $R_\mathrm{L}$ der
+Widerstand von Hin- und Rückleitung. Üblich ist eine Versorgung von 24 V. Für $I_\mathrm{max}$ rechnet man sicherheitshalber
+mit dem Fehlerstrom (z. B. 21 … 22 mA).
+
+### Spannungsschnittstelle 0–10 V
+
+Für kurze Strecken (im Schaltschrank, Gebäudetechnik) ist auch die Spannungsschnittstelle 0–10 V verbreitet. Sie ist einfach,
+aber empfindlich gegen Spannungsabfall und Störungen auf der Leitung und kann einen Drahtbruch nicht von „0 %“
+unterscheiden.
+
+:::note[Digital statt analog]
+Moderne Messumformer übertragen zusätzlich digitale Daten (z. B. HART-Protokoll auf der 4–20-mA-Schleife) oder werden über
+Feldbusse angeschlossen. Die Stromschleife bleibt wegen ihrer Einfachheit und Robustheit aber weit verbreitet.
+:::

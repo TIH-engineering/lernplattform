@@ -1,0 +1,107 @@
+titel: Messverstärker und Schnittstellen
+fragen:
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'An den Eingängen eines Messverstärkers liegen $U_1 = 1{,}205\,\mathrm{V}$ und $U_2 = 1{,}195\,\mathrm{V}$. Wie groß ist die Gleichtaktspannung in V?'
+    loesung: 1.2
+    einheit: V
+    erklaerung: '$U_\mathrm{CM} = (U_1 + U_2)/2 = 1{,}2\,\mathrm{V}$; die Differenzspannung beträgt 10 mV.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Verstärker hat eine Gleichtaktunterdrückung von 80 dB. Welche Fehlerspannung (bezogen auf den Eingang, in µV) erzeugt eine Gleichtaktspannung von 2 V?'
+    loesung: 200
+    einheit: µV
+    erklaerung: '$80\,\mathrm{dB}$ → $\mathrm{CMRR} = 10^4$ → $2\,\mathrm{V}/10^4 = 200\,\mathrm{\mu V}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was ist der Vorteil eines Instrumentenverstärkers gegenüber einem einfachen Differenzverstärker mit einem OPV?
+    optionen:
+      - text: sehr hoher Eingangswiderstand und hohe Gleichtaktunterdrückung, Verstärkung mit einem Widerstand einstellbar
+        richtig: true
+      - text: Er braucht keine Versorgungsspannung.
+      - text: Er kann nur Gleichspannungen verstärken.
+      - text: Er hat eine galvanische Trennung zwischen Ein- und Ausgang.
+    erklaerung: 'Die beiden Eingangs-OPVs belasten die Quelle nicht, und die abgeglichenen Widerstände auf dem Chip ergeben eine CMRR von 100 dB und mehr. Eine galvanische Trennung hat erst ein Trennverstärker.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Instrumentenverstärker hat $V = 1 + 50\,\mathrm{k\Omega}/R_\mathrm{G}$. Welcher Widerstand $R_\mathrm{G}$ (in Ω) ergibt $V = 101$?'
+    loesung: 500
+    einheit: Ω
+    erklaerung: '$R_\mathrm{G} = 50\,\mathrm{k\Omega}/(V - 1) = 50\,\mathrm{k\Omega}/100 = 500\,\Omega$'
+
+  - typ: mc
+    stufe: standard
+    frage: Welche Aussage über die High-Side-Strommessung ist richtig?
+    optionen:
+      - text: Der Verstärker muss eine hohe Gleichtaktspannung vertragen; dafür bleibt die Masse der Last unverändert.
+        richtig: true
+      - text: Der Shunt liegt zwischen Last und Masse.
+      - text: Ein einfacher nichtinvertierender OPV-Verstärker genügt.
+      - text: Kurzschlüsse der Last gegen Masse werden nicht erkannt.
+    erklaerung: 'Der Shunt liegt an der Versorgungsseite – seine beiden Anschlüsse haben fast die volle Versorgungsspannung gegen Masse. Strommessverstärker sind dafür gebaut.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Durch einen Shunt von $10\,\mathrm{m\Omega}$ fließen 15 A. Wie groß ist seine Verlustleistung in W?'
+    loesung: 2.25
+    einheit: W
+    erklaerung: '$P = I^2 R = (15\,\mathrm{A})^2 \cdot 0{,}01\,\Omega = 2{,}25\,\mathrm{W}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Wofür eignen sich Auto-Zero- bzw. Chopper-Verstärker besonders?
+    optionen:
+      - text: für sehr kleine, langsame Signale, bei denen Offset und Drift stören (Waage, Thermoelement, kleiner Shunt)
+        richtig: true
+      - text: für Hochfrequenzsignale über 100 MHz
+      - text: für galvanisch getrennte Messungen
+      - text: für Leistungsendstufen
+    erklaerung: 'Sie messen ihren eigenen Offset ständig und ziehen ihn ab – Offset im µV-Bereich, Drift im nV/K-Bereich. Ihre Bandbreite ist begrenzt.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wann braucht man einen Trennverstärker? (mehrere richtig)
+    optionen:
+      - text: wenn der Messpunkt auf gefährlich hohem Potential liegt
+        richtig: true
+      - text: um eine Masseschleife zu unterbrechen
+        richtig: true
+      - text: für einen Shunt im springenden Potential eines Wechselrichters
+        richtig: true
+      - text: um die Verstärkung eines Thermoelements zu erhöhen
+    erklaerung: 'Der Trennverstärker überträgt das Signal über eine Isolationsbarriere (optisch, kapazitiv oder magnetisch). Mit der Verstärkung hat das nichts zu tun.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Messumformer hat den Bereich 0 … 200 °C → 4 … 20 mA. Welcher Strom (in mA) gehört zu 50 °C?'
+    loesung: 8
+    einheit: mA
+    erklaerung: '$I = 4\,\mathrm{mA} + 16\,\mathrm{mA} \cdot 50/200 = 8\,\mathrm{mA}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Warum beginnt die Stromschleife bei 4 mA und nicht bei 0 mA?
+    optionen:
+      - text: Ein Drahtbruch (0 mA) lässt sich vom Messwert „Bereichsanfang“ unterscheiden, und der Messumformer kann sich aus den 4 mA versorgen.
+        richtig: true
+      - text: Weil kleinere Ströme nicht messbar sind.
+      - text: Weil 4 mA die Leitung vorwärmen.
+      - text: Das ist nur historisch so und hat keinen Vorteil.
+    erklaerung: 'Der „lebende Nullpunkt“ ermöglicht Fehlererkennung und Zweileitertechnik.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'An einer Bürde von 250 Ω misst die Steuerung 3,4 V. Wie groß ist der Schleifenstrom in mA?'
+    loesung: 13.6
+    einheit: mA
+    erklaerung: '$I = 3{,}4\,\mathrm{V}/250\,\Omega = 13{,}6\,\mathrm{mA}$ – das entspricht $(13{,}6 - 4)/16 = 60\,\%$ des Messbereichs.'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein Messumformer braucht mindestens 12 V. Bei 24 V Versorgung und 22 mA Maximalstrom: Wie groß darf der Gesamtwiderstand aus Bürde und Leitung höchstens sein (in Ω)?'
+    loesung: 545
+    einheit: Ω
+    erklaerung: '$R_\mathrm{max} = (24\,\mathrm{V} - 12\,\mathrm{V})/22\,\mathrm{mA} \approx 545\,\Omega$'

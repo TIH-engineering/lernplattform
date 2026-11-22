@@ -1,0 +1,81 @@
+---
+title: Schrittmotor
+description: Funktionsprinzip und Bauarten des Schrittmotors, Schrittwinkel, unipolare und bipolare Ansteuerung, Voll-, Halb- und Mikroschritt, Schrittmotortreiber mit Stromregelung, Drehmoment über der Schrittfrequenz, Schrittverlust, Resonanzen, Rampen.
+sidebar:
+  label: 5 · Schrittmotor
+  order: 5
+---
+
+## Prinzip
+
+Ein **Schrittmotor** dreht sich nicht kontinuierlich, sondern in festen **Schritten**. Jeder Stromimpuls in der richtigen
+Reihenfolge bewegt den Rotor um einen genau definierten Winkel weiter. Zählt man die Schritte, kennt man die Position –
+**ohne Positionssensor** (offener Steuerkreis). Deshalb sind Schrittmotoren in 3D-Druckern, Plottern, Kameraschwenks,
+Dosierpumpen und Ventilstellern so beliebt.
+
+Der übliche **Hybrid-Schrittmotor** hat einen gezahnten Rotor mit Permanentmagnet und einen gezahnten Stator mit zwei
+Wicklungen (Phasen A und B). Typischer **Schrittwinkel**: 1,8° → 200 Vollschritte pro Umdrehung.
+
+$$
+\text{Schritte pro Umdrehung} = \frac{360°}{\alpha} \qquad n = \frac{f_\mathrm{Schritt}}{\text{Schritte pro Umdrehung}}
+$$
+
+## Unipolar und bipolar
+
+- **Bipolar:** Zwei Wicklungen, deren Strom in **beide Richtungen** fließen muss – jede Wicklung braucht eine H-Brücke.
+  Die ganze Wicklung wird genutzt → mehr Moment. Heute Standard.
+- **Unipolar:** Wicklungen mit Mittelanzapfung; der Strom fließt immer nur in eine Richtung, abwechselnd durch eine Hälfte.
+  Einfache Ansteuerung mit vier Transistoren, aber weniger Moment.
+
+## Schrittarten
+
+Mit den Strömen in den Phasen A und B (+, −, 0) ergeben sich:
+
+| Schrittart | Ablauf (A, B) | Schritte/U (1,8°-Motor) | Eigenschaft |
+| --- | --- | --- | --- |
+| **Vollschritt** | (+,+) → (−,+) → (−,−) → (+,−) | 200 | beide Phasen bestromt, volles Moment |
+| **Halbschritt** | (+,+) → (0,+) → (−,+) → (−,0) → … | 400 | dazwischen je eine Phase allein, Moment schwankt |
+| **Mikroschritt** | sinus- und kosinusförmige Ströme in vielen Stufen | z. B. 1/16 → 3200 | sehr ruhig, feine Auflösung |
+
+Mikroschritt verbessert vor allem die **Laufruhe** (weniger Vibration und Geräusch). Die tatsächliche Positionsgenauigkeit
+zwischen den Vollschritten ist wegen der Lastabhängigkeit begrenzt.
+
+## Schrittmotortreiber mit Stromregelung
+
+Ein Schrittmotor wird **nicht** mit seiner Nennspannung betrieben, sondern mit **eingeprägtem Strom**:
+
+- Die Wicklung hat eine Induktivität. Bei hoher Schrittfrequenz bleibt zu wenig Zeit, bis der Strom angestiegen ist
+  ($\tau = L/R$) – das Moment sinkt.
+- Darum legt der Treiber eine **viel höhere Spannung** an (z. B. 24 V an einen Motor mit 3 V Nennspannung) und regelt den
+  Strom mit einem **Chopper** (PWM) auf den eingestellten Wert. So steigt der Strom schnell an, wird aber nicht zu groß.
+- Treiber-ICs enthalten zwei H-Brücken, Strommessung, Mikroschritt-Tabellen und eine einfache Schnittstelle: ein Eingang
+  **STEP** (jeder Impuls = ein Schritt), ein Eingang **DIR** (Richtung), dazu ein Einstellwert für den Strom.
+- Im Stillstand fließt weiter Strom – der Motor hält seine Position mit dem **Haltemoment**, wird aber auch warm. Viele
+  Treiber senken den Strom im Stillstand automatisch ab.
+
+## Drehmoment, Schrittverlust und Rampen
+
+Das verfügbare Moment **sinkt mit steigender Schrittfrequenz** (Induktivität, Gegenspannung). Datenblätter zeigen das als
+Kennlinie (Pull-out-Kennlinie).
+
+Wird das Lastmoment größer als das verfügbare Moment, kann der Rotor dem Feld nicht folgen: **Schrittverlust**. Weil die
+Steuerung das nicht bemerkt (kein Sensor), stimmt danach die Position nicht mehr – beim 3D-Drucker verschiebt sich die
+ganze Schicht. Gegenmaßnahmen:
+
+- **Rampen:** Nicht schlagartig mit hoher Frequenz starten, sondern beschleunigen und abbremsen. Aus dem Stand kann ein
+  Schrittmotor nur bis zu einer begrenzten **Start-Stopp-Frequenz** springen.
+- Ausreichende **Momentreserve** (Faustregel: Motor mit mindestens doppeltem benötigtem Moment wählen).
+- **Resonanzen** vermeiden: Bei bestimmten Frequenzen (oft um 100 … 200 Vollschritte/s) schwingt der Rotor stark – Mikroschritt
+  und mechanische Dämpfung helfen.
+- **Referenzfahrt** beim Einschalten: Die Steuerung fährt gegen einen Endschalter und setzt den Positionszähler auf null.
+- Bei hohen Anforderungen: Schrittmotor mit Encoder (geschlossener Kreis) oder ein Servoantrieb.
+
+## Mechanische Umsetzung
+
+Für eine Linearbewegung treibt der Motor eine **Gewindespindel** (Steigung $h$ pro Umdrehung) oder einen Zahnriemen:
+
+$$
+\Delta x = \frac{h}{\text{Schritte pro Umdrehung}} \qquad v = n \cdot h
+$$
+
+Beispiel: Spindel 8 mm Steigung, 1,8°-Motor mit 1/16-Mikroschritt → 3200 Schritte pro Umdrehung → 2,5 µm pro Mikroschritt.

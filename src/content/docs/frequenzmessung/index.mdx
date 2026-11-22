@@ -1,0 +1,36 @@
+---
+title: Komparator und Frequenzmessung
+description: "Vom Analogsignal zum Rechteck mit Komparator und Hysterese, Frequenzzähler mit Torzeit, Periodendauermessung, ±1-Zählfehler, Zeitbasisfehler, reziprokes Zählen, Drehzahl- und Tastgradmessung mit dem Mikrocontroller."
+sidebar:
+  label: Übersicht
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Frequenz und Zeit sind die Größen, die man am **genauesten** messen kann – ein einfacher Quarz ist auf 0,005 % genau,
+viel genauer als jeder A/D-Umsetzer. Darum wandelt man viele Messgrößen gerne in eine Frequenz oder Zeit um: Drehzahl,
+Durchfluss, Kapazität, sogar Temperatur. Dieses Thema zeigt, wie aus einem analogen Signal mit einem **Komparator** ein
+sauberes Rechteck wird und wie ein Zähler daraus Frequenz und Periodendauer bestimmt.
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- erklären, warum ein Komparator ohne **Hysterese** bei verrauschten Signalen mehrfach schaltet, und die Hysterese bemessen,
+- das **Torzeitverfahren** und die **Periodendauermessung** beschreiben und ihre Fehler (±1 Digit, Zeitbasis) berechnen,
+- für eine gegebene Frequenz das genauere Verfahren auswählen,
+- Drehzahl, Frequenz und Tastgrad mit einem Mikrocontroller-Timer (Input Capture) messen.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="Komparator, Hysterese, Torzeit, Periodendauer, Fehler, reziprokes Zählen, Mikrocontroller" href="/frequenzmessung/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="Zählfehler, Torzeit wählen, Grenzfrequenz, Drehzahl, Hysterese bemessen" href="/frequenzmessung/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Lüfterdrehzahl, Netzfrequenz, Durchflusssensor, kapazitiver Sensor, Störimpulse" href="/frequenzmessung/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen" href="/frequenzmessung/quiz/" />
+</CardGrid>
+
+:::tip[Voraussetzungen]
+[Operationsverstärker – Komparator und Schmitt-Trigger](/operationsverstaerker/theorie/), [Messfehler](/messfehler/),
+[Oszillatoren – Quarz](/oszillatoren/theorie/).
+:::

@@ -1,0 +1,145 @@
+---
+title: Rechenbeispiele – Leistungs- und Impedanzmessung
+description: Rechenbeispiele zu Leistung aus einem Oszilloskopbild, Wirkleistung aus Abtastwerten, Leistungsfaktor und Verzerrungsblindleistung, Auswertung einer LCR-Messung, Eigenresonanz und Impedanz eines realen Kondensators, Verlustleistung im ESR.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+
+## Leistung aus dem Oszilloskopbild
+
+<Stufe wert="grundlagen" />
+
+An einem Verbraucher am 230-V-Netz (50 Hz) wird mit einem Stromwandler ein Strom von $I = 2\,\mathrm{A}$ gemessen. Am
+Oszilloskop liegt der Nulldurchgang des Stroms $2{,}5\,\mathrm{ms}$ **nach** dem der Spannung.
+
+**Gegeben:** $U = 230\,\mathrm{V}$, $I = 2\,\mathrm{A}$, $f = 50\,\mathrm{Hz}$, $\Delta t = 2{,}5\,\mathrm{ms}$
+**Gesucht:** $\varphi$, $S$, $P$, $Q$; Art der Last
+
+<Loesung>
+
+1. $T = 1/f = 20\,\mathrm{ms}$ → $\varphi = 360° \cdot \dfrac{2{,}5\,\mathrm{ms}}{20\,\mathrm{ms}} = 45°$
+2. $S = U I = 230\,\mathrm{V} \cdot 2\,\mathrm{A} = 460\,\mathrm{VA}$
+3. $P = S \cos\varphi = 460\,\mathrm{VA} \cdot 0{,}707 \approx 325\,\mathrm{W}$
+4. $Q = S \sin\varphi \approx 325\,\mathrm{var}$
+5. Der Strom eilt nach → **induktive** Last (z. B. Motor).
+
+</Loesung>
+
+## Wirkleistung aus Abtastwerten
+
+<Stufe wert="standard" />
+
+Ein Leistungsmessgerät tastet eine Periode mit $N = 8$ Werten ab ($u$ in V, $i$ in A):
+
+| $k$ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| $u_k$ | 0 | 229,8 | 325,0 | 229,8 | 0 | −229,8 | −325,0 | −229,8 |
+| $i_k$ | −1,732 | −0,518 | 1,000 | 1,932 | 1,732 | 0,518 | −1,000 | −1,932 |
+
+Berechne die Wirkleistung und vergleiche mit $P = U I \cos\varphi$ ($\hat{u} = 325\,\mathrm{V}$, $\hat{\imath} = 2\,\mathrm{A}$,
+$\varphi = 60°$).
+
+<Loesung>
+
+Produkte $u_k i_k$ in W: 0 · −119,0 · 325,0 · 444,0 · 0 · −119,0 · 325,0 · 444,0 → Summe $1300\,\mathrm{W}$
+
+$$
+P = \frac{1}{8} \cdot 1300\,\mathrm{W} = 162{,}5\,\mathrm{W}
+$$
+
+Kontrolle: $U = 325\,\mathrm{V}/\sqrt{2} = 229{,}8\,\mathrm{V}$, $I = 2\,\mathrm{A}/\sqrt{2} = 1{,}414\,\mathrm{A}$ →
+$P = 229{,}8\,\mathrm{V} \cdot 1{,}414\,\mathrm{A} \cdot \cos 60° = 162{,}5\,\mathrm{W}$ ✓
+
+Bei reinem Sinus und ganzen Perioden reichen schon wenige Abtastwerte. Bei Strompulsen mit vielen Oberschwingungen braucht
+man deutlich mehr.
+
+</Loesung>
+
+## Leistungsfaktor eines Netzteils
+
+<Stufe wert="standard" />
+
+Ein Netzteil ohne Leistungsfaktorkorrektur nimmt am 230-V-Netz einen pulsförmigen Strom mit dem Effektivwert
+$I = 0{,}5\,\mathrm{A}$ auf. Ein Netzanalysator zeigt für die Grundschwingung $I_1 = 0{,}3\,\mathrm{A}$ und
+$\cos\varphi_1 = 0{,}95$.
+
+**Gesucht:** $P$, $Q$, $S$, $D$, $\lambda$
+
+<Loesung>
+
+1. $P = U I_1 \cos\varphi_1 = 230\,\mathrm{V} \cdot 0{,}3\,\mathrm{A} \cdot 0{,}95 \approx 65{,}6\,\mathrm{W}$
+2. $\sin\varphi_1 = \sqrt{1 - 0{,}95^2} = 0{,}312$ → $Q = 230\,\mathrm{V} \cdot 0{,}3\,\mathrm{A} \cdot 0{,}312 \approx 21{,}5\,\mathrm{var}$
+3. $S = U I = 230\,\mathrm{V} \cdot 0{,}5\,\mathrm{A} = 115\,\mathrm{VA}$
+4. $D = \sqrt{S^2 - P^2 - Q^2} = \sqrt{115^2 - 65{,}6^2 - 21{,}5^2}\,\mathrm{var} \approx 92\,\mathrm{var}$
+5. $\lambda = P/S = 65{,}6/115 \approx 0{,}57$ – obwohl $\cos\varphi_1 = 0{,}95$!
+
+Die Verzerrungsblindleistung ist hier der größte Anteil. Das Netz muss 0,5 A liefern, obwohl für die Wirkleistung 0,29 A
+($P/U$) reichen würden.
+
+</Loesung>
+
+## LCR-Messung auswerten
+
+<Stufe wert="standard" />
+
+Ein Kondensator wird mit einem LCR-Meter bei $f = 1\,\mathrm{kHz}$ gemessen: $Z = 159\,\Omega$, $\varphi = -89{,}5°$.
+
+**Gesucht:** Kapazität, Verlustfaktor $D$, ESR (Reihenersatzschaltbild)
+
+<Loesung>
+
+1. Fast reiner Blindwiderstand: $X_C \approx Z$ →
+   $C = \dfrac{1}{2\pi f X_C} = \dfrac{1}{2\pi \cdot 1\,\mathrm{kHz} \cdot 159\,\Omega} \approx 1{,}0\,\mathrm{\mu F}$
+2. Verlustwinkel $\delta = 90° - 89{,}5° = 0{,}5°$ → $D = \tan\delta \approx 0{,}0087$
+3. $R_\mathrm{ESR} = D \cdot X_C = 0{,}0087 \cdot 159\,\Omega \approx 1{,}4\,\Omega$
+
+Ein Verlustfaktor unter 1 % bei 1 kHz ist typisch für einen Keramikkondensator (X7R). Ein Folienkondensator hätte noch
+weniger, ein Elektrolytkondensator deutlich mehr Verluste.
+
+</Loesung>
+
+## Eigenresonanz eines Abblockkondensators
+
+<Stufe wert="vertiefung" />
+
+Ein Keramikkondensator $C = 100\,\mathrm{nF}$ hat $L_\mathrm{ESL} = 5\,\mathrm{nH}$ und $R_\mathrm{ESR} = 20\,\mathrm{m\Omega}$.
+
+1. Bei welcher Frequenz liegt die Eigenresonanz?
+2. Wie groß ist $Z$ bei 100 kHz, 1 MHz, bei $f_0$ und bei 50 MHz?
+3. Was bedeutet das für die Platzierung auf der Leiterplatte?
+
+<Loesung>
+
+1. $f_0 = \dfrac{1}{2\pi\sqrt{5\,\mathrm{nH} \cdot 100\,\mathrm{nF}}} \approx 7{,}1\,\mathrm{MHz}$
+2. $\underline{Z} = R_\mathrm{ESR} + \mathrm{j}\left(\omega L - \dfrac{1}{\omega C}\right)$:
+
+| $f$ | $\omega L$ | $1/(\omega C)$ | $Z$ |
+| --- | --- | --- | --- |
+| 100 kHz | 3,1 mΩ | 15,9 Ω | ≈ 15,9 Ω (kapazitiv) |
+| 1 MHz | 31 mΩ | 1,59 Ω | ≈ 1,56 Ω (kapazitiv) |
+| 7,1 MHz | 0,22 Ω | 0,22 Ω | 20 mΩ (nur ESR) |
+| 50 MHz | 1,57 Ω | 0,032 Ω | ≈ 1,54 Ω (**induktiv**) |
+
+3. Jeder Millimeter Leiterbahn bringt etwa 1 nH zusätzlich. Mit langen Zuleitungen sinkt die Eigenresonanz, und der
+   Kondensator wirkt bei hohen Frequenzen kaum noch. Deshalb: direkt an die Versorgungspins des ICs, mit kurzer Verbindung
+   zur Massefläche (Durchkontaktierung direkt am Pad).
+
+</Loesung>
+
+## Verlustleistung im ESR
+
+<Stufe wert="grundlagen" />
+
+Durch den Ausgangselko eines Schaltreglers fließt ein Rippelstrom von $I = 1{,}2\,\mathrm{A}$ (Effektivwert). Der ESR beträgt
+neu $50\,\mathrm{m\Omega}$, nach Jahren im warmen Gehäuse $200\,\mathrm{m\Omega}$. Wie groß ist die Verlustleistung jeweils?
+
+<Loesung>
+
+- neu: $P = I^2 R = (1{,}2\,\mathrm{A})^2 \cdot 0{,}05\,\Omega = 72\,\mathrm{mW}$
+- gealtert: $P = (1{,}2\,\mathrm{A})^2 \cdot 0{,}2\,\Omega \approx 0{,}29\,\mathrm{W}$
+
+Der gealterte Elko erwärmt sich viermal so stark – und altert dadurch noch schneller. Außerdem steigt die Rippelspannung
+($\Delta U \approx \Delta I \cdot R_\mathrm{ESR}$).
+
+</Loesung>

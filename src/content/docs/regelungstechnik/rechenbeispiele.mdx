@@ -1,0 +1,151 @@
+---
+title: Rechenbeispiele – Regelungstechnik
+description: Rechenbeispiele zur bleibenden Regelabweichung beim P-Regler, thermischer Strecke aus einem Sprungversuch, Reglerentwurf nach dem Betragsoptimum mit Phasenreserve, Einstellregeln nach Ziegler-Nichols (Wendetangente und Schwingversuch), Phasenverlust durch Totzeit und Abtastung, Koeffizienten eines digitalen PI-Reglers.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+
+## Bleibende Regelabweichung beim P-Regler
+
+<Stufe wert="grundlagen" />
+
+Eine Strecke mit Ausgleich hat $K_\mathrm{S} = 2$. Sie wird mit einem P-Regler $K_\mathrm{P} = 2$ geregelt, der Sollwert springt
+von 0 auf 1.
+
+1. Welcher Endwert stellt sich ein, wie groß ist die bleibende Regelabweichung?
+2. Wie groß muss $K_\mathrm{P}$ mindestens sein, damit die Abweichung höchstens 5 % beträgt?
+
+<Loesung>
+
+1. $K_0 = K_\mathrm{P} K_\mathrm{S} = 4$ → $y_\infty = \dfrac{4}{5} = 0{,}8$ · $e_\infty = \dfrac{1}{1 + 4} = 0{,}2$ (20 %)
+2. $\dfrac{1}{1 + K_0} \leq 0{,}05$ → $K_0 \geq 19$ → $K_\mathrm{P} \geq 9{,}5$. Ob der Kreis damit noch stabil und gut gedämpft
+   ist, hängt von den Zeitkonstanten ab – oft nicht. Besser: PI-Regler.
+
+</Loesung>
+
+## Thermische Strecke aus dem Sprungversuch
+
+<Stufe wert="standard" />
+
+Ein Heizblock hat 20 °C. Zum Zeitpunkt 0 wird eine Heizleistung von 40 W eingeschaltet. Die Temperatur steigt ohne
+Überschwingen und erreicht schließlich 120 °C; 83 °C werden nach 150 s erreicht.
+
+**Gesucht:** Streckenmodell (Verhalten, $K_\mathrm{S}$, $T$), Wärmewiderstand und Wärmekapazität
+
+<Loesung>
+
+1. Kein Wendepunkt, sofortiger Anstieg → **PT1**.
+2. $K_\mathrm{S} = \dfrac{\Delta\vartheta}{\Delta P} = \dfrac{100\,\mathrm{K}}{40\,\mathrm{W}} = 2{,}5\,\mathrm{K/W}$ (= $R_\mathrm{th}$)
+3. 63 % von 100 K = 63 K → 83 °C → $T = 150\,\mathrm{s}$
+4. $C_\mathrm{th} = T/R_\mathrm{th} = 150\,\mathrm{s}/2{,}5\,\mathrm{K/W} = 60\,\mathrm{J/K}$
+
+</Loesung>
+
+## PI-Regler nach dem Betragsoptimum
+
+<Stufe wert="vertiefung" />
+
+Eine Strecke besteht aus zwei PT1-Gliedern: $K_\mathrm{S} = 2$, $T_1 = 2\,\mathrm{s}$, $T_2 = 0{,}5\,\mathrm{s}$.
+
+1. Bemesse einen PI-Regler nach dem Betragsoptimum.
+2. Berechne Durchtrittsfrequenz und Phasenreserve des offenen Kreises.
+
+<Loesung>
+
+1. $T_\mathrm{N} = T_1 = 2\,\mathrm{s}$ · $K_\mathrm{P} = \dfrac{T_1}{2 K_\mathrm{S} T_2} = \dfrac{2\,\mathrm{s}}{2 \cdot 2 \cdot 0{,}5\,\mathrm{s}} = 1$
+2. Offener Kreis nach der Kompensation:
+   $G_0 = \dfrac{K_\mathrm{P} K_\mathrm{S}}{T_\mathrm{N} s (1 + T_2 s)} = \dfrac{1}{s\,(1 + 0{,}5\,\mathrm{s} \cdot s)}$ (mit $s$ in 1/s)
+   Betrag 1: $\omega \sqrt{1 + (0{,}5\,\omega)^2} = 1$ → $0{,}25\,\omega^4 + \omega^2 - 1 = 0$ → $\omega^2 = 0{,}828$ →
+   $\omega_\mathrm{D} \approx 0{,}91\,\mathrm{s^{-1}}$
+   Phase: $-90° - \arctan(0{,}5 \cdot 0{,}91) \approx -114{,}5°$ → $\varphi_\mathrm{R} \approx 65{,}5°$
+
+Eine Simulation des geschlossenen Kreises zeigt 4,3 % Überschwingen und eine Ausregelzeit (±2 %) von etwa 4,2 s.
+
+</Loesung>
+
+## Einstellung nach der Wendetangente
+
+<Stufe wert="standard" />
+
+Am Heizkreis eines Trockenofens wird die Stellgröße von 40 % auf 60 % erhöht. Die Temperatur steigt von 80 °C auf 140 °C. Aus
+der Wendetangente liest man $T_\mathrm{u} = 12\,\mathrm{s}$ und $T_\mathrm{g} = 90\,\mathrm{s}$ ab.
+
+1. Wie gut ist die Strecke regelbar?
+2. Berechne einen PI-Regler nach Ziegler und Nichols.
+
+<Loesung>
+
+1. $T_\mathrm{g}/T_\mathrm{u} = 7{,}5$ → noch gut regelbar.
+2. $K_\mathrm{S} = \dfrac{60\,\mathrm{K}}{20\,\%} = 3\,\mathrm{K}/\%$ ·
+   $K_\mathrm{P} = 0{,}9 \cdot \dfrac{T_\mathrm{g}}{K_\mathrm{S} T_\mathrm{u}} = 0{,}9 \cdot \dfrac{90}{3 \cdot 12}\,\%/\mathrm{K} = 2{,}25\,\%/\mathrm{K}$ ·
+   $T_\mathrm{N} = 3{,}33 \cdot 12\,\mathrm{s} = 40\,\mathrm{s}$
+
+Bei 1 K Abweichung erhöht der P-Anteil die Heizleistung also um 2,25 Prozentpunkte. Die Einheit von $K_\mathrm{P}$ ergibt sich
+aus Stellgröße durch Regelgröße.
+
+</Loesung>
+
+## Schwingversuch
+
+<Stufe wert="standard" />
+
+Eine Drehzahlregelung schwingt mit einem reinen P-Regler bei $K_\mathrm{P} = 8$ dauerhaft mit einer Periodendauer von 0,4 s.
+Berechne die Parameter eines PID-Reglers nach Ziegler und Nichols.
+
+<Loesung>
+
+$K_\mathrm{P} = 0{,}6 \cdot 8 = 4{,}8$ · $T_\mathrm{N} = 0{,}5 \cdot 0{,}4\,\mathrm{s} = 0{,}2\,\mathrm{s}$ · $T_\mathrm{V} = 0{,}12 \cdot 0{,}4\,\mathrm{s} = 48\,\mathrm{ms}$
+
+</Loesung>
+
+## Totzeit kostet Phasenreserve
+
+<Stufe wert="vertiefung" />
+
+Im Regelkreis aus dem Beispiel zum Betragsoptimum ($\omega_\mathrm{D} = 0{,}91\,\mathrm{s^{-1}}$, $\varphi_\mathrm{R} = 65{,}5°$) kommt eine
+Totzeit von 0,5 s hinzu (z. B. eine Transportstrecke). Wie groß ist die Phasenreserve jetzt?
+
+<Loesung>
+
+Die Totzeit ändert den Betrag nicht, $\omega_\mathrm{D}$ bleibt. Zusätzliche Phase:
+$\omega_\mathrm{D} T_\mathrm{t} = 0{,}91 \cdot 0{,}5 = 0{,}455\,\mathrm{rad} \approx 26°$ → $\varphi_\mathrm{R} \approx 65{,}5° - 26° \approx 39{,}5°$
+
+Der Kreis ist noch stabil, schwingt aber deutlich über – eine Simulation ergibt rund 33 % statt 4 %. Um wieder 60° zu erreichen, muss $K_\mathrm{P}$
+verkleinert werden – der Kreis wird langsamer.
+
+</Loesung>
+
+## Abtastzeit eines digitalen Reglers
+
+<Stufe wert="standard" />
+
+Der Regler aus dem Beispiel zum Betragsoptimum soll in einem Mikrocontroller laufen.
+
+1. Welche Abtastzeit ist nach der Faustregel $\omega_\mathrm{D} T_\mathrm{s} \leq 0{,}1$ sinnvoll?
+2. Wie groß ist der Phasenverlust bei $T_\mathrm{s} = 0{,}5\,\mathrm{s}$?
+
+<Loesung>
+
+1. $T_\mathrm{s} \leq 0{,}1/0{,}91\,\mathrm{s^{-1}} \approx 0{,}11\,\mathrm{s}$ → z. B. 0,1 s (oder kleiner).
+2. Ersatztotzeit $T_\mathrm{s}/2 = 0{,}25\,\mathrm{s}$ → $0{,}91 \cdot 0{,}25\,\mathrm{rad} \approx 13°$.
+
+Eine Simulation bestätigt den Trend: Das Überschwingen steigt von 4,3 % (analog) auf etwa 5 % bei $T_\mathrm{s} = 0{,}05\,\mathrm{s}$,
+7 % bei 0,2 s und 15 % bei 0,5 s.
+
+</Loesung>
+
+## Koeffizienten des digitalen PI-Reglers
+
+<Stufe wert="grundlagen" />
+
+Ein PI-Regler mit $K_\mathrm{P} = 2$ und $T_\mathrm{N} = 0{,}5\,\mathrm{s}$ wird mit $T_\mathrm{s} = 10\,\mathrm{ms}$ abgetastet
+(Rückwärts-Euler). Um wie viel wächst der I-Anteil pro Takt bei einer konstanten Regelabweichung von 0,1? Nach welcher Zeit ist
+der I-Anteil so groß wie der P-Anteil?
+
+<Loesung>
+
+Faktor $K_\mathrm{P} T_\mathrm{s}/T_\mathrm{N} = 2 \cdot 0{,}01/0{,}5 = 0{,}04$ → pro Takt $0{,}04 \cdot 0{,}1 = 0{,}004$.
+P-Anteil: $2 \cdot 0{,}1 = 0{,}2$ → nach $0{,}2/0{,}004 = 50$ Takten $= 0{,}5\,\mathrm{s}$ – genau die Nachstellzeit $T_\mathrm{N}$.
+
+</Loesung>

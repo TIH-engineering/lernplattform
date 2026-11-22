@@ -1,0 +1,98 @@
+titel: Komparator und Frequenzmessung
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Warum schaltet ein Komparator ohne Hysterese bei einem langsamen, verrauschten Signal mehrfach hin und her?
+    optionen:
+      - text: Das Rauschen kreuzt die Schaltschwelle mehrmals, während das Signal langsam durch sie hindurchläuft.
+        richtig: true
+      - text: Der Komparator ist zu langsam.
+      - text: Die Versorgungsspannung ist zu niedrig.
+      - text: Das passiert nur bei Rechtecksignalen.
+    erklaerung: 'In der Nähe der Schwelle entscheidet das Rauschen, auf welcher Seite das Signal gerade liegt. Mit Hysterese muss das Signal nach dem Umschalten erst um $U_\mathrm{H}$ zurücklaufen.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie groß sollte die Hysterese gewählt werden?
+    optionen:
+      - text: größer als die Rauschspannung (Spitze-Spitze), aber deutlich kleiner als der Signalhub
+        richtig: true
+      - text: genau so groß wie die Signalamplitude
+      - text: so klein wie möglich, am besten null
+      - text: größer als der Signalhub
+    erklaerung: 'Ist sie kleiner als das Rauschen, schaltet der Komparator weiter mehrfach. Ist sie größer als der Signalhub, schaltet er gar nicht mehr.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Ein Zähler zählt während einer Torzeit von 0,1 s genau 2500 Impulse. Wie groß ist die Frequenz in Hz?'
+    loesung: 25000
+    einheit: Hz
+    erklaerung: '$f = N/T_\mathrm{Tor} = 2500/0{,}1\,\mathrm{s} = 25\,000\,\mathrm{Hz}$'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Wie groß ist der relative ±1-Zählfehler in %, wenn eine Frequenz von 200 Hz mit 1 s Torzeit gemessen wird?'
+    loesung: 0.5
+    einheit: '%'
+    erklaerung: '$N = 200$ → $F_\mathrm{r} = \pm 1/200 = \pm 0{,}5\,\%$'
+
+  - typ: mc
+    stufe: standard
+    frage: Welches Verfahren ist für niedrige Frequenzen (z. B. 10 Hz) genauer?
+    optionen:
+      - text: Periodendauermessung mit schnellem Referenztakt
+        richtig: true
+      - text: Torzeitverfahren mit 1 s Torzeit
+      - text: Beide sind immer gleich genau.
+      - text: Keines – niedrige Frequenzen kann man nicht messen.
+    erklaerung: 'Bei der Periodendauermessung werden viele Referenzimpulse pro Periode gezählt ($N = f_\mathrm{ref}/f_\mathrm{x}$). Beim Torzeitverfahren wären es nur 10 Impulse – ±10 %.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Timer mit $f_\mathrm{ref} = 1\,\mathrm{MHz}$ zählt zwischen zwei Flanken 2500 Takte. Wie groß ist die Frequenz des Signals in Hz?'
+    loesung: 400
+    einheit: Hz
+    erklaerung: '$T = 2500/1\,\mathrm{MHz} = 2{,}5\,\mathrm{ms}$ → $f = 400\,\mathrm{Hz}$'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein Zähler hat $f_\mathrm{ref} = 100\,\mathrm{MHz}$ und $T_\mathrm{Tor} = 1\,\mathrm{s}$. Bei welcher Frequenz (in kHz) sind Torzeitverfahren und Periodendauermessung gleich genau?'
+    loesung: 10
+    einheit: kHz
+    erklaerung: '$f_\mathrm{g} = \sqrt{f_\mathrm{ref}/T_\mathrm{Tor}} = \sqrt{10^8}\,\mathrm{Hz} = 10\,\mathrm{kHz}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Ein Zähler zeigt 9 Stellen an, sein Quarz hat aber eine Toleranz von ±50 ppm. Was folgt daraus?
+    optionen:
+      - text: Ab etwa der 5. Stelle sind die angezeigten Ziffern nicht mehr gesichert.
+        richtig: true
+      - text: Alle 9 Stellen sind richtig, der Quarz spielt keine Rolle.
+      - text: Mit längerer Torzeit wird der Quarzfehler kleiner.
+      - text: Die Toleranz wirkt nur bei niedrigen Frequenzen.
+    erklaerung: '±50 ppm sind $5 \cdot 10^{-5}$ – relativ zum Messwert. Eine längere Torzeit verringert nur den ±1-Zählfehler, nicht den Fehler der Zeitbasis.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Hall-Sensor liefert 4 Impulse pro Umdrehung, die Impulsperiode beträgt 5 ms. Wie groß ist die Drehzahl in 1/min?'
+    loesung: 3000
+    einheit: 1/min
+    erklaerung: '$T_\mathrm{U} = 4 \cdot 5\,\mathrm{ms} = 20\,\mathrm{ms}$ → $n = 50\,\mathrm{s^{-1}} = 3000\,\mathrm{min^{-1}}$'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Was braucht ein Open-Collector-Ausgang (z. B. am Tacho-Pin eines Lüfters), damit man ein Signal messen kann?
+    optionen:
+      - text: einen Pull-up-Widerstand zur gewünschten High-Spannung
+        richtig: true
+      - text: einen Kondensator in Reihe
+      - text: eine Diode gegen Masse
+      - text: nichts – er liefert selbst High und Low
+    erklaerung: 'Der Ausgangstransistor kann nur nach Masse ziehen. Der Pull-up legt den High-Pegel fest – so passt der Ausgang an 3,3-V- oder 5-V-Logik.'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein Komparator mit 0/5-V-Ausgang hat eine Mitkopplung mit $\beta = R_2/(R_1 + R_2) = 0{,}03$. Wie groß ist die Hysterese in mV?'
+    loesung: 150
+    einheit: mV
+    erklaerung: '$U_\mathrm{H} = \beta \cdot \Delta U_\mathrm{a} = 0{,}03 \cdot 5\,\mathrm{V} = 150\,\mathrm{mV}$'

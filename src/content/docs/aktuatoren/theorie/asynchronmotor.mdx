@@ -1,0 +1,87 @@
+---
+title: Asynchronmotor
+description: Aufbau des Drehstrom-Asynchronmotors mit Käfigläufer, Drehfeld und Synchrondrehzahl, Schlupf, Drehmoment-Drehzahl-Kennlinie mit Anzugs- und Kippmoment, Typenschild, Stern- und Dreieckschaltung, Anlaufverfahren, Betrieb am Frequenzumrichter mit U/f-Kennlinie.
+sidebar:
+  label: 4 · Asynchronmotor
+  order: 4
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Kennlinie from '../../../../assets/mtrs/asm-kennlinie.svg';
+
+Der **Drehstrom-Asynchronmotor** mit Käfigläufer ist der häufigste Motor der Industrie: Pumpen, Lüfter, Förderbänder,
+Werkzeugmaschinen. Er ist einfach, robust, billig und praktisch wartungsfrei.
+
+## Aufbau und Funktion
+
+- Der **Stator** trägt eine Drehstromwicklung. Am Drehstromnetz erzeugt sie ein **Drehfeld** (siehe
+  [Drehstrom – Theorie](/drehstrom/theorie/)), das mit der **Synchrondrehzahl** umläuft:
+  $n_\mathrm{s} = f/p$ ($p$: Polpaarzahl).
+- Der **Rotor** (Käfigläufer) besteht aus Aluminium- oder Kupferstäben, die an beiden Enden kurzgeschlossen sind – ohne
+  Anschluss nach außen.
+- Das Drehfeld schneidet die Rotorstäbe und **induziert** dort Spannungen. Die Ströme im Käfig erzeugen zusammen mit dem
+  Drehfeld ein Drehmoment – der Rotor läuft dem Feld hinterher.
+
+Würde der Rotor genau synchron laufen, gäbe es keine Relativbewegung, keine Induktion und kein Moment. Er läuft deshalb immer
+etwas **langsamer** – daher der Name „asynchron“.
+
+## Schlupf
+
+$$
+s = \frac{n_\mathrm{s} - n}{n_\mathrm{s}}
+$$
+
+Im Nennbetrieb beträgt der Schlupf wenige Prozent (große Motoren 1 … 3 %, kleine bis etwa 8 %). Ein vierpoliger Motor
+($p = 2$, $n_\mathrm{s} = 1500\,\mathrm{min^{-1}}$) läuft z. B. mit 1440 min⁻¹ ($s = 4\,\%$). Mit steigender Last wächst der
+Schlupf etwas – die Drehzahl ist also fast, aber nicht ganz konstant.
+
+| Polpaare $p$ | 1 | 2 | 3 | 4 |
+| --- | --- | --- | --- | --- |
+| $n_\mathrm{s}$ bei 50 Hz | 3000 min⁻¹ | 1500 min⁻¹ | 1000 min⁻¹ | 750 min⁻¹ |
+
+## Drehmoment-Drehzahl-Kennlinie
+
+<Abbildung bild={Kennlinie} unterschrift="Drehmoment-Drehzahl-Kennlinie eines Asynchronmotors mit Lastkennlinie" />
+
+- **Anzugsmoment** $M_\mathrm{A}$: Moment im Stillstand – muss größer sein als das Lastmoment, sonst läuft der Motor nicht an.
+- **Kippmoment** $M_\mathrm{K}$: größtes Moment (typisch das 2- bis 3-Fache des Nennmoments). Wird es überschritten, „kippt“
+  der Motor: Die Drehzahl bricht ein, der Strom steigt stark.
+- **Arbeitsbereich**: der steile, fast lineare Teil zwischen Kippmoment und Synchrondrehzahl. Der Betriebspunkt liegt dort,
+  wo sich Motor- und **Lastkennlinie** schneiden.
+- Der **Anlaufstrom** beträgt beim direkten Einschalten das 5- bis 8-Fache des Nennstroms.
+
+## Das Typenschild
+
+Ein Typenschild enthält z. B.: 4 kW · 400/690 V Δ/Y · 8,1/4,7 A · 1440 min⁻¹ · 50 Hz · cos φ 0,82 · IE3 · IP55.
+
+- **$P_\mathrm{N}$ ist die mechanische Abgabeleistung** an der Welle, nicht die aufgenommene elektrische Leistung.
+- Die aufgenommene Leistung ist $P_\mathrm{zu} = P_\mathrm{N}/\eta$, der Strom $I = \dfrac{P_\mathrm{N}}{\sqrt{3}\,U\,\eta\cos\varphi}$.
+- **Nennmoment:** $M_\mathrm{N} = \dfrac{P_\mathrm{N}}{2\pi n_\mathrm{N}}$ (mit $n$ in s⁻¹).
+- **400/690 V Δ/Y** bedeutet: Jeder Wicklungsstrang verträgt 400 V. Am 400-V-Netz wird der Motor daher im **Dreieck**
+  geschaltet (Strangspannung = 400 V), an einem 690-V-Netz im Stern. Ein Motor mit „230/400 V Δ/Y“ gehört am 400-V-Netz
+  in den **Stern**.
+- IE3: Effizienzklasse, IP55: Schutzart.
+
+## Anlauf und Drehzahlsteuerung
+
+- **Direktanlauf:** einfach, aber hoher Anlaufstrom – bei kleinen Motoren üblich.
+- **Stern-Dreieck-Anlauf:** Anlauf im Stern (Strom und Moment auf ein Drittel), dann Umschalten auf Dreieck. Nur für Motoren,
+  die im Betrieb im Dreieck laufen.
+- **Sanftanlauf:** Thyristorsteller verringern die Spannung beim Anlauf.
+- **Frequenzumrichter:** Gleichrichter, Zwischenkreis und dreiphasiger Wechselrichter erzeugen Drehstrom mit **variabler
+  Frequenz und Spannung**. Damit lässt sich die Drehzahl stufenlos verstellen, der Anlauf ist sanft, und der Motor kann
+  gebremst werden. Heute Standard bei Pumpen und Lüftern, weil sich damit viel Energie sparen lässt.
+
+### Die U/f-Kennlinie
+
+Der magnetische Fluss im Motor ist proportional zu $U/f$. Damit der Motor bei jeder Drehzahl sein volles Moment entwickeln
+kann, erhöht der Umrichter die Spannung **proportional zur Frequenz**: bei 25 Hz die halbe Spannung, bei 50 Hz die volle. Über
+50 Hz kann die Spannung nicht weiter steigen – der Fluss und damit das verfügbare Moment sinken
+(**Feldschwächbereich**). Bei sehr kleinen Frequenzen hebt man die Spannung etwas an (Boost), weil der Spannungsabfall am
+Wicklungswiderstand dann ins Gewicht fällt.
+
+:::caution[Eigenkühlung bei kleiner Drehzahl]
+Die meisten Motoren kühlen sich mit einem Lüfterrad auf der eigenen Welle. Läuft der Motor am Umrichter lange langsam mit
+vollem Moment, reicht die Kühlung nicht mehr – dann braucht man einen Fremdlüfter oder eine Temperaturüberwachung
+(Kaltleiter in der Wicklung, siehe [Sensoren](/sensoren/theorie/)).
+:::

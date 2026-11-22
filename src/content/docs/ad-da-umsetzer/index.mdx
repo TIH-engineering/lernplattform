@@ -1,0 +1,37 @@
+---
+title: A/D- und D/A-Umsetzer
+description: "Vertiefung: D/A-Umsetzer mit R-2R-Netzwerk und PWM, A/D-Verfahren Flash, SAR, Dual-Slope und Sigma-Delta, statische Fehler (Offset, Verstärkung, DNL, INL), dynamische Kennwerte (SNR, ENOB), Überabtastung, Abtast-Halte-Glied und Jitter."
+sidebar:
+  label: Übersicht
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Die Grundlagen – Auflösung, Quantisierungsfehler, sukzessive Approximation und Abtasttheorem – stehen bei der
+[Digitalen Messtechnik](/digitale-messtechnik/theorie/). Hier geht es weiter: Wie ist ein D/A-Umsetzer aufgebaut? Warum hat
+ein Multimeter einen langsamen, aber sehr genauen Umsetzer, ein Oszilloskop einen schnellen und eine Waage einen mit 24 Bit?
+Und warum liefert ein „12-Bit“-Umsetzer in der Praxis oft nur 10 brauchbare Bits?
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- den Aufbau eines **R-2R-D/A-Umsetzers** und eines **PWM-D/A-Umsetzers** erklären und berechnen,
+- die A/D-Verfahren **Flash**, **SAR**, **Dual-Slope** und **Sigma-Delta** vergleichen und für eine Anwendung auswählen,
+- statische Fehler (**Offset, Verstärkungsfehler, DNL, INL**) an einer Kennlinie erkennen,
+- dynamische Kennwerte (**SNR, ENOB**) berechnen und deuten,
+- erklären, wie **Überabtastung**, Abtast-Halte-Glied und Taktjitter die Messung beeinflussen.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="R-2R, PWM, Flash, SAR, Dual-Slope, Sigma-Delta, Fehler, SNR, ENOB, Überabtastung, Jitter" href="/ad-da-umsetzer/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="R-2R-Ausgang, PWM-Rippel, Dual-Slope, SNR und ENOB, Überabtastung, Jitter" href="/ad-da-umsetzer/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Umsetzer auswählen, ADC-Eingang treiben, Messwert rauscht, Sinus aus dem Mikrocontroller" href="/ad-da-umsetzer/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen" href="/ad-da-umsetzer/quiz/" />
+</CardGrid>
+
+:::tip[Voraussetzungen]
+[Digitale Messtechnik](/digitale-messtechnik/), [Operationsverstärker](/operationsverstaerker/) (Integrierer, Komparator),
+[Filter](/filter/) (Tiefpass).
+:::

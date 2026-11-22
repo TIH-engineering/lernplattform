@@ -1,0 +1,112 @@
+titel: Leistungs- und Impedanzmessung
+fragen:
+  - typ: mc
+    stufe: grundlagen
+    frage: Wie ist die Wirkleistung allgemein (für beliebige Kurvenformen) definiert?
+    optionen:
+      - text: als Mittelwert der Augenblicksleistung $p(t) = u(t) \cdot i(t)$ über ganze Perioden
+        richtig: true
+      - text: als Produkt der Spitzenwerte $\hat{u} \cdot \hat{\imath}$
+      - text: als Produkt der Effektivwerte $U \cdot I$
+      - text: als Produkt der Gleichrichtwerte
+    erklaerung: '$P = \frac{1}{T}\int_0^T u\,i\,\mathrm{d}t$ gilt immer. $U \cdot I$ ist die Scheinleistung; nur bei rein ohmscher Last sind beide gleich.'
+
+  - typ: zahl
+    stufe: grundlagen
+    frage: 'Bei 50 Hz liegt der Nulldurchgang des Stroms 1,5 ms hinter dem der Spannung. Wie groß ist die Phasenverschiebung in Grad?'
+    loesung: 27
+    einheit: '°'
+    erklaerung: '$\varphi = 360° \cdot \Delta t / T = 360° \cdot 1{,}5\,\mathrm{ms}/20\,\mathrm{ms} = 27°$ (induktiv, weil der Strom nacheilt).'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Mit welcher Frequenz schwingt die Augenblicksleistung bei sinusförmiger Spannung und sinusförmigem Strom (50 Hz)?
+    optionen:
+      - text: 100 Hz
+        richtig: true
+      - text: 50 Hz
+      - text: 25 Hz
+      - text: Sie ist konstant.
+    erklaerung: 'Das Produkt zweier Sinusfunktionen gleicher Frequenz enthält einen Gleichanteil ($P$) und einen Anteil mit doppelter Frequenz.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein Gerät nimmt am 230-V-Netz $I = 0{,}8\,\mathrm{A}$ auf, die Wirkleistung beträgt 92 W. Wie groß ist der Leistungsfaktor $\lambda$?'
+    loesung: 0.5
+    erklaerung: '$S = 230\,\mathrm{V} \cdot 0{,}8\,\mathrm{A} = 184\,\mathrm{VA}$ → $\lambda = P/S = 92/184 = 0{,}5$'
+
+  - typ: mc
+    stufe: standard
+    frage: Ein Netzteil hat $\cos\varphi_1 = 1$, aber $\lambda = 0{,}6$. Woran liegt das?
+    optionen:
+      - text: Der Strom ist nicht sinusförmig – die Oberschwingungen verursachen Verzerrungsblindleistung.
+        richtig: true
+      - text: Das Netzteil ist stark induktiv.
+      - text: Das Messgerät ist defekt, $\lambda$ und $\cos\varphi_1$ müssen gleich sein.
+      - text: Die Netzspannung ist zu niedrig.
+    erklaerung: '$\lambda = \frac{I_1}{I}\cos\varphi_1$. Pulsförmige Ströme (Gleichrichter mit Ladekondensator) haben einen viel größeren Effektivwert als ihre Grundschwingung.'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Gegeben sind $S = 200\,\mathrm{VA}$, $P = 120\,\mathrm{W}$ und $Q = 0\,\mathrm{var}$ (Grundschwingung in Phase). Wie groß ist die Verzerrungsblindleistung $D$ in var?'
+    loesung: 160
+    einheit: var
+    erklaerung: '$D = \sqrt{S^2 - P^2 - Q^2} = \sqrt{200^2 - 120^2}\,\mathrm{var} = 160\,\mathrm{var}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum müssen Spannung und Strom bei der digitalen Leistungsmessung gleichzeitig abgetastet werden?
+    optionen:
+      - text: Ein Zeitversatz wirkt wie eine zusätzliche Phasenverschiebung und verfälscht die Wirkleistung.
+        richtig: true
+      - text: Sonst stimmt der Effektivwert der Spannung nicht.
+      - text: Weil das Abtasttheorem es verlangt.
+      - text: Damit der A/D-Umsetzer weniger Strom braucht.
+    erklaerung: 'Die Wirkleistung hängt vom Produkt $u_k \cdot i_k$ zum gleichen Zeitpunkt ab. Besonders bei kleinem $\cos\varphi$ führt schon ein kleiner Zeitversatz zu großen Fehlern.'
+
+  - typ: mc
+    stufe: grundlagen
+    frage: Welches Verfahren eignet sich, um einen Gleichstrom galvanisch getrennt zu messen?
+    optionen:
+      - text: Stromzange mit Hall-Sensor
+        richtig: true
+      - text: Stromwandler
+      - text: Rogowski-Spule
+      - text: Shunt mit normalem Operationsverstärker
+    erklaerung: 'Stromwandler und Rogowski-Spule brauchen ein sich änderndes Magnetfeld. Ein Shunt ist nicht galvanisch getrennt. Der Hall-Sensor misst auch das Gleichfeld.'
+
+  - typ: zahl
+    stufe: standard
+    frage: 'Ein LCR-Meter misst an einem Kondensator $X_C = 50\,\Omega$ und $D = \tan\delta = 0{,}02$. Wie groß ist der ESR in Ω?'
+    loesung: 1
+    einheit: Ω
+    erklaerung: '$R_\mathrm{ESR} = D \cdot X_C = 0{,}02 \cdot 50\,\Omega = 1\,\Omega$'
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Ein Kondensator mit $C = 1\,\mathrm{\mu F}$ hat eine ESL von $2\,\mathrm{nH}$. Bei welcher Frequenz (in MHz) liegt seine Eigenresonanz?'
+    loesung: 3.56
+    einheit: MHz
+    erklaerung: '$f_0 = 1/(2\pi\sqrt{2\,\mathrm{nH} \cdot 1\,\mathrm{\mu F}}) \approx 3{,}56\,\mathrm{MHz}$'
+
+  - typ: mc
+    stufe: standard
+    frage: Wie verhält sich ein Kondensator oberhalb seiner Eigenresonanzfrequenz?
+    optionen:
+      - text: Wie eine Spule – die Impedanz steigt mit der Frequenz.
+        richtig: true
+      - text: Wie ein idealer Kondensator – die Impedanz sinkt weiter.
+      - text: Wie ein Leerlauf.
+      - text: Wie ein Kurzschluss mit 0 Ω.
+    erklaerung: 'Über $f_0$ überwiegt der Blindwiderstand der ESL ($\omega L$), die Impedanz steigt proportional zur Frequenz.'
+
+  - typ: mc
+    stufe: standard
+    frage: Warum misst man kleine Widerstände und Impedanzen in Vierleitertechnik?
+    optionen:
+      - text: Leitungs- und Übergangswiderstände werden nicht mitgemessen, weil die Spannung über stromlose Leitungen abgegriffen wird.
+        richtig: true
+      - text: Damit der Messstrom viermal so groß wird.
+      - text: Weil das Messgerät sonst überlastet wird.
+      - text: Um die Phase messen zu können.
+    erklaerung: 'Zwei Leitungen führen den Strom, zwei andere greifen die Spannung direkt am Prüfling ab. Durch die Spannungsleitungen fließt praktisch kein Strom – also fällt dort keine Spannung ab.'

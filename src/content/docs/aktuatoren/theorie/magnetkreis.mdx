@@ -1,0 +1,111 @@
+---
+title: Magnetkreis und Elektromagnet
+description: Durchflutung, magnetischer Fluss und magnetischer Widerstand, Ohmsches Gesetz des Magnetkreises, Einfluss des Luftspalts, Induktivität, Haltekraft eines Elektromagneten, Relais und Magnetventil, Spulenberechnung, Abschaltüberspannung und Freilaufschaltungen.
+sidebar:
+  label: 1 · Magnetkreis und Elektromagnet
+  order: 1
+---
+
+import Abbildung from '../../../../components/Abbildung.astro';
+import Kreis from '../../../../assets/mtrs/magnetkreis.svg';
+import Freilauf from '../../../../assets/mtrs/freilauf.svg';
+
+Die Grundbegriffe – Feldstärke, Flussdichte, Permeabilität, Induktion – stehen im Schulbuch (siehe
+[Magnetisches Feld](/grundlagen/magnetfeld/)). Hier werden sie auf Bauteile angewendet, die sich bewegen sollen.
+
+## Der Magnetkreis
+
+<Abbildung bild={Kreis} unterschrift="Magnetkreis: Eisenkern mit Spule und Luftspalt" />
+
+Eine Spule mit $N$ Windungen und dem Strom $I$ erzeugt die **Durchflutung** $\Theta = N \cdot I$ (Einheit A). Sie treibt einen
+**magnetischen Fluss** $\Phi$ (Einheit Wb = Vs) durch den Kreis – ähnlich wie eine Spannung einen Strom durch einen
+Stromkreis. Jeder Abschnitt hat einen **magnetischen Widerstand**:
+
+$$
+R_\mathrm{m} = \frac{l}{\mu_0 \mu_\mathrm{r} A} \qquad\qquad \Phi = \frac{\Theta}{R_\mathrm{m,ges}} \qquad\qquad B = \frac{\Phi}{A}
+$$
+
+| elektrischer Kreis | magnetischer Kreis |
+| --- | --- |
+| Spannung $U$ | Durchflutung $\Theta = N I$ |
+| Strom $I$ | Fluss $\Phi$ |
+| Widerstand $R = l/(\gamma A)$ | magnetischer Widerstand $R_\mathrm{m} = l/(\mu A)$ |
+| $I = U/R$ | $\Phi = \Theta/R_\mathrm{m}$ |
+| Reihenschaltung: $R$ addieren | Eisen und Luftspalt: $R_\mathrm{m}$ addieren |
+
+### Der Luftspalt bestimmt alles
+
+Eisen hat eine Permeabilitätszahl $\mu_\mathrm{r}$ von einigen Tausend, Luft hat 1. Deshalb hat schon ein **Luftspalt von
+1 mm** meist einen viel größeren magnetischen Widerstand als 10 cm Eisen. Folgen:
+
+- Der Fluss wird fast nur vom Luftspalt bestimmt – die genauen Eisendaten sind dann zweitrangig.
+- Der Luftspalt macht den Kreis **linearer** und verhindert, dass das Eisen schon bei kleinen Strömen in **Sättigung** geht
+  (oberhalb von etwa 1,5 T steigt $B$ kaum noch).
+- Speicherdrosseln in Schaltwandlern haben deshalb gezielt einen Luftspalt: Die Energie wird im Luftspalt gespeichert.
+
+### Induktivität
+
+Aus $u = N \cdot \mathrm{d}\Phi/\mathrm{d}t$ und $\Phi = N I/R_\mathrm{m}$ folgt die Induktivität einer Spule im Magnetkreis:
+
+$$
+L = \frac{N^2}{R_\mathrm{m,ges}}
+$$
+
+Doppelte Windungszahl → vierfache Induktivität. Bei einem Elektromagneten oder Relais ändert sich $L$ während der
+Bewegung: Ist der Anker angezogen (kleiner Luftspalt), ist $L$ viel größer.
+
+### Kraft eines Elektromagneten
+
+Im Luftspalt ist Energie gespeichert. Schließt sich der Spalt, wird sie in Bewegungsenergie umgesetzt. Für die Kraft auf eine
+Polfläche $A$ gilt
+
+$$
+F = \frac{B^2 \cdot A}{2\mu_0}
+$$
+
+Die Kraft wächst mit $B^2$ – und weil $B$ bei konstantem Strom mit kleiner werdendem Luftspalt steigt, ist sie bei
+**geöffnetem** Anker (großer Spalt) am kleinsten und bei angezogenem am größten. Darum braucht ein Elektromagnet zum
+**Anziehen** viel mehr Strom als zum **Halten**.
+
+## Relais, Hubmagnet und Magnetventil
+
+- **Relais:** Elektromagnet, der Kontakte bewegt. Kennwerte: Spulenspannung und -widerstand, Ansprech- und
+  Abfallspannung, Schaltleistung der Kontakte, Ansprech- und Abfallzeit (einige ms).
+- **Hubmagnet:** Der bewegliche Anker zieht einen Stößel – z. B. Türöffner, Verriegelungen.
+- **Magnetventil:** Der Anker öffnet oder schließt einen Durchgang für Luft (Pneumatik) oder Flüssigkeit (Hydraulik,
+  Wasser). Bei großen Ventilen steuert ein kleines Magnetventil nur einen Vorsteuerdruck, der das eigentliche Ventil bewegt.
+
+**Sparschaltung:** Weil Halten weniger Strom braucht als Anziehen, schaltet man nach dem Anzug auf einen kleineren
+Haltestrom um – mit PWM oder einem Vorwiderstand. Die Verlustleistung sinkt mit dem Quadrat des Stroms; die Spule bleibt
+kühl.
+
+## Spulen berechnen
+
+Für eine gewünschte Durchflutung $\Theta$ wählt man Windungszahl und Draht:
+
+- **Drahtlänge** $l = N \cdot l_\mathrm{m}$ (mittlere Windungslänge $l_\mathrm{m}$),
+- **Widerstand** $R = l/(\gamma A_\mathrm{Draht})$, Strom $I = U/R$,
+- **Verlustleistung** $P = I^2 R$ – sie bestimmt die Erwärmung (siehe [Thermische Auslegung](/thermische-auslegung/)).
+
+Eine überraschende Folgerung: Bei gegebener Wickelfläche und gegebener **Verlustleistung** ist die erreichbare Durchflutung
+$N I$ **unabhängig von der Windungszahl**. Doppelt so viele Windungen passen nur mit halbem Drahtquerschnitt hinein – der
+Widerstand wird viermal so groß, der Strom bei gleicher Leistung halb so groß, $N I$ bleibt gleich. Die Windungszahl passt die
+Spule also nur an die vorhandene **Spannung** an (12-V- oder 24-V-Ausführung desselben Ventils). Mehr Kraft gibt es nur mit
+mehr Kupfer (größere Spule), mehr zulässiger Erwärmung oder einem kürzeren Luftspalt.
+
+## Abschalten: die Induktionsspannung
+
+Eine Spule wehrt sich gegen jede Stromänderung: $u = L \cdot \mathrm{d}i/\mathrm{d}t$. Schaltet ein Transistor den Strom schnell
+ab, wird $\mathrm{d}i/\mathrm{d}t$ riesig – die Spannung kann Hunderte bis Tausende Volt erreichen und zerstört den Transistor.
+
+<Abbildung bild={Freilauf} unterschrift="Relais am Transistor mit Freilaufdiode" />
+
+| Schutz | Wirkung | Abfallzeit |
+| --- | --- | --- |
+| **Freilaufdiode** parallel zur Spule | Strom fließt im Kreis weiter und klingt mit $\tau = L/R$ ab, Spannung am Transistor nur $U_\mathrm{B} + 0{,}7\,\mathrm{V}$ | lang – das Relais fällt verzögert ab |
+| Diode + **Z-Diode** in Reihe | Spannung wird auf $U_\mathrm{B} + U_\mathrm{Z}$ begrenzt, Energie wird schneller abgebaut | kurz |
+| **RC-Glied** oder Varistor | begrenzt Spitzen, auch bei Wechselspannung | mittel |
+
+Die Freilaufdiode ist die einfachste Lösung. Wenn ein Ventil schnell schließen muss, nimmt man die Z-Dioden-Variante –
+der Transistor muss dann aber $U_\mathrm{B} + U_\mathrm{Z}$ aushalten. Viele Treiber-ICs haben diese Schutzschaltung
+(„active clamping“) bereits eingebaut.

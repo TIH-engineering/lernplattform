@@ -1,0 +1,42 @@
+---
+title: Leistungs- und Impedanzmessung
+description: "Augenblicks-, Wirk-, Blind- und Scheinleistung messen, Leistungsfaktor und Verzerrungsblindleistung, digitale Leistungsmessung aus Abtastwerten, Impedanzmessung mit Phase, LCR-Meter, parasitäre Elemente realer Bauteile."
+sidebar:
+  label: Übersicht
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+Wie viel Leistung nimmt ein Netzteil wirklich auf? Warum zeigt das Steckdosen-Messgerät bei einer LED-Lampe einen
+Leistungsfaktor von 0,5? Und warum verhält sich ein 100-nF-Kondensator bei 50 MHz wie eine Spule? In diesem Thema geht es
+darum, **Leistung** und **Impedanz** zu messen – mit Oszilloskop, Leistungsmessgerät und LCR-Meter.
+
+Die Rechengrundlagen (komplexe Rechnung, Wirk-, Blind- und Scheinleistung, Kompensation) stehen im Schulbuch und bei den
+Grundlagen-Themen [Komplexe Wechselstromrechnung](/grundlagen/komplexe-rechnung/) und
+[Leistung bei Wechselstrom](/grundlagen/wechselstromleistung/). Hier geht es um das **Messen** und um
+**nicht sinusförmige** Ströme.
+
+## Lernziele
+
+Nach diesem Thema kannst du …
+
+- die Wirkleistung als **Mittelwert der Augenblicksleistung** erklären und aus Abtastwerten berechnen,
+- Phasenverschiebung, Wirk-, Blind- und Scheinleistung aus einem Oszilloskopbild bestimmen,
+- **Leistungsfaktor** und **Verzerrungsblindleistung** bei nicht sinusförmigem Strom berechnen,
+- erklären, wie ein digitales Leistungsmessgerät arbeitet und worauf man beim Messen achten muss,
+- Impedanzen nach Betrag und Phase messen und mit einem **LCR-Meter** umgehen (Ersatzschaltbild, Güte, Verlustfaktor),
+- die **parasitären Elemente** realer Widerstände, Kondensatoren und Spulen beschreiben und ihre Eigenresonanz berechnen.
+
+## Teile
+
+<CardGrid>
+	<LinkCard title="Theorie" description="Augenblicksleistung, Leistungsfaktor, Verzerrung, digitale Messung, Impedanz, LCR-Meter, parasitäre Elemente" href="/leistungsmessung/theorie/" />
+	<LinkCard title="Rechenbeispiele" description="Phasenverschiebung am Oszilloskop, Abtastwerte, Verzerrungsblindleistung, LCR-Messung, Eigenresonanz" href="/leistungsmessung/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Steckdosen-Messgerät, Standby-Verbrauch, Stromzange, ESR eines Elkos, Abblockkondensator" href="/leistungsmessung/praxisbeispiele/" />
+	<LinkCard title="Quiz" description="Teste dein Wissen" href="/leistungsmessung/quiz/" />
+</CardGrid>
+
+:::tip[Voraussetzungen]
+[Signalkennwerte](/signalkennwerte/) (Effektivwert), [Digitale Messtechnik](/digitale-messtechnik/) (Abtastung, Oszilloskop)
+und die Grundlagen-Themen zur Wechselstromrechnung.
+:::

@@ -1,0 +1,171 @@
+---
+title: Rechenbeispiele – Aktuatoren
+description: Rechenbeispiele zu Magnetkreis mit Luftspalt, Induktivität und Haltekraft, Abschaltspannung und Freilauf, Spulenwiderstand, Gleichstrommotor (Leerlauf, Anlauf, Betriebspunkt, Wirkungsgrad, Zeitkonstante), Asynchronmotor-Typenschild und Schlupf, BLDC-Kommutierungsfrequenz, Schrittmotor mit Spindel.
+---
+
+import Stufe from '../../../components/Stufe.astro';
+import Loesung from '../../../components/Loesung.astro';
+
+## Magnetkreis mit Luftspalt
+
+<Stufe wert="standard" />
+
+Ein Eisenkern ($\mu_\mathrm{r} = 2000$, mittlere Eisenlänge 100 mm, Querschnitt $1\,\mathrm{cm^2}$) hat einen Luftspalt von 1 mm.
+Die Spule hat 500 Windungen, der Strom beträgt 0,5 A.
+
+**Gesucht:** magnetische Widerstände, Fluss, Flussdichte, Induktivität, Kraft im Luftspalt
+
+<Loesung>
+
+1. $R_\mathrm{m,Fe} = \dfrac{0{,}1\,\mathrm{m}}{4\pi \cdot 10^{-7}\,\mathrm{Vs/(Am)} \cdot 2000 \cdot 10^{-4}\,\mathrm{m^2}} \approx 3{,}98 \cdot 10^5\,\mathrm{A/(Vs)}$
+2. $R_\mathrm{m,L} = \dfrac{10^{-3}\,\mathrm{m}}{4\pi \cdot 10^{-7}\,\mathrm{Vs/(Am)} \cdot 10^{-4}\,\mathrm{m^2}} \approx 7{,}96 \cdot 10^6\,\mathrm{A/(Vs)}$ –
+   **20-mal** so groß wie der des Eisens!
+3. $\Theta = 500 \cdot 0{,}5\,\mathrm{A} = 250\,\mathrm{A}$ → $\Phi = \dfrac{250\,\mathrm{A}}{8{,}36 \cdot 10^6\,\mathrm{A/(Vs)}} \approx 29{,}9\,\mathrm{\mu Vs}$ →
+   $B = \Phi/A \approx 0{,}30\,\mathrm{T}$
+4. $L = N^2/R_\mathrm{m} = 500^2/8{,}36 \cdot 10^6\,\mathrm{H} \approx 30\,\mathrm{mH}$ (ohne Luftspalt wären es 0,63 H)
+5. $F = \dfrac{B^2 A}{2\mu_0} = \dfrac{(0{,}30\,\mathrm{T})^2 \cdot 10^{-4}\,\mathrm{m^2}}{2 \cdot 4\pi \cdot 10^{-7}\,\mathrm{Vs/(Am)}} \approx 3{,}6\,\mathrm{N}$
+
+</Loesung>
+
+## Abschaltspannung ohne Freilaufdiode
+
+<Stufe wert="grundlagen" />
+
+Die Spule aus dem vorigen Beispiel ($L = 30\,\mathrm{mH}$, $R = 48\,\Omega$, Strom 0,5 A) wird von einem Transistor in 1 µs
+abgeschaltet.
+
+1. Welche Spannung würde (theoretisch) entstehen?
+2. Wie lange dauert das Abklingen mit Freilaufdiode?
+
+<Loesung>
+
+1. $u = L \cdot \dfrac{\Delta i}{\Delta t} = 30\,\mathrm{mH} \cdot \dfrac{0{,}5\,\mathrm{A}}{1\,\mathrm{\mu s}} = 15\,\mathrm{kV}$ – tatsächlich bricht
+   vorher der Transistor durch und wird zerstört.
+2. $\tau = L/R = 30\,\mathrm{mH}/48\,\Omega \approx 0{,}63\,\mathrm{ms}$; nach etwa $5\tau \approx 3\,\mathrm{ms}$ ist der Strom
+   abgeklungen. Ein Relais fällt dadurch merklich später ab.
+
+</Loesung>
+
+## Spulenwiderstand und Strom
+
+<Stufe wert="grundlagen" />
+
+Eine Spule hat 500 Windungen Kupferlackdraht mit 0,3 mm Durchmesser, die mittlere Windungslänge ist 60 mm. Sie liegt an 12 V.
+
+**Gesucht:** Widerstand, Strom, Durchflutung, Verlustleistung ($\gamma_\mathrm{Cu} = 56\,\mathrm{m/(\Omega\,mm^2)}$)
+
+<Loesung>
+
+$l = 500 \cdot 0{,}06\,\mathrm{m} = 30\,\mathrm{m}$ · $A = \pi \cdot (0{,}15\,\mathrm{mm})^2 \approx 0{,}0707\,\mathrm{mm^2}$ ·
+$R = \dfrac{30}{56 \cdot 0{,}0707}\,\Omega \approx 7{,}6\,\Omega$ · $I = 12\,\mathrm{V}/7{,}6\,\Omega \approx 1{,}6\,\mathrm{A}$ ·
+$\Theta \approx 790\,\mathrm{A}$ · $P = U I \approx 19\,\mathrm{W}$
+
+19 W in einer kleinen Spule sind für Dauerbetrieb meist zu viel – sie würde überhitzen. Abhilfe: Sparschaltung mit
+kleinerem Haltestrom oder eine Spule mit mehr Windungen für 12 V.
+
+</Loesung>
+
+## Kennlinie eines Gleichstrommotors
+
+<Stufe wert="standard" />
+
+Ein Gleichstrommotor hat $U_\mathrm{N} = 12\,\mathrm{V}$, $R_\mathrm{A} = 1{,}2\,\Omega$, $k = 0{,}02\,\mathrm{Vs}$ (= Nm/A) und einen
+Leerlaufstrom $I_0 = 0{,}15\,\mathrm{A}$.
+
+1. Wie groß sind Leerlaufdrehzahl, Anlaufstrom und Anlaufmoment?
+2. Wie groß sind Strom, Drehzahl, abgegebene Leistung und Wirkungsgrad bei einem Lastmoment von 50 mNm?
+
+<Loesung>
+
+1. Leerlauf: $\omega_0 = \dfrac{U - R_\mathrm{A} I_0}{k} = \dfrac{12\,\mathrm{V} - 0{,}18\,\mathrm{V}}{0{,}02\,\mathrm{Vs}} = 591\,\mathrm{s^{-1}}$ →
+   $n_0 = \dfrac{\omega_0}{2\pi} \cdot 60 \approx 5640\,\mathrm{min^{-1}}$
+   Anlauf: $I_\mathrm{A} = U/R_\mathrm{A} = 10\,\mathrm{A}$ · $M_\mathrm{A} = k\,(I_\mathrm{A} - I_0) \approx 0{,}197\,\mathrm{Nm}$
+2. $I = M/k + I_0 = 2{,}5\,\mathrm{A} + 0{,}15\,\mathrm{A} = 2{,}65\,\mathrm{A}$
+   $\omega = \dfrac{12\,\mathrm{V} - 1{,}2\,\Omega \cdot 2{,}65\,\mathrm{A}}{0{,}02\,\mathrm{Vs}} = 441\,\mathrm{s^{-1}}$ → $n \approx 4210\,\mathrm{min^{-1}}$
+   $P_\mathrm{mech} = M\omega = 0{,}05\,\mathrm{Nm} \cdot 441\,\mathrm{s^{-1}} \approx 22{,}1\,\mathrm{W}$ ·
+   $P_\mathrm{el} = 12\,\mathrm{V} \cdot 2{,}65\,\mathrm{A} = 31{,}8\,\mathrm{W}$ · $\eta \approx 69\,\%$
+
+</Loesung>
+
+## Mechanische Zeitkonstante
+
+<Stufe wert="vertiefung" />
+
+Der Motor aus dem vorigen Beispiel hat ein Rotorträgheitsmoment von $J = 10^{-5}\,\mathrm{kg\,m^2}$.
+
+1. Wie groß ist die mechanische Zeitkonstante?
+2. Wie ändert sie sich, wenn eine Schwungscheibe das gesamte Trägheitsmoment verzehnfacht?
+
+<Loesung>
+
+1. $\tau_\mathrm{m} = \dfrac{R_\mathrm{A} J}{k^2} = \dfrac{1{,}2\,\Omega \cdot 10^{-5}\,\mathrm{kg\,m^2}}{(0{,}02\,\mathrm{Vs})^2} = 30\,\mathrm{ms}$
+   Nach einem Spannungssprung erreicht der Motor nach 30 ms etwa 63 % und nach etwa 150 ms praktisch die Enddrehzahl.
+2. $\tau_\mathrm{m}$ ist proportional zu $J$ → 300 ms. Die Last bestimmt die Dynamik oft mehr als der Motor selbst.
+
+</Loesung>
+
+## Typenschild eines Asynchronmotors
+
+<Stufe wert="standard" />
+
+Typenschild: 4 kW · 400 V Δ · 1440 min⁻¹ · 50 Hz · cos φ = 0,82 · η = 87 %.
+
+**Gesucht:** Polpaarzahl, Schlupf, aufgenommene Leistung, Strom, Nennmoment
+
+<Loesung>
+
+1. Die nächste Synchrondrehzahl über 1440 min⁻¹ ist 1500 min⁻¹ → $p = 2$ (vierpolig)
+2. $s = (1500 - 1440)/1500 = 4\,\%$
+3. $P_\mathrm{zu} = 4\,\mathrm{kW}/0{,}87 \approx 4{,}6\,\mathrm{kW}$
+4. $I = \dfrac{4000\,\mathrm{W}}{\sqrt{3} \cdot 400\,\mathrm{V} \cdot 0{,}87 \cdot 0{,}82} \approx 8{,}1\,\mathrm{A}$
+5. $M_\mathrm{N} = \dfrac{P_\mathrm{N}}{2\pi n} = \dfrac{4000\,\mathrm{W}}{2\pi \cdot 1440/60\,\mathrm{s^{-1}}} \approx 26{,}5\,\mathrm{Nm}$
+
+</Loesung>
+
+## Frequenzumrichter: Drehzahl und Spannung
+
+<Stufe wert="grundlagen" />
+
+Der Motor aus dem vorigen Beispiel wird an einem Umrichter mit U/f-Kennlinie (400 V bei 50 Hz) mit 30 Hz betrieben. Der
+Schlupf in min⁻¹ bleibt bei gleichem Moment etwa gleich (60 min⁻¹).
+
+**Gesucht:** Synchrondrehzahl, Drehzahl, Ausgangsspannung des Umrichters
+
+<Loesung>
+
+$n_\mathrm{s} = f/p = 30\,\mathrm{s^{-1}}/2 = 15\,\mathrm{s^{-1}} = 900\,\mathrm{min^{-1}}$ · $n \approx 840\,\mathrm{min^{-1}}$ ·
+$U = 400\,\mathrm{V} \cdot 30/50 = 240\,\mathrm{V}$
+
+</Loesung>
+
+## BLDC-Motor: Kommutierungsfrequenz
+
+<Stufe wert="standard" />
+
+Ein Drohnenmotor hat 7 Polpaare und dreht mit 12 000 min⁻¹.
+
+**Gesucht:** elektrische Frequenz und Anzahl der Kommutierungsschritte pro Sekunde (Blockkommutierung)
+
+<Loesung>
+
+$n = 200\,\mathrm{s^{-1}}$ → $f_\mathrm{el} = p \cdot n = 1400\,\mathrm{Hz}$ → 6 Schritte pro elektrischer Periode:
+$8400$ Schritte pro Sekunde – alle 119 µs muss die Elektronik umschalten.
+
+</Loesung>
+
+## Schrittmotor mit Gewindespindel
+
+<Stufe wert="standard" />
+
+Ein 1,8°-Schrittmotor treibt eine Spindel mit 8 mm Steigung, der Treiber arbeitet mit 1/16-Mikroschritt.
+
+1. Wie weit bewegt sich der Schlitten pro Mikroschritt?
+2. Welche Schrittfrequenz braucht man für 50 mm/s, und welche Drehzahl hat der Motor?
+
+<Loesung>
+
+1. $200 \cdot 16 = 3200$ Mikroschritte pro Umdrehung → $\Delta x = 8\,\mathrm{mm}/3200 = 2{,}5\,\mathrm{\mu m}$
+2. $50\,\mathrm{mm/s}/8\,\mathrm{mm} = 6{,}25$ Umdrehungen/s ($375\,\mathrm{min^{-1}}$) →
+   $f = 6{,}25 \cdot 3200 = 20\,000$ Mikroschritte pro Sekunde (20 kHz am STEP-Eingang)
+
+</Loesung>
