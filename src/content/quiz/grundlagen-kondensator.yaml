@@ -52,7 +52,7 @@ fragen:
     frage: 'Wie groß ist die Ersatzkapazität von zwei Kondensatoren mit je $1\,\mu\mathrm{F}$ in Reihe?'
     loesung: 0.5
     einheit: µF
-    erklaerung: '$C = \dfrac{C_1 C_2}{C_1 + C_2} = 0{,}5\,\mu\mathrm{F}$ – in Reihe wird die Kapazität kleiner (wie bei parallelen Widerständen).'
+    erklaerung: '$C = \dfrac{C_1 C_2}{C_1 + C_2} = 0{,}5\,\mu\mathrm{F}$ – in Reihe wird die Kapazität kleiner (wie bei parallelen Widerständen). Typischer Fehler: wie bei Widerständen addieren (2 µF). Bei Kondensatoren ist es genau umgekehrt.'
 
   - typ: mc
     stufe: standard

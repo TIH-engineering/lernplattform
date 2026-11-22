@@ -59,7 +59,7 @@ fragen:
     einheit: Ω
     toleranz: 0.05
     toleranzArt: absolut
-    erklaerung: '$R = 100\,\Omega \cdot (1 + 0{,}195415 - 0{,}001444) \approx 119{,}40\,\Omega$. Linear gerechnet wären es 119,54 Ω.'
+    erklaerung: '$R = 100\,\Omega \cdot (1 + 0{,}195415 - 0{,}001444) \approx 119{,}40\,\Omega$. Nur mit dem linearen Glied A gerechnet wären es 119,54 Ω.'
 
   - typ: zahl
     stufe: standard

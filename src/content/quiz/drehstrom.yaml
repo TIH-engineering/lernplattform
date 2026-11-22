@@ -56,14 +56,14 @@ fragen:
     frage: 'Ein symmetrischer Verbraucher nimmt bei $400\,\mathrm{V}$ einen Leiterstrom von $10\,\mathrm{A}$ bei $\cos\varphi = 0{,}8$ auf. Wie groß ist die Wirkleistung in kW?'
     loesung: 5.543
     einheit: kW
-    erklaerung: '$P = \sqrt{3} \cdot U \cdot I \cdot \cos\varphi = 1{,}732 \cdot 400\,\mathrm{V} \cdot 10\,\mathrm{A} \cdot 0{,}8 \approx 5{,}54\,\mathrm{kW}$'
+    erklaerung: '$P = \sqrt{3} \cdot U \cdot I \cdot \cos\varphi = 1{,}732 \cdot 400\,\mathrm{V} \cdot 10\,\mathrm{A} \cdot 0{,}8 \approx 5{,}54\,\mathrm{kW}$ Typischer Fehler: $\sqrt{3}$ vergessen (3,2 kW). Mit Leitergrößen gehört $\sqrt{3}$ in die Formel.'
 
   - typ: zahl
     stufe: standard
     frage: 'Ein Durchlauferhitzer mit $18\,\mathrm{kW}$ (ohmsch, symmetrisch) hängt am 400-V-Netz. Wie groß ist der Leiterstrom?'
     loesung: 25.98
     einheit: A
-    erklaerung: '$I = P/(\sqrt{3} \cdot U) = 18\,000\,\mathrm{W}/(1{,}732 \cdot 400\,\mathrm{V}) \approx 26\,\mathrm{A}$'
+    erklaerung: '$I = P/(\sqrt{3} \cdot U) = 18\,000\,\mathrm{W}/(1{,}732 \cdot 400\,\mathrm{V}) \approx 26\,\mathrm{A}$ Typischer Fehler: $I = P/U = 45\,\mathrm{A}$ – das wäre Einphasenrechnung.'
 
   - typ: zahl
     stufe: standard

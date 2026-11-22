@@ -36,7 +36,7 @@ fragen:
     einheit: dB
     toleranz: 0.1
     toleranzArt: absolut
-    erklaerung: '$20 \log_{10}(2/10) = 20 \cdot (-0{,}699) \approx -14\,\mathrm{dB}$'
+    erklaerung: '$20 \log_{10}(2/10) = 20 \cdot (-0{,}699) \approx -14\,\mathrm{dB}$ Typischer Fehler: $10 \log$ statt $20 \log$ (−7 dB). Bei Spannungen gehört der Faktor 20 davor.'
 
   - typ: mc
     stufe: standard

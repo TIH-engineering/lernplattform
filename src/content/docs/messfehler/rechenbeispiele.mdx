@@ -1,6 +1,6 @@
 ---
 title: Rechenbeispiele – Messfehler und Messunsicherheit
-description: Rechenbeispiele zu absolutem und relativem Fehler, Genauigkeitsklassen, Auswahl des Messgeräts, Mittelwert, Varianz, Standardabweichung, 95-%-Bereich eines Einzelwerts, Vertrauensbereich des Mittelwerts und Fehlerfortpflanzung.
+description: Rechenbeispiele zu absolutem und relativem Fehler, Genauigkeitsklassen, Auswahl des Messgeräts, Mittelwert, Varianz, Standardabweichung, Streubereich der Einzelwerte, Vertrauensbereich des Mittelwerts und Fehlerfortpflanzung.
 ---
 
 import Stufe from '../../../components/Stufe.astro';
@@ -67,7 +67,8 @@ Gerät B: $G = 2{,}5\,\% \cdot 30\,\mathrm{V} = \pm 0{,}75\,\mathrm{V}$ → $\pm
 Eine Spannung wird fünfmal gemessen: $12{,}42$ · $12{,}38$ · $12{,}45$ · $12{,}40$ · $12{,}35$ (alle in V). Die Werte sind normalverteilt.
 
 1. Berechne Mittelwert, Stichprobenvarianz und Standardabweichung.
-2. In welchem Bereich liegt ein weiterer Einzelmesswert mit rund 95 % Wahrscheinlichkeit?
+2. Berechne den groben Streubereich $\bar{x} \pm 2s$ der Einzelwerte. Warum darf man ihn bei nur fünf Messungen nicht als gesicherten
+   95-%-Bereich für den nächsten Messwert ausgeben?
 3. Gib den 95-%-Vertrauensbereich des Mittelwerts an ($t = 2{,}78$ für $n = 5$).
 
 <Loesung>
@@ -85,9 +86,13 @@ Eine Spannung wird fünfmal gemessen: $12{,}42$ · $12{,}38$ · $12{,}45$ · $12
 
    $s^2 = \dfrac{0{,}0058\,\mathrm{V^2}}{5 - 1} = 0{,}00145\,\mathrm{V^2}$ · $s = \sqrt{0{,}00145\,\mathrm{V^2}} \approx 0{,}038\,\mathrm{V}$
 2. $\bar{U} \pm 2s = 12{,}40\,\mathrm{V} \pm 0{,}076\,\mathrm{V}$ → **12,32 V … 12,48 V**
+
+   Die Anteile 68/95/99,7 % gelten für eine Normalverteilung mit **bekanntem** $\mu$ und $\sigma$. Hier sind $\bar{U}$ und $s$ nur aus
+   fünf Werten **geschätzt** und selbst noch ungenau – der Bereich ist eine grobe Orientierung, keine exakte 95-%-Vorhersage.
 3. $\Delta = \dfrac{t \cdot s}{\sqrt{n}} = \dfrac{2{,}78 \cdot 0{,}038\,\mathrm{V}}{\sqrt{5}} \approx 0{,}047\,\mathrm{V}$ → $U = (12{,}400 \pm 0{,}047)\,\mathrm{V}$, also **12,353 V … 12,447 V**
 
-Der Vertrauensbereich des Mittelwerts ist schmaler als der Bereich eines Einzelwerts.
+Der Vertrauensbereich beschreibt, wie genau der **Mittelwert** bestimmt ist – er ist deshalb viel schmaler als der Streubereich der
+Einzelwerte.
 
 </Loesung>
 
@@ -143,6 +148,9 @@ $R = U/I = 40{,}0\,\Omega$ · relative Fehler: $\dfrac{0{,}2}{12} = 1{,}67\,\%$,
 (a) Größtfehler: $1{,}67\,\% + 5{,}0\,\% = 6{,}67\,\%$ → $R = (40{,}0 \pm 2{,}7)\,\Omega$
 
 (b) quadratisch: $\sqrt{1{,}67^2 + 5{,}0^2}\,\% \approx 5{,}27\,\%$ → $R = (40{,}0 \pm 2{,}1)\,\Omega$
+
+Die quadratische Addition setzt zufällige, unabhängige Abweichungen voraus. Mit Fehlergrenzen gerechnet ist (b) nur eine grobe
+Abschätzung – auf der sicheren Seite liegt (a).
 
 Auch beim Quotienten addieren sich die relativen Fehler (nicht subtrahieren!) – ein Fehler im Nenner kann das Ergebnis genauso in die
 ungünstige Richtung verschieben.

@@ -45,7 +45,7 @@ fragen:
     frage: 'Eine grüne LED ($U_\mathrm{F} = 2{,}1\,\mathrm{V}$) soll an $12\,\mathrm{V}$ mit $15\,\mathrm{mA}$ betrieben werden. Wie groß ist der Vorwiderstand (rechnerisch)?'
     loesung: 660
     einheit: Ω
-    erklaerung: '$R_\mathrm{V} = (12 - 2{,}1)\,\mathrm{V} / 15\,\mathrm{mA} = 660\,\Omega$ → Normwert 680 Ω.'
+    erklaerung: '$R_\mathrm{V} = (12 - 2{,}1)\,\mathrm{V} / 15\,\mathrm{mA} = 660\,\Omega$ → Normwert 680 Ω. Typischer Fehler: die Durchlassspannung vergessen ($12\,\mathrm{V}/15\,\mathrm{mA} = 800\,\Omega$) – dann leuchtet die LED zu schwach.'
 
   - typ: mc
     stufe: standard
@@ -63,7 +63,7 @@ fragen:
     frage: 'Ein Brückengleichrichter wird mit $9\,\mathrm{V}$ (Effektivwert) gespeist. Wie groß ist etwa der Spitzenwert der Ausgangsspannung ($U_\mathrm{F} = 0{,}7\,\mathrm{V}$)?'
     loesung: 11.33
     einheit: V
-    erklaerung: '$\hat{u}_\mathrm{a} = \sqrt{2} \cdot 9\,\mathrm{V} - 2 \cdot 0{,}7\,\mathrm{V} \approx 12{,}73 - 1{,}4 \approx 11{,}3\,\mathrm{V}$ – zwei Dioden liegen im Strompfad.'
+    erklaerung: '$\hat{u}_\mathrm{a} = \sqrt{2} \cdot 9\,\mathrm{V} - 2 \cdot 0{,}7\,\mathrm{V} \approx 12{,}73 - 1{,}4 \approx 11{,}3\,\mathrm{V}$ – zwei Dioden liegen im Strompfad. Typischer Fehler: mit dem Effektivwert 9 V statt mit dem Scheitelwert rechnen oder nur eine Diodenspannung abziehen (12,0 V).'
 
   - typ: mc
     stufe: standard

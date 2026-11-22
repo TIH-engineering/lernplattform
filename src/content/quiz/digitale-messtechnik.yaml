@@ -14,7 +14,7 @@ fragen:
     frage: 'Wie groß ist der maximale Quantisierungsfehler eines idealen 8-Bit-Umsetzers mit 5 V Referenz (in mV)?'
     loesung: 9.766
     einheit: mV
-    erklaerung: '$U_\mathrm{LSB} = 5\,\mathrm{V}/256 \approx 19{,}5\,\mathrm{mV}$ → $\pm\tfrac{1}{2}$ LSB ≈ ±9,8 mV'
+    erklaerung: '$U_\mathrm{LSB} = 5\,\mathrm{V}/256 \approx 19{,}5\,\mathrm{mV}$ → $\pm\tfrac{1}{2}$ LSB ≈ ±9,8 mV Typischer Fehler: das ganze LSB (19,5 mV) angeben – beim rundenden Umsetzer ist der Fehler höchstens ein halbes LSB.'
 
   - typ: zahl
     stufe: standard
@@ -114,4 +114,4 @@ fragen:
       - text: Weil sie sonst die Bandbreite verringert
       - text: Weil das Oszilloskop dann nicht triggern kann
       - text: Das ist kein Problem.
-    erklaerung: Für Potenziale, die nicht auf Erde liegen, braucht man einen Differenztastkopf oder einen Trenntransformator.
+    erklaerung: Für Potenziale, die nicht auf Erde liegen, braucht man einen dafür zugelassenen Differenztastkopf. Messungen an Netzspannung nur unter Aufsicht der Lehrkraft – und den Schutzleiter des Oszilloskops nie unterbrechen.

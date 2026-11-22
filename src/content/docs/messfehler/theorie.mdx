@@ -78,21 +78,27 @@ Taschenrechner haben dafür einen Statistikmodus (Taste $s_x$ bzw. $\sigma_{n-1}
 <Abbildung bild={Normal} unterschrift="Gauß’sche Normalverteilung: Anteil der Messwerte in den Bereichen ±σ, ±2σ und ±3σ" />
 
 Wirken viele kleine, voneinander unabhängige Einflüsse zusammen, verteilen sich die Messwerte nach der **Gauß’schen Glockenkurve**
-(Normalverteilung). Dann liegen
+(Normalverteilung). Sie wird durch zwei Kennwerte der **Grundgesamtheit** (unendlich viele Messungen) beschrieben: den Erwartungswert
+$\mu$ (Mitte der Kurve) und die Standardabweichung $\sigma$ (Breite). Für eine solche Verteilung mit **bekanntem** $\mu$ und $\sigma$ liegen
 
 | Bereich | Anteil der Messwerte |
 | --- | --- |
-| $\bar{x} \pm 1s$ | 68,3 % |
-| $\bar{x} \pm 2s$ | 95,5 % (≈ 95 %) |
-| $\bar{x} \pm 3s$ | 99,7 % |
+| $\mu \pm 1\sigma$ | 68,3 % |
+| $\mu \pm 2\sigma$ | 95,5 % (≈ 95 %) |
+| $\mu \pm 3\sigma$ | 99,7 % |
 
-**Für einen einzelnen Messwert** gilt also: Mit rund 95 % Wahrscheinlichkeit liegt der nächste Messwert im Bereich $\bar{x} \pm 2s$. Die
-Fläche unter der Kurve entspricht der Wahrscheinlichkeit (statistische Sicherheit $P$).
+Die Fläche unter der Kurve entspricht der Wahrscheinlichkeit (statistische Sicherheit $P$).
+
+**In der Praxis** kennt man $\mu$ und $\sigma$ nicht, sondern nur die **Schätzwerte** $\bar{x}$ und $s$ aus wenigen Messungen. Der Bereich
+$\bar{x} \pm 2s$ ist dann ein guter **grober Streubereich** der Messwerte. Bei wenigen Messungen (z. B. $n = 5$) sind $\bar{x}$ und $s$
+selbst noch ungenau – man darf daher **nicht** behaupten, der nächste Messwert liege mit genau 95 % Wahrscheinlichkeit in $\bar{x} \pm 2s$.
+Erst bei vielen Messungen (etwa ab $n = 30$) stimmen die Anteile aus der Tabelle auch für $\bar{x} \pm k\,s$ recht gut.
 
 ## 6 · Vertrauensbereich des Mittelwerts
 
-Auch der Mittelwert ist nur ein Schätzwert. Wie genau ist er? Mit der **Student-Verteilung** gibt man einen **Vertrauensbereich** an, in dem
-der wahre Wert mit der statistischen Sicherheit $P$ liegt:
+Auch der Mittelwert ist nur ein Schätzwert. Wie genau ist er? Mit der **Student-Verteilung** (t-Verteilung) gibt man einen
+**Vertrauensbereich** (Konfidenzintervall) für den Erwartungswert $\mu$ an – also für den Wert, den man mit unendlich vielen Messungen
+erhalten würde (systematische Fehler sind darin **nicht** enthalten):
 
 $$
 x = \bar{x} \pm \frac{t \cdot s}{\sqrt{n}}
@@ -107,21 +113,36 @@ Der **Vertrauensfaktor** $t$ hängt von $P$ und von der Anzahl $n$ der Messungen
 Bei wenigen Messungen ist $t$ groß (man weiß wenig), bei vielen nähert er sich 1,96 (Normalverteilung). Durch das $\sqrt{n}$ im Nenner wird der
 Vertrauensbereich mit mehr Messungen **schmaler**: Viermal so viele Messungen halbieren ihn ungefähr.
 
-:::caution[Zwei verschiedene 95-%-Aussagen – nicht verwechseln!]
+**Was bedeutet „95 %“ genau?** Der wahre Wert ist fest, er liegt im berechneten Bereich entweder drin oder nicht. Die 95 % beschreiben das
+**Verfahren**: Würde man die ganze Messreihe sehr oft wiederholen und jedes Mal so einen Bereich berechnen, dann enthielten etwa 95 % dieser
+Bereiche den wahren Wert.
+
+:::caution[Streubereich und Vertrauensbereich – nicht verwechseln!]
 | Frage | Formel | beschreibt |
 | --- | --- | --- |
-| Wo liegt ein **einzelner** Messwert? | $\bar{x} \pm 2s$ | die **Streuung** der Messwerte |
-| Wo liegt der **wahre Wert** (Mittelwert)? | $\bar{x} \pm t \cdot s / \sqrt{n}$ | die **Unsicherheit des Mittelwerts** |
+| Wie stark streuen die **einzelnen** Messwerte? | $\bar{x} \pm 2s$ (grober Streubereich) | die **Streuung** der Messwerte |
+| Wie genau ist der **Mittelwert**? | $\bar{x} \pm t \cdot s / \sqrt{n}$ (95-%-Vertrauensbereich) | die **Unsicherheit des Mittelwerts** |
+
+Der Vertrauensbereich ist viel schmaler als der Streubereich – er sagt **nichts** darüber, wo der nächste einzelne Messwert liegt.
 :::
 
-### Messunsicherheit und Messergebnis
+### Fehler, Fehlergrenze, Unsicherheit
 
-Die **Messunsicherheit** $u$ fasst den zufälligen Anteil (Vertrauensbereich) und die nur abschätzbaren, nicht korrigierten systematischen Anteile
-(z. B. Fehlergrenzen des Messgeräts) zusammen. Ein vollständiges Messergebnis lautet:
+| Begriff | Bedeutung |
+| --- | --- |
+| **Fehler** (Messabweichung) $F$ | Abweichung eines Messwerts vom richtigen Wert, **mit Vorzeichen** |
+| **Fehlergrenze** $G$ | vom Hersteller **garantierte Höchstabweichung** (z. B. aus der Genauigkeitsklasse) |
+| **Messunsicherheit** | Bereich um das Messergebnis, in dem der Wert der Messgröße vernünftigerweise vermutet wird |
+
+Ein vollständiges Messergebnis wird mit einem ±-Bereich angegeben. Dabei immer dazusagen, **was** der Bereich ist, z. B.:
 
 $$
-x = \bar{x} \pm u \qquad \text{z. B. } U = (12{,}40 \pm 0{,}05)\,\mathrm{V}
+U = (12{,}40 \pm 0{,}05)\,\mathrm{V} \quad \text{(95-\%-Vertrauensbereich des Mittelwerts)}
 $$
+
+Für den Unterricht reicht eine vorsichtige Abschätzung: Der **zufällige** Anteil (Vertrauensbereich) und die **Fehlergrenze** des Geräts
+werden einfach **addiert** – so liegt man auf der sicheren Seite. In der Normung (GUM, „Leitfaden zur Angabe der Unsicherheit beim Messen“)
+werden alle Anteile zuerst in **Standardunsicherheiten** umgerechnet und dann nach festen Regeln kombiniert; das geht über diesen Kurs hinaus.
 
 **Genauigkeit** ist ein qualitativer Begriff (Nähe zum richtigen Wert) – als Zahl gibt man Fehlergrenzen oder die Unsicherheit an.
 
@@ -136,10 +157,13 @@ an – unter Nennbedingungen (Temperatur, Gebrauchslage, Frequenz):
 | Betriebsmessgeräte | 1 · 1,5 · 2,5 · 5 |
 
 $$
-G = \pm \frac{\text{Klasse}}{100\,\%} \cdot x_\mathrm{e}
+G = \pm \frac{\text{Klasse}}{100} \cdot x_\mathrm{e}
 \qquad\qquad
 G_\mathrm{r} = \frac{G}{x_\mathrm{a}} \cdot 100\,\%
 $$
+
+Die Klasse wird dabei als **reine Zahl** eingesetzt. Beispiel: Klasse 1,5 im 60-V-Bereich →
+$G = \pm \dfrac{1{,}5}{100} \cdot 60\,\mathrm{V} = \pm 0{,}9\,\mathrm{V}$.
 
 Der **absolute** Fehler $G$ ist im ganzen Bereich gleich groß – der **relative** Fehler bezogen auf den Messwert wird deshalb bei kleinen
 Ausschlägen groß. Ein Gerät der Klasse 1 im 100-V-Bereich darf ±1 V abweichen: bei 90 V sind das 1,1 %, bei 10 V schon 10 %.

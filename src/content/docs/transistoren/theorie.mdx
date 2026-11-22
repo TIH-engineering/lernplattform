@@ -77,6 +77,11 @@ Den linearen Bereich durchläuft er nur kurz beim Umschalten.
 3. Mit **Übersteuerungsfaktor** $\ddot{u}$ (typ. 2 … 5) sicher in die Sättigung: $I_\mathrm{B} = \ddot{u} \cdot I_\mathrm{B,min}$
 4. Basiswiderstand: $R_\mathrm{B} = \dfrac{U_\mathrm{Steuer} - U_\mathrm{BE}}{I_\mathrm{B}}$ → nächstkleineren Normwert wählen.
 
+Diese Rechnung ist eine **Entwurfsschätzung**. $B$ (bzw. $h_\mathrm{FE}$) gilt im **aktiven** Bereich; in der Sättigung ist das Verhältnis
+$I_\mathrm{C}/I_\mathrm{B}$ viel kleiner. Datenblätter geben $U_\mathrm{CE,sat}$ deshalb für ein festes Verhältnis an, meist
+$I_\mathrm{C}/I_\mathrm{B} = 10$ (z. B. $I_\mathrm{C} = 100\,\mathrm{mA}$, $I_\mathrm{B} = 10\,\mathrm{mA}$). Wer sicher gehen will, prüft das
+Ergebnis mit diesen Datenblattwerten – und misst $U_\mathrm{CE}$ im eingeschalteten Zustand nach.
+
 :::caution[Warum „satt“ schalten?]
 Ist der Basisstrom zu klein, bleibt der Transistor im linearen Bereich: $U_\mathrm{CE}$ ist dann groß, und die Verlustleistung
 $P = U_\mathrm{CE} \cdot I_\mathrm{C}$ erhitzt den Transistor. Im gesättigten Zustand ist $P \approx 0{,}2\,\mathrm{V} \cdot I_\mathrm{C}$ – sehr klein.

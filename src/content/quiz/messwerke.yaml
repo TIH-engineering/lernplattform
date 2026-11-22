@@ -60,14 +60,14 @@ fragen:
     frage: 'Ein Voltmeter-Modul hat 1 V Messbereich und 10 kΩ Innenwiderstand. Welcher Vorwiderstand ist für den 50-V-Bereich nötig (in kΩ)?'
     loesung: 490
     einheit: kΩ
-    erklaerung: '$R_\mathrm{V} = R_\mathrm{i} \cdot (n - 1) = 10\,\mathrm{k\Omega} \cdot (50 - 1) = 490\,\mathrm{k\Omega}$'
+    erklaerung: '$R_\mathrm{V} = R_\mathrm{i} \cdot (n - 1) = 10\,\mathrm{k\Omega} \cdot (50 - 1) = 490\,\mathrm{k\Omega}$ Typischer Fehler: $50 \cdot 10\,\mathrm{k\Omega} = 500\,\mathrm{k\Omega}$ angeben – das ist der Gesamtwiderstand, der Innenwiderstand des Moduls ist darin schon enthalten.'
 
   - typ: zahl
     stufe: standard
     frage: 'Ein Strommesser hat bei 1 A Vollausschlag und 50 mΩ Innenwiderstand. Wie groß muss der Shunt für 10 A sein (in mΩ)?'
     loesung: 5.556
     einheit: mΩ
-    erklaerung: '$R_\mathrm{N} = R_\mathrm{i}/(n - 1) = 50\,\mathrm{m\Omega}/9 \approx 5{,}56\,\mathrm{m\Omega}$'
+    erklaerung: '$R_\mathrm{N} = R_\mathrm{i}/(n - 1) = 50\,\mathrm{m\Omega}/9 \approx 5{,}56\,\mathrm{m\Omega}$ Typischer Fehler: durch $n = 10$ statt durch $n - 1 = 9$ teilen (5 mΩ) – durch das Messwerk fließt ja weiterhin 1 A.'
 
   - typ: zahl
     stufe: standard

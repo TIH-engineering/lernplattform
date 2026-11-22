@@ -23,7 +23,7 @@ fragen:
     frage: 'Eine Sinusspannung hat den Scheitelwert $17\,\mathrm{V}$. Wie groß ist der Effektivwert?'
     loesung: 12.02
     einheit: V
-    erklaerung: '$U = \hat{u} / \sqrt{2} = 17\,\mathrm{V} / 1{,}414 \approx 12{,}0\,\mathrm{V}$'
+    erklaerung: '$U = \hat{u} / \sqrt{2} = 17\,\mathrm{V} / 1{,}414 \approx 12{,}0\,\mathrm{V}$ Typischer Fehler: mal statt durch $\sqrt{2}$ rechnen (24 V) – der Effektivwert ist immer kleiner als der Scheitelwert.'
 
   - typ: zahl
     stufe: standard
@@ -84,7 +84,7 @@ fragen:
     frage: 'Eine Sinusspannung ($f = 50\,\mathrm{Hz}$, Nullphasenwinkel 0) hat den Scheitelwert $325\,\mathrm{V}$. Wie groß ist der Augenblickswert $2\,\mathrm{ms}$ nach dem Nulldurchgang?'
     loesung: 191.0
     einheit: V
-    erklaerung: '$u = \hat{u} \sin(\omega t) = 325\,\mathrm{V} \cdot \sin(2\pi \cdot 50 \cdot 0{,}002) = 325\,\mathrm{V} \cdot \sin 36° \approx 191\,\mathrm{V}$'
+    erklaerung: '$u = \hat{u} \sin(\omega t) = 325\,\mathrm{V} \cdot \sin(2\pi \cdot 50 \cdot 0{,}002) = 325\,\mathrm{V} \cdot \sin 36° \approx 191\,\mathrm{V}$ Typischer Fehler: Taschenrechner im Bogenmaß (RAD) – dann ergibt sin(36) einen falschen Wert. Entweder DEG einstellen oder mit $0{,}2\pi$ im Bogenmaß rechnen.'
 
   - typ: mc
     stufe: vertiefung

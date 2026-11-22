@@ -65,14 +65,13 @@ const quizId = `quiz-${Astro.props.id}`;
 					data-toleranzart={f.typ === 'zahl' ? f.toleranzArt : undefined}
 				>
 					<header class="quiz-kopf">
-						<span class="quiz-nr">Frage {i + 1} von {fragen.length}</span>
+						<span class="quiz-nr" id={`${name}-nr`}>Frage {i + 1} von {fragen.length}</span>
 						<span class={`quiz-stufe stufe-${f.stufe}`}>{stufenText[f.stufe]}</span>
 					</header>
-					<div class="quiz-text" set:html={alsHtml(f.frage)} />
+					<div class="quiz-text" id={`${name}-text`} set:html={alsHtml(f.frage)} />
 
 					{f.typ === 'mc' && (
-						<fieldset class="quiz-optionen">
-							<legend class="sr-only">Antwortmöglichkeiten</legend>
+						<fieldset class="quiz-optionen" aria-labelledby={`${name}-nr ${name}-text`}>
 							{mehrfach && <p class="quiz-hinweis">Mehrere Antworten können richtig sein.</p>}
 							{f.optionen.map((o, j) => (
 								<label class="quiz-option">
@@ -85,18 +84,31 @@ const quizId = `quiz-${Astro.props.id}`;
 
 					{f.typ === 'zahl' && (
 						<div class="quiz-zahl">
-							<label for={name} class="sr-only">Deine Antwort</label>
-							<input id={name} type="text" inputmode="decimal" autocomplete="off" placeholder="Zahl eingeben" />
+							<input
+								id={name}
+								type="text"
+								inputmode="decimal"
+								autocomplete="off"
+								placeholder="Zahl eingeben"
+								aria-labelledby={`${name}-nr ${name}-text`}
+								aria-describedby={`${name}-format`}
+							/>
 							{f.einheit && <span class="quiz-einheit">{f.einheit}</span>}
+							<p class="quiz-format" id={`${name}-format`}>
+								Nur die Zahl eingeben{f.einheit ? ' – die Einheit steht daneben' : ''}. Komma oder Punkt, z. B. 2,5 oder 2.5.
+							</p>
 						</div>
 					)}
 
 					<div class="quiz-knoepfe">
 						<button type="button" class="quiz-pruefen">Antwort prüfen</button>
-						<button type="button" class="quiz-nochmal" hidden>Nochmal versuchen</button>
+						<button type="button" class="quiz-nochmal" hidden aria-describedby={`${name}-rueck`}>
+							Nochmal versuchen
+						</button>
 					</div>
 
-					<div class="quiz-rueckmeldung" aria-live="polite" hidden>
+					<p class="sr-only quiz-status" role="status" />
+					<div class="quiz-rueckmeldung" id={`${name}-rueck`} hidden>
 						<p class="quiz-ergebnis" />
 						{f.typ === 'zahl' && (
 							<p class="quiz-musterloesung">
@@ -113,38 +125,41 @@ const quizId = `quiz-${Astro.props.id}`;
 			);
 		})
 	}
-	<p class="quiz-stand" aria-live="polite">
-		Beim ersten Versuch richtig: <strong class="quiz-punkte">0</strong> von {fragen.length}
+	<p class="quiz-stand">
+		Bearbeitet: <strong class="quiz-bearbeitet">0</strong> von {fragen.length} Fragen
+		<span class="quiz-stand-richtig" hidden>
+			&nbsp;· davon beim ersten Versuch richtig: <strong class="quiz-punkte">0</strong>
+		</span>
 	</p>
 </div>
 
 <script>
-	// Liest eine Zahl mit Komma oder Punkt, auch „4,7e-3“ oder „1 200“.
-	function leseZahl(text: string): number {
-		const t = text.trim().replace(/\s/g, '').replace(',', '.').replace('−', '-');
-		if (!/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(t)) return NaN;
-		return Number(t);
-	}
+	import { leseZahl, hinweisZuGrund, zahlRichtig, auswahlRichtig } from '../lib/quiz-pruefung.mjs';
 
-	function pruefe(frage: HTMLElement): boolean | null {
+	/** true/false = richtig/falsch, sonst ein Hinweistext (keine gültige Eingabe – zählt nicht als Versuch). */
+	function pruefe(frage: HTMLElement): boolean | string {
 		if (frage.dataset.typ === 'mc') {
 			const gewaehlt = [...frage.querySelectorAll<HTMLInputElement>('input:checked')].map((e) => e.value);
-			if (gewaehlt.length === 0) return null;
-			const richtig = (frage.dataset.richtig ?? '').split(',');
-			return gewaehlt.length === richtig.length && gewaehlt.every((g) => richtig.includes(g));
+			const ok = auswahlRichtig(gewaehlt, (frage.dataset.richtig ?? '').split(','));
+			return ok === null ? 'Bitte wähle zuerst eine Antwort.' : ok;
 		}
 		const eingabe = frage.querySelector<HTMLInputElement>('.quiz-zahl input')!;
-		const wert = leseZahl(eingabe.value);
-		if (Number.isNaN(wert)) return null;
-		const loesung = Number(frage.dataset.loesung);
-		const tol = Number(frage.dataset.toleranz);
-		const erlaubt = frage.dataset.toleranzart === 'absolut' ? tol : (Math.abs(loesung) * tol) / 100;
-		return Math.abs(wert - loesung) <= erlaubt + 1e-12;
+		const gelesen = leseZahl(eingabe.value);
+		if (gelesen.wert === undefined) return hinweisZuGrund(gelesen.grund);
+		return zahlRichtig(
+			gelesen.wert,
+			Number(frage.dataset.loesung),
+			Number(frage.dataset.toleranz),
+			frage.dataset.toleranzart,
+		);
 	}
 
 	function aktualisierePunkte(quiz: HTMLElement) {
+		const bearbeitet = quiz.querySelectorAll('.quiz-frage[data-erster]').length;
 		const punkte = quiz.querySelectorAll('.quiz-frage[data-erster="richtig"]').length;
+		quiz.querySelector('.quiz-bearbeitet')!.textContent = String(bearbeitet);
 		quiz.querySelector('.quiz-punkte')!.textContent = String(punkte);
+		quiz.querySelector<HTMLElement>('.quiz-stand-richtig')!.hidden = bearbeitet === 0;
 	}
 
 	document.querySelectorAll<HTMLElement>('.quiz').forEach((quiz) => {
@@ -153,13 +168,14 @@ const quizId = `quiz-${Astro.props.id}`;
 			const nochmal = frage.querySelector<HTMLButtonElement>('.quiz-nochmal')!;
 			const rueck = frage.querySelector<HTMLElement>('.quiz-rueckmeldung')!;
 			const ergebnis = frage.querySelector<HTMLElement>('.quiz-ergebnis')!;
+			const status = frage.querySelector<HTMLElement>('.quiz-status')!;
 			const eingaben = frage.querySelectorAll<HTMLInputElement>('input');
 
 			const auswerten = () => {
 				const ok = pruefe(frage);
-				if (ok === null) {
-					ergebnis.textContent =
-						frage.dataset.typ === 'mc' ? 'Bitte wähle zuerst eine Antwort.' : 'Bitte gib eine Zahl ein (z. B. 2,5).';
+				if (typeof ok === 'string') {
+					ergebnis.textContent = ok;
+					status.textContent = ok;
 					rueck.hidden = false;
 					rueck.dataset.status = 'leer';
 					return;
@@ -171,6 +187,8 @@ const quizId = `quiz-${Astro.props.id}`;
 				frage.dataset.status = ok ? 'richtig' : 'falsch';
 				rueck.dataset.status = ok ? 'richtig' : 'falsch';
 				ergebnis.textContent = ok ? '✔ Richtig!' : '✘ Leider falsch.';
+				status.textContent = ok ? 'Richtig! Die Erklärung steht unter der Frage.' : 'Leider falsch. Die Lösung und die Erklärung stehen unter der Frage.';
+				nochmal.textContent = ok ? 'Frage zurücksetzen' : 'Erneut üben';
 				rueck.hidden = false;
 				eingaben.forEach((e) => (e.disabled = true));
 				// Bei Multiple Choice die richtigen Antworten markieren
@@ -200,6 +218,7 @@ const quizId = `quiz-${Astro.props.id}`;
 				});
 				frage.querySelectorAll<HTMLElement>('.quiz-option').forEach((l) => delete l.dataset.markierung);
 				delete frage.dataset.status;
+				status.textContent = '';
 				rueck.hidden = true;
 				nochmal.hidden = true;
 				pruefen.hidden = false;
@@ -234,7 +253,7 @@ const quizId = `quiz-${Astro.props.id}`;
 		align-items: center;
 		gap: 0.5rem;
 		font-size: var(--sl-text-sm);
-		color: var(--sl-color-gray-3);
+		color: var(--sl-color-gray-2);
 		margin-bottom: 0.5rem;
 	}
 	.quiz-stufe {
@@ -274,7 +293,7 @@ const quizId = `quiz-${Astro.props.id}`;
 	.quiz-hinweis {
 		margin: 0 0 0.25rem;
 		font-size: var(--sl-text-sm);
-		color: var(--sl-color-gray-3);
+		color: var(--sl-color-gray-2);
 	}
 	.quiz-option {
 		display: flex;
@@ -319,6 +338,22 @@ const quizId = `quiz-${Astro.props.id}`;
 	.quiz-einheit {
 		font-weight: 600;
 	}
+	.quiz-zahl {
+		flex-wrap: wrap;
+	}
+	.quiz-format {
+		flex-basis: 100%;
+		margin: 0;
+		font-size: var(--sl-text-xs);
+		color: var(--sl-color-gray-2);
+	}
+	/* Sichtbarer Fokus für die Bedienung mit der Tastatur */
+	.quiz-option:has(input:focus-visible),
+	.quiz-knoepfe button:focus-visible,
+	.quiz-zahl input:focus-visible {
+		outline: 2px solid var(--sl-color-accent-high);
+		outline-offset: 2px;
+	}
 	.quiz-knoepfe {
 		margin-top: 0.75rem;
 	}
@@ -333,6 +368,11 @@ const quizId = `quiz-${Astro.props.id}`;
 	.quiz-pruefen {
 		background: var(--sl-color-accent);
 		color: var(--sl-color-black);
+	}
+	/* Im Dunkelmodus hellerer Knopf, damit der dunkle Text genug Kontrast hat */
+	:global([data-theme='dark']) .quiz-pruefen {
+		background: var(--sl-color-accent-high);
+		border-color: var(--sl-color-accent-high);
 	}
 	.quiz-nochmal {
 		background: transparent;
@@ -362,7 +402,7 @@ const quizId = `quiz-${Astro.props.id}`;
 	}
 	.quiz-tol {
 		font-size: var(--sl-text-sm);
-		color: var(--sl-color-gray-3);
+		color: var(--sl-color-gray-2);
 	}
 	.quiz-erklaerung :global(p) {
 		margin: 0.25rem 0;

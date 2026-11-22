@@ -9,12 +9,15 @@ import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 
 const stufe = z.enum(['grundlagen', 'standard', 'vertiefung']);
 
+// Text, der nach dem Entfernen von Leerzeichen nicht leer sein darf
+const text = z.string().trim().min(1, 'Text darf nicht leer sein.');
+
 // Gemeinsame Felder jeder Frage
 const basis = {
-	frage: z.string(),
+	frage: text,
 	stufe,
 	/** Wird nach JEDER Antwort angezeigt (richtig oder falsch). */
-	erklaerung: z.string(),
+	erklaerung: text,
 };
 
 /** Multiple Choice: eine oder mehrere Antworten richtig */
@@ -22,9 +25,13 @@ const multipleChoice = z.object({
 	typ: z.literal('mc'),
 	...basis,
 	optionen: z
-		.array(z.object({ text: z.string(), richtig: z.boolean().default(false) }))
+		.array(z.object({ text, richtig: z.boolean().default(false) }))
 		.min(2)
-		.refine((o) => o.some((x) => x.richtig), 'Mindestens eine Option muss richtig: true haben.'),
+		.refine((o) => o.some((x) => x.richtig), 'Mindestens eine Option muss richtig: true haben.')
+		.refine(
+			(o) => new Set(o.map((x) => x.text.toLowerCase())).size === o.length,
+			'Zwei Antwortmöglichkeiten sind gleich (Tippfehler?).',
+		),
 	/** Antworten beim Bauen mischen (Standard). false z. B. bei „alle oben genannten“ */
 	mischen: z.boolean().default(true),
 });
@@ -33,10 +40,10 @@ const multipleChoice = z.object({
 const zahleneingabe = z.object({
 	typ: z.literal('zahl'),
 	...basis,
-	loesung: z.number(),
+	loesung: z.number().finite(),
 	einheit: z.string().default(''),
 	/** Erlaubte Abweichung, Standard: 2 % */
-	toleranz: z.number().nonnegative().default(2),
+	toleranz: z.number().finite().nonnegative().default(2),
 	toleranzArt: z.enum(['prozent', 'absolut']).default('prozent'),
 });
 
@@ -44,7 +51,20 @@ const quiz = defineCollection({
 	loader: glob({ pattern: '**/*.yaml', base: './src/content/quiz' }),
 	schema: z.object({
 		titel: z.string().optional(),
-		fragen: z.array(z.discriminatedUnion('typ', [multipleChoice, zahleneingabe])).min(1),
+		fragen: z
+			.array(z.discriminatedUnion('typ', [multipleChoice, zahleneingabe]))
+			.min(1)
+			// Bei der Lösung 0 wäre eine Toleranz in % immer 0 – dann eine absolute Toleranz angeben.
+			.superRefine((fragen, ctx) =>
+				fragen.forEach((f, i) => {
+					if (f.typ === 'zahl' && f.loesung === 0 && f.toleranzArt === 'prozent')
+						ctx.addIssue({
+							code: 'custom',
+							path: [i, 'toleranzArt'],
+							message: 'loesung: 0 braucht toleranzArt: absolut (z. B. toleranz: 0.01).',
+						});
+				}),
+			),
 	}),
 });
 

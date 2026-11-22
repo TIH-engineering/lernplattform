@@ -70,7 +70,7 @@ fragen:
     frage: 'Bei einer Konstantstromquelle liegt die Basis auf $2{,}2\,\mathrm{V}$, der Emitterwiderstand beträgt $50\,\Omega$. Welcher Strom fließt?'
     loesung: 30
     einheit: mA
-    erklaerung: '$I = (2{,}2\,\mathrm{V} - 0{,}7\,\mathrm{V}) / 50\,\Omega = 30\,\mathrm{mA}$'
+    erklaerung: '$I = (2{,}2\,\mathrm{V} - 0{,}7\,\mathrm{V}) / 50\,\Omega = 30\,\mathrm{mA}$ Typischer Fehler: $U_\mathrm{BE}$ vergessen ($2{,}2\,\mathrm{V}/50\,\Omega = 44\,\mathrm{mA}$).'
 
   - typ: mc
     stufe: standard
@@ -121,12 +121,12 @@ fragen:
     stufe: vertiefung
     frage: Warum braucht man an einem 3,3-V-Mikrocontroller einen „Logic-Level“-MOSFET?
     optionen:
-      - text: Weil dessen R_DS(on) schon bei niedriger Gate-Spannung (z. B. 2,5 V oder 4,5 V) garantiert ist
+      - text: Weil dessen R_DS(on) schon bei niedriger Gate-Spannung garantiert ist (für 3,3 V z. B. bei 2,5 V)
         richtig: true
       - text: Weil normale MOSFETs bei 3,3 V zu schnell schalten
       - text: Weil Logic-Level-MOSFETs eine höhere Sperrspannung haben
       - text: Weil normale MOSFETs einen Basisstrom brauchen
-    erklaerung: Standard-MOSFETs sind oft erst bei 10 V voll durchgeschaltet. Mit 3,3 V blieben sie halb leitend und würden heiß.
+    erklaerung: 'Standard-MOSFETs sind oft erst bei 10 V voll durchgeschaltet. Mit 3,3 V blieben sie halb leitend und würden heiß. Achtung: Viele „Logic-Level“-Typen garantieren R_DS(on) erst ab 4,5 V – das passt zu 5-V-Logik, für 3,3 V im Datenblatt einen Wert bei 2,5 V suchen.'
 
   - typ: mc
     stufe: vertiefung

@@ -73,7 +73,7 @@ fragen:
     frage: 'Ein PWM-Signal 0/24 V hat einen Tastgrad von 36 %. Wie groß ist der Effektivwert?'
     loesung: 14.4
     einheit: V
-    erklaerung: '$U = \sqrt{D} \cdot \hat{u} = 0{,}6 \cdot 24\,\mathrm{V} = 14{,}4\,\mathrm{V}$; der Mittelwert beträgt 8,64 V.'
+    erklaerung: '$U = \sqrt{D} \cdot \hat{u} = 0{,}6 \cdot 24\,\mathrm{V} = 14{,}4\,\mathrm{V}$; der Mittelwert beträgt 8,64 V. Typischer Fehler: $D$ statt $\sqrt{D}$ verwenden – das ergibt den Mittelwert 8,64 V, nicht den Effektivwert.'
 
   - typ: mc
     stufe: standard

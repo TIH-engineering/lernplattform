@@ -76,7 +76,7 @@ fragen:
     frage: 'Ein Bauteil setzt $6\,\mathrm{W}$ um. $\vartheta_\mathrm{j,max} = 125\,°\mathrm{C}$, $\vartheta_\mathrm{a} = 45\,°\mathrm{C}$, $R_\mathrm{th,jc} = 2\,\mathrm{K/W}$, $R_\mathrm{th,ch} = 0{,}5\,\mathrm{K/W}$. Welchen Wärmewiderstand darf der Kühlkörper höchstens haben?'
     loesung: 10.83
     einheit: K/W
-    erklaerung: '$R_\mathrm{th,ha} \leq (125 - 45)\,\mathrm{K}/6\,\mathrm{W} - 2{,}5\,\mathrm{K/W} = 13{,}33 - 2{,}5 \approx 10{,}8\,\mathrm{K/W}$'
+    erklaerung: '$R_\mathrm{th,ha} \leq (125 - 45)\,\mathrm{K}/6\,\mathrm{W} - 2{,}5\,\mathrm{K/W} = 13{,}33 - 2{,}5 \approx 10{,}8\,\mathrm{K/W}$ Typischer Fehler: $R_\mathrm{th,jc}$ und $R_\mathrm{th,ch}$ nicht abziehen (13,3 K/W) – der Kühlkörper wäre zu schlecht, der Chip zu heiß.'
 
   - typ: mc
     stufe: standard

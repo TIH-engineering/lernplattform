@@ -4,6 +4,7 @@ description: Mikrocontroller misst Akkuspannung, Tastkopf abgleichen, Netzspannu
 ---
 
 import Loesung from '../../../components/Loesung.astro';
+import Netzsicherheit from '../../../components/Netzsicherheit.astro';
 
 ## Akkuspannung mit dem Mikrocontroller messen
 
@@ -41,6 +42,8 @@ Am Oszilloskop gibt es einen Anschluss „Probe Comp“ mit einem 1-kHz-Rechteck
 
 ## Netzspannung am Oszilloskop
 
+<Netzsicherheit />
+
 Für eine Laborübung soll die Netzspannung (230 V, 50 Hz) am Oszilloskop dargestellt werden.
 
 1. Warum darf man nicht einfach den Tastkopf an L und die Masseklemme an N anschließen?
@@ -51,7 +54,8 @@ Für eine Laborübung soll die Netzspannung (230 V, 50 Hz) am Oszilloskop darges
 1. Die Masseklemme ist mit dem **Schutzleiter** verbunden. N liegt zwar meist nahe an Erdpotential, ist aber ein aktiver Leiter – bei vertauschtem Stecker hängt die
    Masseklemme direkt an L → **Kurzschluss** über den Schutzleiter, Tastkopf und Gerät werden zerstört. Außerdem sind normale Tastköpfe oft nicht für diese
    Spannung (Messkategorie) zugelassen.
-2. Mit einem **Differenztastkopf** (Hochvolt, CAT-gerecht) oder über einen **Trenntransformator** mit kleiner Sekundärspannung (z. B. 12 V) – die Kurvenform ist dieselbe.
+2. Mit einem **Differenztastkopf** (Hochvolt, CAT-gerecht) oder – für die Laborübung am einfachsten – an der **Sekundärseite eines
+   kleinen Netztransformators** (z. B. 230 V/12 V): Die Kurvenform ist dieselbe, gemessen wird nur Schutzkleinspannung.
    Den Schutzleiter des Oszilloskops **niemals** abklemmen.
 
 </Loesung>

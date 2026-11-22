@@ -5,7 +5,7 @@ fragen:
     frage: 'Ein Wasserkocher mit $2000\,\mathrm{W}$ läuft 3 Minuten. Welche elektrische Energie nimmt er auf?'
     loesung: 0.1
     einheit: kWh
-    erklaerung: '$W = P \cdot t = 2\,\mathrm{kW} \cdot 0{,}05\,\mathrm{h} = 0{,}1\,\mathrm{kWh}$ (3 min = 0,05 h)'
+    erklaerung: '$W = P \cdot t = 2\,\mathrm{kW} \cdot 0{,}05\,\mathrm{h} = 0{,}1\,\mathrm{kWh}$ (3 min = 0,05 h) Typischer Fehler: 3 min nicht in Stunden umrechnen – dann kommen 6 kWh heraus, viel zu viel für einmal Wasserkochen.'
 
   - typ: zahl
     stufe: grundlagen

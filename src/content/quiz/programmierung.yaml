@@ -225,7 +225,7 @@ fragen:
     loesung: 44
     toleranz: 0
     toleranzArt: absolut
-    erklaerung: '300 passt nicht in 8 Bit (max. 255). Es kommt zum **Überlauf**: 300 − 256 = 44. Der Compiler warnt nicht – den Datentyp immer passend zum größten Ergebnis wählen.'
+    erklaerung: '300 passt nicht in 8 Bit (max. 255). Es kommt zum **Überlauf**: 300 − 256 = 44. Viele Compiler warnen dabei nicht – den Datentyp immer passend zum größten Ergebnis wählen.'
 
   - typ: mc
     stufe: vertiefung

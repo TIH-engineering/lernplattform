@@ -55,14 +55,57 @@ for (const [d, t] of inhalt) {
 	}
 }
 
-// 3) Quiz: Position der richtigen Antwort (nur Fragen mit genau einer richtigen Antwort)
-console.log('\nQuiz – wie oft ist die 1./2./3./4. Antwort richtig?');
+// 2b) Sprungmarken auf derselben Seite (href="#…"), relative Links (ohne / am Anfang) und srcset
+const seitenUrl = (d) => BASIS + '/' + relative(DIST, d).split(sep).join('/').replace(/index\.html$/, '');
+const melde = (d, meldung) => {
+	if (gemeldet.has(meldung + d)) return;
+	gemeldet.add(meldung + d);
+	console.log(`LINK    ${relative(DIST, d)}: ${meldung}`);
+	fehler++;
+};
+for (const [d, t] of inhalt) {
+	const ids = new Set([...t.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
+	for (const m of t.matchAll(/<a\b[^>]*\shref="#([^"]*)"/g)) {
+		const id = decodeURIComponent(m[1]);
+		if (id && !ids.has(id)) melde(d, `ANKER (gleiche Seite) #${id}`);
+	}
+	for (const m of t.matchAll(/\s(?:href|src)="(?![a-z][a-z0-9+.-]*:|\/|#)([^"#?]+)(#[^"]*)?"/gi)) {
+		const ziel = new URL(m[1], 'http://x' + seitenUrl(d)).pathname;
+		if (!existsSync(zielDatei(ziel))) melde(d, `RELATIV ${m[1]} → ${ziel} fehlt`);
+	}
+	for (const m of t.matchAll(/srcset="([^"]+)"/g)) {
+		for (const teil of m[1].split(',')) {
+			const url = teil.trim().split(/\s+/)[0];
+			if (url.startsWith('/') && !existsSync(zielDatei(url.split(/[?#]/)[0]))) melde(d, `SRCSET ${url}`);
+		}
+	}
+}
+
+// 3) Quiz: Position der richtigen Antwort (nur Fragen mit genau einer richtigen Antwort).
+//    Ab 8 solchen Fragen gibt es eine WARNUNG (kein Fehler), wenn eine Position nie oder viel zu oft richtig ist.
+console.log('\nQuiz – wie oft ist die 1./2./3./4. Antwort richtig?   (Fragen mit einer / mit mehreren richtigen Antworten)');
+let warnungen = 0;
+const gesamt = [0, 0, 0, 0];
+let mehrfachGesamt = 0;
 for (const [d, t] of inhalt) {
 	if (!d.split(sep).includes('quiz')) continue;
-	const pos = [...t.matchAll(/data-typ="mc" data-richtig="([0-9,]+)"/g)].map((m) => m[1]).filter((p) => !p.includes(','));
+	const alle = [...t.matchAll(/data-typ="mc" data-richtig="([0-9,]+)"/g)].map((m) => m[1]);
+	const pos = alle.filter((p) => !p.includes(','));
+	const mehrfach = alle.length - pos.length;
+	mehrfachGesamt += mehrfach;
 	const zaehler = [0, 1, 2, 3].map((k) => pos.filter((p) => Number(p) === k).length);
-	console.log(`  ${relative(DIST, d).replace(/[\\/]index\.html$/, '').padEnd(42)} ${zaehler.join(' / ')}`);
+	zaehler.forEach((z, k) => (gesamt[k] += z));
+	let hinweis = '';
+	if (pos.length >= 8 && (Math.min(zaehler[0], zaehler[1]) === 0 || Math.max(...zaehler) > pos.length / 2)) {
+		hinweis = '  ← WARNUNG: ungleichmäßig';
+		warnungen++;
+	}
+	console.log(
+		`  ${relative(DIST, d).replace(/[\\/]index\.html$/, '').padEnd(42)} ${zaehler.join(' / ')}   (${pos.length} / ${mehrfach})${hinweis}`,
+	);
 }
+console.log(`  ${'Summe'.padEnd(42)} ${gesamt.join(' / ')}   (mit mehreren richtigen: ${mehrfachGesamt})`);
+if (warnungen) console.log(`  ${warnungen} Warnung(en) zur Verteilung – bitte ansehen.`);
 
 console.log(`\n${dateien.length} Seiten geprüft, ${fehler} Problem(e) gefunden.`);
 process.exit(fehler ? 1 : 0);

@@ -1,0 +1,28 @@
+---
+// Einheitlicher Sicherheitshinweis für Versuche mit Netzspannung, Drehstrom oder Zwischenkreisen.
+// Verwendung in einer .mdx-Seite:
+//   import Netzsicherheit from '../../components/Netzsicherheit.astro';
+//   <Netzsicherheit />
+// Der Text steht nur hier – Änderungen wirken auf allen Seiten.
+import { Aside } from '@astrojs/starlight/components';
+---
+
+<Aside type="danger" title="Sicherheit: Netzspannung ist lebensgefährlich">
+	<ul>
+		<li>
+			Übungen im Labor mit <strong>Schutzkleinspannung</strong> (z. B. Trafo 12 V~). Versuche mit 230/400 V oder geladenen
+			Zwischenkreisen nur an dafür vorgesehenen Laborplätzen und <strong>nur unter Aufsicht der Lehrkraft</strong>.
+		</li>
+		<li>Den <strong>Schutzleiter</strong> eines Geräts (z. B. des Oszilloskops) nie entfernen oder unterbrechen.</li>
+		<li>
+			Die Masseklemme eines normalen Tastkopfs liegt am Schutzleiter – <strong>nie an Netzpotenzial</strong> anklemmen. Für
+			Netzmessungen nur dafür zugelassene Differenztastköpfe und Messgeräte mit passender Messkategorie (CAT) verwenden.
+		</li>
+		<li>
+			Kondensatoren (Ladeelko, Zwischenkreis) können nach dem Abschalten noch gefährlich geladen sein: vor dem Berühren entladen
+			und nachmessen.
+		</li>
+		<li>Ein Trenntransformator verringert bestimmte Gefahren, macht eine Netzschaltung aber <strong>nicht</strong> ungefährlich.</li>
+	</ul>
+	<slot />
+</Aside>

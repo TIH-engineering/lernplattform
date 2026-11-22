@@ -90,10 +90,13 @@ C hat keinen eigenen Datentyp für Text. Ein **String** (Zeichenkette) ist ein `
 ```c
 char wort[] = "Hallo";    // Compiler reserviert 6 Zeichen und hängt '\0' an
 char name[20] = "Eva";    // Platz für 19 Zeichen + '\0'; benutzt sind 4
-char zu_klein[5] = "Hallo";   // FEHLER: kein Platz für das '\0'
+char zeichen[5] = "Hallo";    // in C erlaubt, aber OHNE '\0' – kein String!
 ```
 
 - Ein String braucht **immer ein Zeichen mehr**, als Buchstaben sichtbar sind.
+- `char zeichen[5] = "Hallo";` ist **erlaubt**: Die fünf Buchstaben passen hinein, das `'\0'` wird weggelassen. Das Ergebnis ist ein
+  gewöhnliches `char`-Array, aber **kein gültiger String**. `printf("%s", zeichen)` würde nach dem Array weiterlesen, bis zufällig
+  eine 0 im Speicher steht – ein schwer zu findender Fehler. Gute Compiler geben hier eine **Warnung** aus. Merke: **legales `char`-Array ≠ gültiger C-String.**
 - `"A"` (String: `'A'` und `'\0'`, 2 Byte) ist etwas anderes als `'A'` (ein einzelnes Zeichen, 1 Byte).
 - Ausgabe mit `printf("%s", wort);` – `printf` gibt Zeichen aus, bis es auf `'\0'` stößt.
 - Einzelne Zeichen kann man ändern: `wort[0] = 'B';` ergibt „Ballo“.

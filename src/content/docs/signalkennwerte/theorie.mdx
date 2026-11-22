@@ -141,8 +141,15 @@ $$
 U = \sqrt{D} \cdot \hat{u}
 $$
 
-Ein Motor oder eine LED reagiert (wegen Trägheit bzw. Auge) auf den **Mittelwert**, ein Heizwiderstand auf den **Effektivwert** – deshalb ist die Leistung
-in einem Widerstand bei PWM größer, als man aus dem Mittelwert schätzen würde.
+Welcher Kennwert zählt, hängt von der Last ab:
+
+- **Ohmscher Heizwiderstand:** Die mittlere Leistung ist $P = U^2/R$ mit dem **Effektivwert** $U$ – deshalb ist die Leistung bei PWM
+  größer, als man aus dem Mittelwert schätzen würde.
+- **Gleichstrommotor:** Bei ausreichend hoher PWM-Frequenz glätten Wicklungsinduktivität und Trägheit; für die Drehzahl ist der
+  **Mittelwert der Spannung** eine brauchbare Näherung (das genaue Verhalten hängt auch von Strom, Gegenspannung und Last ab).
+- **LED:** Die mittlere Helligkeit folgt näherungsweise dem **mittleren Strom** – nicht der mittleren Spannung, denn die LED-Kennlinie
+  ist stark nichtlinear. Bei PWM fließt in der Einschaltzeit der volle (durch den Vorwiderstand begrenzte) Strom, die Helligkeit ist
+  also etwa proportional zum Tastgrad $D$.
 
 ### Einweggleichgerichteter Sinus
 

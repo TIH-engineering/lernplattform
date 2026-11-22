@@ -61,7 +61,7 @@ fragen:
     einheit: °C
     toleranz: 0.5
     toleranzArt: absolut
-    erklaerung: '$\Delta\vartheta = (58/50 - 1) / 0{,}004\,\mathrm{K^{-1}} = 40\,\mathrm{K}$ → $\vartheta = 20\,°\mathrm{C} + 40\,\mathrm{K} = 60\,°\mathrm{C}$'
+    erklaerung: '$\Delta\vartheta = (58/50 - 1) / 0{,}004\,\mathrm{K^{-1}} = 40\,\mathrm{K}$ → $\vartheta = 20\,°\mathrm{C} + 40\,\mathrm{K} = 60\,°\mathrm{C}$ Typischer Fehler: 40 als Ergebnis angeben – das ist nur die Erwärmung $\Delta\vartheta$, die 20 °C Anfangstemperatur kommen noch dazu.'
 
   - typ: mc
     stufe: grundlagen
@@ -105,3 +105,4 @@ fragen:
     erklaerung: >-
       $R_\mathrm{max} = 3\,\mathrm{V} / 10\,\mathrm{A} = 0{,}3\,\Omega$; Leiterlänge $l = 80\,\mathrm{m}$:
       $A = \rho \cdot l / R = 0{,}0179 \cdot 80 / 0{,}3\,\mathrm{mm^2} \approx 4{,}77\,\mathrm{mm^2}$ → gewählt wird 6 mm².
+      Typischer Fehler: nur 40 m Leitungslänge einsetzen (2,39 mm²) – der Strom fließt hin und zurück.

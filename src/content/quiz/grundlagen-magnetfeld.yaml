@@ -5,7 +5,7 @@ fragen:
     frage: 'Wie groß ist die Feldstärke im Abstand $4\,\mathrm{cm}$ von einem langen geraden Leiter mit $8\,\mathrm{A}$?'
     loesung: 31.83
     einheit: A/m
-    erklaerung: '$H = I / (2\pi r) = 8\,\mathrm{A} / (2\pi \cdot 0{,}04\,\mathrm{m}) \approx 31{,}8\,\mathrm{A/m}$'
+    erklaerung: '$H = I / (2\pi r) = 8\,\mathrm{A} / (2\pi \cdot 0{,}04\,\mathrm{m}) \approx 31{,}8\,\mathrm{A/m}$ Typischer Fehler: den Abstand in cm einsetzen ($r = 4$) – dann ist das Ergebnis 100-mal zu klein.'
 
   - typ: zahl
     stufe: grundlagen

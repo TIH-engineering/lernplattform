@@ -24,7 +24,7 @@ fragen:
     frage: 'Wie groß ist der Ersatzwiderstand von $R_1 = 300\,\Omega$ und $R_2 = 600\,\Omega$ parallel?'
     loesung: 200
     einheit: Ω
-    erklaerung: '$R_\mathrm{ges} = \dfrac{300 \cdot 600}{300 + 600}\,\Omega = 200\,\Omega$'
+    erklaerung: '$R_\mathrm{ges} = \dfrac{300 \cdot 600}{300 + 600}\,\Omega = 200\,\Omega$ Typischer Fehler: einfach addieren (900 Ω). Parallel ist das Ergebnis immer kleiner als der kleinste Einzelwiderstand.'
 
   - typ: mc
     stufe: grundlagen

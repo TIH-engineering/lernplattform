@@ -41,7 +41,7 @@ fragen:
     frage: 'Ein Motor hat $P = 3\,\mathrm{kW}$ und $\cos\varphi = 0{,}75$ an $230\,\mathrm{V}$. Wie groß ist der Strom?'
     loesung: 17.39
     einheit: A
-    erklaerung: '$I = P / (U \cos\varphi) = 3000 / (230 \cdot 0{,}75)\,\mathrm{A} \approx 17{,}4\,\mathrm{A}$'
+    erklaerung: '$I = P / (U \cos\varphi) = 3000 / (230 \cdot 0{,}75)\,\mathrm{A} \approx 17{,}4\,\mathrm{A}$ Typischer Fehler: $\cos\varphi$ vergessen (13 A) – der Motor braucht wegen der Blindleistung mehr Strom.'
 
   - typ: mc
     stufe: standard

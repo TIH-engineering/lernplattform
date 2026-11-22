@@ -56,7 +56,7 @@ fragen:
     stufe: standard
     frage: Warum verwendet der RC-Phasenschieber-Oszillator drei RC-Glieder?
     optionen:
-      - text: Ein bzw. zwei RC-Glieder erreichen 180° erst im Grenzfall bei vollständiger Dämpfung – drei schaffen es bei endlicher Frequenz.
+      - text: Ein RC-Glied schafft höchstens 90°, zwei erreichen 180° erst im Grenzfall (unendlich hohe Frequenz, Signal null) – drei schaffen es bei endlicher Frequenz.
         richtig: true
       - text: Damit die Verstärkung genau 3 beträgt.
       - text: Damit der Oszillator ein Rechteck liefert.

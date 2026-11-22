@@ -100,7 +100,8 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
   „Das solltest du können“, kurze Formeltabelle), **Rechenbeispiele**, **Praxisbeispiele**, **Quiz**.
 - 14 Themen in `src/content/docs/grundlagen/<thema>/`, Liste in `astro.config.mjs` (`grundlagenThemen`).
   Quizdateien: `src/content/quiz/grundlagen-<thema>.yaml`.
-- Unbekannte GET2-Kapitelnummern stehen als „Kapitel …“ – nachtragen, sobald bekannt.
+- GET1/GET2-Kapitel- und Abschnittsnummern sind nach den Inhaltsverzeichnissen eingetragen (22.11.2026), auch als
+  „Im Schulbuch“-Kasten bei Messtechnik und Elektronik (GET2 Kap. 5–7). Elektronik bleibt trotzdem mit eigener Theorie.
 - **Keine Inhalte aus dem Schulbuch oder dem Lindner übernehmen** (kein Text, keine Abbildungen, keine Aufgaben).
 - Quelle für Stoffumfang und Niveau: `Quellen/HWE/` (Tests, Teststofflisten, Jahresplanung).
   Dort liegen auch **Notenlisten und Scans mit Schülerdaten – niemals lesen, verwenden oder veröffentlichen.**
@@ -143,7 +144,14 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
 
 - YAML-Quiz: Zahlen in `loesung` mit **Punkt** schreiben; Texte mit Formeln in `'…'` oder als `>-`-Block.
 - In Markdown-Tabellen nie `|` in Formeln verwenden (bricht die Tabelle) → `\vert` bzw. `\lvert … \rvert`.
-- Prüfskript nach dem Bauen: `node werkzeuge/pruefen.mjs` (KaTeX-Fehler, Links/Anker, Verteilung der Quiz-Antworten).
+- Prüfskript nach dem Bauen: `node werkzeuge/pruefen.mjs` (KaTeX-Fehler, Links/Anker auch auf derselben Seite, relative
+  Links, srcset, Verteilung der Quiz-Antworten mit Warnung). Quiz-Prüflogik liegt in `src/lib/quiz-pruefung.mjs`,
+  Test ohne Build: `node werkzeuge/quiz-test.mjs`.
+- Quiz-Schema (`src/content.config.ts`) lehnt leere Texte, doppelte Antwortoptionen und `loesung: 0` mit
+  Prozent-Toleranz ab (dann `toleranzArt: absolut`).
+- Messfehler-Statistik: 68/95/99,7 % nur für $\mu \pm k\sigma$; $\bar{x} \pm 2s$ heißt „grober Streubereich“ (keine
+  95-%-Prognose); Vertrauensbereich nur für den Mittelwert. Theorie, Rechenbeispiele und Quiz gemeinsam ändern.
+- GET1/GET2-Kapitelnummern nur mit Quelle eintragen, sonst „Kapitel über …“ ohne Nummer.
 - Rechenergebnisse nachrechnen; LTspice-Netzlisten vor der Veröffentlichung simulieren
   (LTspice: `C:\Tools\LTspice_24_HTL_250909\LTspice.exe -b datei.cir`).
 - Nach Änderungen an `src/content.config.ts` den Entwicklungsserver neu starten.

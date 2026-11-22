@@ -22,14 +22,14 @@ fragen:
 
   - typ: mc
     stufe: grundlagen
-    frage: Welcher Anteil normalverteilter Messwerte liegt im Bereich Mittelwert ± 2s?
+    frage: 'Messwerte sind normalverteilt mit bekanntem Erwartungswert $\mu$ und bekannter Standardabweichung $\sigma$. Welcher Anteil liegt zwischen $\mu - 2\sigma$ und $\mu + 2\sigma$?'
     optionen:
       - text: rund 95 %
         richtig: true
       - text: rund 68 %
       - text: rund 99,7 %
       - text: 100 %
-    erklaerung: '±1s: 68,3 %, ±2s: 95,5 %, ±3s: 99,7 %.'
+    erklaerung: '$\mu \pm 1\sigma$: 68,3 %, $\mu \pm 2\sigma$: 95,5 %, $\mu \pm 3\sigma$: 99,7 %. Hat man nur wenige Messwerte, kennt man $\mu$ und $\sigma$ nicht – dann ist $\bar{x} \pm 2s$ nur ein grober Streubereich, keine exakte 95-%-Angabe.'
 
   - typ: zahl
     stufe: standard
@@ -64,19 +64,19 @@ fragen:
     stufe: standard
     frage: 'Was beschreibt der Bereich x̄ ± t·s/√n?'
     optionen:
-      - text: Den Bereich, in dem der wahre Wert (Mittelwert) mit der gewählten Sicherheit liegt
+      - text: Den Vertrauensbereich für den Erwartungswert – also wie genau der Mittelwert bestimmt ist
         richtig: true
       - text: Den Bereich, in dem ein einzelner neuer Messwert liegt
       - text: Die Fehlergrenze aus der Genauigkeitsklasse
       - text: Den Messbereich des Geräts
-    erklaerung: Für einen Einzelwert gilt ungefähr x̄ ± 2s – das ist breiter.
+    erklaerung: 'Der Vertrauensbereich beschreibt die Unsicherheit des Mittelwerts, nicht die Streuung der Einzelwerte. Wie stark einzelne Werte streuen, zeigt grob $\bar{x} \pm 2s$ – das ist viel breiter.'
 
   - typ: zahl
     stufe: grundlagen
     frage: 'Ein Messgerät Klasse 2,5 hat den Endwert 40 V. Wie groß ist die absolute Fehlergrenze?'
     loesung: 1
     einheit: V
-    erklaerung: '$G = 2{,}5\,\% \cdot 40\,\mathrm{V} = \pm 1\,\mathrm{V}$ – unabhängig vom angezeigten Wert.'
+    erklaerung: '$G = \pm \dfrac{2{,}5}{100} \cdot 40\,\mathrm{V} = \pm 1\,\mathrm{V}$ – unabhängig vom angezeigten Wert.'
 
   - typ: mc
     stufe: standard

@@ -4,6 +4,7 @@ description: Verpolungsschutz, Netzteil mit Brückengleichrichter messen, LED-Le
 ---
 
 import Loesung from '../../../components/Loesung.astro';
+import Netzsicherheit from '../../../components/Netzsicherheit.astro';
 
 ## Verpolungsschutz
 
@@ -31,6 +32,8 @@ negativ gegenüber der Source und der Kanal schaltet durch. Bei Verpolung bleibt
 
 ## Netzteil messen: Brummspannung am Oszilloskop
 
+<Netzsicherheit />
+
 Im Labor misst du an einem Netzteil mit Trafo (12 V~), Brückengleichrichter und 2200 µF die Ausgangsspannung mit dem Oszilloskop.
 Last: 100 Ω.
 
@@ -46,8 +49,9 @@ Last: 100 Ω.
 2. $\hat{u}_\mathrm{a} \approx 16{,}97 - 1{,}4 \approx 15{,}6\,\mathrm{V}$, $I \approx 156\,\mathrm{mA}$,
    $\Delta U \approx \dfrac{0{,}156\,\mathrm{A}}{100\,\mathrm{Hz} \cdot 2200\,\mu\mathrm{F}} \approx 0{,}7\,\mathrm{V}$
 3. Die Masse des Oszilloskops ist über den Schutzleiter **geerdet**. Klemmt man sie an einen Punkt, der nicht auf Erdpotenzial
-   liegt, schließt man Teile der Schaltung kurz (bei Netzschaltungen sogar gefährlich!). Abhilfe: Differenztastkopf,
-   Messung nur gegen die Ausgangsmasse oder ein Trenntransformator. Arbeiten auf der Netzseite nur unter Aufsicht!
+   liegt, schließt man Teile der Schaltung kurz (bei Netzschaltungen sogar gefährlich!). Abhilfe: auf der
+   Kleinspannungsseite nur gegen die Ausgangsmasse messen, sonst einen zugelassenen Differenztastkopf verwenden. Arbeiten auf der Netzseite nur
+   unter Aufsicht!
 
 </Loesung>
 

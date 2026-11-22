@@ -42,7 +42,7 @@ fragen:
     frage: 'Ein Strom von $200\,\mathrm{mA}$ fließt 5 Minuten lang. Welche Ladung fließt dabei?'
     loesung: 60
     einheit: C
-    erklaerung: '$Q = I \cdot t = 0{,}2\,\mathrm{A} \cdot 300\,\mathrm{s} = 60\,\mathrm{C}$ (Minuten zuerst in Sekunden umrechnen!).'
+    erklaerung: '$Q = I \cdot t = 0{,}2\,\mathrm{A} \cdot 300\,\mathrm{s} = 60\,\mathrm{C}$ (Minuten zuerst in Sekunden umrechnen!). Typischer Fehler: mit 5 statt 300 s rechnen – dann kommt 1 C heraus.'
 
   - typ: zahl
     stufe: standard
