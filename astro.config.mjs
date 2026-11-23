@@ -10,9 +10,9 @@ import rehypeKatexSuche from './src/lib/katex-suche.mjs';
 import rehypeBasisLinks from './src/lib/basis-links.mjs';
 
 // Adresse der veröffentlichten Seite (GitHub Pages).
-// Bei einer eigenen Domain später: SITE = 'https://…' und BASIS = '/' setzen.
-const SITE = 'https://tih-engineering.github.io';
-const BASIS = '/lernplattform';
+// Eigene Domain seit 23.11.2026 (vorher https://tih-engineering.github.io mit BASIS '/lernplattform').
+const SITE = 'https://elektronik-lernen.at';
+const BASIS = '/';
 
 // Kennzeichnung für Themenbereiche, die noch keine Inhalte haben.
 const inArbeit = { text: 'in Arbeit', variant: /** @type {const} */ ('note') };

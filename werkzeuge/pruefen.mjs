@@ -8,7 +8,7 @@ import { join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const DIST = fileURLToPath(new URL('../dist/', import.meta.url));
-const BASIS = '/lernplattform';
+const BASIS = ''; // Unterordner der Webseite ('' bei eigener Domain, früher '/lernplattform')
 
 const alleHtml = (ordner) =>
 	readdirSync(ordner).flatMap((n) => {

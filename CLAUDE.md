@@ -163,14 +163,17 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
 
 ## Veröffentlichung
 
-- Online: **https://tih-engineering.github.io/lernplattform/**
+- Online: **https://elektronik-lernen.at/** (eigene Domain seit 23.11.2026, bei netcup; die alte Adresse
+  https://tih-engineering.github.io/lernplattform/ leitet GitHub automatisch weiter)
+- DNS bei netcup (CloudDNS): 4 × A `@` → 185.199.108–111.153, CNAME `www` → `tih-engineering.github.io.`,
+  TXT `_github-pages-challenge-TIH-engineering` (Domain-Verifizierung). Alle A-Einträge mit gleicher TTL (3600).
 - Repository: https://github.com/TIH-engineering/lernplattform (öffentlich, Zweig `main`)
 - Jeder Push auf `main` baut und veröffentlicht automatisch (`.github/workflows/veroeffentlichen.yml`,
   GitHub Pages mit Quelle „GitHub Actions“). Dauer ca. 1–2 Minuten.
 - Commits mit der GitHub-Ersatzadresse (`246109830+TIH-engineering@users.noreply.github.com`,
   nur in diesem Repository eingestellt) – die private E-Mail-Adresse nie in Commits verwenden.
-- Unterordner `/lernplattform`: Links in Inhalten mit `/…` werden automatisch ergänzt
-  (`src/lib/basis-links.mjs`). Bei eigener Domain `SITE`/`BASIS` in `astro.config.mjs` anpassen.
+- Adresse und Unterordner stehen in `astro.config.mjs` (`SITE`, `BASIS = '/'`) und in `werkzeuge/pruefen.mjs` (`BASIS`).
+  Links in Inhalten mit `/…` ergänzt `src/lib/basis-links.mjs`, falls wieder ein Unterordner nötig wird.
 - Vor jedem Push `npm run build` lokal ausführen; `Quellen/` bleibt per `.gitignore` draußen.
 
 ## Befehle
