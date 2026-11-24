@@ -1,12 +1,15 @@
 ---
 title: Praxisbeispiele – Komparator und Frequenzmessung
-description: Tacho-Signal eines Lüfters mit Pull-up auswerten, Netzfrequenz sicher erfassen, Durchflusssensor mit Impulsen pro Liter, kapazitiver Füllstandssensor mit Oszillator, Störimpulse an einem Drehzahleingang, springende Frequenzanzeige am Oszilloskop.
+description: "Praxisbeispiele: Tacho-Signal eines Lüfters · Netzfrequenz messen · Kapazitiver Füllstandssensor · Zu hohe Drehzahl durch Störimpulse · Springende Frequenzanzeige am Oszilloskop · Drehzahl eines Lüfters."
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
 import Netzsicherheit from '../../../components/Netzsicherheit.astro';
 
 ## Tacho-Signal eines Lüfters
+
+<Stufe wert="grundlagen" />
 
 Ein 12-V-Lüfter hat drei Anschlüsse: +12 V, Masse und „Tacho“. Am Tacho-Pin misst das Multimeter gegen Masse 0 V, egal ob der
 Lüfter läuft oder nicht.
@@ -26,6 +29,8 @@ Lüfter läuft oder nicht.
 
 ## Netzfrequenz messen
 
+<Stufe wert="grundlagen" />
+
 <Netzsicherheit />
 
 Ein Datenlogger soll die Netzfrequenz aufzeichnen (Netzfrequenz schwankt im europäischen Verbundnetz normalerweise nur um
@@ -44,22 +49,9 @@ wenige hundertstel Hertz).
 
 </Loesung>
 
-## Durchflusssensor
-
-Ein Turbinen-Durchflusssensor für Wasser liefert laut Datenblatt 450 Impulse pro Liter.
-
-1. Der Mikrocontroller zählt in 1 s genau 63 Impulse. Wie groß ist der Durchfluss in l/min?
-2. Wie viel Wasser ist nach 12 600 Impulsen durchgeflossen?
-
-<Loesung>
-
-1. $63/450 = 0{,}14\,\mathrm{l}$ pro Sekunde → $8{,}4\,\mathrm{l/min}$. Bei so wenigen Impulsen pro Sekunde ist der ±1-Fehler
-   1,6 % – Periodendauermessung wäre genauer.
-2. $12\,600/450 = 28\,\mathrm{l}$ – zum Messen der Menge zählt man einfach alle Impulse (hier ist der ±1-Fehler bedeutungslos).
-
-</Loesung>
-
 ## Kapazitiver Füllstandssensor
+
+<Stufe wert="grundlagen" />
 
 Zwei Elektroden an einem Kunststofftank bilden eine Kapazität, die mit dem Füllstand von 100 pF (leer) auf 150 pF (voll)
 steigt. Sie bestimmt die Frequenz eines Timer-ICs 555 im astabilen Betrieb: $f = \dfrac{1{,}44}{(R_1 + 2 R_2) \cdot C}$ mit
@@ -79,6 +71,8 @@ $R_1 = 10\,\mathrm{k\Omega}$, $R_2 = 100\,\mathrm{k\Omega}$.
 </Loesung>
 
 ## Zu hohe Drehzahl durch Störimpulse
+
+<Stufe wert="grundlagen" />
 
 Ein Mikrocontroller misst die Drehzahl eines Gleichstrommotors über einen Hall-Sensor. Läuft der Motor unter Last, springt
 die Anzeige gelegentlich auf unsinnig hohe Werte.
@@ -100,6 +94,8 @@ die Anzeige gelegentlich auf unsinnig hohe Werte.
 
 ## Springende Frequenzanzeige am Oszilloskop
 
+<Stufe wert="grundlagen" />
+
 Die automatische Frequenzmessung eines Oszilloskops zeigt bei einem langsamen, verrauschten Sinus (100 Hz) Werte zwischen
 100 Hz und mehreren kHz.
 
@@ -109,5 +105,23 @@ Die Messfunktion zählt Durchgänge durch einen Pegel (meist 50 % der Amplitude)
 Durchgänge – derselbe Effekt wie beim Komparator ohne Hysterese. Abhilfe: Bandbreitenbegrenzung (z. B. 20 MHz) oder
 „HF Reject“ beim Trigger einschalten, Mittelwertbildung (Average), Rauschunterdrückung am Trigger (Hysterese) aktivieren.
 Viele Oszilloskope haben zusätzlich einen genaueren Hardware-Frequenzzähler, der das Triggersignal nutzt.
+
+</Loesung>
+
+## Drehzahl eines Lüfters
+
+<Stufe wert="standard" />
+
+Ein PC-Lüfter liefert am Tacho-Ausgang **2 Impulse pro Umdrehung**. Ein Timer mit 1 MHz liefert bei zwei
+aufeinanderfolgenden steigenden Flanken die Capture-Werte 61 200 und 3 164 (der 16-Bit-Zähler ist dazwischen übergelaufen).
+
+**Gesucht:** Impulsperiode und Drehzahl in 1/min
+
+<Loesung>
+
+1. Differenz modulo $2^{16} = 65\,536$: $3164 - 61\,200 + 65\,536 = 7500$ Takte → $T_\mathrm{p} = 7{,}5\,\mathrm{ms}$
+   (im Programm erledigt das die `uint16_t`-Subtraktion automatisch).
+2. Eine Umdrehung = 2 Impulse → $T_\mathrm{U} = 15\,\mathrm{ms}$ → $n = 1/15\,\mathrm{ms} \approx 66{,}7\,\mathrm{s^{-1}}$
+   $= 4000\,\mathrm{min^{-1}}$
 
 </Loesung>

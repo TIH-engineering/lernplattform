@@ -3,9 +3,12 @@ title: Praxisbeispiele – Sensoren
 description: Sensor für Kühlschrank, Pizzaofen und Heizungsrohr auswählen, NTC als Einschaltstrombegrenzer, Varistor im Netzfilter, Küchenwaage mit DMS, Fahrradtacho mit Hall-Sensor, Pt100 in Zweileiterschaltung, Smartphone-Sensoren, NTC-Messkette mit ADC und Umrechnung.
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
 
 ## Den passenden Temperatursensor wählen
+
+<Stufe wert="grundlagen" />
 
 Wähle für jede Anwendung einen Sensor und begründe:
 
@@ -26,6 +29,8 @@ Wähle für jede Anwendung einen Sensor und begründe:
 
 ## Warum knallt es beim Einschalten nicht?
 
+<Stufe wert="grundlagen" />
+
 Ein 500-W-Netzteil hat hinter dem Gleichrichter einen großen Elko. In Reihe zum Netzeingang sitzt ein scheibenförmiges Bauteil, beschriftet „NTC 5D-15“.
 
 1. Wozu dient es?
@@ -41,6 +46,8 @@ Ein 500-W-Netzteil hat hinter dem Gleichrichter einen großen Elko. In Reihe zum
 </Loesung>
 
 ## Varistor im Netzfilter
+
+<Stufe wert="grundlagen" />
 
 In einer Überspannungs-Steckdosenleiste sitzen zwischen L und N sowie zwischen L/N und PE scheibenförmige **Varistoren** (z. B. 275 V AC).
 
@@ -61,6 +68,8 @@ In einer Überspannungs-Steckdosenleiste sitzen zwischen L und N sowie zwischen 
 
 ## Messkette einer Küchenwaage
 
+<Stufe wert="grundlagen" />
+
 Eine Küchenwaage hat eine Wägezelle mit vier DMS (Vollbrücke, 1 kΩ, Ausgang 1 mV/V bei 5 kg). Sie wird mit 3,3 V versorgt, ein 24-Bit-A/D-Umsetzer
 wertet aus.
 
@@ -77,6 +86,8 @@ wertet aus.
 </Loesung>
 
 ## Fahrradtacho mit Hall-Sensor
+
+<Stufe wert="standard" />
 
 Am Fahrrad sitzt ein Magnet an einer Speiche, am Rahmen ein Hall-Schalter. Der Radumfang beträgt 2,10 m. Der Tacho misst zwischen zwei Impulsen 0,30 s.
 
@@ -97,6 +108,8 @@ Am Fahrrad sitzt ein Magnet an einer Speiche, am Rahmen ein Hall-Schalter. Der R
 
 ## Pt100 mit langen Zuleitungen
 
+<Stufe wert="grundlagen" />
+
 Ein Pt100 sitzt in 15 m Entfernung und ist in **Zweileiterschaltung** mit Kupferleitung (0,5 mm², $\rho = 0{,}0178\,\Omega\,\mathrm{mm^2/m}$) angeschlossen.
 
 1. Wie groß ist der Widerstand der Zuleitungen?
@@ -114,6 +127,8 @@ Ein Pt100 sitzt in 15 m Entfernung und ist in **Zweileiterschaltung** mit Kupfer
 </Loesung>
 
 ## Vom NTC zum Messwert im Mikrocontroller
+
+<Stufe wert="standard" />
 
 Eine Temperatur soll mit einem NTC ($R_{25} = 10\,\mathrm{k\Omega}$, $B = 3950\,\mathrm{K}$) gemessen werden. Die Messkette: NTC als unterer Widerstand
 eines Spannungsteilers mit $R_\mathrm{V} = 10\,\mathrm{k\Omega}$ an 3,3 V → RC-Tiefpass → 12-Bit-A/D-Umsetzer ($U_\mathrm{ref} = 3{,}3\,\mathrm{V}$) →

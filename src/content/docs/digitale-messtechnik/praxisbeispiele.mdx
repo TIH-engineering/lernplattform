@@ -3,10 +3,13 @@ title: Praxisbeispiele – Digitale Messtechnik und Laborgeräte
 description: Mikrocontroller misst Akkuspannung, Tastkopf abgleichen, Netzspannung sicher am Oszilloskop darstellen, Aliasing im Video und am Oszilloskop, Frequenzspektrum mit dem Smartphone, Funktionsgenerator am Verstärker.
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
 import Netzsicherheit from '../../../components/Netzsicherheit.astro';
 
 ## Akkuspannung mit dem Mikrocontroller messen
+
+<Stufe wert="standard" />
 
 Ein Mikrocontroller (12-Bit-ADC, $U_\mathrm{ref} = 3{,}3\,\mathrm{V}$) soll die Spannung eines Akkupacks (bis 12,6 V) überwachen.
 
@@ -26,6 +29,8 @@ Ein Mikrocontroller (12-Bit-ADC, $U_\mathrm{ref} = 3{,}3\,\mathrm{V}$) soll die 
 
 ## Tastkopf abgleichen
 
+<Stufe wert="grundlagen" />
+
 Am Oszilloskop gibt es einen Anschluss „Probe Comp“ mit einem 1-kHz-Rechtecksignal. Ein frisch angeschlossener 10:1-Tastkopf zeigt dort ein Rechteck mit
 **Spitzen** an den Ecken.
 
@@ -41,6 +46,8 @@ Am Oszilloskop gibt es einen Anschluss „Probe Comp“ mit einem 1-kHz-Rechteck
 </Loesung>
 
 ## Netzspannung am Oszilloskop
+
+<Stufe wert="grundlagen" />
 
 <Netzsicherheit />
 
@@ -62,6 +69,8 @@ Für eine Laborübung soll die Netzspannung (230 V, 50 Hz) am Oszilloskop darges
 
 ## Aliasing sichtbar machen
 
+<Stufe wert="grundlagen" />
+
 1. In einem Video dreht sich ein Propeller scheinbar langsam rückwärts. Erkläre das mit dem Abtasttheorem.
 2. Am Digitaloszilloskop wird ein 1-MHz-Sinus bei einer zu langsamen Zeitbasis (500 ms/Div) dargestellt. Das Bild zeigt eine langsame Schwingung mit wenigen Hz. Warum?
 
@@ -75,6 +84,8 @@ Für eine Laborübung soll die Netzspannung (230 V, 50 Hz) am Oszilloskop darges
 </Loesung>
 
 ## Frequenzspektrum mit dem Smartphone
+
+<Stufe wert="grundlagen" />
 
 Mit einer Messapp (z. B. phyphox, Funktion „Audio-Spektrum“) wird ein Ton von 440 Hz eines Tongenerators und dann eine Gitarrensaite (A, 110 Hz) gemessen.
 
@@ -90,6 +101,8 @@ Mit einer Messapp (z. B. phyphox, Funktion „Audio-Spektrum“) wird ein Ton vo
 </Loesung>
 
 ## Verstärker mit dem Funktionsgenerator prüfen
+
+<Stufe wert="grundlagen" />
 
 Ein Audioverstärker (Eingangswiderstand 10 kΩ) soll mit 100 mV Effektivwert bei 1 kHz angesteuert werden. Der Generator ist auf 50-Ω-Last eingestellt.
 

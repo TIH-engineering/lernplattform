@@ -1,10 +1,11 @@
 ---
 title: Rechenbeispiele – Signalkennwerte
-description: Rechenbeispiele zu Periodendauer, Frequenz, Kreisfrequenz und Wellenlänge, Netzspannung, Phasenverschiebung, unsymmetrischem Rechtecksignal, Dreiecksignal, Mischspannung, PWM, Einweggleichrichtung und Messfehler eines Multimeters.
+description: "Rechenbeispiele: Periodendauer, Frequenz, Kreisfrequenz · Wellenlänge eines Funksignals · Die Netzspannung · Phasenverschiebung · Sinussignal am Oszilloskop · Unsymmetrisches Rechtecksignal · Dreiecksignal · Mischspannung · Einweggleichrichtung · Multimeter misst ein Rechteck · Messfunktionen des Oszilloskops · Brummspannung eines Netzteils."
 ---
 
 import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
+import Netzsicherheit from '../../../components/Netzsicherheit.astro';
 
 ## Periodendauer, Frequenz, Kreisfrequenz
 
@@ -131,23 +132,6 @@ Hinter einem Netzteil liegt eine Gleichspannung von $12\,\mathrm{V}$ mit einer �
 
 </Loesung>
 
-## PWM-Signal an einer Heizung
-
-<Stufe wert="standard" />
-
-Eine Heizfolie ($R = 6\,\Omega$) wird mit PWM an $12\,\mathrm{V}$ betrieben, Tastgrad $D = 25\,\%$.
-
-1. Berechne Mittelwert und Effektivwert der Spannung.
-2. Welche Heizleistung ergibt sich? Vergleiche mit einer Gleichspannung in Höhe des Mittelwerts.
-
-<Loesung>
-
-1. $\bar{u} = D \cdot \hat{u} = 0{,}25 \cdot 12\,\mathrm{V} = 3\,\mathrm{V}$ · $U = \sqrt{D} \cdot \hat{u} = 0{,}5 \cdot 12\,\mathrm{V} = 6\,\mathrm{V}$
-2. $P = U^2/R = 36\,\mathrm{V^2}/6\,\Omega = 6\,\mathrm{W}$ (das sind genau 25 % von 24 W bei Dauerbetrieb). Mit 3 V Gleichspannung wären es nur
-   $9/6 = 1{,}5\,\mathrm{W}$ – für die Leistung zählt der **Effektivwert**.
-
-</Loesung>
-
 ## Einweggleichrichtung
 
 <Stufe wert="standard" />
@@ -178,5 +162,44 @@ Was zeigen die Geräte an? Wie groß ist der Fehler des einfachen Geräts?
 2. Dreieck: $\overline{\lvert u \rvert} = 5\,\mathrm{V}$ → einfaches Gerät: $5{,}56\,\mathrm{V}$; True RMS: $10/\sqrt{3} = 5{,}77\,\mathrm{V}$ → Fehler **−3,8 %**.
 
 Allgemein: $F_\mathrm{r} = \dfrac{1{,}111}{k_\mathrm{f}} - 1$.
+
+</Loesung>
+
+## Messfunktionen des Oszilloskops
+
+<Stufe wert="standard" />
+
+Moderne Oszilloskope berechnen Kennwerte automatisch („Measure“): *Freq*, *Period*, *Vpp*, *Vmax*, *Mean*, *RMS*.
+An einem Signal werden angezeigt: Vpp = 5,0 V, Vmax = 5,0 V, Mean = 1,25 V, RMS = 2,50 V, Freq = 1,00 kHz.
+
+1. Um welche Signalform handelt es sich vermutlich?
+2. Wie groß ist der Tastgrad?
+
+<Loesung>
+
+1. Vmax = Vpp → das Signal schwankt zwischen 0 V und 5 V. Mittelwert ≠ 0 und RMS = √(Mean · Vmax) – typisch für ein **PWM-Rechtecksignal** von 0/5 V.
+2. $D = \bar{u}/\hat{u} = 1{,}25/5 = 25\,\%$. Kontrolle: $U = \sqrt{D} \cdot \hat{u} = 0{,}5 \cdot 5\,\mathrm{V} = 2{,}5\,\mathrm{V}$ ✓
+
+Tipp: Das Oszilloskop rechnet nur über die Perioden auf dem Bildschirm – für genaue Werte mehrere ganze Perioden darstellen.
+
+</Loesung>
+
+## Brummspannung eines Netzteils
+
+<Stufe wert="grundlagen" />
+
+Ein Netzteil liefert 12 V. Am Oszilloskop siehst du in Stellung **AC-Kopplung** mit 50 mV/Div eine Restwelligkeit von 4 Kästchen Spitze-Spitze
+mit 100 Hz.
+
+1. Warum stellt man die AC-Kopplung ein?
+2. Wie groß ist die Brummspannung $U_\mathrm{ss}$? Woher kommen die 100 Hz?
+3. Welchen Effektivwert misst ein True-RMS-Multimeter in Stellung AC (Annahme: sägezahnähnlich, $k_\mathrm{s} \approx \sqrt{3}$)?
+
+<Loesung>
+
+1. Die AC-Kopplung entfernt den Gleichanteil (12 V). Nur so kann man die kleine Welligkeit mit hoher Empfindlichkeit vergrößert darstellen.
+2. $U_\mathrm{ss} = 4 \cdot 50\,\mathrm{mV} = 200\,\mathrm{mV}$. Ein **Brückengleichrichter** lädt den Kondensator bei jeder Halbwelle nach – zweimal pro Netzperiode,
+   also mit 100 Hz.
+3. $\hat{u}_\sim \approx 100\,\mathrm{mV}$ → $U_\sim \approx 100\,\mathrm{mV}/\sqrt{3} \approx 58\,\mathrm{mV}$.
 
 </Loesung>

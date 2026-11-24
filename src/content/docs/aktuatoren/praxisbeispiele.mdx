@@ -1,11 +1,14 @@
 ---
 title: Praxisbeispiele – Aktuatoren
-description: Relais am Mikrocontroller mit Transistor und Freilaufdiode, Magnetventil mit PWM-Haltestrom, Akkuschrauber mit Drehmomentstufen, blockierter Scheibenwischermotor, Schrittverluste am 3D-Drucker, Pumpe am Frequenzumrichter, Motor falsch angeschlossen.
+description: "Praxisbeispiele: Relais am Mikrocontroller · Magnetventil sparsam halten · Akkuschrauber mit Drehmomentstufen · Schrittverluste am 3D-Drucker · Pumpe am Frequenzumrichter · Motor läuft falsch herum oder brummt · Typenschild eines Asynchronmotors · Frequenzumrichter: Drehzahl und Spannung · BLDC-Motor: Kommutierungsfrequenz."
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
 
 ## Relais am Mikrocontroller
+
+<Stufe wert="grundlagen" />
 
 Ein 5-V-Relais (Spulenwiderstand 70 Ω) soll von einem 3,3-V-Mikrocontroller geschaltet werden.
 
@@ -27,6 +30,8 @@ Ein 5-V-Relais (Spulenwiderstand 70 Ω) soll von einem 3,3-V-Mikrocontroller ges
 
 ## Magnetventil sparsam halten
 
+<Stufe wert="standard" />
+
 Ein 24-V-Magnetventil braucht laut Datenblatt 1 A zum Anziehen, hält aber schon mit 0,35 A sicher. Die Spule hat 24 Ω.
 
 1. Wie groß ist die Verlustleistung bei Dauerstrom 1 A und bei 0,35 A Haltestrom?
@@ -43,6 +48,8 @@ Ein 24-V-Magnetventil braucht laut Datenblatt 1 A zum Anziehen, hält aber schon
 </Loesung>
 
 ## Akkuschrauber mit Drehmomentstufen
+
+<Stufe wert="grundlagen" />
 
 Ein Akkuschrauber hat einen Gleichstrommotor (bzw. BLDC-Motor), ein Getriebe und einen Einstellring für das Drehmoment.
 
@@ -63,6 +70,8 @@ Ein Akkuschrauber hat einen Gleichstrommotor (bzw. BLDC-Motor), ein Getriebe und
 
 ## Schrittverluste am 3D-Drucker
 
+<Stufe wert="grundlagen" />
+
 Beim schnellen Drucken verschieben sich plötzlich alle oberen Schichten um einige Millimeter in X-Richtung.
 
 1. Was ist passiert?
@@ -79,6 +88,8 @@ Beim schnellen Drucken verschieben sich plötzlich alle oberen Schichten um eini
 </Loesung>
 
 ## Pumpe am Frequenzumrichter
+
+<Stufe wert="grundlagen" />
 
 Eine Heizungsumwälzpumpe mit Asynchronmotor läuft bisher direkt am Netz; der Durchfluss wird mit einem Drosselventil
 eingestellt. Sie soll einen Frequenzumrichter bekommen.
@@ -98,6 +109,8 @@ eingestellt. Sie soll einen Frequenzumrichter bekommen.
 
 ## Motor läuft falsch herum oder brummt
 
+<Stufe wert="grundlagen" />
+
 1. Ein Drehstrommotor läuft nach dem Anschluss in die falsche Richtung. Was tun?
 2. Ein anderer Motor brummt nur und läuft nicht an, wird aber warm. Woran kann das liegen?
 
@@ -108,5 +121,54 @@ eingestellt. Sie soll einen Frequenzumrichter bekommen.
    Wechselfeld – kein Anlaufmoment, aber großer Strom. Möglich ist auch, dass das Lastmoment größer als das Anzugsmoment
    ist (blockierte Pumpe) oder der Motor im Stern statt im Dreieck angeschlossen wurde. Sofort abschalten – der Motorschutz
    sollte auslösen.
+
+</Loesung>
+
+## Typenschild eines Asynchronmotors
+
+<Stufe wert="standard" />
+
+Typenschild: 4 kW · 400 V Δ · 1440 min⁻¹ · 50 Hz · cos φ = 0,82 · η = 87 %.
+
+**Gesucht:** Polpaarzahl, Schlupf, aufgenommene Leistung, Strom, Nennmoment
+
+<Loesung>
+
+1. Die nächste Synchrondrehzahl über 1440 min⁻¹ ist 1500 min⁻¹ → $p = 2$ (vierpolig)
+2. $s = (1500 - 1440)/1500 = 4\,\%$
+3. $P_\mathrm{zu} = 4\,\mathrm{kW}/0{,}87 \approx 4{,}6\,\mathrm{kW}$
+4. $I = \dfrac{4000\,\mathrm{W}}{\sqrt{3} \cdot 400\,\mathrm{V} \cdot 0{,}87 \cdot 0{,}82} \approx 8{,}1\,\mathrm{A}$
+5. $M_\mathrm{N} = \dfrac{P_\mathrm{N}}{2\pi n} = \dfrac{4000\,\mathrm{W}}{2\pi \cdot 1440/60\,\mathrm{s^{-1}}} \approx 26{,}5\,\mathrm{Nm}$
+
+</Loesung>
+
+## Frequenzumrichter: Drehzahl und Spannung
+
+<Stufe wert="grundlagen" />
+
+Der Motor aus dem vorigen Beispiel wird an einem Umrichter mit U/f-Kennlinie (400 V bei 50 Hz) mit 30 Hz betrieben. Der
+Schlupf in min⁻¹ bleibt bei gleichem Moment etwa gleich (60 min⁻¹).
+
+**Gesucht:** Synchrondrehzahl, Drehzahl, Ausgangsspannung des Umrichters
+
+<Loesung>
+
+$n_\mathrm{s} = f/p = 30\,\mathrm{s^{-1}}/2 = 15\,\mathrm{s^{-1}} = 900\,\mathrm{min^{-1}}$ · $n \approx 840\,\mathrm{min^{-1}}$ ·
+$U = 400\,\mathrm{V} \cdot 30/50 = 240\,\mathrm{V}$
+
+</Loesung>
+
+## BLDC-Motor: Kommutierungsfrequenz
+
+<Stufe wert="standard" />
+
+Ein Drohnenmotor hat 7 Polpaare und dreht mit 12 000 min⁻¹.
+
+**Gesucht:** elektrische Frequenz und Anzahl der Kommutierungsschritte pro Sekunde (Blockkommutierung)
+
+<Loesung>
+
+$n = 200\,\mathrm{s^{-1}}$ → $f_\mathrm{el} = p \cdot n = 1400\,\mathrm{Hz}$ → 6 Schritte pro elektrischer Periode:
+$8400$ Schritte pro Sekunde – alle 119 µs muss die Elektronik umschalten.
 
 </Loesung>

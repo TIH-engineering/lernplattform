@@ -1,11 +1,14 @@
 ---
 title: Praxisbeispiele – A/D- und D/A-Umsetzer
-description: Den passenden A/D-Umsetzer auswählen, hochohmigen Spannungsteiler am ADC-Eingang, Referenz aus der Versorgungsspannung, verrauschter Messwert, Zweipunkt-Kalibrierung, Sinus aus dem Mikrocontroller mit Tabelle und D/A-Umsetzer.
+description: "Praxisbeispiele: Welcher Umsetzer passt? · Akkuspannung mit großem Teiler · Messwert hängt vom USB-Kabel ab · Verrauschter Messwert · Sinus aus dem Mikrocontroller."
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
 
 ## Welcher Umsetzer passt?
+
+<Stufe wert="grundlagen" />
 
 Ordne jeder Anwendung ein Verfahren zu (Flash, SAR, Dual-Slope, Sigma-Delta) und begründe:
 
@@ -25,6 +28,8 @@ Ordne jeder Anwendung ein Verfahren zu (Flash, SAR, Dual-Slope, Sigma-Delta) und
 
 ## Akkuspannung mit großem Teiler
 
+<Stufe wert="grundlagen" />
+
 Ein Mikrocontroller misst eine Akkuspannung über einen Teiler aus 1 MΩ und 330 kΩ (wenig Ruhestrom). Die Messwerte sind
 um einige Prozent zu klein und schwanken, je nachdem, welcher Kanal vorher gemessen wurde.
 
@@ -40,6 +45,8 @@ längere Abtastzeit einstellen bzw. einen OPV-Puffer verwenden.
 
 ## Messwert hängt vom USB-Kabel ab
 
+<Stufe wert="grundlagen" />
+
 Ein Arduino misst eine Sensorspannung mit der Versorgung (5 V) als Referenz. Am Laptop zeigt er 2,50 V, am Steckernetzteil
 2,58 V – die Sensorspannung ist laut Multimeter in beiden Fällen 2,50 V.
 
@@ -54,6 +61,8 @@ Sensoren (Potentiometer, Brücke), die selbst an der Versorgung hängen – da i
 
 ## Verrauschter Messwert
 
+<Stufe wert="grundlagen" />
+
 Der ADC-Wert eines ruhigen Temperatursensors springt um ±3 LSB. Was kann man tun?
 
 <Loesung>
@@ -66,22 +75,9 @@ Der ADC-Wert eines ruhigen Temperatursensors springt um ±3 LSB. Was kann man tu
 
 </Loesung>
 
-## Zweipunkt-Kalibrierung
-
-Ein Messkanal (12 Bit, 0 … 10 V) liefert bei 0,000 V den Code 18 und bei 10,000 V den Code 4071. Wie rechnet man einen Code in
-eine Spannung um, und welche Spannung gehört zu Code 2000?
-
-<Loesung>
-
-Steigung: $\dfrac{10\,\mathrm{V}}{4071 - 18} = 2{,}4673\,\mathrm{mV}$ pro Code. $U = (Z - 18) \cdot 2{,}4673\,\mathrm{mV}$ →
-$Z = 2000$: $U = 1982 \cdot 2{,}4673\,\mathrm{mV} \approx 4{,}890\,\mathrm{V}$
-
-Damit sind Offset (18 Codes) und Verstärkungsfehler korrigiert. Ohne Kalibrierung hätte man $2000 \cdot 10\,\mathrm{V}/4096
-\approx 4{,}883\,\mathrm{V}$ gerechnet.
-
-</Loesung>
-
 ## Sinus aus dem Mikrocontroller
+
+<Stufe wert="standard" />
 
 Ein Mikrocontroller soll mit einem 8-Bit-D/A-Umsetzer einen 50-Hz-Sinus für einen Prüfaufbau erzeugen. Er gibt dazu
 64 Werte pro Periode aus einer Tabelle aus.

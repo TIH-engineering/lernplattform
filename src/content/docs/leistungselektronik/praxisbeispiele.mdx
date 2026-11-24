@@ -5,16 +5,18 @@ description: Leistungselektronik in echten Bauteilen – integrierte H-Brücke, 
 
 import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
-import Netzsicherheit from '../../../components/Netzsicherheit.astro';
 import Abbildung from '../../../components/Abbildung.astro';
+import Netzsicherheit from '../../../components/Netzsicherheit.astro';
 import SaettigungAufbau from '../../../assets/leistungselektronik/saettigung-messaufbau.svg';
 import SaettigungStrom from '../../../assets/leistungselektronik/saettigung-stromanstieg.svg';
 
 Hier siehst du, wie die Theorie in **echten Bauteilen** steckt. Die Kennwerte stammen aus den
-Herstellerdatenblättern (Links unter [Literatur & Links](/leistungselektronik/literatur/)).
+Herstellerdatenblättern (Links unter [Datenblätter](/leistungselektronik/literatur/)).
 Lies bei jedem Beispiel auch selbst im Datenblatt nach – das ist die wichtigste Fähigkeit in der Praxis.
 
 ## Integrierte H-Brücke: DRV8212P
+
+<Stufe wert="standard" />
 
 Der **DRV8212P** von Texas Instruments ist eine komplette [H-Brücke](/leistungselektronik/theorie/motorbruecken/) in einem Chip –
 für kleine Gleichstrommotoren, z. B. in Spielzeug, Schlössern oder Ventilen.
@@ -51,6 +53,8 @@ Steuereingänge IN1/IN2 hinein. Die Logik steuert die beiden Halbbrücken an OUT
 
 ## Buck-IC: AP61100
 
+<Stufe wert="standard" />
+
 Der **AP61100** (Diodes Incorporated) ist ein **synchroner Tiefsetzsteller** mit zwei integrierten MOSFETs.
 Eine Freilaufdiode ist nicht nötig – der Low-Side-MOSFET übernimmt den Freilauf.
 
@@ -86,6 +90,8 @@ verglichen wird, ein Timer für die Einschaltzeit, die beiden Leistungs-MOSFETs 
 ➡ Die komplette Dimensionierung dieses Wandlers findest du bei den [Rechenbeispielen](/leistungselektronik/rechenbeispiele/#komplette-buck-auslegung).
 
 ## Boost-IC: TPS61023
+
+<Stufe wert="standard" />
 
 Der **TPS61023** (Texas Instruments) ist ein **synchroner Hochsetzsteller** für batteriebetriebene Geräte –
 z. B. um aus einer Li-Ionen-Zelle 5 V für USB zu erzeugen. Ein zweiter MOSFET ersetzt die Ausgangsdiode
@@ -124,6 +130,8 @@ der Eingangsstrom – rechne immer auch den ungünstigsten Fall!
 
 ## Die richtige Drossel auswählen
 
+<Stufe wert="standard" />
+
 Für den AP61100-Wandler (5 V → 1,8 V, 1 A, 2,2 MHz) empfiehlt der Hersteller **1,0 … 1,5 µH**. Der berechnete
 Spitzenstrom liegt bei **1,26 A**. Zwei Drosseln aus der Coilcraft-Serie LPS4018 stehen zur Auswahl:
 
@@ -154,6 +162,8 @@ Temperatur, Toleranzen, Layout und EMV müssen trotzdem geprüft werden.
 </Loesung>
 
 ## Flyback-Netzteil analysieren
+
+<Stufe wert="grundlagen" />
 
 <Netzsicherheit />
 
@@ -189,6 +199,8 @@ Die Primärseite führt **Netzspannung**. Der Schaltplan dient zur Analyse im Un
 :::
 
 ## Layout: heißen Pfad finden
+
+<Stufe wert="grundlagen" />
 
 Im Datenblatt des AP61100 gibt es einen **Layoutvorschlag** (PCB-Layout-Beispiel). Drucke ihn aus oder öffne ihn am Bildschirm.
 

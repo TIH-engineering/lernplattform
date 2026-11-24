@@ -1,11 +1,12 @@
 ---
 title: Rechenbeispiele – Messwerke und Messbereiche
-description: Rechenbeispiele zu Drehmoment und Ausschlag eines Drehspulmesswerks, Dreheisenskala, Vorwiderständen für mehrere Spannungsbereiche, Shunt, Belastungsfehler eines Spannungsmessers, strom- und spannungsrichtiger Widerstandsmessung und Widerstandsmessung mit Spannungsteiler.
+description: "Rechenbeispiele: Drehmoment eines Drehspulmesswerks · Skala eines Dreheisenmesswerks · Drehspul oder Dreheisen? · Vorwiderstände für drei Spannungsbereiche · Shunt für einen Strommesser · Belastungsfehler am Spannungsteiler · Stromrichtige Widerstandsmessung · Spannungsrichtige Messung eines großen Widerstands · Widerstand über einen Spannungsteiler · Innenwiderstand eines Akkus · Hochohmige Schaltung messen."
 ---
 
 import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
 import Abbildung from '../../../components/Abbildung.astro';
+import Netzsicherheit from '../../../components/Netzsicherheit.astro';
 import Spannungsrichtig from '../../../assets/mtrs/spannungsrichtig.svg';
 import Stromrichtig from '../../../assets/mtrs/stromrichtig.svg';
 
@@ -166,5 +167,40 @@ Ein unbekannter Widerstand liegt in Reihe mit $R = 1\,\mathrm{k\Omega}$ an $5{,}
 $$
 R_\mathrm{x} = R \cdot \frac{U_\mathrm{x}}{U - U_\mathrm{x}} = 1\,\mathrm{k\Omega} \cdot \frac{1{,}8\,\mathrm{V}}{3{,}2\,\mathrm{V}} \approx 563\,\Omega
 $$
+
+</Loesung>
+
+## Innenwiderstand eines Akkus
+
+<Stufe wert="grundlagen" />
+
+Ein Lithium-Akku zeigt im Leerlauf $4{,}10\,\mathrm{V}$. Mit einem Lastwiderstand von $2\,\Omega$ misst du $3{,}94\,\mathrm{V}$ an den Polen und $1{,}97\,\mathrm{A}$.
+
+1. Berechne den Innenwiderstand.
+2. Warum misst man die Spannung mit eigenen Messleitungen direkt an den Polen und nicht an den Klemmen des Lastwiderstands?
+
+<Loesung>
+
+1. $R_\mathrm{i} = \dfrac{U_0 - U}{I} = \dfrac{4{,}10 - 3{,}94}{1{,}97}\,\Omega \approx 81\,\mathrm{m\Omega}$
+2. Die Zuleitungen und Klemmen zum Lastwiderstand haben selbst einige mΩ – dieselbe Größenordnung wie der Innenwiderstand. Misst man direkt an den
+   Polen (stromlose Messleitungen, **Vierleiterprinzip**), gehen sie nicht ins Ergebnis ein.
+
+</Loesung>
+
+## Hochohmige Schaltung messen
+
+<Stufe wert="grundlagen" />
+
+An einem Transistorverstärker soll die Basisspannung gemessen werden. Der Basis-Spannungsteiler besteht aus $470\,\mathrm{k\Omega}$ und $100\,\mathrm{k\Omega}$ an
+$12\,\mathrm{V}$. Das alte Analogmultimeter (20 kΩ/V, 3-V-Bereich) zeigt 1,1 V, das Digitalmultimeter (10 MΩ) 2,08 V.
+
+1. Welcher Wert stimmt ungefähr? Berechne den unbelasteten Wert.
+2. Warum misst das Analoggerät so viel weniger?
+
+<Loesung>
+
+1. Unbelastet: $12\,\mathrm{V} \cdot \dfrac{100}{570} \approx 2{,}11\,\mathrm{V}$ – das **Digitalmultimeter** liegt fast richtig (der Basisstrom senkt die Spannung zusätzlich etwas).
+2. Im 3-V-Bereich hat das Analoggerät nur $60\,\mathrm{k\Omega}$ – das liegt parallel zu den 100 kΩ und belastet den hochohmigen Teiler (Innenwiderstand ≈ 83 kΩ) stark.
+   Rechnerisch: $100 \parallel 60 = 37{,}5\,\mathrm{k\Omega}$ → $12\,\mathrm{V} \cdot 37{,}5/507{,}5 \approx 0{,}89\,\mathrm{V}$ – die Größenordnung der gemessenen 1,1 V.
 
 </Loesung>

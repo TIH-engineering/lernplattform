@@ -44,10 +44,10 @@ const thema = (label, ordner, { theorieOrdner = false, zusatz = [], rechenLabel 
 
 // Grundlagen der Elektrotechnik: Theorie steht im Schulbuch, daher pro Thema nur
 // Übersicht, Rechenbeispiele, Praxisbeispiele und Quiz. Ordner: src/content/docs/grundlagen/<ordner>/
-// Regel: Rechenbeispiele = Aufgaben mit gegebenen Werten und Rechenweg (wie im Test);
-//        Praxisbeispiele = echter Gegenstand oder Messung aus Alltag/Labor, Schwerpunkt Verstehen und Abschätzen.
-// Wo sich das nicht sinnvoll trennen lässt, gibt es nur „Beispiele“ (Datei rechenbeispiele.mdx, kein praxisbeispiele.mdx).
-const nurBeispiele = new Set(['netzwerke', 'komplexe-rechnung']);
+// Regel (ganze Seite): Rechenbeispiele = fiktive Schaltung, Bauteil/Messgerät mit Kennwerten, Messwerte auswerten,
+//        LTspice-Kontrolle; Praxisbeispiele = Alltagsgerät/Anwendung, Maschine mit Typenschild, Labor-/Werkstattsituation.
+// Themen in nurBeispiele hätten nur eine Seite „Beispiele“ (rechenbeispiele.mdx) – derzeit keine.
+const nurBeispiele = new Set([]);
 const grundlagenThemen = [
 	['Grundbegriffe, Strom und Spannung', 'grundbegriffe'],
 	['Ohmsches Gesetz und Quellen', 'ohmsches-gesetz'],
@@ -146,7 +146,7 @@ export default defineConfig({
 							theorieOrdner: true,
 							zusatz: [
 								['Simulationen', 'simulationen'],
-								['Literatur & Links', 'literatur'],
+								['Datenblätter', 'literatur'],
 							],
 						}),
 					],

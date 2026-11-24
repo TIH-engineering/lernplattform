@@ -1,11 +1,17 @@
 ---
 title: Praxisbeispiele – Filter
-description: Anti-Aliasing-Filter vor dem ADC, Sensorsignal einer Industrieanlage, Sprachfilter für ein Mikrofon, Messung des Frequenzgangs mit dem Network Analyzer und Simulation in LTspice, Bode-Messung mit dem Analog Discovery, Übertragungsfunktion aus einer Messung, FFT-Messung eines Rechtecksignals und Verzerrungen.
+description: "Praxisbeispiele: Anti-Aliasing-Filter vor dem ADC · Sensorsignal einer Förderanlage · Sprachfilter für ein Mikrofon · Frequenzgang messen mit dem Network Analyzer · Bode-Diagramm mit dem Analog Discovery messen · FFT-Messung eines Rechtecksignals · Klingt das Signal sauber? – Verzerrungen hören und sehen."
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import RLC from '../../../assets/elektronik/rlc-tiefpass.svg';
+import SallenKey from '../../../assets/elektronik/sallen-key-tiefpass.svg';
 
 ## Anti-Aliasing-Filter vor dem ADC
+
+<Stufe wert="grundlagen" />
 
 Ein Mikrocontroller tastet ein Sensorsignal mit 1 kHz ab (1000 Messwerte pro Sekunde). Das Signal enthält Nutzanteile bis 50 Hz, aber auch
 Störungen um 950 Hz von einem Lüfter.
@@ -24,6 +30,8 @@ Störungen um 950 Hz von einem Lüfter.
 </Loesung>
 
 ## Sensorsignal einer Förderanlage
+
+<Stufe wert="standard" />
 
 Ein Temperatursensor liefert ein langsames Signal (120 mV). Darauf liegen Störungen von 50 Hz (20 mV) und 2 kHz (80 mV). Die Aufbereitung:
 passiver RC-Tiefpass ($3{,}3\,\mathrm{k\Omega}$, $4{,}7\,\mu\mathrm{F}$) → Sallen-Key-Tiefpass ($10\,\mathrm{k\Omega}$, $100\,\mathrm{nF}$, $K = 1$) → nichtinvertierender
@@ -47,6 +55,8 @@ Verstärker mit $V = 20$.
 
 ## Sprachfilter für ein Mikrofon
 
+<Stufe wert="grundlagen" />
+
 Für eine Sprechanlage soll nur der Bereich 300 Hz … 3,4 kHz übertragen werden (wie beim Telefon).
 
 1. Welche Filterkombination brauchst du?
@@ -63,6 +73,8 @@ Für eine Sprechanlage soll nur der Bereich 300 Hz … 3,4 kHz übertragen werde
 </Loesung>
 
 ## Frequenzgang messen mit dem Network Analyzer
+
+<Stufe wert="grundlagen" />
 
 Im Labor wird der Frequenzgang eines Filters mit einem Network Analyzer (oder Oszilloskop mit Bode-Funktion) gemessen:
 Ein Generator „wobbelt“ die Frequenz, das Gerät misst Betrag und Phase von $U_\mathrm{a}/U_\mathrm{e}$.
@@ -81,24 +93,9 @@ Ein Generator „wobbelt“ die Frequenz, das Gerät misst Betrag und Phase von 
 
 </Loesung>
 
-## Simulieren statt raten
-
-Baue den [Sallen-Key-Tiefpass aus den Rechenbeispielen](/filter/rechenbeispiele/#sallen-key-tiefpass-auslegen) in LTspice mit einem idealen OPV auf
-(AC-Quelle mit Amplitude 1, `.ac dec 100 10 100k`).
-
-1. Lies $f_\mathrm{g}$ und den Durchlasspegel ab.
-2. Ändere $R_\mathrm{f}$ auf 10 kΩ und auf 15 kΩ. Was passiert?
-
-<Loesung>
-
-1. Durchlasspegel ≈ +4 dB ($K = 1{,}586$), die −3-dB-Grenze liegt etwa bei 1,94 kHz (−3 dB **unter** dem Durchlasspegel, also bei ≈ +1 dB).
-2. $R_\mathrm{f} = 10\,\mathrm{k\Omega}$: $K = 2$, $Q = 1$ → sichtbare Überhöhung (+1,2 dB über dem Durchlasspegel).
-   $R_\mathrm{f} = 15\,\mathrm{k\Omega}$: $K = 2{,}5$, $Q = 2$ → deutliche Spitze. Bei $K \geq 3$ wird die Schaltung instabil und schwingt – sie ist dann
-   ein Oszillator!
-
-</Loesung>
-
 ## Bode-Diagramm mit dem Analog Discovery messen
+
+<Stufe wert="grundlagen" />
 
 Ein RC-Tiefpass mit $R = 10\,\mathrm{k\Omega}$ und $C = 10\,\mathrm{nF}$ wird mit dem **Network Analyzer** des Analog Discovery (Software WaveForms)
 gemessen: Wavegen W1 speist den Eingang, Kanal 1 misst die Eingangs-, Kanal 2 die Ausgangsspannung. Einstellungen: 10 Hz … 100 kHz,
@@ -127,30 +124,9 @@ logarithmisch, 1 V Amplitude, kein Offset.
 
 </Loesung>
 
-## Übertragungsfunktion aus einer Messung bestimmen
-
-Ein unbekannter aktiver Tiefpass wird gemessen. Ergebnis: Durchlasspegel +4,0 dB, bei 700 Hz eine Überhöhung auf +5,25 dB, bei 1 kHz Phase −90°
-und Pegel +4,0 dB, oberhalb fällt der Betrag mit −40 dB/Dekade.
-
-1. Welche Ordnung hat das Filter, und wie groß sind Verstärkung $K$ und Kennfrequenz $f_0$?
-2. Bestimme die Güte $Q$.
-3. Stelle die Übertragungsfunktion auf.
-
-<Loesung>
-
-1. −40 dB/Dekade und −90° bei $f_0$ → **2. Ordnung**. Durchlass +4 dB → $K = 10^{4/20} \approx 1{,}58$. Die Phase −90° liegt bei der
-   Kennfrequenz → $f_0 = 1\,\mathrm{kHz}$.
-2. Bei $f_0$ gilt $\lvert H \rvert = K \cdot Q$. Gemessen: gleicher Pegel wie im Durchlass → $Q \approx 1$. Kontrolle über die Überhöhung: Für
-   $Q = 1$ liegt das Maximum $1{,}25\,\mathrm{dB}$ über dem Durchlasspegel bei $f_0/\sqrt{2} \approx 707\,\mathrm{Hz}$ – passt.
-3. $H(\mathrm{j}\omega) = \dfrac{K}{1 + \mathrm{j}\dfrac{\omega}{Q \omega_0} - \dfrac{\omega^2}{\omega_0^2}}$ mit $K \approx 1{,}58$, $Q \approx 1$, $\omega_0 = 2\pi \cdot 1\,\mathrm{kHz}$.
-
-**Folgerung:** $Q = 1$ statt 0,707 – das Filter ist **kein** Butterworth-Filter, es hat eine leichte Überhöhung. Bei einem Sallen-Key-Filter mit
-gleichen Bauteilen gehört zu $K = 1{,}58$ eigentlich $Q = 1/(3 - K) \approx 0{,}7$. Die Bauteile sind also offenbar **nicht** gleich groß –
-Werte nachmessen und mit dem [Sallen-Key-Rechenbeispiel](/filter/rechenbeispiele/#sallen-key-tiefpass-auslegen) vergleichen.
-
-</Loesung>
-
 ## FFT-Messung eines Rechtecksignals
+
+<Stufe wert="grundlagen" />
 
 Mit dem Funktionsgenerator des **Analog Discovery** (oder eines Labor-Funktionsgenerators) wird ein Rechteck mit $\pm 1\,\mathrm{V}$ und 1 kHz
 erzeugt und mit dem Oszilloskop bzw. dem Spektrum-Instrument in WaveForms gemessen. Einstellungen: Abtastrate 100 kS/s, 16 384 Werte,
@@ -182,6 +158,8 @@ Hann-Fenster, senkrechte Achse in dBV.
 </Loesung>
 
 ## Klingt das Signal sauber? – Verzerrungen hören und sehen
+
+<Stufe wert="grundlagen" />
 
 Ein Audioverstärker gibt einen 1-kHz-Sinus aus. Bei kleiner Lautstärke zeigt die FFT eine Linie bei 1 kHz und alle anderen Linien mehr
 als 70 dB darunter. Dreht man auf, erscheinen deutliche Linien bei 3 kHz und 5 kHz, im Zeitbereich sind die Sinuskuppen abgeflacht.

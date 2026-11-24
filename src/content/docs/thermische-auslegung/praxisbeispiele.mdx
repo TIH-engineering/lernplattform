@@ -1,11 +1,16 @@
 ---
 title: Praxisbeispiele – Thermische Auslegung
-description: Linearregler in vier thermischen Varianten vergleichen, die passende Variante für eine 5-V-Versorgung auswählen, Temperatur mit einem Sensor-IC messen, Wärmebildkamera richtig verwenden, thermisches Modell in LTspice und Linearregler oder Schaltregler.
+description: "Praxisbeispiele: Vier Varianten eines Linearreglers · Welche Variante passt für eine 5-V-Versorgung? · Temperatur mit einem Sensor-IC messen · Wärmebildkamera richtig verwenden · Linearregler oder Schaltregler?."
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import Statisch from '../../../assets/elektronik/waerme-statisch.svg';
 
 ## Vier Varianten eines Linearreglers
+
+<Stufe wert="standard" />
 
 Auf einer Versuchsplatine sitzt viermal dieselbe Reglerschaltung (einstellbarer Linearregler), aber thermisch unterschiedlich angebunden:
 
@@ -36,6 +41,8 @@ Die Rangfolge zeigt: Ein Kühlkörper bringt am meisten; beim SMD-Gehäuse macht
 </Loesung>
 
 ## Welche Variante passt für eine 5-V-Versorgung?
+
+<Stufe wert="standard" />
 
 Ein Gerät braucht $5\,\mathrm{V}$ aus einem $12\,\mathrm{V}$-Netzteil. Der Regler sitzt in einem Gehäuse, in dem es bis zu $40\,°\mathrm{C}$ warm wird; die
 Chiptemperatur darf $125\,°\mathrm{C}$ nicht überschreiten. Verwende die vier Varianten und die $R_\mathrm{th}$-Werte aus dem Beispiel oben
@@ -74,6 +81,8 @@ Verlustleistung im Regler: $P_\mathrm{V} = (U_\mathrm{E} - U_\mathrm{A}) \cdot I
 
 ## Temperatur mit einem Sensor-IC messen
 
+<Stufe wert="standard" />
+
 Für die Messung werden zwei analoge Temperatursensoren (MCP9700: $U = 500\,\mathrm{mV} + 10\,\mathrm{mV/K} \cdot \vartheta$) verwendet und mit
 einem USB-Oszilloskop/Datenlogger über 15 Minuten aufgezeichnet. Ein Sensor sitzt auf dem Reglergehäuse, einer auf der Kupferfläche.
 
@@ -93,6 +102,8 @@ einem USB-Oszilloskop/Datenlogger über 15 Minuten aufgezeichnet. Ein Sensor sit
 
 ## Wärmebildkamera richtig verwenden
 
+<Stufe wert="grundlagen" />
+
 Mit der Wärmebildkamera wird der Regler mit Kühlkörper bei 5 W betrachtet. Der schwarz eloxierte Kühlkörper zeigt 62 °C, die blanke
 Metallfahne des Reglers nur 35 °C.
 
@@ -108,43 +119,9 @@ Metallfahne des Reglers nur 35 °C.
 
 </Loesung>
 
-## Thermisches Modell in LTspice
-
-Das dynamische Modell des TO-220-Reglers mit Kühlkörper lässt sich als Netzliste simulieren (1 A ≙ 1 W, 1 V ≙ 1 °C, 1 Ω ≙ 1 K/W, 1 F ≙ 1 J/K):
-
-```
-* Thermisches Modell: TO-220 mit Kuehlkoerper, 2 W, 20 Grad C
-I1 0 j 2
-Rjc j c 3
-Rch c h 0.5
-Rha h a 5.3
-Cj j 0 0.01
-Cc c 0 1
-Ch h 0 27
-Va a 0 20
-.ic V(j)=20 V(c)=20 V(h)=20
-.tran 0 1200 0 0.5 uic
-.end
-```
-
-1. Welche Endtemperatur des Chips erwartest du? Kontrolliere mit der Simulation.
-2. Die Simulation zeigt, dass der Chip schon nach 1 s fast 7 K wärmer ist, der Kühlkörper aber kaum. Erkläre.
-3. Welche Werte stammen aus Datenblättern, welche muss man schätzen?
-
-<Loesung>
-
-1. $\vartheta_\mathrm{j} = 20\,°\mathrm{C} + 2\,\mathrm{W} \cdot (3 + 0{,}5 + 5{,}3)\,\mathrm{K/W} = 37{,}6\,°\mathrm{C}$. Die Simulation erreicht nach 1200 s
-   (≈ 8 Zeitkonstanten des Kühlkörpers) 37,6 °C.
-2. Chip und Gehäuse haben kleine Wärmekapazitäten – sie sind nach Sekunden eingeschwungen. Über $R_\mathrm{th,jc} + R_\mathrm{th,ch}$ entsteht
-   sofort der Temperatursprung $2\,\mathrm{W} \cdot 3{,}5\,\mathrm{K/W} = 7\,\mathrm{K}$. Der große Kühlkörper ($\tau \approx 143\,\mathrm{s}$)
-   erwärmt sich dagegen langsam.
-3. **Datenblatt:** $R_\mathrm{th,jc}$ (Regler), $R_\mathrm{th,ha}$ (Kühlkörper). **Geschätzt:** $R_\mathrm{th,ch}$ (abhängig von Paste und
-   Anpressdruck), alle Wärmekapazitäten (aus Masse × spezifischer Wärmekapazität) und – bei SMD – der Wärmewiderstand der Kupferfläche.
-   Diese Werte passt man nach der Messung an.
-
-</Loesung>
-
 ## Linearregler oder Schaltregler?
+
+<Stufe wert="standard" />
 
 Ein Sensorknoten braucht 3,3 V bei 400 mA aus einem 24-V-Industrienetz.
 

@@ -1,28 +1,15 @@
 ---
 title: Praxisbeispiele – Wechselgrößen und Blindwiderstände
-description: Oszilloskop-Bild ablesen, Netzspannung weltweit und Kondensatornetzteil.
+description: "Praxisbeispiele: Netzspannung weltweit · Kondensatornetzteil."
 ---
 
+import Stufe from '../../../../components/Stufe.astro';
 import Loesung from '../../../../components/Loesung.astro';
 import Netzsicherheit from '../../../../components/Netzsicherheit.astro';
 
-## Ein Oszilloskop-Bild ablesen
-
-Auf dem Oszilloskop ist eine Sinusspannung zu sehen. Einstellungen: **2 V/Div** (vertikal), **0,5 ms/Div** (horizontal).
-Von Spitze zu Spitze sind es **6 Kästchen**, eine Periode ist **4 Kästchen** lang.
-
-Bestimme $U_\mathrm{ss}$, $\hat{u}$, $U$, $T$ und $f$.
-
-<Loesung>
-
-- $U_\mathrm{ss} = 6\,\mathrm{Div} \cdot 2\,\mathrm{V/Div} = 12\,\mathrm{V}$ → $\hat{u} = 6\,\mathrm{V}$ → $U = 6\,\mathrm{V}/\sqrt{2} \approx 4{,}24\,\mathrm{V}$
-- $T = 4\,\mathrm{Div} \cdot 0{,}5\,\mathrm{ms/Div} = 2\,\mathrm{ms}$ → $f = 500\,\mathrm{Hz}$
-
-Tipp: Moderne Oszilloskope zeigen diese Werte auch automatisch an („Measure“) – überprüfe sie trotzdem selbst.
-
-</Loesung>
-
 ## Netzspannung weltweit
+
+<Stufe wert="grundlagen" />
 
 | Region | Effektivwert | Frequenz |
 | --- | --- | --- |
@@ -42,6 +29,8 @@ Tipp: Moderne Oszilloskope zeigen diese Werte auch automatisch an („Measure“
 </Loesung>
 
 ## Kondensatornetzteil
+
+<Stufe wert="grundlagen" />
 
 <Netzsicherheit />
 

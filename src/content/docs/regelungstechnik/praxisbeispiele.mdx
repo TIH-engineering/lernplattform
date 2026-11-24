@@ -3,11 +3,14 @@ title: Praxisbeispiele – Regelungstechnik
 description: Lötstation mit Zweipunkt- und PI-Regelung, Drehzahlregelung eines Lüfters mit Mikrocontroller, Raumheizung mit großer Totzeit, Konstantstrom-Laderegler, Tempomat, Regelkreis simulieren, Windup nach dem Aufheizen, Helligkeitsregelung im Labor, Ball-on-Beam mit P-, PD- und PID-Regler.
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
 import Abbildung from '../../../components/Abbildung.astro';
 import BallOnBeam from '../../../assets/mtrs/ball-on-beam.svg';
 
 ## Lötstation
+
+<Stufe wert="grundlagen" />
 
 Eine Lötstation misst die Spitzentemperatur mit einem Thermoelement in der Spitze und heizt mit PWM.
 
@@ -30,6 +33,8 @@ Eine Lötstation misst die Spitzentemperatur mit einem Thermoelement in der Spit
 
 ## Lüfterdrehzahl mit dem Mikrocontroller regeln
 
+<Stufe wert="grundlagen" />
+
 Ein 4-Pin-PC-Lüfter (PWM-Eingang, Tacho-Ausgang) soll auf eine einstellbare Drehzahl geregelt werden.
 
 1. Zeichne den Regelkreis: Was ist Sollwert, Istwert, Stellgröße, Stellglied, Strecke, Messglied?
@@ -51,6 +56,8 @@ Ein 4-Pin-PC-Lüfter (PWM-Eingang, Tacho-Ausgang) soll auf eine einstellbare Dre
 
 ## Raumheizung mit großer Totzeit
 
+<Stufe wert="grundlagen" />
+
 Eine Fußbodenheizung reagiert extrem träge: Nach einer Änderung der Vorlauftemperatur dauert es eine Stunde, bis sich die
 Raumtemperatur merklich ändert.
 
@@ -69,6 +76,8 @@ Raumtemperatur merklich ändert.
 
 ## Konstantstrom-Laderegler
 
+<Stufe wert="grundlagen" />
+
 Ein Ladegerät lädt einen Akku zuerst mit konstantem Strom (1 A), dann mit konstanter Spannung (4,2 V).
 
 1. Welche Größe wird in welcher Phase geregelt?
@@ -86,6 +95,8 @@ Ein Ladegerät lädt einen Akku zuerst mit konstantem Strom (1 A), dann mit kons
 
 ## Tempomat am Berg
 
+<Stufe wert="grundlagen" />
+
 Ein Tempomat hält 100 km/h. Am Beginn einer Steigung sinkt die Geschwindigkeit kurz auf 96 km/h und erreicht dann wieder 100 km/h.
 
 1. Welches Verhalten (Führungs- oder Störverhalten) ist das, und welcher Regleranteil sorgt dafür, dass wieder genau 100 km/h
@@ -102,6 +113,8 @@ Ein Tempomat hält 100 km/h. Am Beginn einer Steigung sinkt die Geschwindigkeit 
 
 ## Windup nach dem Aufheizen
 
+<Stufe wert="grundlagen" />
+
 Ein Ofen wird von 20 °C auf 200 °C aufgeheizt; die Heizung läuft dabei lange mit 100 %. Danach schießt die Temperatur auf
 240 °C hinaus, obwohl der Regler bei kleinen Sollwertänderungen gut funktioniert.
 
@@ -116,6 +129,8 @@ freigeben.
 </Loesung>
 
 ## Regelkreis vorher simulieren
+
+<Stufe wert="grundlagen" />
 
 Bevor ein Regler an eine teure Anlage geht, wird er simuliert.
 
@@ -133,6 +148,8 @@ Bevor ein Regler an eine teure Anlage geht, wird er simuliert.
 </Loesung>
 
 ## Helligkeitsregelung im Labor
+
+<Stufe wert="grundlagen" />
 
 Ein einfacher geschlossener Regelkreis zum Selbstaufbauen: Eine LED beleuchtet einen Fotowiderstand (LDR) oder eine Fotodiode in einem
 dunklen Röhrchen. Ein Mikrocontroller misst die Helligkeit mit dem ADC und stellt den PWM-Tastgrad der LED so ein, dass ein Sollwert (vom
@@ -157,6 +174,8 @@ Potentiometer) gehalten wird. Mit einer Taschenlampe kann man von außen eine **
 </Loesung>
 
 ## Ball-on-Beam: P, PD oder PID?
+
+<Stufe wert="standard" />
 
 <Abbildung bild={BallOnBeam} unterschrift="Ball-on-Beam: Ein Servo kippt den Balken, ein Abstandssensor misst die Lage der Kugel" />
 

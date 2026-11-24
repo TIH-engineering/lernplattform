@@ -1,11 +1,16 @@
 ---
 title: Praxisbeispiele – Messbrücken
-description: Wägezelle mit Kennwert in mV/V auswerten, Pt100 in Zwei- und Dreileiterschaltung, Brücke im Labor abgleichen, Messbrücke in LTspice simulieren, Widerstand eines Kupferkabels in Vierleitertechnik.
+description: "Praxisbeispiele: Wägezelle auswerten · Pt100: Zwei- oder Dreileiterschaltung? · Eine Brücke im Labor abgleichen · Widerstand eines Kabels in Vierleitertechnik."
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import Wheatstone from '../../../assets/mtrs/wheatstone.svg';
 
 ## Wägezelle auswerten
+
+<Stufe wert="standard" />
 
 Eine Wägezelle für eine Paketwaage hat das Datenblatt: Nennlast 50 kg, Kennwert 2,0 mV/V, Brückenwiderstand 350 Ω, empfohlene Speisung 5 … 10 V.
 
@@ -24,6 +29,8 @@ Eine Wägezelle für eine Paketwaage hat das Datenblatt: Nennlast 50 kg, Kennwer
 
 ## Pt100: Zwei- oder Dreileiterschaltung?
 
+<Stufe wert="grundlagen" />
+
 Ein Pt100 ist über je 10 m Kupferleitung (jede Ader 0,6 Ω) an eine Brücke angeschlossen.
 
 1. Wie groß ist der Messfehler in Zweileiterschaltung?
@@ -39,6 +46,8 @@ Ein Pt100 ist über je 10 m Kupferleitung (jede Ader 0,6 Ω) an eine Brücke ang
 </Loesung>
 
 ## Eine Brücke im Labor abgleichen
+
+<Stufe wert="standard" />
 
 Im Labor soll ein unbekannter Widerstand (ca. 2 kΩ) mit einer Brücke aus zwei 1-kΩ-Präzisionswiderständen, einer Widerstandsdekade und einem Multimeter als
 Nullindikator gemessen werden.
@@ -58,24 +67,9 @@ Nullindikator gemessen werden.
 
 </Loesung>
 
-## Simulation der Ausschlagbrücke
-
-Eine Viertelbrücke mit 350-Ω-DMS ($k = 2$) und 5 V Speisung wird in einer Schaltungssimulation (z. B. LTspice) aufgebaut. Der DMS wird als Widerstand
-$350\,\Omega \cdot (1 + k \cdot \varepsilon)$ modelliert, die Dehnung wird von 0 bis 10 000 µm/m durchgefahren (DC-Sweep).
-
-1. Welche Spannung erwartest du bei 1000 µm/m und bei 10 000 µm/m nach der Näherungsformel?
-2. Die Simulation zeigt bei 10 000 µm/m (DMS in der Position von $R_2$) nur 24,75 mV. Warum?
-
-<Loesung>
-
-1. $U_\mathrm{B} \approx \dfrac{U_0}{4} \cdot k\varepsilon$: 1000 µm/m → $\dfrac{5}{4} \cdot 0{,}002\,\mathrm{V} = 2{,}5\,\mathrm{mV}$ · 10 000 µm/m → $25\,\mathrm{mV}$
-2. Die Näherung gilt nur für **kleine** Änderungen. Exakt: $U_\mathrm{B} = 5\,\mathrm{V} \cdot \left(\dfrac{1{,}02}{2{,}02} - 0{,}5\right) \approx 24{,}75\,\mathrm{mV}$ – die
-   Viertelbrücke ist leicht **nichtlinear** (1 % Abweichung bei dieser großen Dehnung). In der Vollbrücke mit gegensinnig gedehnten DMS ist die Kennlinie
-   exakt linear.
-
-</Loesung>
-
 ## Widerstand eines Kabels in Vierleitertechnik
+
+<Stufe wert="standard" />
 
 Der Widerstand einer 50-m-Kabeltrommel (2 × 1,5 mm²) soll geprüft werden. Ein Laborgerät speist 1,00 A ein (Stromklemmen an den Enden), mit zwei getrennten
 Messspitzen misst man an denselben Enden 0,595 V.

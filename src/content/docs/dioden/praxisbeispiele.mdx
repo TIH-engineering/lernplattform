@@ -3,10 +3,13 @@ title: Praxisbeispiele – Dioden
 description: Verpolungsschutz, Netzteil mit Brückengleichrichter messen, LED-Leiste für 12 V, ESD-Schutz an der USB-Buchse und Fehlersuche an Dioden.
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
 import Netzsicherheit from '../../../components/Netzsicherheit.astro';
 
 ## Verpolungsschutz
+
+<Stufe wert="grundlagen" />
 
 Ein Gerät wird aus einer 12-V-Batterie versorgt und zieht bis zu 2 A. Es soll keinen Schaden nehmen, wenn die Batterie
 verkehrt angeschlossen wird. Drei Lösungen werden diskutiert:
@@ -31,6 +34,8 @@ negativ gegenüber der Source und der Kanal schaltet durch. Bei Verpolung bleibt
 </Loesung>
 
 ## Netzteil messen: Brummspannung am Oszilloskop
+
+<Stufe wert="grundlagen" />
 
 <Netzsicherheit />
 
@@ -57,6 +62,8 @@ Last: 100 Ω.
 
 ## LED-Leiste für 12 V
 
+<Stufe wert="standard" />
+
 Für eine Vitrine sollen 9 weiße LEDs ($U_\mathrm{F} = 3{,}1\,\mathrm{V}$, $I_\mathrm{F} = 20\,\mathrm{mA}$) an einem 12-V-Netzteil leuchten.
 
 1. Warum schaltet man nicht alle 9 LEDs einfach parallel an einen gemeinsamen Vorwiderstand?
@@ -77,6 +84,8 @@ Für eine Vitrine sollen 9 weiße LEDs ($U_\mathrm{F} = 3{,}1\,\mathrm{V}$, $I_\
 
 ## ESD-Schutz an der USB-Buchse
 
+<Stufe wert="grundlagen" />
+
 Wer einen USB-Stecker einsteckt, kann sich vorher elektrostatisch auf einige kV aufgeladen haben. Auf Platinen findet man
 direkt neben der Buchse kleine **TVS-Dioden-Arrays**.
 
@@ -95,6 +104,8 @@ direkt neben der Buchse kleine **TVS-Dioden-Arrays**.
 </Loesung>
 
 ## Fehlersuche: Diode prüfen
+
+<Stufe wert="grundlagen" />
 
 Mit der Diodenprüffunktion des Multimeters misst du an einer ausgebauten Diode:
 

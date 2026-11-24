@@ -1,13 +1,14 @@
 ---
 title: Rechenbeispiele – Transistoren
-description: Rechenbeispiele zu Basisstrom und Basiswiderstand, Relaistreiber, LED-Schalter, Längsregler, Konstantstromquelle, MOSFET-Verluste, Gate-Ansteuerung, Arbeitspunkt und Verstärkung der Grundschaltungen, Emitterfolger, Basisschaltung und Differenzverstärker.
+description: "Rechenbeispiele: Basiswiderstand für eine LED · LED am Transistor · Relaistreiber mit Bipolartransistor · Längsregler · Längsregler genauer: mit Basisstrom · Konstantstromquelle · Stromquelle mit Diodenreferenz · MOSFET oder Bipolartransistor? · Wie schnell schaltet der MOSFET? · Arbeitspunkt einer Emitterschaltung · Verstärkung und Eingangswiderstand der Emitterschaltung · Emitterfolger als Impedanzwandler · Basisschaltung an einer 50-Ω-Quelle · Differenzverstärker: Nutzsignal und Brummstörung · Schaltungsanalyse: MOSFET mit Pull-up."
 ---
 
 import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
 import Abbildung from '../../../components/Abbildung.astro';
-import NpnSchalter from '../../../assets/elektronik/npn-schalter.svg';
 import Laengsregler from '../../../assets/elektronik/laengsregler.svg';
+import MosfetRelais from '../../../assets/elektronik/mosfet-relais.svg';
+import NpnSchalter from '../../../assets/elektronik/npn-schalter.svg';
 import Stromquelle from '../../../assets/elektronik/stromquelle.svg';
 
 Wenn nichts anderes angegeben ist: $U_\mathrm{BE} = 0{,}7\,\mathrm{V}$, $U_\mathrm{CE,sat} = 0{,}2\,\mathrm{V}$.
@@ -368,5 +369,24 @@ d) $\mathrm{CMRR} \approx \dfrac{1\,\mathrm{M\Omega}}{25{,}8\,\Omega} \approx 39
 
 **Ergebnis:** Mit $R_\mathrm{E}$ ist die Störung (0,30 V) noch deutlich sichtbar neben dem Nutzsignal (1,32 V). Mit Stromquelle oder
 mit differenziellem Ausgang (Störanteile heben sich auf) verschwindet sie praktisch.
+
+</Loesung>
+
+## Schaltungsanalyse: MOSFET mit Pull-up
+
+<Stufe wert="standard" />
+
+Ein N-Kanal-Logic-Level-MOSFET hat die Source an Masse, den Drain über $10\,\mathrm{k\Omega}$ an $+5\,\mathrm{V}$. Der Ausgang $U_\mathrm{out}$
+wird am Drain abgegriffen, das Gate wird von einem 3,3-V-Signal $U_\mathrm{in}$ angesteuert.
+
+1. Welche Spannung liegt am Ausgang bei $U_\mathrm{in} = 0\,\mathrm{V}$ und bei $U_\mathrm{in} = 3{,}3\,\mathrm{V}$?
+2. Welche Funktion hat die Schaltung?
+
+<Loesung>
+
+1. $U_\mathrm{in} = 0\,\mathrm{V}$: MOSFET sperrt → kein Strom durch den Pull-up → $U_\mathrm{out} = 5\,\mathrm{V}$.
+   $U_\mathrm{in} = 3{,}3\,\mathrm{V}$: MOSFET leitet → $U_\mathrm{out} \approx 0\,\mathrm{V}$ (nur $R_\mathrm{DS(on)} \cdot 0{,}5\,\mathrm{mA}$).
+2. Ein **Inverter** und zugleich ein **Pegelwandler** von 3,3-V-Logik auf 5-V-Logik (mit Invertierung).
+   Ohne Invertierung braucht man eine zweite Stufe oder einen bidirektionalen Pegelwandler (z. B. für I²C).
 
 </Loesung>

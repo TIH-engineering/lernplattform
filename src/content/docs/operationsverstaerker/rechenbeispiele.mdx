@@ -1,6 +1,6 @@
 ---
 title: Rechenbeispiele – Operationsverstärker
-description: Rechenbeispiele zu invertierendem und nichtinvertierendem Verstärker, Auslegung in dB, Aussteuerbereich, Addierer, Differenzverstärker, Integrierer, Transimpedanzverstärker, Schmitt-Trigger und Slew-Rate.
+description: "Rechenbeispiele: Invertierender Verstärker · Nichtinvertierender Verstärker · Verstärker nach dB-Vorgabe auslegen · Addierer · Differenzverstärker · Integrierer · Transimpedanzverstärker · Schmitt-Trigger · Slew-Rate · Zweistufiger Verstärker und Bandbreite · Temperatursensor für den ADC."
 ---
 
 import Stufe from '../../../components/Stufe.astro';
@@ -211,5 +211,26 @@ In dB: $20 \log 5 + 20 \log 10 \approx 14 + 20 = 34\,\mathrm{dB}$ (die dB-Werte 
 b) Eine Stufe mit $|V| = 50$ hätte nur $f_\mathrm{g} \approx 1\,\mathrm{MHz}/50 = 20\,\mathrm{kHz}$ Bandbreite. Bei zwei Stufen hat jede eine größere
 Bandbreite – die Gesamtbandbreite ist deutlich höher. (Genau genommen zählt beim invertierenden Verstärker die
 „Rauschverstärkung“ $1 + R_\mathrm{f}/R_1 = 6$, also $f_\mathrm{g} \approx 167\,\mathrm{kHz}$; Stufe 2: $\approx 100\,\mathrm{kHz}$.)
+
+</Loesung>
+
+## Temperatursensor für den ADC
+
+<Stufe wert="standard" />
+
+Ein Temperatursensor liefert $10\,\mathrm{mV/°C}$ (bei 0 °C: 0 V). Der Messbereich soll 0 … 100 °C sein, der ADC hat 0 … 3,3 V.
+
+1. Welche Verstärkung ist nötig, damit 100 °C knapp unter 3,3 V ergeben? Welche Schaltung wählst du?
+2. Dimensioniere die Widerstände mit E12-Werten.
+3. Warum schaltet man vor den ADC oft noch einen RC-Tiefpass?
+
+<Loesung>
+
+1. Bei 100 °C liefert der Sensor 1 V → $V = 3{,}3$ (genau). Mit etwas Reserve z. B. $V = 3{,}2$. Der Sensor soll nicht belastet werden
+   und das Signal nicht invertiert → **nichtinvertierender Verstärker**.
+2. $V = 1 + R_\mathrm{f}/R_\mathrm{g} = 3{,}2$ → $R_\mathrm{f}/R_\mathrm{g} = 2{,}2$ → z. B. $R_\mathrm{g} = 10\,\mathrm{k\Omega}$, $R_\mathrm{f} = 22\,\mathrm{k\Omega}$
+   → 100 °C ergeben 3,2 V.
+3. Als **Anti-Aliasing-Filter**: Er entfernt hochfrequente Störungen, die der ADC sonst als falsche, langsame Schwankungen messen würde
+   (siehe [Filter](/filter/)).
 
 </Loesung>

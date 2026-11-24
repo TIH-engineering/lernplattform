@@ -1,6 +1,6 @@
 ---
 title: Rechenbeispiele – A/D- und D/A-Umsetzer
-description: Rechenbeispiele zur Ausgangsspannung eines R-2R-D/A-Umsetzers, Auflösung und Rippel eines PWM-D/A-Umsetzers, Dual-Slope-Wandlung, Anzahl der Komparatoren eines Flash-Umsetzers, idealem SNR und ENOB, Überabtastung und Jitter.
+description: "Rechenbeispiele: Ausgangsspannung eines D/A-Umsetzers · Flash-Umsetzer · PWM als D/A-Umsetzer · Dual-Slope-Wandlung · SNR und effektive Bitzahl · Auflösung durch Überabtastung · Jitter begrenzt die Auflösung · Zweipunkt-Kalibrierung."
 ---
 
 import Stufe from '../../../components/Stufe.astro';
@@ -124,5 +124,22 @@ $\mathrm{ENOB} \approx (64 - 1{,}76)/6{,}02 \approx 10{,}3\,\mathrm{Bit}$
 
 Ein 14-Bit-Umsetzer wäre an diesem Takt verschwendet. Bei 10 kHz Signalfrequenz wäre der Jitter dagegen bedeutungslos
 (104 dB).
+
+</Loesung>
+
+## Zweipunkt-Kalibrierung
+
+<Stufe wert="standard" />
+
+Ein Messkanal (12 Bit, 0 … 10 V) liefert bei 0,000 V den Code 18 und bei 10,000 V den Code 4071. Wie rechnet man einen Code in
+eine Spannung um, und welche Spannung gehört zu Code 2000?
+
+<Loesung>
+
+Steigung: $\dfrac{10\,\mathrm{V}}{4071 - 18} = 2{,}4673\,\mathrm{mV}$ pro Code. $U = (Z - 18) \cdot 2{,}4673\,\mathrm{mV}$ →
+$Z = 2000$: $U = 1982 \cdot 2{,}4673\,\mathrm{mV} \approx 4{,}890\,\mathrm{V}$
+
+Damit sind Offset (18 Codes) und Verstärkungsfehler korrigiert. Ohne Kalibrierung hätte man $2000 \cdot 10\,\mathrm{V}/4096
+\approx 4{,}883\,\mathrm{V}$ gerechnet.
 
 </Loesung>

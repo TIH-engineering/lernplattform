@@ -1,12 +1,17 @@
 ---
 title: Praxisbeispiele – Drehstrom
-description: Leistung eines Hausanschlusses, Durchlauferhitzer, Wallbox ein- oder dreiphasig, Neutralleiterbruch im Haus, Motor richtig anschließen und Drehrichtung ändern, Ausfall eines Außenleiters, Drehfeld messen.
+description: "Praxisbeispiele: Wie viel Leistung hat ein Hausanschluss? · Durchlauferhitzer · Wallbox: ein- oder dreiphasig laden? · Neutralleiterbruch im Haus · Motor richtig anschließen · Ausfall eines Außenleiters · Drehfeld messen · Heizung in Stern und Dreieck · Motorstrom aus dem Typenschild · Drehzahl und Schlupf · Stern-Dreieck-Anlauf · Blindleistungskompensation."
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
 import Netzsicherheit from '../../../components/Netzsicherheit.astro';
+import Stern from '../../../assets/drehstrom/sternschaltung.svg';
 
 ## Wie viel Leistung hat ein Hausanschluss?
+
+<Stufe wert="grundlagen" />
 
 Ein Einfamilienhaus ist mit $3 \times 35\,\mathrm{A}$ abgesichert (Hausanschlusssicherungen in L1, L2, L3).
 
@@ -23,6 +28,8 @@ Ein Einfamilienhaus ist mit $3 \times 35\,\mathrm{A}$ abgesichert (Hausanschluss
 
 ## Durchlauferhitzer
 
+<Stufe wert="grundlagen" />
+
 Ein Durchlauferhitzer hat $21\,\mathrm{kW}$ (ohmsch, symmetrisch, 400 V).
 
 1. Wie groß ist der Leiterstrom?
@@ -37,6 +44,8 @@ Ein Durchlauferhitzer hat $21\,\mathrm{kW}$ (ohmsch, symmetrisch, 400 V).
 </Loesung>
 
 ## Wallbox: ein- oder dreiphasig laden?
+
+<Stufe wert="grundlagen" />
 
 Eine Wallbox kann mit 16 A oder 32 A pro Außenleiter laden, ein- oder dreiphasig.
 
@@ -56,6 +65,8 @@ möglichen Leistung.
 
 ## Neutralleiterbruch im Haus
 
+<Stufe wert="standard" />
+
 Im Haus fällt durch eine lose Klemme der Neutralleiter aus. Zu diesem Zeitpunkt läuft an L1 ein Heizlüfter ($2300\,\mathrm{W}$), an L2 eine
 Kaffeemaschine ($1150\,\mathrm{W}$), an L3 ist nichts eingeschaltet.
 
@@ -74,6 +85,8 @@ Kaffeemaschine ($1150\,\mathrm{W}$), an L3 ist nichts eingeschaltet.
 
 ## Motor richtig anschließen
 
+<Stufe wert="grundlagen" />
+
 Auf dem Typenschild eines Asynchronmotors steht: **230/400 V Δ/Y, 3 kW, 1430 min⁻¹**.
 
 1. Wie wird der Motor am 400-V-Netz geschaltet?
@@ -91,6 +104,8 @@ Auf dem Typenschild eines Asynchronmotors steht: **230/400 V Δ/Y, 3 kW, 1430 mi
 
 ## Ausfall eines Außenleiters
 
+<Stufe wert="grundlagen" />
+
 Bei einem laufenden Drehstrommotor brennt die Sicherung in L3 durch.
 
 1. Was passiert, wenn der Motor gerade läuft? Was, wenn er neu eingeschaltet wird?
@@ -107,6 +122,8 @@ Bei einem laufenden Drehstrommotor brennt die Sicherung in L3 durch.
 
 ## Drehfeld messen
 
+<Stufe wert="grundlagen" />
+
 <Netzsicherheit />
 
 Vor dem Anschluss einer Maschine wird mit einem **Drehfeldmessgerät** (Drehfeldrichtungsanzeiger) die Phasenfolge an der CEE-Steckdose geprüft.
@@ -121,5 +138,109 @@ Vor dem Anschluss einer Maschine wird mit einem **Drehfeldmessgerät** (Drehfeld
 2. Zwei Spannungen gegen N gleichzeitig darstellen und den zeitlichen Abstand der Nulldurchgänge prüfen ($U_\mathrm{2N}$ folgt $U_\mathrm{1N}$ um
    ein Drittel der Periode = 6,67 ms). **Nur mit differenziellen Hochvolttastköpfen** (oder einem isolierten Messgerät) – ein normaler
    Tastkopf verbindet seine Masse mit dem Schutzleiter des Oszilloskops und erzeugt einen Kurzschluss.
+
+</Loesung>
+
+## Heizung in Stern und Dreieck
+
+<Stufe wert="grundlagen" />
+
+<Abbildung bild={Stern} unterschrift="Sternschaltung" />
+
+Ein Heizregister besteht aus drei Heizstäben mit je $R = 52{,}9\,\Omega$. Es wird an das 400/230-V-Netz angeschlossen.
+
+1. Berechne Strangspannung, Strangstrom, Leiterstrom und Gesamtleistung in **Sternschaltung**.
+2. Wiederhole die Rechnung für die **Dreieckschaltung**.
+3. Vergleiche die Leistungen.
+
+<Loesung>
+
+**Gegeben:** $R = 52{,}9\,\Omega$, $U = 400\,\mathrm{V}$ · **Gesucht:** $U_\mathrm{Str}$, $I_\mathrm{Str}$, $I$, $P$
+
+1. Stern: $U_\mathrm{Str} = 230\,\mathrm{V}$ → $I_\mathrm{Str} = I = \dfrac{230\,\mathrm{V}}{52{,}9\,\Omega} \approx 4{,}35\,\mathrm{A}$ →
+   $P = 3 \cdot U_\mathrm{Str} \cdot I_\mathrm{Str} = 3 \cdot 230\,\mathrm{V} \cdot 4{,}35\,\mathrm{A} = 3{,}0\,\mathrm{kW}$
+2. Dreieck: $U_\mathrm{Str} = 400\,\mathrm{V}$ → $I_\mathrm{Str} = \dfrac{400\,\mathrm{V}}{52{,}9\,\Omega} \approx 7{,}56\,\mathrm{A}$ →
+   $I = \sqrt{3} \cdot 7{,}56\,\mathrm{A} \approx 13{,}1\,\mathrm{A}$ → $P = \sqrt{3} \cdot 400\,\mathrm{V} \cdot 13{,}1\,\mathrm{A} \approx 9{,}07\,\mathrm{kW}$
+3. Im Dreieck ist die Leistung **dreimal so groß** – die Spannung am Heizstab ist $\sqrt{3}$-mal so groß, und $P \sim U^2$.
+
+</Loesung>
+
+## Motorstrom aus dem Typenschild
+
+<Stufe wert="standard" />
+
+Typenschild eines Asynchronmotors: $P = 7{,}5\,\mathrm{kW}$, $400\,\mathrm{V}$ Δ, $\cos\varphi = 0{,}85$, $\eta = 88\,\%$.
+
+1. Welche Wirkleistung nimmt der Motor auf?
+2. Wie groß ist der Leiterstrom?
+3. Wie groß sind Schein- und Blindleistung?
+
+<Loesung>
+
+Die Typenschildleistung ist die **abgegebene mechanische** Leistung.
+
+1. $P_\mathrm{auf} = \dfrac{P_\mathrm{ab}}{\eta} = \dfrac{7{,}5\,\mathrm{kW}}{0{,}88} \approx 8{,}52\,\mathrm{kW}$
+2. $I = \dfrac{P_\mathrm{auf}}{\sqrt{3} \cdot U \cdot \cos\varphi} = \dfrac{8520\,\mathrm{W}}{\sqrt{3} \cdot 400\,\mathrm{V} \cdot 0{,}85} \approx 14{,}5\,\mathrm{A}$
+3. $S = \sqrt{3} \cdot U \cdot I \approx 10{,}0\,\mathrm{kVA}$ · $Q = P_\mathrm{auf} \cdot \tan\varphi = 8{,}52\,\mathrm{kW} \cdot 0{,}62 \approx 5{,}28\,\mathrm{kvar}$
+
+</Loesung>
+
+## Drehzahl und Schlupf
+
+<Stufe wert="grundlagen" />
+
+Ein vierpoliger Asynchronmotor (2 Polpaare) läuft am 50-Hz-Netz mit $1440\,\mathrm{min^{-1}}$. Berechne die synchrone Drehzahl und den Schlupf.
+Mit welcher Drehzahl dreht sich das Drehfeld bei $35\,\mathrm{Hz}$ aus einem Frequenzumrichter?
+
+<Loesung>
+
+$$
+n_\mathrm{s} = \frac{60 \cdot f}{p} = \frac{60 \cdot 50}{2}\,\mathrm{min^{-1}} = 1500\,\mathrm{min^{-1}}
+\qquad
+s = \frac{1500 - 1440}{1500} = 4\,\%
+$$
+
+Bei 35 Hz: $n_\mathrm{s} = 60 \cdot 35 / 2\,\mathrm{min^{-1}} = 1050\,\mathrm{min^{-1}}$ (der Motor dreht dann etwas langsamer, ca. 1000 … 1020 min⁻¹).
+
+</Loesung>
+
+## Stern-Dreieck-Anlauf
+
+<Stufe wert="standard" />
+
+Ein Motor (400 V Δ) zieht beim direkten Einschalten im Dreieck einen Anlaufstrom von $90\,\mathrm{A}$. Wie groß ist der Anlaufstrom beim
+Stern-Dreieck-Anlauf? Was ist der Nachteil?
+
+<Loesung>
+
+Im Stern liegt jeder Strang nur an $230\,\mathrm{V}$ statt $400\,\mathrm{V}$ (Faktor $1/\sqrt{3}$), der Strangstrom sinkt um $1/\sqrt{3}$, und der
+Leiterstrom ist im Stern gleich dem Strangstrom statt $\sqrt{3}$-mal so groß. Insgesamt:
+
+$$
+I_\mathrm{A,Y} = \frac{I_\mathrm{A,\Delta}}{3} = 30\,\mathrm{A}
+$$
+
+Nachteil: Auch das **Anlaufmoment** sinkt auf ein Drittel ($M \sim U^2$). Der Motor darf deshalb nur unter geringer Last anlaufen
+(z. B. Lüfter, Pumpe), nicht unter voller Last (z. B. Förderband mit Material).
+
+</Loesung>
+
+## Blindleistungskompensation
+
+<Stufe wert="vertiefung" />
+
+Eine Maschine nimmt $P = 15\,\mathrm{kW}$ bei $\cos\varphi_1 = 0{,}80$ auf. Der Leistungsfaktor soll auf $\cos\varphi_2 = 0{,}95$ verbessert werden.
+
+1. Welche Kompensationsleistung ist nötig?
+2. Berechne die Kapazität je Kondensator in Dreieck- und in Sternschaltung.
+3. Wie ändert sich der Leiterstrom?
+
+<Loesung>
+
+1. $\tan\varphi_1 = 0{,}75$, $\tan\varphi_2 = 0{,}329$ → $Q_\mathrm{C} = 15\,\mathrm{kW} \cdot (0{,}75 - 0{,}329) \approx 6{,}32\,\mathrm{kvar}$
+2. Dreieck: $C_\Delta = \dfrac{Q_\mathrm{C}}{3 \omega U^2} = \dfrac{6320\,\mathrm{var}}{3 \cdot 314{,}2\,\mathrm{s^{-1}} \cdot (400\,\mathrm{V})^2} \approx 41{,}9\,\mathrm{\mu F}$ ·
+   Stern: $C_\mathrm{Y} = \dfrac{6320\,\mathrm{var}}{3 \cdot 314{,}2\,\mathrm{s^{-1}} \cdot (230\,\mathrm{V})^2} \approx 127\,\mathrm{\mu F}$ (dreimal so viel)
+3. $I_1 = \dfrac{15\,\mathrm{kW}}{\sqrt{3} \cdot 400\,\mathrm{V} \cdot 0{,}80} \approx 27{,}1\,\mathrm{A}$ → $I_2 = \dfrac{15\,\mathrm{kW}}{\sqrt{3} \cdot 400\,\mathrm{V} \cdot 0{,}95} \approx 22{,}8\,\mathrm{A}$ –
+   rund 16 % weniger Strom bei gleicher Wirkleistung; die Leitungsverluste sinken sogar um ca. 29 % ($\sim I^2$).
 
 </Loesung>

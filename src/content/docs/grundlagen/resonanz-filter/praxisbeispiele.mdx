@@ -1,11 +1,19 @@
 ---
 title: Praxisbeispiele – Resonanz und Filter
-description: Sender wählen beim Radio, Resonanz als Gefahr, Frequenzweiche und Filter in der Messtechnik mit Simulation.
+description: "Praxisbeispiele: Einen Radiosender einstellen · Wenn Resonanz gefährlich wird · Frequenzweiche einer Lautsprecherbox · Schwingkreis und Federpendel · UKW-Tuner abstimmen."
 ---
 
+import Stufe from '../../../../components/Stufe.astro';
 import Loesung from '../../../../components/Loesung.astro';
+import Abbildung from '../../../../components/Abbildung.astro';
+import RLCParallel from '../../../../assets/grundlagen/rlc-parallel.svg';
+import RLCReihe from '../../../../assets/grundlagen/rlc-reihe.svg';
+import Realer from '../../../../assets/grundlagen/parallelschwingkreis-real.svg';
+import Tiefpass from '../../../../assets/grundlagen/rc-tiefpass.svg';
 
 ## Einen Radiosender einstellen
+
+<Stufe wert="grundlagen" />
 
 In einem einfachen Mittelwellenradio wird der Sender mit einem Drehkondensator (30 pF … 300 pF) und einer Spule mit $250\,\mu\mathrm{H}$ gewählt.
 
@@ -24,6 +32,8 @@ In einem einfachen Mittelwellenradio wird der Sender mit einem Drehkondensator (
 
 ## Wenn Resonanz gefährlich wird
 
+<Stufe wert="grundlagen" />
+
 1. Warum dürfen Soldaten nicht im Gleichschritt über eine Brücke marschieren?
 2. Im Reihenschwingkreis aus dem Rechenbeispiel lagen an L und C jeweils 10 V bei nur 1 V Eingangsspannung.
    Was bedeutet das für die Auswahl der Bauteile?
@@ -40,6 +50,8 @@ In einem einfachen Mittelwellenradio wird der Sender mit einem Drehkondensator (
 </Loesung>
 
 ## Frequenzweiche einer Lautsprecherbox
+
+<Stufe wert="standard" />
 
 Eine einfache 2-Wege-Box hat einen Tieftöner und einen Hochtöner (beide 8 Ω). Der Hochtöner bekommt einen Kondensator in Reihe,
 der Tieftöner eine Spule. Die Trennfrequenz soll 3 kHz sein.
@@ -58,24 +70,9 @@ Solche Filter 1. Ordnung fallen mit 6 dB pro Oktave (20 dB pro Dekade) ab. Besse
 
 </Loesung>
 
-## Filter in LTspice untersuchen
-
-Baue den RC-Tiefpass aus den Rechenbeispielen ($R = 1\,\mathrm{k\Omega}$, $C = 100\,\mathrm{nF}$) in LTspice auf.
-
-1. Simuliere mit `.ac dec 50 10 100k` und zeichne $V(\mathrm{out})$. Lies die Grenzfrequenz bei −3 dB ab.
-2. Wie steil fällt die Kurve oberhalb der Grenzfrequenz ab?
-3. Schalte zwei gleiche RC-Glieder hintereinander. Was ändert sich?
-
-<Loesung>
-
-1. Bei etwa 1,59 kHz ist der Pegel auf −3 dB gefallen, die Phase beträgt −45°.
-2. Mit −20 dB pro Dekade (ein Zehntel der Spannung pro Zehnfacher der Frequenz).
-3. Die Steilheit verdoppelt sich auf −40 dB/Dekade. Aber: Die −3-dB-Frequenz sinkt, weil das zweite RC-Glied das erste
-   **belastet** (belasteter Spannungsteiler!). Abhilfe: Entkopplung durch einen Operationsverstärker als Puffer.
-
-</Loesung>
-
 ## Schwingkreis und Federpendel
+
+<Stufe wert="standard" />
 
 Ein Feder-Masse-System mit Dämpfer schwingt nach denselben Gesetzen wie ein elektrischer Schwingkreis.
 
@@ -90,5 +87,26 @@ Ein Feder-Masse-System mit Dämpfer schwingt nach denselben Gesetzen wie ein ele
 2. Mechanisch: Bewegungsenergie ↔ Spannenergie der Feder. Elektrisch: magnetische Energie der Spule ↔ elektrische Energie des Kondensators.
 3. Wenig Reibung = hohe Güte (schwingt lange nach). Die Eigenfrequenz $f_0 = \frac{1}{2\pi}\sqrt{k/m}$ entspricht $f_0 = \frac{1}{2\pi\sqrt{LC}}$ –
    eine schwere Masse (große Induktivität) oder weiche Feder (große Kapazität) ergibt eine tiefe Frequenz.
+
+</Loesung>
+
+## UKW-Tuner abstimmen
+
+<Stufe wert="standard" />
+
+Der Eingangskreis eines UKW-Radios ist ein LC-Schwingkreis mit $L = 100\,\mathrm{nH}$ und einem Drehkondensator von 20 pF bis 36 pF.
+
+1. Welchen Frequenzbereich deckt der Kreis ab? Reicht das für das UKW-Band (88 … 108 MHz)?
+2. Welche Kapazität ist für 100 MHz eingestellt?
+3. Der Kreis soll bei 100 MHz eine Bandbreite von 500 kHz haben. Welche Güte ist nötig, und wie groß darf der Verlustwiderstand der Spule (in Reihe) höchstens sein?
+
+<Loesung>
+
+1. $f_\mathrm{max} = \dfrac{1}{2\pi\sqrt{100\,\mathrm{nH} \cdot 20\,\mathrm{pF}}} \approx 112{,}5\,\mathrm{MHz}$ ·
+   $f_\mathrm{min} = \dfrac{1}{2\pi\sqrt{100\,\mathrm{nH} \cdot 36\,\mathrm{pF}}} \approx 83{,}9\,\mathrm{MHz}$ → das UKW-Band wird abgedeckt.
+2. $C = \dfrac{1}{(2\pi f_0)^2 L} = \dfrac{1}{(2\pi \cdot 100\,\mathrm{MHz})^2 \cdot 100\,\mathrm{nH}} \approx 25{,}3\,\mathrm{pF}$
+3. $Q = f_0 / B = 100\,\mathrm{MHz} / 500\,\mathrm{kHz} = 200$ → $R = \dfrac{\omega_0 L}{Q} = \dfrac{2\pi \cdot 100\,\mathrm{MHz} \cdot 100\,\mathrm{nH}}{200} \approx 0{,}31\,\Omega$.
+   Das ist bei 100 MHz anspruchsvoll (Skin-Effekt!). Bessere Güte: dickerer oder versilberter Draht, Luftspule statt Ferritkern, kurze
+   Leitungen und verlustarme Kondensatoren.
 
 </Loesung>

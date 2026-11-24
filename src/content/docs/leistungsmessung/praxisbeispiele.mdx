@@ -1,11 +1,14 @@
 ---
 title: Praxisbeispiele – Leistungs- und Impedanzmessung
-description: Steckdosen-Messgerät an LED-Lampe und Heizlüfter, Standby-Verbrauch messen, Stromzange an Gleich- und Wechselstrom, ESR-Messung eines Elkos, Kapazitätsverlust eines Keramikkondensators, Phasenmessung im Labor.
+description: "Praxisbeispiele: Das Steckdosen-Messgerät · Stromzange richtig verwenden · ESR eines Elkos prüfen · Wo ist die Kapazität geblieben?."
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
 
 ## Das Steckdosen-Messgerät
+
+<Stufe wert="grundlagen" />
 
 Ein günstiges Energiekosten-Messgerät zeigt:
 
@@ -32,6 +35,8 @@ Ein günstiges Energiekosten-Messgerät zeigt:
 
 ## Stromzange richtig verwenden
 
+<Stufe wert="grundlagen" />
+
 Mit einer Stromzange soll der Strom eines Wasserkochers gemessen werden.
 
 1. Welches Prinzip nutzt die Stromzange, um ohne Auftrennen der Leitung zu messen?
@@ -54,6 +59,8 @@ Mit einer Stromzange soll der Strom eines Wasserkochers gemessen werden.
 
 ## ESR eines Elkos prüfen
 
+<Stufe wert="grundlagen" />
+
 Ein Schaltnetzteil pfeift und liefert eine unruhige Ausgangsspannung. Am Ausgangselko (1000 µF, 16 V) wird mit einem
 ESR-Messgerät (100 kHz) 1,8 Ω gemessen. Ein neuer Elko gleicher Bauart hat laut Datenblatt höchstens 0,04 Ω.
 
@@ -71,6 +78,8 @@ ESR-Messgerät (100 kHz) 1,8 Ω gemessen. Ein neuer Elko gleicher Bauart hat lau
 
 ## Wo ist die Kapazität geblieben?
 
+<Stufe wert="grundlagen" />
+
 Ein Keramikkondensator 10 µF, 6,3 V, X5R, Bauform 0603, wird am Ausgang eines 5-V-Reglers eingesetzt. Ein LCR-Meter mit
 eingebauter Gleichspannungsvorspannung misst bei 0 V noch 9,6 µF, bei 5 V aber nur 3,1 µF.
 
@@ -84,26 +93,5 @@ eingebauter Gleichspannungsvorspannung misst bei 0 V noch 9,6 µF, bei 5 V aber 
    („DC bias characteristics“).
 2. Höhere Nennspannung (z. B. 16 V) und/oder größere Bauform wählen, oder mehrere Kondensatoren parallel. Bei der
    Auslegung immer mit der **wirksamen** Kapazität bei Betriebsspannung rechnen.
-
-</Loesung>
-
-## Impedanz einer Spule im Labor messen
-
-Eine Spule wird mit einem Funktionsgenerator (1 kHz) und einem 10-Ω-Messwiderstand in Reihe betrieben. Das Oszilloskop zeigt
-an der Spule $\hat{u}_L = 2{,}0\,\mathrm{V}$, am Messwiderstand $\hat{u}_R = 0{,}5\,\mathrm{V}$; der Strom eilt der
-Spulenspannung um $0{,}22\,\mathrm{ms}$ nach.
-
-1. Berechne $Z$, $\varphi$, $L$ und den Drahtwiderstand.
-2. Wie kann man die Spulenspannung messen, wenn beide Tastkopf-Massen an Masse liegen müssen?
-
-<Loesung>
-
-1. $\hat{\imath} = 0{,}5\,\mathrm{V}/10\,\Omega = 50\,\mathrm{mA}$ → $Z = 2{,}0\,\mathrm{V}/50\,\mathrm{mA} = 40\,\Omega$ ·
-   $\varphi = 360° \cdot 0{,}22\,\mathrm{ms}/1\,\mathrm{ms} \approx 79°$ ·
-   $X_L = Z \sin\varphi \approx 39{,}3\,\Omega$ → $L = X_L/(2\pi f) \approx 6{,}3\,\mathrm{mH}$ ·
-   $R = Z \cos\varphi \approx 7{,}5\,\Omega$
-2. Messwiderstand an Masse, Spule darüber. Kanal 1 misst die Spannung über beiden, Kanal 2 die am Messwiderstand. Die
-   Spulenspannung ist die Differenz – Rechenfunktion „CH1 − CH2“ des Oszilloskops. Beide Tastköpfe gleich einstellen und
-   abgleichen, sonst ist die Differenz ungenau.
 
 </Loesung>

@@ -1,6 +1,6 @@
 ---
 title: Rechenbeispiele – Leistungs- und Impedanzmessung
-description: Rechenbeispiele zu Leistung aus einem Oszilloskopbild, Wirkleistung aus Abtastwerten, Leistungsfaktor und Verzerrungsblindleistung, Auswertung einer LCR-Messung, Eigenresonanz und Impedanz eines realen Kondensators, Verlustleistung im ESR.
+description: "Rechenbeispiele: Leistung aus dem Oszilloskopbild · Wirkleistung aus Abtastwerten · Leistungsfaktor eines Netzteils · LCR-Messung auswerten · Eigenresonanz eines Abblockkondensators · Verlustleistung im ESR · Impedanz einer Spule im Labor messen."
 ---
 
 import Stufe from '../../../components/Stufe.astro';
@@ -141,5 +141,28 @@ neu $50\,\mathrm{m\Omega}$, nach Jahren im warmen Gehäuse $200\,\mathrm{m\Omega
 
 Der gealterte Elko erwärmt sich viermal so stark – und altert dadurch noch schneller. Außerdem steigt die Rippelspannung
 ($\Delta U \approx \Delta I \cdot R_\mathrm{ESR}$).
+
+</Loesung>
+
+## Impedanz einer Spule im Labor messen
+
+<Stufe wert="standard" />
+
+Eine Spule wird mit einem Funktionsgenerator (1 kHz) und einem 10-Ω-Messwiderstand in Reihe betrieben. Das Oszilloskop zeigt
+an der Spule $\hat{u}_L = 2{,}0\,\mathrm{V}$, am Messwiderstand $\hat{u}_R = 0{,}5\,\mathrm{V}$; der Strom eilt der
+Spulenspannung um $0{,}22\,\mathrm{ms}$ nach.
+
+1. Berechne $Z$, $\varphi$, $L$ und den Drahtwiderstand.
+2. Wie kann man die Spulenspannung messen, wenn beide Tastkopf-Massen an Masse liegen müssen?
+
+<Loesung>
+
+1. $\hat{\imath} = 0{,}5\,\mathrm{V}/10\,\Omega = 50\,\mathrm{mA}$ → $Z = 2{,}0\,\mathrm{V}/50\,\mathrm{mA} = 40\,\Omega$ ·
+   $\varphi = 360° \cdot 0{,}22\,\mathrm{ms}/1\,\mathrm{ms} \approx 79°$ ·
+   $X_L = Z \sin\varphi \approx 39{,}3\,\Omega$ → $L = X_L/(2\pi f) \approx 6{,}3\,\mathrm{mH}$ ·
+   $R = Z \cos\varphi \approx 7{,}5\,\Omega$
+2. Messwiderstand an Masse, Spule darüber. Kanal 1 misst die Spannung über beiden, Kanal 2 die am Messwiderstand. Die
+   Spulenspannung ist die Differenz – Rechenfunktion „CH1 − CH2“ des Oszilloskops. Beide Tastköpfe gleich einstellen und
+   abgleichen, sonst ist die Differenz ungenau.
 
 </Loesung>

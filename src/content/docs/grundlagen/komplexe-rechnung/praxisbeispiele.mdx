@@ -1,0 +1,128 @@
+---
+title: Praxisbeispiele – Komplexe Wechselstromrechnung
+description: "Praxisbeispiele: Ein Lautsprecher ist kein ohmscher Widerstand · Vorschaltdrossel einer Leuchtstofflampe · Baustrahler an der Kabeltrommel · Heizlüfter und Winkelschleifer an einer Sicherung · Warum löst der FI aus?."
+---
+
+import Stufe from '../../../../components/Stufe.astro';
+import Loesung from '../../../../components/Loesung.astro';
+import Abbildung from '../../../../components/Abbildung.astro';
+import RLCGemischt from '../../../../assets/grundlagen/rlc-gemischt.svg';
+
+## Ein Lautsprecher ist kein ohmscher Widerstand
+
+<Stufe wert="standard" />
+
+Auf einem Lautsprecher steht „8 Ω“. Mit einem Multimeter misst du aber nur **6,2 Ω**.
+Ein einfaches Modell: Schwingspule = Widerstand $R = 6{,}2\,\Omega$ in Reihe mit $L = 0{,}5\,\mathrm{mH}$.
+
+1. Warum zeigt das Multimeter weniger als 8 Ω?
+2. Berechne den Betrag der Impedanz bei 100 Hz, 1 kHz und 10 kHz.
+3. Was bedeutet das für einen Hochtonlautsprecher an derselben Frequenzweiche?
+
+<Loesung>
+
+1. Das Multimeter misst mit **Gleichstrom** – es sieht nur den Drahtwiderstand der Schwingspule. Die Nennimpedanz 8 Ω ist ein
+   typischer Wert im Betrieb mit Wechselstrom.
+2. $\underline{Z} = R + \mathrm{j}\omega L$:
+   - 100 Hz: $X_\mathrm{L} = 0{,}31\,\Omega$ → $Z \approx 6{,}21\,\Omega$
+   - 1 kHz: $X_\mathrm{L} = 3{,}14\,\Omega$ → $Z \approx 6{,}95\,\Omega$
+   - 10 kHz: $X_\mathrm{L} = 31{,}4\,\Omega$ → $Z \approx 32{,}0\,\Omega$
+3. Bei hohen Frequenzen steigt die Impedanz stark. Frequenzweichen müssen das berücksichtigen, sonst stimmt die Trennfrequenz nicht.
+   (Ein echter Lautsprecher hat zusätzlich eine Resonanzspitze bei tiefen Frequenzen.)
+
+</Loesung>
+
+## Vorschaltdrossel einer Leuchtstofflampe
+
+<Stufe wert="standard" />
+
+Ältere Leuchtstofflampen haben eine Drossel in Reihe. Im Betrieb liegen an der Lampe ca. **100 V** (wie ein ohmscher Widerstand),
+die Netzspannung beträgt **230 V**, der Strom **0,43 A**.
+
+1. Zeichne das Zeigerdiagramm der Spannungen (Lampe = ohmsch, Drossel = ideal induktiv).
+2. Wie groß ist die Spannung an der Drossel? Warum nicht einfach 130 V?
+3. Wie groß ist die Induktivität der Drossel?
+
+<Loesung>
+
+1. $\underline{U}_\mathrm{Lampe}$ in Phase mit dem Strom, $\underline{U}_\mathrm{Drossel}$ 90° voreilend – sie bilden ein rechtwinkeliges Dreieck mit $\underline{U}$ als Hypotenuse.
+2. $U_\mathrm{D} = \sqrt{230^2 - 100^2}\,\mathrm{V} \approx 207\,\mathrm{V}$. Die Spannungen sind um 90° verschoben – man muss sie **geometrisch** addieren.
+3. $X_\mathrm{L} = \dfrac{207\,\mathrm{V}}{0{,}43\,\mathrm{A}} \approx 482\,\Omega$ → $L = \dfrac{X_\mathrm{L}}{2\pi \cdot 50\,\mathrm{Hz}} \approx 1{,}53\,\mathrm{H}$
+
+Warum eine Drossel statt eines Vorwiderstands? Ein Widerstand würde $130\,\mathrm{V} \cdot 0{,}43\,\mathrm{A} \approx 56\,\mathrm{W}$ verheizen – die
+Drossel verbraucht (fast) keine Wirkleistung.
+
+</Loesung>
+
+## Baustrahler an der Kabeltrommel
+
+<Stufe wert="standard" />
+
+Ein Baustrahler wird über eine **ganz abgerollte** Kabeltrommel (50 m, 1,5 mm² Kupfer) an einer Baustellensteckdose betrieben (230 V, 50 Hz).
+Das Gerät verhält sich wie $\underline{Z}_\mathrm{G} = (35 + \mathrm{j}\,12)\,\Omega$. Die Hausinstallation bis zur Steckdose hat die Netzimpedanz
+$\underline{Z}_\mathrm{N} = (0{,}6 + \mathrm{j}\,0{,}25)\,\Omega$, Der Blindwiderstand der Kabeltrommel ist sehr klein (ca. $0{,}01\,\Omega$, siehe Frage 3).
+
+1. Berechne den Widerstand der Kabeltrommel (Hin- und Rückleiter, $\gamma_\mathrm{Cu} = 56\,\mathrm{m/(\Omega \cdot mm^2)}$).
+2. Welcher Strom fließt? Welche Spannung liegt am Gerät?
+3. Warum soll man eine Kabeltrommel bei großer Last immer ganz abrollen?
+
+<Loesung>
+
+1. $R_\mathrm{K} = \dfrac{2 \cdot 50\,\mathrm{m}}{56\,\mathrm{m/(\Omega \cdot mm^2)} \cdot 1{,}5\,\mathrm{mm^2}} \approx 1{,}19\,\Omega$ → $\underline{Z}_\mathrm{K} \approx (1{,}19 + \mathrm{j}\,0{,}01)\,\Omega$
+2. Alle Impedanzen liegen in Reihe:
+   $\underline{Z}_\mathrm{ges} = (0{,}6 + 1{,}19 + 35)\,\Omega + \mathrm{j}\,(0{,}25 + 0{,}01 + 12)\,\Omega = (36{,}8 + \mathrm{j}\,12{,}26)\,\Omega$ →
+   $\lvert \underline{Z}_\mathrm{ges} \rvert \approx 38{,}8\,\Omega$ → $I = 230\,\mathrm{V} / 38{,}8\,\Omega \approx 5{,}93\,\mathrm{A}$.
+   Am Gerät: $U_\mathrm{G} = I \cdot \lvert \underline{Z}_\mathrm{G} \rvert = 5{,}93\,\mathrm{A} \cdot 37{,}0\,\Omega \approx 219\,\mathrm{V}$ – rund **11 V** gehen in Installation und Kabeltrommel verloren.
+3. Entscheidend ist die **Wärme**: Die Leitung erwärmt sich durch $P = I^2 R$. Abgerollt gibt sie die Wärme an die Luft ab; aufgerollt
+   liegen viele Lagen eng aufeinander, die Wärme staut sich und die Isolierung kann schmelzen. Auf der Trommel steht deshalb, welche
+   Leistung aufgerollt und abgerollt erlaubt ist.
+   Eine nennenswerte Spule ist die Trommel dagegen **nicht**: Hin- und Rückleiter liegen im selben Kabel, ihre Ströme fließen in
+   entgegengesetzter Richtung, und ihre Magnetfelder heben sich fast auf. Darum ist der Blindwiderstand so klein, aufgerollt wie abgerollt.
+
+</Loesung>
+
+## Heizlüfter und Winkelschleifer an einer Sicherung
+
+<Stufe wert="standard" />
+
+In einer Werkstatt laufen an derselben 10-A-Sicherung (230 V, 50 Hz) gleichzeitig ein Heizlüfter mit 1,5 kW (rein ohmsch) und ein
+Winkelschleifer, der sich wie eine Reihenschaltung aus $R = 8\,\Omega$ und $L = 150\,\mathrm{mH}$ verhält.
+
+1. Berechne beide Ströme nach Betrag und Phase.
+2. Wie groß ist der Gesamtstrom? Löst die Sicherung aus?
+3. Ein Kollege addiert einfach die Beträge. Zu welchem (falschen) Ergebnis kommt er?
+
+<Loesung>
+
+1. Heizlüfter: $R_\mathrm{H} = (230\,\mathrm{V})^2 / 1500\,\mathrm{W} \approx 35{,}3\,\Omega$ → $\underline{I}_\mathrm{H} \approx 6{,}52\,\mathrm{A}\angle 0°$.
+   Winkelschleifer: $X_L = 2\pi \cdot 50\,\mathrm{Hz} \cdot 0{,}15\,\mathrm{H} \approx 47{,}1\,\Omega$ → $\underline{Z} = (8 + \mathrm{j}\,47{,}1)\,\Omega = 47{,}8\,\Omega\angle 80{,}4°$ →
+   $\underline{I}_\mathrm{W} = 230\,\mathrm{V} / \underline{Z} \approx 4{,}81\,\mathrm{A}\angle{-80{,}4°} = (0{,}80 - \mathrm{j}\,4{,}74)\,\mathrm{A}$
+2. $\underline{I} = (6{,}52 + 0{,}80 - \mathrm{j}\,4{,}74)\,\mathrm{A} = (7{,}32 - \mathrm{j}\,4{,}74)\,\mathrm{A}$ → $I \approx 8{,}73\,\mathrm{A}\angle{-32{,}9°}$ – **kleiner als 10 A**, die Sicherung hält.
+3. $6{,}52\,\mathrm{A} + 4{,}81\,\mathrm{A} = 11{,}3\,\mathrm{A}$ – er würde fälschlich eine Überlast vermuten. Wechselströme mit unterschiedlicher Phase
+   werden **als Zeiger** addiert.
+
+</Loesung>
+
+## Warum löst der FI aus?
+
+<Stufe wert="vertiefung" />
+
+In einer großen Halle hängt ein einphasiger Stromkreis (230 V, 50 Hz) mit sehr langen Leitungen an einem FI-Schutzschalter mit
+$I_\mathrm{\Delta N} = 30\,\mathrm{mA}$. Die Leitungen haben eine Kapazität von $120\,\mathrm{nF}$ gegen den Schutzleiter. Zusätzlich gibt es einen
+Isolationsfehler mit $R_\mathrm{F} = 10\,\mathrm{k\Omega}$ gegen PE.
+
+1. Berechne den kapazitiven Ableitstrom und den Fehlerstrom über $R_\mathrm{F}$.
+2. Wie groß ist der gesamte Differenzstrom?
+3. Jetzt wird ein Gerät mit Netzfilter eingesteckt, dessen Y-Kondensatoren zusätzlich $12\,\mathrm{mA}$ (kapazitiv) gegen PE ableiten. Was passiert?
+
+<Loesung>
+
+1. $X_C = \dfrac{1}{2\pi \cdot 50\,\mathrm{Hz} \cdot 120\,\mathrm{nF}} \approx 26{,}5\,\mathrm{k\Omega}$ → $I_C = 230\,\mathrm{V} / 26{,}5\,\mathrm{k\Omega} \approx 8{,}7\,\mathrm{mA}$ (90° voreilend) ·
+   $I_R = 230\,\mathrm{V} / 10\,\mathrm{k\Omega} = 23\,\mathrm{mA}$ (in Phase)
+2. Die Ströme sind um 90° verschoben: $I_\Delta = \sqrt{23^2 + 8{,}7^2}\,\mathrm{mA} \approx 24{,}6\,\mathrm{mA}$ – unter 30 mA.
+   Aber Achtung: Ein FI darf laut Norm schon ab **50 %** von $I_\mathrm{\Delta N}$ (15 mA) auslösen. Er **kann** also schon jetzt gelegentlich auslösen.
+3. Die kapazitiven Ströme sind gleichphasig und addieren sich: $I_C = 8{,}7 + 12 = 20{,}7\,\mathrm{mA}$ →
+   $I_\Delta = \sqrt{23^2 + 20{,}7^2}\,\mathrm{mA} \approx 30{,}9\,\mathrm{mA}$ → der FI löst **sicher** aus. Ursache ist nicht das Gerät allein, sondern die Summe
+   aus Isolationsfehler, Leitungskapazität und Filter – den Isolationsfehler muss man suchen und beheben.
+
+</Loesung>

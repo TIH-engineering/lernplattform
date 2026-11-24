@@ -1,6 +1,6 @@
 ---
 title: Rechenbeispiele – Thermische Auslegung
-description: Rechenbeispiele zu Verlustleistung eines Linearreglers, Sperrschichttemperatur, Temperaturen im Ersatzschaltbild, Leistung ohne Kühlkörper, Kühlkörperauswahl, Endstufe mit zwei Transistoren, SMD-Regler auf der Leiterplatte, Wärmeleitpad, Zeitkonstante und Pulsbetrieb.
+description: "Rechenbeispiele: Verlustleistung eines Linearreglers · Sperrschichttemperatur ohne Kühlkörper · Temperaturen im Ersatzschaltbild · Wie viel Leistung ohne Kühlkörper? · Kühlkörper für einen Linearregler auswählen · Wärmeleitpad statt Paste · Endstufe mit zwei Transistoren · SMD-Regler auf der Leiterplatte · Wie lange dauert das Aufwärmen? · Kurzer Strompuls im Chip · Thermisches Modell in LTspice."
 ---
 
 import Stufe from '../../../components/Stufe.astro';
@@ -216,5 +216,43 @@ Einschalten eines Motors $1\,\mathrm{ms}$ lang mit $100\,\mathrm{W}$ belastet.
    (In Wirklichkeit fließt schon während des Pulses Wärme ab, es wird also noch etwas weniger.)
 3. Dauerhaft: $\Delta\vartheta = 100\,\mathrm{W} \cdot 0{,}6\,\mathrm{K/W} = 60\,\mathrm{K}$ über dem Gehäuse → 110 °C – und der Kühlkörper müsste
    100 W abführen. Kurze Pulse sind also viel weniger kritisch, solange sie selten genug kommen.
+
+</Loesung>
+
+## Thermisches Modell in LTspice
+
+<Stufe wert="standard" />
+
+Das dynamische Modell des TO-220-Reglers mit Kühlkörper lässt sich als Netzliste simulieren (1 A ≙ 1 W, 1 V ≙ 1 °C, 1 Ω ≙ 1 K/W, 1 F ≙ 1 J/K):
+
+```
+* Thermisches Modell: TO-220 mit Kuehlkoerper, 2 W, 20 Grad C
+I1 0 j 2
+Rjc j c 3
+Rch c h 0.5
+Rha h a 5.3
+Cj j 0 0.01
+Cc c 0 1
+Ch h 0 27
+Va a 0 20
+.ic V(j)=20 V(c)=20 V(h)=20
+.tran 0 1200 0 0.5 uic
+.end
+```
+
+1. Welche Endtemperatur des Chips erwartest du? Kontrolliere mit der Simulation.
+2. Die Simulation zeigt, dass der Chip schon nach 1 s fast 7 K wärmer ist, der Kühlkörper aber kaum. Erkläre.
+3. Welche Werte stammen aus Datenblättern, welche muss man schätzen?
+
+<Loesung>
+
+1. $\vartheta_\mathrm{j} = 20\,°\mathrm{C} + 2\,\mathrm{W} \cdot (3 + 0{,}5 + 5{,}3)\,\mathrm{K/W} = 37{,}6\,°\mathrm{C}$. Die Simulation erreicht nach 1200 s
+   (≈ 8 Zeitkonstanten des Kühlkörpers) 37,6 °C.
+2. Chip und Gehäuse haben kleine Wärmekapazitäten – sie sind nach Sekunden eingeschwungen. Über $R_\mathrm{th,jc} + R_\mathrm{th,ch}$ entsteht
+   sofort der Temperatursprung $2\,\mathrm{W} \cdot 3{,}5\,\mathrm{K/W} = 7\,\mathrm{K}$. Der große Kühlkörper ($\tau \approx 143\,\mathrm{s}$)
+   erwärmt sich dagegen langsam.
+3. **Datenblatt:** $R_\mathrm{th,jc}$ (Regler), $R_\mathrm{th,ha}$ (Kühlkörper). **Geschätzt:** $R_\mathrm{th,ch}$ (abhängig von Paste und
+   Anpressdruck), alle Wärmekapazitäten (aus Masse × spezifischer Wärmekapazität) und – bei SMD – der Wärmewiderstand der Kupferfläche.
+   Diese Werte passt man nach der Messung an.
 
 </Loesung>

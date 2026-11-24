@@ -3,10 +3,13 @@ title: Praxisbeispiele – Messverstärker und Schnittstellen
 description: Küchenwaage mit Wägezelle und 24-Bit-A/D-Umsetzer, Lade- und Entladestrom eines Akkus bidirektional messen, Low-Side-Messung mit Masseproblem, Strommessung im Wechselrichter mit Trennverstärker, Drucksensor mit 4–20 mA in der Anlage, Brummen durch Masseschleife.
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
 import Netzsicherheit from '../../../components/Netzsicherheit.astro';
 
 ## Küchenwaage mit Mikrocontroller
+
+<Stufe wert="grundlagen" />
 
 Für eine Waage gibt es fertige Module: eine Wägezelle (1 mV/V) und ein Baustein, der Brückenspeisung, programmierbaren
 Verstärker (z. B. $V = 128$) und einen 24-Bit-Sigma-Delta-A/D-Umsetzer enthält.
@@ -30,6 +33,8 @@ Verstärker (z. B. $V = 128$) und einen 24-Bit-Sigma-Delta-A/D-Umsetzer enthält
 
 ## Akkustrom in beide Richtungen
 
+<Stufe wert="standard" />
+
 Ein 12-V-Akku wird geladen (bis +10 A) und entladen (bis −10 A). Der Strom soll mit einem bidirektionalen
 Strommessverstärker ($V = 50$, Referenzeingang) und einem 3,3-V-A/D-Umsetzer gemessen werden.
 
@@ -49,6 +54,8 @@ Fehler der 1,65 V als Stromfehler sichtbar.
 
 ## Low-Side-Messung mit Überraschung
 
+<Stufe wert="grundlagen" />
+
 Ein Motor (bis 30 A) wird Low-Side über einen 5-mΩ-Shunt gemessen. Ein Temperatursensor sitzt am Motor und ist mit der
 Motormasse verbunden; ausgewertet wird er von der Steuerung, deren Masse vor dem Shunt liegt. Bei hohem Strom zeigt der
 Temperatursensor um mehrere Grad falsche Werte.
@@ -63,6 +70,8 @@ differentiell messen.
 </Loesung>
 
 ## Phasenstrom im Wechselrichter
+
+<Stufe wert="grundlagen" />
 
 <Netzsicherheit />
 
@@ -83,6 +92,8 @@ In einem Motorumrichter (Zwischenkreis 560 V) soll der Strom in einer Motorphase
 
 ## Drucksensor in der Anlage
 
+<Stufe wert="grundlagen" />
+
 Ein Drucktransmitter (0 … 10 bar, 4–20 mA, Zweileiter) wird an den Analogeingang einer SPS angeschlossen. Die SPS zeigt
 dauerhaft −25 % an.
 
@@ -98,6 +109,8 @@ dauerhaft −25 % an.
 </Loesung>
 
 ## Brummen durch Masseschleife
+
+<Stufe wert="grundlagen" />
 
 Ein Thermoelement-Messverstärker in einem Prüfstand zeigt einen schwankenden Wert; am Oszilloskop sieht man ein 50-Hz-Signal
 auf dem Ausgang. Der Messverstärker ist über das USB-Kabel des Laptops und über den Schutzleiter des Prüfstands geerdet.

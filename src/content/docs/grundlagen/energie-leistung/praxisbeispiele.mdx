@@ -1,11 +1,14 @@
 ---
 title: Praxisbeispiele – Energie, Leistung, Wirkungsgrad
-description: Standby-Verbrauch messen, LED statt Glühlampe, Energie im Alltag vergleichen.
+description: "Praxisbeispiele: Standby-Verbrauch messen · LED statt Glühlampe · Energie im Alltag vergleichen · Energiekosten eines Routers · Wirkungsgrad eines Aufzugs · Pumpe mit Gesamtwirkungsgrad · Wasserkocher."
 ---
 
+import Stufe from '../../../../components/Stufe.astro';
 import Loesung from '../../../../components/Loesung.astro';
 
 ## Standby-Verbrauch messen
+
+<Stufe wert="standard" />
 
 Mit einem Energiemessgerät (Zwischenstecker) misst du an einem Fernseher im Standby **5 W**. Der Fernseher ist täglich
 20 Stunden im Standby.
@@ -24,6 +27,8 @@ Mit einem Energiemessgerät (Zwischenstecker) misst du an einem Fernseher im Sta
 
 ## LED statt Glühlampe
 
+<Stufe wert="grundlagen" />
+
 Eine 60-W-Glühlampe wird durch eine LED-Lampe mit 8 W und gleicher Helligkeit ersetzt. Die Lampe brennt täglich 3 Stunden.
 
 1. Wie viel Energie und Geld (0,25 €/kWh) spart man pro Jahr?
@@ -38,6 +43,8 @@ Eine 60-W-Glühlampe wird durch eine LED-Lampe mit 8 W und gleicher Helligkeit e
 </Loesung>
 
 ## Energie im Alltag vergleichen
+
+<Stufe wert="grundlagen" />
 
 Ordne die folgenden Energiemengen der Größe nach. Rechne alles in kWh um.
 
@@ -59,5 +66,90 @@ d) $\approx 8{,}5\,\mathrm{kWh}$
 **Reihenfolge:** a < b < c < d. Überraschend: Die ganze Anstrengung am Berg entspricht nur einem Viertel eines
 E-Bike-Akkus – und ein warmes Bad braucht so viel Energie wie fast neun volle E-Bike-Akkus!
 Erwärmen braucht sehr viel Energie.
+
+</Loesung>
+
+## Energiekosten eines Routers
+
+<Stufe wert="grundlagen" />
+
+Ein WLAN-Router nimmt dauernd $12\,\mathrm{W}$ auf und läuft das ganze Jahr. Welche Energie braucht er pro Jahr,
+und was kostet das bei $0{,}25\,\text{€}/\mathrm{kWh}$?
+
+<Loesung>
+
+$t = 365 \cdot 24\,\mathrm{h} = 8760\,\mathrm{h}$
+
+$$
+W = P \cdot t = 12\,\mathrm{W} \cdot 8760\,\mathrm{h} = 105\,120\,\mathrm{Wh} \approx 105{,}1\,\mathrm{kWh}
+\qquad
+K = 105{,}1\,\mathrm{kWh} \cdot 0{,}25\,\text{€}/\mathrm{kWh} \approx 26{,}28\,\text{€}
+$$
+
+</Loesung>
+
+## Wirkungsgrad eines Aufzugs
+
+<Stufe wert="standard" />
+
+Ein Aufzug hebt eine Last von $800\,\mathrm{kg}$ in $20\,\mathrm{s}$ um $12\,\mathrm{m}$ mit konstanter Geschwindigkeit.
+Der Motor nimmt dabei $6\,\mathrm{kW}$ auf. Wie groß ist der Gesamtwirkungsgrad?
+
+**Gegeben:** $m = 800\,\mathrm{kg}$, $h = 12\,\mathrm{m}$, $t = 20\,\mathrm{s}$, $P_\mathrm{zu} = 6\,\mathrm{kW}$, $g = 9{,}81\,\mathrm{m/s^2}$
+
+**Gesucht:** $\eta$
+
+<Loesung>
+
+$$
+P_\mathrm{ab} = \frac{m \cdot g \cdot h}{t} = \frac{800\,\mathrm{kg} \cdot 9{,}81\,\mathrm{m/s^2} \cdot 12\,\mathrm{m}}{20\,\mathrm{s}} \approx 4709\,\mathrm{W}
+\qquad
+\eta = \frac{P_\mathrm{ab}}{P_\mathrm{zu}} = \frac{4709\,\mathrm{W}}{6000\,\mathrm{W}} \approx 78{,}5\,\%
+$$
+
+</Loesung>
+
+## Pumpe mit Gesamtwirkungsgrad
+
+<Stufe wert="standard" />
+
+Ein Motor ($\eta_\mathrm{M} = 90\,\%$) treibt eine Pumpe ($\eta_\mathrm{P} = 70\,\%$) an, die Wasser $50\,\mathrm{m}$ hoch fördert.
+Der Motor nimmt $5{,}5\,\mathrm{kW}$ auf. Wie viele Kubikmeter Wasser werden pro Stunde gefördert?
+($1\,\mathrm{m^3}$ Wasser $= 1000\,\mathrm{kg}$)
+
+<Loesung>
+
+Gesamtwirkungsgrad: $\eta_\mathrm{ges} = \eta_\mathrm{M} \cdot \eta_\mathrm{P} = 0{,}9 \cdot 0{,}7 = 0{,}63$
+
+Nutzleistung: $P_\mathrm{ab} = 0{,}63 \cdot 5500\,\mathrm{W} = 3465\,\mathrm{W}$
+
+Aus $P = \dfrac{m \cdot g \cdot h}{t}$ folgt die Masse pro Sekunde:
+
+$$
+\frac{m}{t} = \frac{P_\mathrm{ab}}{g \cdot h} = \frac{3465\,\mathrm{W}}{9{,}81\,\mathrm{m/s^2} \cdot 50\,\mathrm{m}} \approx 7{,}06\,\frac{\mathrm{kg}}{\mathrm{s}}
+$$
+
+Pro Stunde: $7{,}06\,\mathrm{kg/s} \cdot 3600\,\mathrm{s} \approx 25\,430\,\mathrm{kg} \approx 25{,}4\,\mathrm{m^3}$
+
+</Loesung>
+
+## Wasserkocher
+
+<Stufe wert="vertiefung" />
+
+Ein Wasserkocher ($2000\,\mathrm{W}$, Wirkungsgrad $90\,\%$) erhitzt $1{,}5\,\mathrm{l}$ Wasser von $15\,°\mathrm{C}$ auf $100\,°\mathrm{C}$
+($c = 4{,}19\,\mathrm{kJ/(kg\,K)}$). Wie lange dauert das, und was kostet es bei $0{,}25\,\text{€}/\mathrm{kWh}$?
+
+<Loesung>
+
+Nötige Wärme: $Q = m \cdot c \cdot \Delta\vartheta = 1{,}5\,\mathrm{kg} \cdot 4190\,\mathrm{J/(kg\,K)} \cdot 85\,\mathrm{K} \approx 534\,\mathrm{kJ}$
+
+Nutzbare Heizleistung: $0{,}9 \cdot 2000\,\mathrm{W} = 1800\,\mathrm{W}$
+
+$$
+t = \frac{Q}{P_\mathrm{ab}} = \frac{534\,225\,\mathrm{J}}{1800\,\mathrm{W}} \approx 297\,\mathrm{s} \approx 4{,}9\,\mathrm{min}
+$$
+
+Elektrische Energie: $W = \dfrac{Q}{\eta} \approx 593{,}6\,\mathrm{kJ} \approx 0{,}165\,\mathrm{kWh}$ → Kosten $\approx 4{,}1$ Cent.
 
 </Loesung>

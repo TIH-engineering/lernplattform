@@ -1,12 +1,18 @@
 ---
 title: Praxisbeispiele – Messwerke und Messbereiche
-description: Strommessung mit dem Multimeter und die durchgebrannte Sicherung, Ruhestrom eines Autos messen, Innenwiderstand eines Akkus bestimmen, Schalttafelinstrument, Messfehler an einer hochohmigen Schaltung.
+description: "Praxisbeispiele: Die Sicherung im Multimeter · Ruhestrom eines Autos · Schalttafelinstrumente."
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
 import Netzsicherheit from '../../../components/Netzsicherheit.astro';
+import Spannungsrichtig from '../../../assets/mtrs/spannungsrichtig.svg';
+import Stromrichtig from '../../../assets/mtrs/stromrichtig.svg';
 
 ## Die Sicherung im Multimeter
+
+<Stufe wert="grundlagen" />
 
 <Netzsicherheit />
 
@@ -27,6 +33,8 @@ Versuch. Es knallt, das Multimeter zeigt danach im Strombereich nichts mehr an.
 
 ## Ruhestrom eines Autos
 
+<Stufe wert="grundlagen" />
+
 Die Batterie eines Autos ist nach zwei Wochen Standzeit leer. In der Werkstatt soll der **Ruhestrom** (Stromverbrauch bei abgeschlossenem Auto) gemessen werden.
 
 1. Wie wird das Multimeter angeschlossen?
@@ -43,22 +51,9 @@ Die Batterie eines Autos ist nach zwei Wochen Standzeit leer. In der Werkstatt s
 
 </Loesung>
 
-## Innenwiderstand eines Akkus
-
-Ein Lithium-Akku zeigt im Leerlauf $4{,}10\,\mathrm{V}$. Mit einem Lastwiderstand von $2\,\Omega$ misst du $3{,}94\,\mathrm{V}$ an den Polen und $1{,}97\,\mathrm{A}$.
-
-1. Berechne den Innenwiderstand.
-2. Warum misst man die Spannung mit eigenen Messleitungen direkt an den Polen und nicht an den Klemmen des Lastwiderstands?
-
-<Loesung>
-
-1. $R_\mathrm{i} = \dfrac{U_0 - U}{I} = \dfrac{4{,}10 - 3{,}94}{1{,}97}\,\Omega \approx 81\,\mathrm{m\Omega}$
-2. Die Zuleitungen und Klemmen zum Lastwiderstand haben selbst einige mΩ – dieselbe Größenordnung wie der Innenwiderstand. Misst man direkt an den
-   Polen (stromlose Messleitungen, **Vierleiterprinzip**), gehen sie nicht ins Ergebnis ein.
-
-</Loesung>
-
 ## Schalttafelinstrumente
+
+<Stufe wert="grundlagen" />
 
 In einem Schaltschrank zeigen Zeigerinstrumente Netzspannung und Motorstrom an. Auf der Skala ist ein Symbol mit zwei Eisenplättchen und eine „1,5“.
 
@@ -69,21 +64,5 @@ In einem Schaltschrank zeigen Zeigerinstrumente Netzspannung und Motorstrom an. 
 
 1. Ein **Dreheisenmesswerk** der Klasse 1,5: robust, misst direkt Wechselstrom, zeigt den Effektivwert auch bei verzerrten Strömen, verträgt Anlaufströme.
 2. $80\,\mathrm{A} \cdot 5/100 = 4\,\mathrm{A}$ – der Stromwandler (ein Transformator) setzt den großen Strom herunter und trennt das Instrument galvanisch vom Netz.
-
-</Loesung>
-
-## Hochohmige Schaltung messen
-
-An einem Transistorverstärker soll die Basisspannung gemessen werden. Der Basis-Spannungsteiler besteht aus $470\,\mathrm{k\Omega}$ und $100\,\mathrm{k\Omega}$ an
-$12\,\mathrm{V}$. Das alte Analogmultimeter (20 kΩ/V, 3-V-Bereich) zeigt 1,1 V, das Digitalmultimeter (10 MΩ) 2,08 V.
-
-1. Welcher Wert stimmt ungefähr? Berechne den unbelasteten Wert.
-2. Warum misst das Analoggerät so viel weniger?
-
-<Loesung>
-
-1. Unbelastet: $12\,\mathrm{V} \cdot \dfrac{100}{570} \approx 2{,}11\,\mathrm{V}$ – das **Digitalmultimeter** liegt fast richtig (der Basisstrom senkt die Spannung zusätzlich etwas).
-2. Im 3-V-Bereich hat das Analoggerät nur $60\,\mathrm{k\Omega}$ – das liegt parallel zu den 100 kΩ und belastet den hochohmigen Teiler (Innenwiderstand ≈ 83 kΩ) stark.
-   Rechnerisch: $100 \parallel 60 = 37{,}5\,\mathrm{k\Omega}$ → $12\,\mathrm{V} \cdot 37{,}5/507{,}5 \approx 0{,}89\,\mathrm{V}$ – die Größenordnung der gemessenen 1,1 V.
 
 </Loesung>

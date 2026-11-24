@@ -1,10 +1,11 @@
 ---
 title: Rechenbeispiele – Komparator und Frequenzmessung
-description: Rechenbeispiele zu Torzeit und ±1-Zählfehler, notwendiger Torzeit, Periodendauermessung, Grenzfrequenz beider Verfahren, Gesamtfehler mit Quarztoleranz, Drehzahl aus Input-Capture-Werten und Bemessung der Hysterese.
+description: "Rechenbeispiele: Frequenzzähler mit Torzeit · Welche Torzeit ist nötig? · Netzfrequenz über die Periodendauer · Grenzfrequenz der beiden Verfahren · Gesamtfehler mit Quarztoleranz · Hysterese bemessen · Durchflusssensor."
 ---
 
 import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
+import Netzsicherheit from '../../../components/Netzsicherheit.astro';
 
 ## Frequenzzähler mit Torzeit
 
@@ -91,24 +92,6 @@ Ein Zähler mit einem Quarz von ±30 ppm misst bei 1 s Torzeit eine Frequenz von
 
 </Loesung>
 
-## Drehzahl eines Lüfters
-
-<Stufe wert="standard" />
-
-Ein PC-Lüfter liefert am Tacho-Ausgang **2 Impulse pro Umdrehung**. Ein Timer mit 1 MHz liefert bei zwei
-aufeinanderfolgenden steigenden Flanken die Capture-Werte 61 200 und 3 164 (der 16-Bit-Zähler ist dazwischen übergelaufen).
-
-**Gesucht:** Impulsperiode und Drehzahl in 1/min
-
-<Loesung>
-
-1. Differenz modulo $2^{16} = 65\,536$: $3164 - 61\,200 + 65\,536 = 7500$ Takte → $T_\mathrm{p} = 7{,}5\,\mathrm{ms}$
-   (im Programm erledigt das die `uint16_t`-Subtraktion automatisch).
-2. Eine Umdrehung = 2 Impulse → $T_\mathrm{U} = 15\,\mathrm{ms}$ → $n = 1/15\,\mathrm{ms} \approx 66{,}7\,\mathrm{s^{-1}}$
-   $= 4000\,\mathrm{min^{-1}}$
-
-</Loesung>
-
 ## Hysterese bemessen
 
 <Stufe wert="vertiefung" />
@@ -125,5 +108,22 @@ Wähle die Widerstände so, dass die Hysterese etwa 100 mV beträgt.
 2. $U_\mathrm{H} = \beta \cdot \Delta U_\mathrm{a}$ → $\beta = 0{,}1\,\mathrm{V}/5\,\mathrm{V} = 0{,}02$
 3. $\beta = \dfrac{R_2}{R_1 + R_2} = 0{,}02$ → $R_1 = 49 \cdot R_2$. Mit $R_2 = 1\,\mathrm{k\Omega}$: $R_1 = 49\,\mathrm{k\Omega}$ →
    Normwert $47\,\mathrm{k\Omega}$ ergibt $\beta = 1/48$ und $U_\mathrm{H} \approx 104\,\mathrm{mV}$.
+
+</Loesung>
+
+## Durchflusssensor
+
+<Stufe wert="grundlagen" />
+
+Ein Turbinen-Durchflusssensor für Wasser liefert laut Datenblatt 450 Impulse pro Liter.
+
+1. Der Mikrocontroller zählt in 1 s genau 63 Impulse. Wie groß ist der Durchfluss in l/min?
+2. Wie viel Wasser ist nach 12 600 Impulsen durchgeflossen?
+
+<Loesung>
+
+1. $63/450 = 0{,}14\,\mathrm{l}$ pro Sekunde → $8{,}4\,\mathrm{l/min}$. Bei so wenigen Impulsen pro Sekunde ist der ±1-Fehler
+   1,6 % – Periodendauermessung wäre genauer.
+2. $12\,600/450 = 28\,\mathrm{l}$ – zum Messen der Menge zählt man einfach alle Impulse (hier ist der ±1-Fehler bedeutungslos).
 
 </Loesung>

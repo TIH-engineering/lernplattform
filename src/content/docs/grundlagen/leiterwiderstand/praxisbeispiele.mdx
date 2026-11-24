@@ -1,11 +1,14 @@
 ---
 title: Praxisbeispiele – Leiterwiderstand und Temperatur
-description: Kabeltrommel, Leiterbahnbreite auf Platinen, PTC als rückstellende Sicherung.
+description: "Praxisbeispiele: Die Kabeltrommel · Wie breit muss eine Leiterbahn sein? · PTC als „Sicherung, die sich selbst zurückstellt“ · Widerstand bei Betriebstemperatur · Wicklungstemperatur messen · Einschaltstrom einer Ventilspule."
 ---
 
+import Stufe from '../../../../components/Stufe.astro';
 import Loesung from '../../../../components/Loesung.astro';
 
 ## Die Kabeltrommel
+
+<Stufe wert="standard" />
 
 Auf einer Kabeltrommel steht: **„Aufgerollt max. 1000 W, abgerollt max. 3500 W“**.
 
@@ -23,6 +26,8 @@ Auf einer Kabeltrommel steht: **„Aufgerollt max. 1000 W, abgerollt max. 3500 W
 </Loesung>
 
 ## Wie breit muss eine Leiterbahn sein?
+
+<Stufe wert="standard" />
 
 Beim Platinenentwurf wird die Leiterbahnbreite nach dem Strom gewählt. Standard ist eine Kupferschicht von 35 µm.
 
@@ -42,6 +47,8 @@ Beim Platinenentwurf wird die Leiterbahnbreite nach dem Strom gewählt. Standard
 
 ## PTC als „Sicherung, die sich selbst zurückstellt“
 
+<Stufe wert="grundlagen" />
+
 In USB-Anschlüssen oder Spielzeug findet man oft eine **Polyfuse** (rückstellende Sicherung, ein PTC-Bauteil).
 
 1. Erkläre die Funktion bei einem Kurzschluss.
@@ -54,5 +61,64 @@ In USB-Anschlüssen oder Spielzeug findet man oft eine **Polyfuse** (rückstelle
    Nach Beseitigung des Fehlers und Abkühlen wird er wieder niederohmig.
 2. **Vorteil:** Sie muss nicht getauscht werden. **Nachteil:** Sie trennt nicht vollständig (ein kleiner Reststrom fließt)
    und reagiert langsamer als eine flinke Schmelzsicherung.
+
+</Loesung>
+
+## Widerstand bei Betriebstemperatur
+
+<Stufe wert="grundlagen" />
+
+Die Kupferwicklung eines Motors hat bei $20\,°\mathrm{C}$ einen Widerstand von $12\,\Omega$
+($\alpha_{20} = 0{,}0039\,\mathrm{K^{-1}}$). Wie groß ist der Widerstand bei $75\,°\mathrm{C}$?
+
+<Loesung>
+
+$\Delta\vartheta = 75\,°\mathrm{C} - 20\,°\mathrm{C} = 55\,\mathrm{K}$
+
+$$
+R_{75} = R_{20} \cdot (1 + \alpha_{20} \cdot \Delta\vartheta) = 12\,\Omega \cdot (1 + 0{,}0039\,\mathrm{K^{-1}} \cdot 55\,\mathrm{K}) \approx 14{,}57\,\Omega
+$$
+
+</Loesung>
+
+## Wicklungstemperatur messen
+
+<Stufe wert="standard" />
+
+Die Kupferwicklung eines Motors ($\alpha_{20} = 0{,}0039\,\mathrm{K^{-1}}$) hat im kalten Zustand bei $20\,°\mathrm{C}$ einen
+Widerstand von $4{,}8\,\Omega$. Nach einer Stunde Betrieb misst man $5{,}9\,\Omega$. Wie warm ist die Wicklung?
+
+<Loesung>
+
+$$
+\Delta\vartheta = \frac{R_\vartheta / R_{20} - 1}{\alpha_{20}} = \frac{5{,}9 / 4{,}8 - 1}{0{,}0039\,\mathrm{K^{-1}}} \approx 58{,}8\,\mathrm{K}
+\qquad
+\vartheta = 20\,°\mathrm{C} + 58{,}8\,\mathrm{K} \approx 78{,}8\,°\mathrm{C}
+$$
+
+So misst man die Temperatur von Wicklungen, in die man kein Thermometer stecken kann – die **Widerstandsmethode**.
+
+</Loesung>
+
+## Einschaltstrom einer Ventilspule
+
+<Stufe wert="standard" />
+
+Die Kupferwicklung eines Magnetventils nimmt an $24\,\mathrm{V}$ im warmen Zustand ($60\,°\mathrm{C}$) $40\,\mathrm{mA}$ auf
+($\alpha_{20} = 0{,}0039\,\mathrm{K^{-1}}$). Berechne den Warmwiderstand, den Kaltwiderstand bei $20\,°\mathrm{C}$ und den Einschaltstrom.
+
+<Loesung>
+
+Warmwiderstand: $R_{60} = \dfrac{24\,\mathrm{V}}{0{,}04\,\mathrm{A}} = 600\,\Omega$
+
+Kaltwiderstand ($\Delta\vartheta = 40\,\mathrm{K}$):
+
+$$
+R_{20} = \frac{R_{60}}{1 + \alpha_{20} \cdot \Delta\vartheta} = \frac{600\,\Omega}{1 + 0{,}0039 \cdot 40} \approx 519\,\Omega
+$$
+
+Einschaltstrom (Spule ist noch kalt): $I_\mathrm{E} = \dfrac{24\,\mathrm{V}}{519\,\Omega} \approx 46{,}2\,\mathrm{mA}$
+
+Der Strom ist beim Einschalten also rund 16 % größer als im Betrieb.
 
 </Loesung>

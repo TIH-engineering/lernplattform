@@ -1,6 +1,6 @@
 ---
 title: Rechenbeispiele – Messbrücken
-description: Rechenbeispiele zu Abgleichbedingung, unbekanntem Widerstand aus der Diagonalspannung, Diagonalspannung einer unabgeglichenen Brücke, belasteter Brücke mit Ersatzspannungsquelle, Viertel- und Vollbrücke mit DMS, Pt100-Brücke und Thomson-Brücke.
+description: "Rechenbeispiele: Abgleich mit einer Widerstandsdekade · Diagonalspannung einer unabgeglichenen Brücke · Unbekannter Widerstand aus der Diagonalspannung · Belastete Brücke · DMS in Viertel- und Vollbrücke · Pt100 in der Brücke · Thomson-Brücke · Simulation der Ausschlagbrücke."
 ---
 
 import Stufe from '../../../components/Stufe.astro';
@@ -141,5 +141,24 @@ gekoppelten Potentiometer im Verhältnis $R_1 : R_2 = 0{,}35$. Der Messstrom bet
 1. $R_\mathrm{x} = R_\mathrm{N} \cdot \dfrac{R_1}{R_2} = 10\,\mathrm{m\Omega} \cdot 0{,}35 = 3{,}5\,\mathrm{m\Omega}$
 2. $U = 10\,\mathrm{A} \cdot 3{,}5\,\mathrm{m\Omega} = 35\,\mathrm{mV}$. Messleitungen und Prüfspitzen eines normalen Ohmmeters haben zusammen schon 0,1 … 0,3 Ω – das
    Hundertfache des Messwerts.
+
+</Loesung>
+
+## Simulation der Ausschlagbrücke
+
+<Stufe wert="grundlagen" />
+
+Eine Viertelbrücke mit 350-Ω-DMS ($k = 2$) und 5 V Speisung wird in einer Schaltungssimulation (z. B. LTspice) aufgebaut. Der DMS wird als Widerstand
+$350\,\Omega \cdot (1 + k \cdot \varepsilon)$ modelliert, die Dehnung wird von 0 bis 10 000 µm/m durchgefahren (DC-Sweep).
+
+1. Welche Spannung erwartest du bei 1000 µm/m und bei 10 000 µm/m nach der Näherungsformel?
+2. Die Simulation zeigt bei 10 000 µm/m (DMS in der Position von $R_2$) nur 24,75 mV. Warum?
+
+<Loesung>
+
+1. $U_\mathrm{B} \approx \dfrac{U_0}{4} \cdot k\varepsilon$: 1000 µm/m → $\dfrac{5}{4} \cdot 0{,}002\,\mathrm{V} = 2{,}5\,\mathrm{mV}$ · 10 000 µm/m → $25\,\mathrm{mV}$
+2. Die Näherung gilt nur für **kleine** Änderungen. Exakt: $U_\mathrm{B} = 5\,\mathrm{V} \cdot \left(\dfrac{1{,}02}{2{,}02} - 0{,}5\right) \approx 24{,}75\,\mathrm{mV}$ – die
+   Viertelbrücke ist leicht **nichtlinear** (1 % Abweichung bei dieser großen Dehnung). In der Vollbrücke mit gegensinnig gedehnten DMS ist die Kennlinie
+   exakt linear.
 
 </Loesung>

@@ -60,6 +60,17 @@ Bei sehr umfangreichen Themen darf Theorie in mehrere Seiten (Unterordner) getei
 Noch leere Themenbereiche bekommen in der Seitenleiste das Abzeichen **„in Arbeit“**
 und eine Platzhalterseite.
 
+### Rechen- oder Praxisbeispiel? (Regel des Lehrers, 24.11.2026, gilt für die ganze Seite außer C und Projektmanagement)
+
+- **Rechenbeispiel:** fiktive Schaltung bzw. Schaltplan, reine Formelaufgabe, Bauteil oder Messgerät mit Kennwerten
+  (z. B. „Ein Strommesser Klasse 1,0 …“, „Ein Drucksensor liefert …“, „Ein Buck-Wandler 24 V → 12 V …“),
+  Messwerte auswerten (Messreihe, Oszilloskopbild), LTspice-Kontrolle einer fiktiven Schaltung.
+- **Praxisbeispiel:** sobald ein Alltagsgerät oder eine Anwendung vorkommt – auch wenn es nur die Einkleidung ist
+  (Router, Wasserkocher, Autobatterie, Drohne, Treppenhauslicht), Maschinen mit Typenschild (Motor), Labor-/Werkstattsituationen.
+- **Alle** Rechen- und Praxisbeispiele haben ein Stufen-Abzeichen (`<Stufe wert="…" />`).
+- Jedes Thema hat **mindestens 3 Rechenbeispiele**; fehlen welche, neue fiktive Aufgaben ergänzen (nachrechnen).
+- Seitenbeschreibungen (`description`) der Beispielseiten listen die Überschriften auf.
+
 ### Rechenbeispiele
 
 Schema: **Angabe** (sichtbar) → **Gegeben / Gesucht** → **Lösung** Schritt für Schritt
@@ -76,7 +87,8 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
   (Beispiele ATmega328P) – laut Lehrer **abgeschlossen, nicht erweitern** (keine weiteren Sprachen/Vertiefungen).
   Auf der Startseite nur ein kurzer Hinweis, keine eigene Karte. Quelle: `Quellen/SOTE2` (Abgaben, WebUntis,
   Leistungsbeurteilung, Zusatzprüfungen nicht verwenden). C-Beispiele vor dem Veröffentlichen kompilieren (Visual Studio `cl`).
-- **Energietechnik** – Drehstrom, Leistungselektronik (Theorie in Unterordner `theorie/`).
+- **Energietechnik** – Drehstrom, Leistungselektronik (Theorie in Unterordner `theorie/`; Zusatzseite „Datenblätter“ =
+  `literatur.mdx`, nur Datenblätter und Application Notes – keine Bücher, keine Quellenangaben).
 - **Projektmanagement** – Sonderaufbau: Übersicht, Theorie, **Fallbeispiele**, Quiz (Seite „Diplomarbeit planen“ auf Wunsch entfernt – gehört in den Unterricht)
   (keine Rechenbeispiele; eigener Eintrag in `astro.config.mjs`).
 - **Mess- und Regelungstechnik (MTRS)** – kein eigenes Lehrbuch, daher mit Theorie (Quellen: `Quellen/MTRS/MTRS2`,
@@ -99,10 +111,6 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
   Zusätzlich Übungsbuch **Lindner, Elektro-Aufgaben Bd. 1/2** (nur Aufgabennummern nennen).
 - **Keine eigene Theorie** – pro Thema: Übersicht (Schulbuchkasten **nur mit Kapitelangaben**, keine testrelevanten
   Beispiel-/Aufgabennummern; „Das solltest du können“, kurze Formeltabelle), **Rechenbeispiele**, **Praxisbeispiele**, **Quiz**.
-- Trennung (24.11.2026): **Rechenbeispiele** = Aufgaben mit gegebenen Werten und Rechenweg (wie im Test, mit Stufe);
-  **Praxisbeispiele** = echter Gegenstand oder Messung aus Alltag/Labor, Schwerpunkt Verstehen und Abschätzen.
-  Wo das nicht sinnvoll trennbar ist, nur eine Seite **„Beispiele“** (Datei `rechenbeispiele.mdx`, kein `praxisbeispiele.mdx`,
-  Liste `nurBeispiele` in `astro.config.mjs`): derzeit Netzwerke und Komplexe Rechnung.
 - **Stoffreihenfolge beachten:** In einem Thema nichts verwenden, was erst später kommt (z. B. Leistung erst ab Thema 6,
   Kondensator ab Thema 8, Hall-/Reedsensoren und Stromzange gar nicht – die stehen bei Sensoren bzw. Leistungsmessung).
   Kenngrößen wie Gleichrichtwert/Formfaktor/True RMS nicht doppeln, sie stehen bei Signalkennwerte.

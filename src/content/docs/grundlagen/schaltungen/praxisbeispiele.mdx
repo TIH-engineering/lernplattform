@@ -1,11 +1,17 @@
 ---
 title: Praxisbeispiele – Reihen- und Parallelschaltung
-description: Lichterkette, Batteriespannung mit dem Mikrocontroller messen, Verbraucher im Haushalt und Messfehler durch das Messgerät.
+description: "Praxisbeispiele: Die Lichterkette · Batteriespannung mit dem Mikrocontroller messen · Warum sind im Haushalt alle Geräte parallel?."
 ---
 
+import Stufe from '../../../../components/Stufe.astro';
 import Loesung from '../../../../components/Loesung.astro';
+import Abbildung from '../../../../components/Abbildung.astro';
+import Gemischt from '../../../../assets/grundlagen/gemischt.svg';
+import Spannungsteiler from '../../../../assets/grundlagen/spannungsteiler.svg';
 
 ## Die Lichterkette
+
+<Stufe wert="grundlagen" />
 
 Eine alte Lichterkette hat 16 gleiche Lämpchen **in Reihe** an 230 V.
 
@@ -23,6 +29,8 @@ Eine alte Lichterkette hat 16 gleiche Lämpchen **in Reihe** an 230 V.
 </Loesung>
 
 ## Batteriespannung mit dem Mikrocontroller messen
+
+<Stufe wert="grundlagen" />
 
 Ein Mikrocontroller soll die Spannung eines 12-V-Akkus überwachen. Sein Analogeingang (ADC) verträgt aber höchstens **3,3 V**.
 Du verwendest einen Spannungsteiler mit $R_1 = 27\,\mathrm{k\Omega}$ (oben) und $R_2 = 10\,\mathrm{k\Omega}$ (unten).
@@ -44,6 +52,8 @@ Du verwendest einen Spannungsteiler mit $R_1 = 27\,\mathrm{k\Omega}$ (oben) und 
 
 ## Warum sind im Haushalt alle Geräte parallel?
 
+<Stufe wert="grundlagen" />
+
 Begründe, warum Haushaltsgeräte parallel und nicht in Reihe ans Netz geschaltet werden.
 
 <Loesung>
@@ -51,23 +61,5 @@ Begründe, warum Haushaltsgeräte parallel und nicht in Reihe ans Netz geschalte
 Bei der Parallelschaltung bekommt **jedes Gerät die volle Netzspannung** und kann unabhängig ein- und ausgeschaltet werden.
 In Reihe würden sich die Spannungen aufteilen, und beim Ausschalten eines Geräts wären alle anderen auch aus.
 Die Ströme der Geräte addieren sich in der Zuleitung (Knotenregel) – darum hat jeder Stromkreis eine Sicherung.
-
-</Loesung>
-
-## Messfehler durch das Messgerät
-
-Du misst die Spannung an $R_2$ eines Spannungsteilers aus zwei Widerständen mit je $1\,\mathrm{M\Omega}$ an $10\,\mathrm{V}$.
-Erwartet: 5 V. Dein Multimeter hat einen Innenwiderstand von $10\,\mathrm{M\Omega}$. Was zeigt es an?
-
-<Loesung>
-
-Das Messgerät liegt parallel zu $R_2$: $R_2 \parallel R_\mathrm{M} = \dfrac{1 \cdot 10}{11}\,\mathrm{M\Omega} \approx 0{,}909\,\mathrm{M\Omega}$
-
-$$
-U_\mathrm{Anzeige} = 10\,\mathrm{V} \cdot \frac{0{,}909}{1 + 0{,}909} \approx 4{,}76\,\mathrm{V}
-$$
-
-Statt 5 V zeigt das Gerät 4,76 V – fast 5 % Fehler, obwohl das Messgerät „richtig“ misst.
-Bei hochohmigen Schaltungen beeinflusst das Messgerät die Schaltung!
 
 </Loesung>

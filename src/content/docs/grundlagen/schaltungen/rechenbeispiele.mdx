@@ -1,6 +1,6 @@
 ---
 title: Rechenbeispiele – Reihen- und Parallelschaltung
-description: Rechenbeispiele zu Reihen- und Parallelschaltung, Spannungs- und Stromteiler, LED-Vorwiderstand, gemischten Schaltungen und Messbereichserweiterung.
+description: "Rechenbeispiele: Reihenschaltung · Parallelschaltung · Stromteiler · Gemischte Schaltung · Belasteter Spannungsteiler · LED-Vorwiderstand · Messbereichserweiterung · Messfehler durch das Messgerät."
 ---
 
 import Stufe from '../../../../components/Stufe.astro';
@@ -222,5 +222,25 @@ R_\mathrm{P} = \frac{0{,}1\,\mathrm{V}}{0{,}999\,\mathrm{A}} \approx 0{,}1001\,\
 $$
 
 **Erkenntnis:** Ein guter Spannungsmesser hat einen sehr **großen**, ein guter Strommesser einen sehr **kleinen** Innenwiderstand.
+
+</Loesung>
+
+## Messfehler durch das Messgerät
+
+<Stufe wert="grundlagen" />
+
+Du misst die Spannung an $R_2$ eines Spannungsteilers aus zwei Widerständen mit je $1\,\mathrm{M\Omega}$ an $10\,\mathrm{V}$.
+Erwartet: 5 V. Dein Multimeter hat einen Innenwiderstand von $10\,\mathrm{M\Omega}$. Was zeigt es an?
+
+<Loesung>
+
+Das Messgerät liegt parallel zu $R_2$: $R_2 \parallel R_\mathrm{M} = \dfrac{1 \cdot 10}{11}\,\mathrm{M\Omega} \approx 0{,}909\,\mathrm{M\Omega}$
+
+$$
+U_\mathrm{Anzeige} = 10\,\mathrm{V} \cdot \frac{0{,}909}{1 + 0{,}909} \approx 4{,}76\,\mathrm{V}
+$$
+
+Statt 5 V zeigt das Gerät 4,76 V – fast 5 % Fehler, obwohl das Messgerät „richtig“ misst.
+Bei hochohmigen Schaltungen beeinflusst das Messgerät die Schaltung!
 
 </Loesung>

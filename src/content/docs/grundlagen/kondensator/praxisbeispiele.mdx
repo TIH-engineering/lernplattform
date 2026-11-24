@@ -1,11 +1,17 @@
 ---
 title: Praxisbeispiele – Elektrisches Feld und Kondensator
-description: Wo Kondensatoren eingesetzt werden, Kennzeichnung ablesen, Touchscreen, Elkos sicher entladen und Blitzableiter.
+description: "Praxisbeispiele: Wofür braucht man Kondensatoren? · Kondensator-Aufdruck lesen · Achtung: geladene Kondensatoren · Spitzenwirkung: Blitzableiter und Gewitter · Energie für einen Kamerablitz."
 ---
 
+import Stufe from '../../../../components/Stufe.astro';
 import Loesung from '../../../../components/Loesung.astro';
+import Abbildung from '../../../../components/Abbildung.astro';
+import CGemischt from '../../../../assets/grundlagen/kondensatoren-gemischt.svg';
+import RCLaden from '../../../../assets/grundlagen/rc-laden.svg';
 
 ## Wofür braucht man Kondensatoren?
+
+<Stufe wert="grundlagen" />
 
 Ordne jede Anwendung der passenden Aufgabe zu: **Energie speichern**, **Spannung glätten/puffern**, **Gleichspannung sperren**,
 **Frequenzen trennen/bestimmen**, **Zeit erzeugen**, **Sensor**.
@@ -32,6 +38,8 @@ Ordne jede Anwendung der passenden Aufgabe zu: **Energie speichern**, **Spannung
 
 ## Kondensator-Aufdruck lesen
 
+<Stufe wert="standard" />
+
 Auf kleinen Keramikkondensatoren steht oft ein dreistelliger Code: zwei Ziffern + Anzahl der Nullen, Einheit **pF**.
 
 Bestimme die Kapazität: a) **104** b) **472** c) **220** d) Auf einem Elko steht „470 µF 16 V“. Was bedeutet die Spannungsangabe?
@@ -51,6 +59,8 @@ d) Die **Nennspannung**: Darüber kann das Dielektrikum durchschlagen. In der Pr
 
 ## Achtung: geladene Kondensatoren
 
+<Stufe wert="standard" />
+
 In einem ausgesteckten Netzteil sitzt ein Elko mit $220\,\mu\mathrm{F}$, geladen auf $325\,\mathrm{V}$.
 
 1. Welche Energie ist gespeichert?
@@ -69,6 +79,8 @@ In einem ausgesteckten Netzteil sitzt ein Elko mit $220\,\mu\mathrm{F}$, geladen
 
 ## Spitzenwirkung: Blitzableiter und Gewitter
 
+<Stufe wert="grundlagen" />
+
 1. Warum schlägt ein Blitz bevorzugt in Spitzen (Kirchturm, Baum, Blitzableiter) ein?
 2. Warum bist du in einem Auto bei Gewitter sicher (faradayscher Käfig)?
 
@@ -78,5 +90,24 @@ In einem ausgesteckten Netzteil sitzt ein Elko mit $220\,\mu\mathrm{F}$, geladen
    Dort wird die Luft zuerst ionisiert und leitfähig. Der Blitzableiter bietet dem Blitz einen gezielten, gut leitenden Weg zur Erde.
 2. In einem geschlossenen Metallgehäuse ist das elektrische Feld im Inneren null – die Ladungen verteilen sich auf der Außenhaut.
    Der Strom fließt über die Karosserie außen herum. (Ein Cabrio schützt nicht!)
+
+</Loesung>
+
+## Energie für einen Kamerablitz
+
+<Stufe wert="standard" />
+
+Ein Blitzkondensator mit $330\,\mu\mathrm{F}$ wird auf $300\,\mathrm{V}$ geladen und in $1\,\mathrm{ms}$ entladen.
+Welche Energie ist gespeichert, und welche mittlere Leistung tritt beim Entladen auf?
+
+<Loesung>
+
+$$
+W = \tfrac12 C U^2 = \tfrac12 \cdot 330 \cdot 10^{-6}\,\mathrm{F} \cdot (300\,\mathrm{V})^2 \approx 14{,}9\,\mathrm{J}
+\qquad
+P = \frac{W}{t} = \frac{14{,}85\,\mathrm{J}}{10^{-3}\,\mathrm{s}} \approx 14{,}9\,\mathrm{kW}
+$$
+
+Eine kleine Batterie lädt den Kondensator langsam auf – beim Blitz wird die Energie in kürzester Zeit frei.
 
 </Loesung>

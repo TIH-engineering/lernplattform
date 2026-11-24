@@ -1,6 +1,6 @@
 ---
 title: Rechenbeispiele – Leistung bei Wechselstrom
-description: Rechenbeispiele zu Wirk-, Blind- und Scheinleistung, Motor mit Leistungsfaktor, Kompensation, komplexer Scheinleistung, Leistungsbilanz, Kompensation in einem Betrieb, Leuchtstofflampe und LED-Netzteil.
+description: "Rechenbeispiele: Leistungsdreieck · Komplexe Scheinleistung · Leistungen in der RL-Reihenschaltung · Leistungsbilanz einer gemischten Schaltung."
 ---
 
 import Stufe from '../../../../components/Stufe.astro';
@@ -27,53 +27,6 @@ Q = S \sin\varphi = 1150 \cdot \sin 30°\,\mathrm{var} = 575\,\mathrm{var}
 $$
 
 Der Strom eilt nach → induktiv → $Q > 0$. Probe: $\sqrt{996^2 + 575^2} \approx 1150\,\mathrm{VA}$ ✔
-
-</Loesung>
-
-## Motor am Netz
-
-<Stufe wert="standard" />
-
-Ein Wechselstrommotor nimmt an $230\,\mathrm{V}$ die Wirkleistung $2\,\mathrm{kW}$ bei $\cos\varphi = 0{,}8$ auf.
-Berechne Schein- und Blindleistung und den Strom.
-
-<Loesung>
-
-$$
-S = \frac{P}{\cos\varphi} = \frac{2000\,\mathrm{W}}{0{,}8} = 2500\,\mathrm{VA}
-\qquad
-I = \frac{S}{U} = \frac{2500\,\mathrm{VA}}{230\,\mathrm{V}} \approx 10{,}87\,\mathrm{A}
-\qquad
-Q = \sqrt{S^2 - P^2} = 1500\,\mathrm{var}
-$$
-
-Mit $\cos\varphi = 1$ bräuchte der Motor für dieselbe Wirkleistung nur $8{,}7\,\mathrm{A}$ – der Blindstrom belastet die Leitungen zusätzlich.
-
-</Loesung>
-
-## Blindleistungskompensation
-
-<Stufe wert="standard" />
-
-Der Motor aus dem vorigen Beispiel soll durch einen parallelen Kondensator auf $\cos\varphi_2 = 0{,}95$ kompensiert werden ($50\,\mathrm{Hz}$).
-Berechne die nötige Blindleistung, die Kapazität und den neuen Netzstrom.
-
-<Loesung>
-
-Neue Blindleistung: $Q_2 = P \cdot \tan(\arccos 0{,}95) = 2000\,\mathrm{W} \cdot 0{,}3287 \approx 657\,\mathrm{var}$
-
-Der Kondensator muss die Differenz liefern: $Q_\mathrm{C} = Q_1 - Q_2 = 1500 - 657 \approx 843\,\mathrm{var}$
-
-$$
-Q_\mathrm{C} = \frac{U^2}{X_\mathrm{C}} = U^2 \omega C \;\Rightarrow\; C = \frac{Q_\mathrm{C}}{\omega U^2} = \frac{843\,\mathrm{var}}{314{,}2\,\mathrm{s^{-1}} \cdot (230\,\mathrm{V})^2} \approx 50{,}7\,\mu\mathrm{F}
-$$
-
-$$
-I_\mathrm{neu} = \frac{P}{U \cos\varphi_2} = \frac{2000\,\mathrm{W}}{230\,\mathrm{V} \cdot 0{,}95} \approx 9{,}15\,\mathrm{A}
-$$
-
-Der Netzstrom sinkt von 10,87 A auf 9,15 A – der **Motor selbst** merkt davon nichts, er bekommt weiterhin seinen Blindstrom,
-jetzt aber vom Kondensator statt aus dem Netz.
 
 </Loesung>
 
@@ -139,61 +92,5 @@ Berechne alle Einzelleistungen und prüfe die Bilanz mit $\underline{S} = \under
 Probe: $\underline{S} = 230\,\mathrm{V} \angle 0° \cdot 1{,}303\,\mathrm{A} \angle +8{,}34° \approx 299{,}8\,\mathrm{VA} \angle 8{,}34° = (296{,}6 + \mathrm{j}43{,}5)\,\mathrm{VA}$ ✔
 
 Wirk- und Blindleistungen lassen sich addieren – die Scheinleistungen der Bauteile dagegen nicht.
-
-</Loesung>
-
-## Kompensation in einem Betrieb
-
-<Stufe wert="standard" />
-
-Eine Werkstatt hat eine Wirkleistung von $40\,\mathrm{kW}$ bei $\cos\varphi = 0{,}7$ (viele Motoren). Der Leistungsfaktor soll auf $0{,}95$ verbessert werden.
-
-1. Wie viel Blindleistung muss die Kompensationsanlage liefern?
-2. Um wie viel Prozent sinkt die Scheinleistung (und damit der Strom)?
-
-<Loesung>
-
-1. $Q_1 = P \tan(\arccos 0{,}7) \approx 40{,}8\,\mathrm{kvar}$ · $Q_2 = P \tan(\arccos 0{,}95) \approx 13{,}1\,\mathrm{kvar}$ →
-   $Q_\mathrm{C} \approx 27{,}7\,\mathrm{kvar}$
-2. $S_1 = P / 0{,}7 \approx 57{,}1\,\mathrm{kVA}$, $S_2 = P / 0{,}95 \approx 42{,}1\,\mathrm{kVA}$ → **rund 26 % weniger** Scheinleistung und Strom.
-   Die Leitungsverluste ($\sim I^2$) sinken sogar um etwa 46 %.
-
-</Loesung>
-
-## Leuchtstofflampe mit Kompensationskondensator
-
-<Stufe wert="standard" />
-
-Eine Leuchtstofflampe mit Vorschaltdrossel nimmt an $230\,\mathrm{V}$ einen Strom von $0{,}43\,\mathrm{A}$ auf; die Wirkleistung beträgt $43\,\mathrm{W}$.
-
-1. Berechne $S$, $\cos\varphi$ und $Q$.
-2. Welcher Parallelkondensator kompensiert die Blindleistung vollständig?
-
-<Loesung>
-
-1. $S = 230 \cdot 0{,}43\,\mathrm{VA} \approx 98{,}9\,\mathrm{VA}$ · $\cos\varphi = 43/98{,}9 \approx 0{,}43$ · $Q = \sqrt{98{,}9^2 - 43^2} \approx 89\,\mathrm{var}$
-2. $C = \dfrac{Q}{\omega U^2} = \dfrac{89}{314{,}2 \cdot 230^2}\,\mathrm{F} \approx 5{,}4\,\mu\mathrm{F}$.
-   Genau so einen Kondensator findet man in vielen alten Leuchten (oft „4,5 µF“ oder „5 µF, 250 V ~“ beschriftet).
-
-</Loesung>
-
-## LED-Netzteil mit kapazitivem Leistungsfaktor
-
-<Stufe wert="vertiefung" />
-
-Ein kleines LED-Netzteil ohne PFC nimmt an 230 V einen Strom von 0,32 A auf. Das Messgerät zeigt $\cos\varphi = 0{,}60$ (kapazitiv).
-
-1. Berechne Schein-, Wirk- und Blindleistung.
-2. Warum ist die Blindleistung hier **negativ** (kapazitiv), bei einem Motor aber positiv?
-3. In einem Bürogebäude hängen 200 solcher Netzteile an einem Außenleiter. Was bedeutet das für Leitung und Netz?
-
-<Loesung>
-
-1. $S = U \cdot I = 230\,\mathrm{V} \cdot 0{,}32\,\mathrm{A} \approx 73{,}6\,\mathrm{VA}$ · $P = S \cdot \cos\varphi \approx 44{,}2\,\mathrm{W}$ ·
-   $Q = -\sqrt{S^2 - P^2} \approx -58{,}9\,\mathrm{var}$
-2. Am Eingang sitzen ein Entstörkondensator und ein Elko hinter dem Gleichrichter – der Strom eilt der Spannung voraus (kapazitiv). Bei einem
-   Motor ist die Wicklung induktiv, der Strom eilt nach. Nach Vereinbarung zählt induktive Blindleistung positiv, kapazitive negativ.
-3. 200 × 0,32 A = 64 A Strom (bei nur 8,8 kW Wirkleistung) – Leitungen und Sicherungen müssen für den **Scheinstrom** ausgelegt werden. Deshalb
-   verlangen Normen für größere Netzteile eine Leistungsfaktorkorrektur.
 
 </Loesung>

@@ -1,11 +1,18 @@
 ---
 title: Praxisbeispiele – Oszillatoren
-description: Quarz oder interner RC-Oszillator am Mikrocontroller, warum Uhrenquarze 32,768 kHz haben, Sinusgenerator mit Wien-Brücke, Taktgeber für eine Blinkschaltung, Frequenzstabilität messen und Oszillatoren in LTspice simulieren.
+description: "Praxisbeispiele: Quarz oder interner Oszillator? · Warum 32,768 kHz? · Sinusgenerator für das Labor · Taktgeber für eine Warnleuchte · Frequenzstabilität messen · Wien-Brücke für den Kammerton · Blinker mit astabiler Kippstufe · Blitzlicht mit ungleichen Zeiten · Treppenhauslicht mit dem 555 · Taster entprellen mit einem Monoflop."
 ---
 
+import Stufe from '../../../components/Stufe.astro';
 import Loesung from '../../../components/Loesung.astro';
+import Abbildung from '../../../components/Abbildung.astro';
+import Phasenschieber from '../../../assets/elektronik/rc-phasenschieber.svg';
+import Relax from '../../../assets/elektronik/relaxationsoszillator.svg';
+import Wien from '../../../assets/elektronik/wien-oszillator.svg';
 
 ## Quarz oder interner Oszillator?
+
+<Stufe wert="grundlagen" />
 
 Viele Mikrocontroller haben einen **internen RC-Oszillator** (z. B. 16 MHz, Toleranz ±1 % bei 25 °C, über Temperatur bis ±3 %). Ein externer
 Quarz kostet Platz, zwei Kondensatoren und zwei Pins.
@@ -26,6 +33,8 @@ Quarz kostet Platz, zwei Kondensatoren und zwei Pins.
 
 ## Warum 32,768 kHz?
 
+<Stufe wert="grundlagen" />
+
 Fast jede Uhr und jede Echtzeituhr (RTC) verwendet einen Quarz mit genau $32\,768\,\mathrm{Hz}$.
 
 1. Rechne $32\,768$ als Zweierpotenz. Warum ist das praktisch?
@@ -41,6 +50,8 @@ Fast jede Uhr und jede Echtzeituhr (RTC) verwendet einen Quarz mit genau $32\,76
 </Loesung>
 
 ## Sinusgenerator für das Labor
+
+<Stufe wert="standard" />
 
 Für Messungen an Verstärkern wird ein Sinusgenerator mit 1 kHz und sehr geringem Klirrfaktor gebaut (Wien-Brücke, OPV an ±15 V).
 
@@ -62,6 +73,8 @@ Für Messungen an Verstärkern wird ein Sinusgenerator mit 1 kHz und sehr gering
 
 ## Taktgeber für eine Warnleuchte
 
+<Stufe wert="grundlagen" />
+
 Eine Warnleuchte soll mit ca. 1 Hz blinken. Verwendet wird ein Relaxationsoszillator mit OPV ($R_2 = R_3$) und $C = 10\,\mathrm{\mu F}$;
 der Ausgang schaltet über einen Transistor die LED.
 
@@ -81,6 +94,8 @@ der Ausgang schaltet über einen Transistor die LED.
 
 ## Frequenzstabilität messen
 
+<Stufe wert="grundlagen" />
+
 Im Labor werden ein OPV-Relaxationsoszillator und ein 32,768-kHz-Quarzoszillator mit dem Frequenzzähler beobachtet.
 
 1. Du berührst den Kondensator des Relaxationsoszillators mit dem Finger bzw. erwärmst ihn mit dem Föhn. Was beobachtest du? Und beim Quarz?
@@ -98,24 +113,115 @@ Im Labor werden ein OPV-Relaxationsoszillator und ein 32,768-kHz-Quarzoszillator
 
 </Loesung>
 
-## Oszillatoren in LTspice simulieren
+## Wien-Brücke für den Kammerton
 
-Baue einen RC-Phasenschieber-Oszillator ($R = 10\,\mathrm{k\Omega}$, $C = 1\,\mathrm{nF}$, $R_\mathrm{f} = 330\,\mathrm{k\Omega}$) in LTspice auf –
-einmal mit einem idealen OPV, einmal mit einem realen Modell (z. B. LM358).
+<Stufe wert="standard" />
 
-1. Die Simulation zeigt am Ausgang nur 0 V. Warum, und wie bringst du die Schaltung zum Schwingen?
-2. Welche Frequenz erwartest du? Wie misst du sie in der Simulation?
-3. Warum sieht der Sinus beim idealen OPV „perfekt“ begrenzt aus, beim realen OPV anders?
+Ein Stimmgerät soll den Kammerton $a' = 440\,\mathrm{Hz}$ als Sinus erzeugen. Es werden Folienkondensatoren mit $C = 22\,\mathrm{nF}$ verwendet.
+
+1. Berechne $R$ und wähle einen Wert aus der E24-Reihe.
+2. Wie groß ist die Frequenz dann, und wie viel Prozent weicht sie ab?
+3. Wie könnte man die Frequenz genau einstellen?
 
 <Loesung>
 
-1. Die Simulation startet mit einem exakt berechneten Arbeitspunkt – **ohne Rauschen**. Es gibt nichts, was verstärkt werden könnte.
-   Abhilfe: Startbedingung setzen (z. B. `.ic V(n1)=10m` an einem Knoten), die Option `startup` bei `.tran` verwenden oder einen kurzen
-   Impuls einkoppeln.
-2. $f_0 = 1/(2\pi\sqrt{6}RC) \approx 6{,}50\,\mathrm{kHz}$. Messen: Zeitabstand mehrerer Nulldurchgänge im eingeschwungenen Zustand
-   (Cursor) oder per FFT (`View → FFT`) eines Zeitfensters mit ganzen Perioden.
-3. $A = 33 > 29$: Die Amplitude wächst bis zur Begrenzung. Ein idealer OPV ohne Versorgungsgrenze würde die Amplitude **unbegrenzt**
-   anwachsen lassen; ein reales Modell begrenzt an der Versorgung und hat zusätzlich eine endliche Bandbreite und Slew-Rate, die Phase
-   und Signalform verändern. Simulation mit realem Modell und Messung im Labor stimmen deshalb besser überein.
+**Gegeben:** $f_0 = 440\,\mathrm{Hz}$, $C = 22\,\mathrm{nF}$ · **Gesucht:** $R$, $f_0$ mit Normwert, Abweichung
+
+1. $R = \dfrac{1}{2\pi f_0 C} = \dfrac{1}{2\pi \cdot 440\,\mathrm{Hz} \cdot 22\,\mathrm{nF}} \approx 16{,}4\,\mathrm{k\Omega}$ → E24: $16\,\mathrm{k\Omega}$
+2. $f_0 = \dfrac{1}{2\pi \cdot 16\,\mathrm{k\Omega} \cdot 22\,\mathrm{nF}} \approx 452\,\mathrm{Hz}$ → $\dfrac{452 - 440}{440} \approx +2{,}8\,\%$ – für ein Stimmgerät viel zu ungenau
+   (ein halber Ton sind 6 %).
+3. Beide $R$ als Reihenschaltung aus Festwiderstand (15 kΩ) und **Doppel-Trimmpotentiometer** (2 × 2,2 kΩ) aufbauen und abgleichen.
+   Auch die Toleranz der Kondensatoren (z. B. ±5 %) geht direkt in die Frequenz ein.
+
+</Loesung>
+
+## Blinker mit astabiler Kippstufe
+
+<Stufe wert="standard" />
+
+Ein Blinker nach der [astabilen Kippstufe mit zwei Transistoren](/oszillatoren/theorie/kippstufen/#mit-zwei-transistoren-multivibrator)
+arbeitet an $U_\mathrm{B} = 5\,\mathrm{V}$. In beiden Kollektorzweigen liegt eine LED ($U_\mathrm{F} \approx 2\,\mathrm{V}$) mit
+$R_\mathrm{C} = 330\,\Omega$. Symmetrisch: $R_\mathrm{B1} = R_\mathrm{B2} = 27\,\mathrm{k\Omega}$, $C_1 = C_2 = 22\,\mu\mathrm{F}$, $B_\mathrm{min} = 100$.
+
+**Gesucht:** Blinkfrequenz; sind die Transistoren gesättigt? Wie groß wäre der Fehler mit der Faustformel $0{,}69\,RC$?
+
+<Loesung>
+
+1. Faktor bei 5 V: $\ln \dfrac{2 \cdot 5\,\mathrm{V} - 0{,}8\,\mathrm{V}}{5\,\mathrm{V} - 0{,}7\,\mathrm{V}} = \ln \dfrac{9{,}2}{4{,}3} \approx 0{,}76$
+2. $t_1 = t_2 = 0{,}76 \cdot 27\,\mathrm{k\Omega} \cdot 22\,\mu\mathrm{F} \approx 0{,}45\,\mathrm{s}$ → $T \approx 0{,}90\,\mathrm{s}$ → $f \approx 1{,}1\,\mathrm{Hz}$
+3. Sättigung: $I_\mathrm{C} = \dfrac{5\,\mathrm{V} - 2\,\mathrm{V} - 0{,}1\,\mathrm{V}}{330\,\Omega} \approx 8{,}8\,\mathrm{mA}$,
+   $I_\mathrm{B} = \dfrac{5\,\mathrm{V} - 0{,}7\,\mathrm{V}}{27\,\mathrm{k\Omega}} \approx 0{,}16\,\mathrm{mA}$ → $I_\mathrm{C}/I_\mathrm{B} \approx 55 < B_\mathrm{min}$ ✓
+4. Faustformel: $T = 2 \cdot 0{,}69 \cdot 27\,\mathrm{k\Omega} \cdot 22\,\mu\mathrm{F} \approx 0{,}82\,\mathrm{s}$ → $f \approx 1{,}2\,\mathrm{Hz}$ – etwa 9 % zu hoch.
+
+**Ergebnis:** $f \approx 1{,}1\,\mathrm{Hz}$, die Transistoren sind sicher gesättigt. Bei 5 V lohnt sich die genaue Formel; die
+Toleranz der Elkos (oft ±20 %) ist allerdings noch größer.
+
+</Loesung>
+
+## Blitzlicht mit ungleichen Zeiten
+
+<Stufe wert="vertiefung" />
+
+Die LED an T2 soll **0,1 s** aufblitzen und dann **0,9 s** dunkel bleiben ($U_\mathrm{B} = 5\,\mathrm{V}$, LED-Zweig $R_\mathrm{C2} = 330\,\Omega$,
+$B_\mathrm{min} = 100$). Vorgesehen sind $C_2 = 10\,\mu\mathrm{F}$ und $C_1 = 47\,\mu\mathrm{F}$.
+
+1. Welcher Basiswiderstand bestimmt welche Zeit? Dimensioniere $R_\mathrm{B1}$ und $R_\mathrm{B2}$ (E12).
+2. Prüfe die Sättigung von T2.
+3. Wie klein muss $R_\mathrm{C1}$ sein, damit sich $C_1$ in der kurzen Phase wieder aufladen kann?
+
+<Loesung>
+
+1. T2 leitet, solange T1 gesperrt ist; T1 wird über $C_2$ gesperrt und über $R_\mathrm{B1}$ wieder freigegeben →
+   Leuchtzeit $= 0{,}76 \cdot R_\mathrm{B1} C_2$. Dunkelzeit $= 0{,}76 \cdot R_\mathrm{B2} C_1$.
+   - $R_\mathrm{B1} = \dfrac{0{,}1\,\mathrm{s}}{0{,}76 \cdot 10\,\mu\mathrm{F}} \approx 13\,\mathrm{k\Omega}$ → **12 kΩ** (0,091 s)
+   - $R_\mathrm{B2} = \dfrac{0{,}9\,\mathrm{s}}{0{,}76 \cdot 47\,\mu\mathrm{F}} \approx 25\,\mathrm{k\Omega}$ → **27 kΩ** (0,97 s)
+2. $I_\mathrm{B2} = 4{,}3\,\mathrm{V}/27\,\mathrm{k\Omega} \approx 0{,}16\,\mathrm{mA}$, $I_\mathrm{C2} \approx 8{,}8\,\mathrm{mA}$ → $I_\mathrm{C}/I_\mathrm{B} \approx 55$ ✓.
+   (Mit $C_1 = 10\,\mu\mathrm{F}$ bräuchte man 120 kΩ – dann wäre $I_\mathrm{C}/I_\mathrm{B} \approx 245 > B_\mathrm{min}$, die LED bliebe dunkel.)
+3. In der kurzen Phase (0,09 s) ist T1 gesperrt, und $C_1$ lädt sich über $R_\mathrm{C1}$ nach. Nach etwa $5\tau$ ist das erledigt:
+   $5 R_\mathrm{C1} \cdot 47\,\mu\mathrm{F} \leq 0{,}09\,\mathrm{s}$ → $R_\mathrm{C1} \leq 380\,\Omega$ → z. B. **390 Ω** (knapp) oder 330 Ω.
+   T1 bleibt gesättigt: $I_\mathrm{C1} \approx 12{,}6\,\mathrm{mA}$, $I_\mathrm{B1} \approx 0{,}36\,\mathrm{mA}$ → Verhältnis ≈ 35 ✓.
+
+**Ergebnis:** $R_\mathrm{B1} = 12\,\mathrm{k\Omega}$, $R_\mathrm{B2} = 27\,\mathrm{k\Omega}$, $R_\mathrm{C1} \approx 330 \dots 390\,\Omega$. Lange Zeiten erreicht man
+über große Kondensatoren, nicht über große Basiswiderstände – sonst fällt der Transistor aus der Sättigung.
+
+</Loesung>
+
+## Treppenhauslicht mit dem 555
+
+<Stufe wert="grundlagen" />
+
+Ein Taster startet ein [555-Monoflop](/oszillatoren/theorie/kippstufen/#monoflop-mit-dem-timer-555), das ein Licht für etwa 60 s
+einschaltet. Vorhanden ist ein Elko mit $C = 100\,\mu\mathrm{F}$ (Toleranz −20 % … +50 %).
+
+**Gesucht:** $R$ (E12), die tatsächliche Zeit und ihr Streubereich.
+
+<Loesung>
+
+$t_\mathrm{i} \approx 1{,}1\, R C$ → $R = \dfrac{60\,\mathrm{s}}{1{,}1 \cdot 100\,\mu\mathrm{F}} \approx 545\,\mathrm{k\Omega}$ → **560 kΩ** →
+$t_\mathrm{i} = 1{,}1 \cdot 560\,\mathrm{k\Omega} \cdot 100\,\mu\mathrm{F} \approx 62\,\mathrm{s}$
+
+Streubereich durch den Elko: $0{,}8 \cdot 62\,\mathrm{s} \approx 49\,\mathrm{s}$ bis $1{,}5 \cdot 62\,\mathrm{s} \approx 92\,\mathrm{s}$.
+
+**Ergebnis:** $R = 560\,\mathrm{k\Omega}$, $t_\mathrm{i} \approx 62\,\mathrm{s}$ (49 … 92 s). Für ein Treppenhaus reicht das; braucht man die Zeit genau,
+nimmt man einen Folienkondensator statt eines Elkos oder einen Mikrocontroller.
+
+</Loesung>
+
+## Taster entprellen mit einem Monoflop
+
+<Stufe wert="standard" />
+
+Ein mechanischer Taster prellt bis zu 10 ms lang. Ein 555-Monoflop soll aus jedem Tastendruck genau einen sauberen Impuls von etwa
+20 ms machen. Gewählt wird $C = 100\,\mathrm{nF}$. Welcher Widerstand ist nötig, und warum funktioniert das?
+
+<Loesung>
+
+$R = \dfrac{t_\mathrm{i}}{1{,}1\, C} = \dfrac{20\,\mathrm{ms}}{1{,}1 \cdot 100\,\mathrm{nF}} \approx 182\,\mathrm{k\Omega}$ → **180 kΩ** ($t_\mathrm{i} \approx 19{,}8\,\mathrm{ms}$)
+
+Der erste Prellimpuls startet das Monoflop. Alle weiteren Prellimpulse fallen in die 20 ms – der 555 ist nicht nachtriggerbar und
+reagiert darauf nicht. Der Ausgang liefert einen einzigen Impuls.
+
+**Ergebnis:** $R = 180\,\mathrm{k\Omega}$. Wichtig: $t_\mathrm{i}$ muss länger als die Prellzeit sein, aber kürzer als der Abstand zweier
+gewollter Tastendrücke.
 
 </Loesung>

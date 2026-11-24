@@ -1,32 +1,12 @@
 ---
 title: Rechenbeispiele – Ohmsches Gesetz und Quellen
-description: Rechenbeispiele zu ohmschem Gesetz, Leitwert, Widerstandsgerade sowie realen Spannungs- und Stromquellen.
+description: "Rechenbeispiele: Widerstand aus einer Messreihe · Innenwiderstand messen · Reale Stromquelle · Mindest-Lastwiderstand."
 ---
 
 import Stufe from '../../../../components/Stufe.astro';
 import Loesung from '../../../../components/Loesung.astro';
 import Abbildung from '../../../../components/Abbildung.astro';
 import RealeQuelle from '../../../../assets/grundlagen/reale-quelle.svg';
-
-## Ohmsches Gesetz und Leitwert
-
-<Stufe wert="grundlagen" />
-
-Ein Heizwiderstand hat $R = 52{,}9\,\Omega$ und liegt an $230\,\mathrm{V}$. Berechne den Strom und den Leitwert.
-
-**Gegeben:** $U = 230\,\mathrm{V}$, $R = 52{,}9\,\Omega$
-
-**Gesucht:** $I$, $G$
-
-<Loesung>
-
-$$
-I = \frac{U}{R} = \frac{230\,\mathrm{V}}{52{,}9\,\Omega} \approx 4{,}35\,\mathrm{A}
-\qquad
-G = \frac{1}{R} = \frac{1}{52{,}9\,\Omega} \approx 0{,}0189\,\mathrm{S} = 18{,}9\,\mathrm{mS}
-$$
-
-</Loesung>
 
 ## Widerstand aus einer Messreihe
 
@@ -48,34 +28,6 @@ a) Ja: Doppelte Spannung ergibt doppelten Strom – die Punkte liegen auf einer 
 b) $R = \dfrac{U}{I} = \dfrac{6\,\mathrm{V}}{12 \cdot 10^{-3}\,\mathrm{A}} = 500\,\Omega$ (jedes Wertepaar ergibt dasselbe).
 
 c) $I = \dfrac{9\,\mathrm{V}}{500\,\Omega} = 18\,\mathrm{mA}$
-
-</Loesung>
-
-## Autobatterie beim Starten
-
-<Stufe wert="standard" />
-
-<Abbildung bild={RealeQuelle} unterschrift="Reale Spannungsquelle: ideale Quelle mit Innenwiderstand" />
-
-Eine Autobatterie hat die Quellenspannung $U_\mathrm{q} = 12{,}6\,\mathrm{V}$ und den Innenwiderstand
-$R_\mathrm{i} = 10\,\mathrm{m\Omega}$. Der Anlasser zieht beim Starten $200\,\mathrm{A}$.
-
-a) Wie groß ist die Klemmenspannung beim Starten? b) Wie groß wäre der Kurzschlussstrom?
-
-**Gegeben:** $U_\mathrm{q} = 12{,}6\,\mathrm{V}$, $R_\mathrm{i} = 0{,}01\,\Omega$, $I = 200\,\mathrm{A}$
-
-**Gesucht:** $U_\mathrm{Kl}$, $I_\mathrm{k}$
-
-<Loesung>
-
-a) Am Innenwiderstand fällt $U_\mathrm{i} = R_\mathrm{i} \cdot I = 0{,}01\,\Omega \cdot 200\,\mathrm{A} = 2\,\mathrm{V}$ ab:
-
-$$
-U_\mathrm{Kl} = U_\mathrm{q} - R_\mathrm{i} \cdot I = 12{,}6\,\mathrm{V} - 2\,\mathrm{V} = 10{,}6\,\mathrm{V}
-$$
-
-b) $I_\mathrm{k} = \dfrac{U_\mathrm{q}}{R_\mathrm{i}} = \dfrac{12{,}6\,\mathrm{V}}{0{,}01\,\Omega} = 1260\,\mathrm{A}$ –
-deshalb ist ein Kurzschluss an einer Autobatterie so gefährlich (Funken, Brand, schmelzendes Werkzeug)!
 
 </Loesung>
 

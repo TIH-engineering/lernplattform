@@ -1,6 +1,6 @@
 ---
-title: Beispiele – Netzwerke und Ersatzquellen
-description: Beispiele zu Kirchhoff-Gleichungssystemen, Überlagerungssatz, Ersatzspannungsquelle, Quellenumwandlung, Stern-Dreieck, Körperdurchströmung am Weidezaun, zwei Akkus parallel und Kontrolle mit der Simulation.
+title: Rechenbeispiele – Netzwerke und Ersatzquellen
+description: "Rechenbeispiele: Kirchhoff-Gleichungssystem · Überlagerungssatz · Ersatzspannungsquelle · Quellen umwandeln · Brückenschaltung mit Dreieck-Stern-Umwandlung · Rechnung mit der Simulation überprüfen."
 ---
 
 import Stufe from '../../../../components/Stufe.astro';
@@ -167,76 +167,6 @@ I = \frac{10\,\mathrm{V}}{29{,}05\,\Omega} \approx 0{,}344\,\mathrm{A}
 $$
 
 Tipp: Kontrolliere solche Ergebnisse mit einer Simulation (LTspice oder [CircuitJS](https://www.falstad.com/circuit/circuitjs.html)).
-
-</Loesung>
-
-## Körperdurchströmung am Weidezaun
-
-<Stufe wert="standard" />
-
-Eine Person A greift an einen Weidezaun (Impulsspannung 5000 V). Mit der anderen Hand hält sie Person B an der Hand.
-Person A trägt Sportschuhe, Person B ist barfuß.
-
-**Körpermodell:** jeder Arm 500 Ω, Rumpf 100 Ω, jedes Bein 500 Ω.
-**Übergänge zur Erde:** Sportschuh je 10 kΩ, barfuß je 100 Ω. Die Kontaktwiderstände an den Händen werden vernachlässigt.
-
-1. Zeichne das Widerstandsnetzwerk und fasse es schrittweise zusammen.
-2. Berechne die Ströme zu Beginn des Impulses durch beide Personen (Quelle als ideale 5-kV-Spannungsquelle).
-
-<Loesung>
-
-**1. Netzwerk:** Vom Zaun fließt der Strom durch den **Arm von A** (500 Ω) zum Rumpf von A (Knoten K).
-Von dort gibt es zwei Wege zur Erde:
-
-- **direkt durch A:** Rumpf 100 Ω + beide Beine mit Schuhen parallel: $100 + \dfrac{500 + 10\,000}{2} = 5350\,\Omega$
-- **über B:** zweiter Arm von A 500 Ω + Arm von B 500 Ω + Rumpf B 100 Ω + Beine barfuß parallel $\dfrac{500 + 100}{2}$:
-  $500 + 500 + 100 + 300 = 1400\,\Omega$
-
-Beide Wege parallel: $5350 \parallel 1400 \approx 1110\,\Omega$, dazu der erste Arm: $R_\mathrm{ges} \approx 1610\,\Omega$
-
-**2. Ströme:**
-
-$$
-I_\mathrm{ges} = \frac{5000\,\mathrm{V}}{1610\,\Omega} \approx 3{,}11\,\mathrm{A}
-\qquad
-U_\mathrm{K} = 5000\,\mathrm{V} - 500\,\Omega \cdot 3{,}11\,\mathrm{A} \approx 3447\,\mathrm{V}
-$$
-
-$$
-I_\mathrm{A,Erde} = \frac{3447\,\mathrm{V}}{5350\,\Omega} \approx 0{,}64\,\mathrm{A}
-\qquad
-I_\mathrm{B} = \frac{3447\,\mathrm{V}}{1400\,\Omega} \approx 2{,}46\,\mathrm{A}
-$$
-
-**Überraschung:** Durch die **barfüßige** Person B fließt fast viermal so viel Strom wie über die Beine von A –
-obwohl B den Zaun gar nicht berührt! Schuhe isolieren.
-
-:::caution[Modell, keine Realität]
-Die Ströme sind Idealwerte aus einem stark vereinfachten Modell. Echte Weidezaungeräte sind so gebaut, dass der Impuls
-nur Millisekunden dauert und die Energie begrenzt ist.
-Trotzdem gilt: Weidezäune und elektrische Anlagen sind kein Spielzeug!
-:::
-
-</Loesung>
-
-## Zwei Akkus parallel schalten
-
-<Stufe wert="standard" />
-
-Zwei 12-V-Bleiakkus sollen parallel geschaltet werden, um die Kapazität zu verdoppeln. Akku 1 ist voll ($U_\mathrm{q1} = 12{,}8\,\mathrm{V}$),
-Akku 2 ist fast leer ($U_\mathrm{q2} = 12{,}2\,\mathrm{V}$). Beide haben $R_\mathrm{i} = 20\,\mathrm{m\Omega}$.
-
-1. Welcher Ausgleichsstrom fließt im Moment des Zusammenschaltens (ohne Last)?
-2. Welche Spannung stellt sich an den Klemmen ein?
-3. Was folgt daraus für die Praxis?
-
-<Loesung>
-
-1. Der Kreis besteht aus beiden Quellen (gegeneinander) und beiden Innenwiderständen (Maschenregel):
-   $I = \dfrac{U_\mathrm{q1} - U_\mathrm{q2}}{R_\mathrm{i1} + R_\mathrm{i2}} = \dfrac{0{,}6\,\mathrm{V}}{0{,}04\,\Omega} = 15\,\mathrm{A}$
-2. $U_\mathrm{Kl} = U_\mathrm{q1} - R_\mathrm{i1} \cdot I = 12{,}8\,\mathrm{V} - 0{,}3\,\mathrm{V} = 12{,}5\,\mathrm{V}$ (genau in der Mitte).
-3. Akkus nur mit **gleichem Ladezustand** parallel schalten. Schon 0,6 V Unterschied erzeugen einen großen Strom,
-   der Akkus, Kabel und Klemmen belastet. Bei Lithium-Akkus ist das noch gefährlicher (Brandgefahr).
 
 </Loesung>
 
