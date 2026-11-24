@@ -132,14 +132,14 @@ fragen:
 
   - typ: mc
     stufe: standard
-    frage: Beim Relaxationsoszillator wird R1 verdoppelt. Was passiert mit der Frequenz?
+    frage: Beim Relaxationsoszillator mit OPV wird der Widerstand verdoppelt, über den der Kondensator vom OPV-Ausgang geladen und entladen wird. Was passiert mit der Frequenz?
     optionen:
       - text: Sie halbiert sich.
         richtig: true
       - text: Sie verdoppelt sich.
       - text: Sie bleibt gleich, nur die Amplitude ändert sich.
       - text: Sie sinkt auf 1/4.
-    erklaerung: '$T \sim R_1 C$ – doppelte Zeitkonstante, doppelte Periodendauer, halbe Frequenz.'
+    erklaerung: 'Die Periodendauer ist proportional zur Zeitkonstante dieses Widerstands mit dem Kondensator ($T \sim R_1 C$, in der Theorie heißt er $R_1$): doppelte Zeitkonstante, doppelte Periodendauer, halbe Frequenz. Der Spannungsteiler $R_2$/$R_3$ bestimmt dagegen die Schaltschwellen.'
 
   - typ: mc
     stufe: grundlagen

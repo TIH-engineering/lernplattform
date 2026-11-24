@@ -1,6 +1,6 @@
 ---
 title: Praxisbeispiele – Filter
-description: Anti-Aliasing-Filter vor dem ADC, Sensorsignal einer Industrieanlage, Sprachfilter für ein Mikrofon, Messung des Frequenzgangs mit dem Network Analyzer und Simulation in LTspice, Bode-Messung mit dem Analog Discovery, Übertragungsfunktion aus einer Messung.
+description: Anti-Aliasing-Filter vor dem ADC, Sensorsignal einer Industrieanlage, Sprachfilter für ein Mikrofon, Messung des Frequenzgangs mit dem Network Analyzer und Simulation in LTspice, Bode-Messung mit dem Analog Discovery, Übertragungsfunktion aus einer Messung, FFT-Messung eines Rechtecksignals und Verzerrungen.
 ---
 
 import Loesung from '../../../components/Loesung.astro';
@@ -147,5 +147,53 @@ und Pegel +4,0 dB, oberhalb fällt der Betrag mit −40 dB/Dekade.
 **Folgerung:** $Q = 1$ statt 0,707 – das Filter ist **kein** Butterworth-Filter, es hat eine leichte Überhöhung. Bei einem Sallen-Key-Filter mit
 gleichen Bauteilen gehört zu $K = 1{,}58$ eigentlich $Q = 1/(3 - K) \approx 0{,}7$. Die Bauteile sind also offenbar **nicht** gleich groß –
 Werte nachmessen und mit dem [Sallen-Key-Rechenbeispiel](/filter/rechenbeispiele/#sallen-key-tiefpass-auslegen) vergleichen.
+
+</Loesung>
+
+## FFT-Messung eines Rechtecksignals
+
+Mit dem Funktionsgenerator des **Analog Discovery** (oder eines Labor-Funktionsgenerators) wird ein Rechteck mit $\pm 1\,\mathrm{V}$ und 1 kHz
+erzeugt und mit dem Oszilloskop bzw. dem Spektrum-Instrument in WaveForms gemessen. Einstellungen: Abtastrate 100 kS/s, 16 384 Werte,
+Hann-Fenster, senkrechte Achse in dBV.
+
+1. Bei welchen Frequenzen erwartest du Linien, und mit welchem Pegel in dBV ($0\,\mathrm{dBV} = 1\,\mathrm{V}$ Effektivwert)?
+2. In der Messung tauchen auch kleine Linien bei 2 kHz, 4 kHz, … auf. Was verrät das über das Signal?
+3. Zusätzlich ist eine Linie bei 50 Hz zu sehen. Woher kommt sie, und wie kannst du das prüfen?
+4. Warum sieht das Spektrum mit dem Rechteckfenster „verschmierter“ aus als mit dem Hann-Fenster?
+
+<Loesung>
+
+1. Nur ungerade Harmonische (1, 3, 5, 7, 9 kHz …). Effektivwerte $\tfrac{4}{\pi n} \cdot \tfrac{1\,\mathrm{V}}{\sqrt{2}}$:
+
+   | Frequenz | 1 kHz | 3 kHz | 5 kHz | 7 kHz | 9 kHz |
+   | --- | --- | --- | --- | --- | --- |
+   | Effektivwert | 0,90 V | 0,30 V | 0,18 V | 0,13 V | 0,10 V |
+   | Pegel | −0,9 dBV | −10,5 dBV | −14,9 dBV | −17,8 dBV | −20,0 dBV |
+
+   Jede Linie liegt um $20 \lg n$ unter der Grundschwingung – im dB-Maßstab fallen die Spitzen gleichmäßig ab.
+2. Gerade Harmonische entstehen, wenn das Signal **nicht genau halbwellensymmetrisch** ist: Tastverhältnis nicht exakt 50 %, oder
+   steigende und fallende Flanke unterschiedlich schnell. Ein Blick auf das Tastverhältnis im Zeitbereich bestätigt das.
+3. Netzbrummen, eingekoppelt über Masseschleifen oder ungeschirmte Leitungen. Prüfen: Messleitungen kürzen und verdrillen, den Tastkopf
+   direkt am Generator anschließen, Laptop vom Netzteil trennen (Akku) – verschwindet die Linie, war es eine Masseschleife
+   (siehe [Messverstärker – Praxis](/messverstaerker/praxisbeispiele/)).
+4. 16 384 Werte bei 100 kS/s sind 163,84 ms – das sind 163,84 Perioden, also **keine ganze Zahl**. Ohne Fenster entsteht
+   [spektrale Leckage](/filter/theorie/spektren/#6--spektrale-leckage-und-fensterfunktionen).
+
+</Loesung>
+
+## Klingt das Signal sauber? – Verzerrungen hören und sehen
+
+Ein Audioverstärker gibt einen 1-kHz-Sinus aus. Bei kleiner Lautstärke zeigt die FFT eine Linie bei 1 kHz und alle anderen Linien mehr
+als 70 dB darunter. Dreht man auf, erscheinen deutliche Linien bei 3 kHz und 5 kHz, im Zeitbereich sind die Sinuskuppen abgeflacht.
+
+1. Was passiert im Verstärker?
+2. Warum erkennt man das im Spektrum früher als im Zeitbereich?
+
+<Loesung>
+
+1. Der Verstärker **begrenzt** (die Ausgangsspannung erreicht die Versorgung). Symmetrisch abgeflachte Kuppen machen den Sinus einem
+   Rechteck ähnlicher – es entstehen vor allem **ungerade** Harmonische.
+2. Eine Oberschwingung mit 1 % der Grundschwingung liegt nur 40 dB darunter – im Spektrum gut sichtbar, im Zeitbereich ist eine 1-%-Verformung
+   mit freiem Auge kaum zu erkennen. Darum misst man Verzerrungen im Frequenzbereich.
 
 </Loesung>

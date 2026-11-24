@@ -1,6 +1,6 @@
 ---
 title: Rechenbeispiele – Energie, Leistung, Wirkungsgrad
-description: Rechenbeispiele zu Energiekosten, Leistung am Widerstand, Belastbarkeit, Hubleistung, Gesamtwirkungsgrad, Wasserkocher und Übertragungsverlusten.
+description: Rechenbeispiele zu Energiekosten, Leistung am Widerstand, Belastbarkeit, Hubleistung, Gesamtwirkungsgrad, Wasserkocher, Übertragungsverlusten und Leistungsanpassung.
 ---
 
 import Stufe from '../../../../components/Stufe.astro';
@@ -146,5 +146,30 @@ $I = P / U$ und $P_\mathrm{V} = I^2 \cdot R$:
 
 **Zehnfache Spannung → ein Zehntel des Stroms → ein Hundertstel der Verluste** ($P_\mathrm{V} \sim I^2$).
 Darum wird elektrische Energie über weite Strecken mit Hochspannung (110 kV … 380 kV) übertragen.
+
+</Loesung>
+
+## Leistungsanpassung
+
+<Stufe wert="vertiefung" />
+
+Eine Quelle hat $U_0 = 12\,\mathrm{V}$ und $R_\mathrm{i} = 4\,\Omega$. Berechne für $R_\mathrm{L} = 1, 2, 4, 8, 12\,\Omega$
+die Leistung an der Last und den Wirkungsgrad. Bei welchem $R_\mathrm{L}$ ist die Leistung maximal?
+
+<Loesung>
+
+$I = \dfrac{U_0}{R_\mathrm{i} + R_\mathrm{L}}$, $P_\mathrm{L} = I^2 \cdot R_\mathrm{L}$, $\eta = \dfrac{R_\mathrm{L}}{R_\mathrm{i} + R_\mathrm{L}}$
+
+| $R_\mathrm{L}$ in Ω | 1 | 2 | 4 | 8 | 12 |
+| --- | --- | --- | --- | --- | --- |
+| $I$ in A | 2,4 | 2,0 | 1,5 | 1,0 | 0,75 |
+| $P_\mathrm{L}$ in W | 5,76 | 8,0 | **9,0** | 8,0 | 6,75 |
+| $\eta$ | 20 % | 33 % | **50 %** | 67 % | 75 % |
+
+Die Leistung ist bei $R_\mathrm{L} = R_\mathrm{i} = 4\,\Omega$ maximal: $P_\mathrm{max} = \dfrac{U_0^2}{4 R_\mathrm{i}} = 9\,\mathrm{W}$ –
+aber dann wird die **Hälfte** der Leistung in der Quelle verheizt ($\eta = 50\,\%$).
+
+**Wann will man das?** In der Nachrichtentechnik (Antenne → Empfänger), wo die Leistung klein ist und möglichst viel davon ankommen soll.
+In der Energietechnik will man dagegen einen hohen Wirkungsgrad: $R_\mathrm{L} \gg R_\mathrm{i}$.
 
 </Loesung>

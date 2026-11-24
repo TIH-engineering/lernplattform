@@ -1,6 +1,6 @@
 ---
 title: Praxisbeispiele – Wechselgrößen und Blindwiderstände
-description: Oszilloskop-Bild ablesen, Netzspannung weltweit, True-RMS-Messgeräte und Kondensatornetzteil.
+description: Oszilloskop-Bild ablesen, Netzspannung weltweit und Kondensatornetzteil.
 ---
 
 import Loesung from '../../../../components/Loesung.astro';
@@ -38,20 +38,6 @@ Tipp: Moderne Oszilloskope zeigen diese Werte auch automatisch an („Measure“
 1. Europa: $\hat{u} \approx 325\,\mathrm{V}$, $T = 20\,\mathrm{ms}$ · USA: $\hat{u} \approx 170\,\mathrm{V}$, $T \approx 16{,}7\,\mathrm{ms}$
 2. Das Netzteil funktioniert an allen Netzen der Welt (Weitbereichsnetzteil) – man braucht nur einen Steckeradapter.
    Bei Geräten ohne diese Angabe (z. B. ein amerikanischer Föhn) würde 230 V das Gerät zerstören.
-
-</Loesung>
-
-## Warum „True RMS“?
-
-Du misst den Strom eines LED-Netzteils mit zwei Multimetern: Ein günstiges Gerät zeigt 0,8 A, ein True-RMS-Gerät 1,3 A.
-
-Welches Gerät hat recht, und warum unterscheiden sich die Anzeigen?
-
-<Loesung>
-
-Das **True-RMS-Gerät** hat recht. Netzteile ziehen den Strom oft in kurzen, hohen Impulsen (nicht sinusförmig).
-Das günstige Gerät misst den Gleichrichtwert und multipliziert mit dem Sinus-Formfaktor 1,11 – das ist nur für reine
-Sinusgrößen richtig. Bei Impulsen ist der Effektivwert viel größer als 1,11 mal der Gleichrichtwert.
 
 </Loesung>
 

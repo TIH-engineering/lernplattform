@@ -82,3 +82,22 @@ fragen:
       - text: Weil das Magnetfeld unter Last verschwindet
       - text: Weil Motoren unter Last Wechselstrom erzeugen
     erklaerung: Unter Last fließt mehr Strom – die Verluste in der Wicklung steigen quadratisch mit dem Strom.
+
+  # ---------- Leistungsanpassung (aus Thema 5 verschoben) ----------
+  - typ: mc
+    stufe: standard
+    frage: Wann gibt eine Quelle die größtmögliche Leistung an einen Lastwiderstand ab?
+    optionen:
+      - text: Wenn der Lastwiderstand gleich dem Innenwiderstand ist
+        richtig: true
+      - text: Wenn der Lastwiderstand null ist (Kurzschluss)
+      - text: Wenn der Lastwiderstand unendlich groß ist (Leerlauf)
+      - text: Wenn der Lastwiderstand doppelt so groß wie der Innenwiderstand ist
+    erklaerung: Das ist die **Leistungsanpassung**. Im Kurzschluss ist die Spannung null, im Leerlauf der Strom – in beiden Fällen ist die Leistung null.
+
+  - typ: zahl
+    stufe: vertiefung
+    frage: 'Wie groß ist die maximale Leistung, die eine Quelle mit $U_0 = 10\,\mathrm{V}$ und $R_\mathrm{i} = 5\,\Omega$ an eine Last abgeben kann?'
+    loesung: 5
+    einheit: W
+    erklaerung: '$P_\mathrm{max} = U_0^2 / (4 R_\mathrm{i}) = 100 / 20\,\mathrm{W} = 5\,\mathrm{W}$ (bei $R_\mathrm{L} = 5\,\Omega$, Wirkungsgrad 50 %).'

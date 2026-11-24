@@ -1,6 +1,6 @@
 ---
 title: Praxisbeispiele – Thermische Auslegung
-description: Linearregler in vier thermischen Varianten vergleichen, Last und Eingangsspannung für einen Versuch berechnen, Temperatur mit einem Sensor-IC messen, Wärmebildkamera richtig verwenden, thermisches Modell in LTspice und Linearregler oder Schaltregler.
+description: Linearregler in vier thermischen Varianten vergleichen, die passende Variante für eine 5-V-Versorgung auswählen, Temperatur mit einem Sensor-IC messen, Wärmebildkamera richtig verwenden, thermisches Modell in LTspice und Linearregler oder Schaltregler.
 ---
 
 import Loesung from '../../../components/Loesung.astro';
@@ -35,24 +35,40 @@ Die Rangfolge zeigt: Ein Kühlkörper bringt am meisten; beim SMD-Gehäuse macht
 
 </Loesung>
 
-## Versuch vorbereiten: Last und Eingangsspannung
+## Welche Variante passt für eine 5-V-Versorgung?
 
-Der einstellbare Regler ist so bestückt, dass er nur seine Referenzspannung von $U_\mathrm{A} = 1{,}25\,\mathrm{V}$ ausgibt. Er braucht
-mindestens ca. 3 V Spannungsdifferenz. Die Eingangsspannung darf 20 V nicht überschreiten.
+Ein Gerät braucht $5\,\mathrm{V}$ aus einem $12\,\mathrm{V}$-Netzteil. Der Regler sitzt in einem Gehäuse, in dem es bis zu $40\,°\mathrm{C}$ warm wird; die
+Chiptemperatur darf $125\,°\mathrm{C}$ nicht überschreiten. Verwende die vier Varianten und die $R_\mathrm{th}$-Werte aus dem Beispiel oben
+(120 K/W, 55 K/W, 50 K/W und 8,5 K/W).
 
-1. Variante 2 (SOT-223 mit Kupfer) soll mit etwa $1\,\mathrm{W}$ belastet werden. Wähle eine Eingangsspannung und berechne den Lastwiderstand (E12).
-2. Variante 4 (mit Kühlkörper) soll etwa $5\,\mathrm{W}$ umsetzen. Wähle $U_\mathrm{E}$ und $R_\mathrm{L}$.
-3. Welche Leistung muss der Lastwiderstand jeweils aushalten?
+1. Die Schaltung braucht $0{,}2\,\mathrm{A}$. Welche Varianten sind geeignet?
+2. Eine Erweiterung erhöht den Strom auf $0{,}5\,\mathrm{A}$. Welche Varianten bleiben übrig?
+3. Bis zu welchem Strom reicht Variante 2 (SOT-223 mit Kupferfläche) an $12\,\mathrm{V}$?
+4. Wie könnte Variante 2 die $0{,}5\,\mathrm{A}$ doch schaffen, ohne Kühlkörper?
 
 <Loesung>
 
-1. Gewählt $U_\mathrm{E} = 6\,\mathrm{V}$ → $\Delta U = 4{,}75\,\mathrm{V}$ → $I = 1\,\mathrm{W} / 4{,}75\,\mathrm{V} \approx 0{,}21\,\mathrm{A}$ →
-   $R_\mathrm{L} = 1{,}25\,\mathrm{V} / 0{,}21\,\mathrm{A} \approx 5{,}9\,\Omega$ → **5,6 Ω**: $I \approx 0{,}22\,\mathrm{A}$, $P_\mathrm{V} \approx 1{,}06\,\mathrm{W}$.
-2. Gewählt $U_\mathrm{E} = 15\,\mathrm{V}$ → $\Delta U = 13{,}75\,\mathrm{V}$ → $I = 5\,\mathrm{W} / 13{,}75\,\mathrm{V} \approx 0{,}36\,\mathrm{A}$ →
-   $R_\mathrm{L} \approx 3{,}4\,\Omega$ → **3,3 Ω**: $I \approx 0{,}38\,\mathrm{A}$, $P_\mathrm{V} \approx 5{,}2\,\mathrm{W}$.
-3. $P_\mathrm{R} = U_\mathrm{A}^2 / R_\mathrm{L}$: 1. $0{,}28\,\mathrm{W}$ · 2. $0{,}47\,\mathrm{W}$ → Widerstände mit mindestens 1 W verwenden.
+Verlustleistung im Regler: $P_\mathrm{V} = (U_\mathrm{E} - U_\mathrm{A}) \cdot I$, Chiptemperatur: $\vartheta_\mathrm{J} = \vartheta_\mathrm{U} + P_\mathrm{V} \cdot R_\mathrm{th,ges}$
 
-Bei so kleiner Ausgangsspannung landet fast die gesamte Leistung im Regler – ideal für einen Wärmeversuch.
+1. $P_\mathrm{V} = 7\,\mathrm{V} \cdot 0{,}2\,\mathrm{A} = 1{,}4\,\mathrm{W}$
+
+   | Variante | $\vartheta_\mathrm{J}$ | geeignet? |
+   | --- | --- | --- |
+   | 1 · SOT-223 ohne Kupfer | $40\,°\mathrm{C} + 1{,}4\,\mathrm{W} \cdot 120\,\mathrm{K/W} \approx 208\,°\mathrm{C}$ | nein |
+   | 2 · SOT-223 mit Kupfer | $40\,°\mathrm{C} + 1{,}4\,\mathrm{W} \cdot 55\,\mathrm{K/W} \approx 117\,°\mathrm{C}$ | ja, aber knapp |
+   | 3 · TO-220 frei | $40\,°\mathrm{C} + 1{,}4\,\mathrm{W} \cdot 50\,\mathrm{K/W} = 110\,°\mathrm{C}$ | ja |
+   | 4 · TO-220 mit Kühlkörper | $40\,°\mathrm{C} + 1{,}4\,\mathrm{W} \cdot 8{,}5\,\mathrm{K/W} \approx 52\,°\mathrm{C}$ | ja, viel Reserve |
+
+2. $P_\mathrm{V} = 7\,\mathrm{V} \cdot 0{,}5\,\mathrm{A} = 3{,}5\,\mathrm{W}$ → nur noch **Variante 4**: $40\,°\mathrm{C} + 3{,}5\,\mathrm{W} \cdot 8{,}5\,\mathrm{K/W} \approx 70\,°\mathrm{C}$.
+   Variante 3 käme schon auf $40\,°\mathrm{C} + 3{,}5\,\mathrm{W} \cdot 50\,\mathrm{K/W} = 215\,°\mathrm{C}$.
+3. $P_\mathrm{max} = \dfrac{125\,°\mathrm{C} - 40\,°\mathrm{C}}{55\,\mathrm{K/W}} \approx 1{,}55\,\mathrm{W}$ →
+   $I_\mathrm{max} = \dfrac{1{,}55\,\mathrm{W}}{7\,\mathrm{V}} \approx 0{,}22\,\mathrm{A}$.
+4. Die Spannung am Regler verkleinern: mit einem $8\,\mathrm{V}$-Netzteil (der Regler braucht ca. 3 V Differenz) ist
+   $P_\mathrm{V} = 3\,\mathrm{V} \cdot 0{,}5\,\mathrm{A} = 1{,}5\,\mathrm{W}$ → $\vartheta_\mathrm{J} \approx 40\,°\mathrm{C} + 1{,}5\,\mathrm{W} \cdot 55\,\mathrm{K/W} \approx 123\,°\mathrm{C}$ –
+   gerade noch, ohne Reserve. Besser ist ein **Schaltregler**, der kaum Wärme erzeugt (siehe
+   [Linearregler oder Schaltregler?](#linearregler-oder-schaltregler)).
+
+**Merke:** Beim Linearregler entscheidet die Spannungsdifferenz mal Strom über die Wärme – nicht die Ausgangsleistung.
 
 </Loesung>
 

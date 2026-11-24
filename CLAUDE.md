@@ -69,7 +69,8 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
 
 - **Grundlagen der Elektrotechnik** – Schulbuchthemen ohne eigene Theorie (siehe unten).
 - **Elektronik** – kein Lehrbuch, daher mit ausführlicher Theorieseite: Dioden, Transistoren, Operationsverstärker,
-  Filter, Oszillatoren, Thermische Auslegung.
+  Filter und Spektren (`filter`, Theorie in `theorie/`: `index` = Filter, `spektren` = Signale und Spektren mit FourierLabor,
+  seit 24.11.2026 hier statt bei Signalkennwerte – Spektren brauchen mehr Mathematik), Oszillatoren, Thermische Auslegung.
   Als Ergänzung am Ende: **Programmierung in C** (`programmierung`, Theorie in `theorie/`, Seite „Programmieraufgaben“ =
   `rechenbeispiele.mdx`, „Werkzeuge & Links“ = `literatur.mdx`). Nur C-Grundlagen für einfache Mikrocontroller-Programme
   (Beispiele ATmega328P) – laut Lehrer **abgeschlossen, nicht erweitern** (keine weiteren Sprachen/Vertiefungen).
@@ -96,8 +97,15 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
 
 - Schulbücher: **Grundlagen der Elektrotechnik 1 und 2** (GET1, GET2), Hans Deimel und Andreas Hasenzagl (digital über digi4school).
   Zusätzlich Übungsbuch **Lindner, Elektro-Aufgaben Bd. 1/2** (nur Aufgabennummern nennen).
-- **Keine eigene Theorie** – pro Thema: Übersicht (Schulbuchkapitel, testrelevante Beispiel-/Aufgabennummern,
-  „Das solltest du können“, kurze Formeltabelle), **Rechenbeispiele**, **Praxisbeispiele**, **Quiz**.
+- **Keine eigene Theorie** – pro Thema: Übersicht (Schulbuchkasten **nur mit Kapitelangaben**, keine testrelevanten
+  Beispiel-/Aufgabennummern; „Das solltest du können“, kurze Formeltabelle), **Rechenbeispiele**, **Praxisbeispiele**, **Quiz**.
+- Trennung (24.11.2026): **Rechenbeispiele** = Aufgaben mit gegebenen Werten und Rechenweg (wie im Test, mit Stufe);
+  **Praxisbeispiele** = echter Gegenstand oder Messung aus Alltag/Labor, Schwerpunkt Verstehen und Abschätzen.
+  Wo das nicht sinnvoll trennbar ist, nur eine Seite **„Beispiele“** (Datei `rechenbeispiele.mdx`, kein `praxisbeispiele.mdx`,
+  Liste `nurBeispiele` in `astro.config.mjs`): derzeit Netzwerke und Komplexe Rechnung.
+- **Stoffreihenfolge beachten:** In einem Thema nichts verwenden, was erst später kommt (z. B. Leistung erst ab Thema 6,
+  Kondensator ab Thema 8, Hall-/Reedsensoren und Stromzange gar nicht – die stehen bei Sensoren bzw. Leistungsmessung).
+  Kenngrößen wie Gleichrichtwert/Formfaktor/True RMS nicht doppeln, sie stehen bei Signalkennwerte.
 - 14 Themen in `src/content/docs/grundlagen/<thema>/`, Liste in `astro.config.mjs` (`grundlagenThemen`).
   Quizdateien: `src/content/quiz/grundlagen-<thema>.yaml`.
 - GET1/GET2-Kapitel- und Abschnittsnummern sind nach den Inhaltsverzeichnissen eingetragen (22.11.2026), auch als
@@ -193,8 +201,9 @@ in einem aufklappbaren `<details>`-Block („Lösung anzeigen“). Schwierigkeit
 
 ## Erweiterung 22.11.2026 (Transistoren, Kippstufen, Spektren, Magnetkreise, Praxis)
 
-- Theorie von **Transistoren, Oszillatoren und Signalkennwerte** liegt jetzt im Unterordner `theorie/` (`index.mdx` = alte
-  Seite, URL unverändert) mit Zusatzseiten: `grundschaltungen`, `differenzverstaerker`, `kippstufen`, `spektren`.
+- Theorie von **Transistoren und Oszillatoren** liegt im Unterordner `theorie/` (`index.mdx` = alte Seite, URL unverändert) mit
+  Zusatzseiten `grundschaltungen`, `differenzverstaerker`, `kippstufen`. `spektren` liegt seit 24.11.2026 bei `filter/theorie/`;
+  Signalkennwerte hat wieder eine einzelne `theorie.mdx`.
 - Interaktive Fourier-Visualisierung: `src/components/FourierLabor.astro` (echte Fourier-Koeffizienten, kein Framework).
 - `Kasten` hat einen Bereich `<span slot="gilt">…</span>` für Gültigkeitsangaben mit Formeln (statt `gilt="…"` mit `R_E`).
 - Neue Rechenwerte wurden mit Python nachgerechnet, Transistorschaltungen mit LTspice (2N3904) gegengeprüft.

@@ -1,6 +1,6 @@
 ---
-title: Filter
-description: "Pegel und Bode-Diagramm, passive Filter 1. und 2. Ordnung, Güte und Butterworth-Verhalten, aktive Filter mit OPV (Sallen-Key), Filterauslegung und Schaltungsanalyse."
+title: Filter und Spektren
+description: "Pegel und Bode-Diagramm, passive Filter 1. und 2. Ordnung, Güte und Butterworth-Verhalten, aktive Filter mit OPV (Sallen-Key), Filterauslegung und Schaltungsanalyse; Signale und Spektren: Fourier-Reihe, FFT, Aliasing und Fensterfunktionen."
 sidebar:
   label: Übersicht
 ---
@@ -25,16 +25,19 @@ Operationsverstärkern.
 - passive RC- und RL-Filter 1. Ordnung berechnen und auslegen,
 - passive Filter 2. Ordnung (RLC) mit Güte und Butterworth-Verhalten berechnen und das Problem der Belastung erklären,
 - aktive Filter 1. und 2. Ordnung (Sallen-Key, Butterworth) dimensionieren,
-- mehrstufige Filter-/Verstärkerschaltungen analysieren (Grenzfrequenzen, Bode-Diagramm, Ausgangssignal).
+- mehrstufige Filter-/Verstärkerschaltungen analysieren (Grenzfrequenzen, Bode-Diagramm, Ausgangssignal),
+- Signale im Frequenzbereich beschreiben, Oberschwingungen berechnen und erklären, was ein Filter mit dem Spektrum macht,
+- eine FFT-Messung richtig einstellen und deuten (Auflösung, Aliasing, Fensterfunktion).
 
 </Kasten>
 
 ## Teile
 
 <CardGrid>
-	<LinkCard title="Theorie" description="dB, Bode-Diagramm, passive und aktive Filter 1. und 2. Ordnung, Butterworth" href="/filter/theorie/" />
-	<LinkCard title="Rechenbeispiele" description="Grenzfrequenz, Auslegung, RLC, Sallen-Key, Schaltungsanalyse" href="/filter/rechenbeispiele/" />
-	<LinkCard title="Praxisbeispiele" description="Anti-Aliasing, Mikrofon-Bandpass, Netzfilter, Messung mit dem Network Analyzer" href="/filter/praxisbeispiele/" />
+	<LinkCard title="Theorie: Filter" description="dB, Bode-Diagramm, passive und aktive Filter 1. und 2. Ordnung, Butterworth" href="/filter/theorie/" />
+	<LinkCard title="Theorie: Signale und Spektren" description="Zeit- und Frequenzbereich, Fourier-Reihe (interaktiv), FFT, Aliasing, Fensterfunktionen" href="/filter/theorie/spektren/" />
+	<LinkCard title="Rechenbeispiele" description="Grenzfrequenz, Auslegung, RLC, Sallen-Key, Schaltungsanalyse, Oberschwingungen, FFT" href="/filter/rechenbeispiele/" />
+	<LinkCard title="Praxisbeispiele" description="Anti-Aliasing, Mikrofon-Bandpass, Bode-Messung, FFT-Messung eines Rechtecks, Verzerrungen" href="/filter/praxisbeispiele/" />
 	<LinkCard title="Quiz" description="Teste dein Wissen über Filter" href="/filter/quiz/" />
 </CardGrid>
 

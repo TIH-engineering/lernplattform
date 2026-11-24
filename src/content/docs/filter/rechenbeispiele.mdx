@@ -1,6 +1,6 @@
 ---
 title: Rechenbeispiele – Filter
-description: Rechenbeispiele zu Grenzfrequenz, Filterauslegung, Betrag und Phase, Pegelrechnung, RLC-Butterworth-Tiefpass, Resonanzüberhöhung, Sallen-Key-Auslegung und Schaltungsanalyse eines Bandpasses.
+description: Rechenbeispiele zu Grenzfrequenz, Filterauslegung, Betrag und Phase, Pegelrechnung, RLC-Butterworth-Tiefpass, Resonanzüberhöhung, Sallen-Key-Auslegung, Schaltungsanalyse eines Bandpasses, Oberschwingungen, Aliasfrequenzen, FFT-Auflösung und Rechteck durch einen Tiefpass.
 ---
 
 import Stufe from '../../../components/Stufe.astro';
@@ -185,5 +185,97 @@ fällt sie mit −40 dB/Dekade.
 **d)** 1 kHz liegt im Durchlassbereich (Dämpfungen: Hochpass 0,9994, Tiefpass ≈ 0,996):
 $\hat{u}_\mathrm{a} \approx 50\,\mathrm{mV} \cdot 15{,}8 \approx 0{,}79\,\mathrm{V}$ (invertiert).
 Bei 20 kHz: $|H_\mathrm{TP}| = \dfrac{1{,}586}{\sqrt{1 + (20/3{,}39)^4}} \approx 0{,}045$ → $\hat{u}_\mathrm{a} \approx 50\,\mathrm{mV} \cdot 0{,}045 \cdot 10 \approx 23\,\mathrm{mV}$.
+
+</Loesung>
+
+## Oberschwingungen eines Rechtecksignals
+
+<Stufe wert="grundlagen" />
+
+Ein symmetrisches Rechtecksignal springt zwischen $+5\,\mathrm{V}$ und $-5\,\mathrm{V}$, $f_0 = 1\,\mathrm{kHz}$.
+
+**Gesucht:** Frequenz und Scheitelwert der ersten drei Spektrallinien; welcher Anteil der Leistung steckt in der Grundschwingung?
+
+<Loesung>
+
+Nach der [Fourier-Reihe](/filter/theorie/spektren/#3--die-fourier-reihe) gilt $\hat{u}_n = \dfrac{4 \hat{u}}{\pi n}$ für ungerade $n$:
+
+| Linie | Frequenz | Scheitelwert | Effektivwert |
+| --- | --- | --- | --- |
+| Grundschwingung | 1 kHz | $\tfrac{4 \cdot 5\,\mathrm{V}}{\pi} \approx 6{,}37\,\mathrm{V}$ | $4{,}50\,\mathrm{V}$ |
+| 3. Harmonische | 3 kHz | $6{,}37\,\mathrm{V}/3 \approx 2{,}12\,\mathrm{V}$ | $1{,}50\,\mathrm{V}$ |
+| 5. Harmonische | 5 kHz | $6{,}37\,\mathrm{V}/5 \approx 1{,}27\,\mathrm{V}$ | $0{,}90\,\mathrm{V}$ |
+
+Leistung in einem Widerstand ∝ $U^2$. Das Rechteck hat den Effektivwert 5 V: $\dfrac{(4{,}50\,\mathrm{V})^2}{(5\,\mathrm{V})^2} \approx 0{,}81$.
+
+**Ergebnis:** Linien bei 1, 3 und 5 kHz mit 6,37 V, 2,12 V und 1,27 V Scheitelwert. Die Grundschwingung trägt 81 % der Leistung
+(genau $8/\pi^2$). Bemerkenswert: Ihr Scheitelwert (6,37 V) ist größer als der des Rechtecks selbst.
+
+</Loesung>
+
+## Aliasfrequenzen berechnen
+
+<Stufe wert="standard" />
+
+Ein Datenlogger tastet mit $f_\mathrm{s} = 10\,\mathrm{kHz}$ ab und hat **kein** Anti-Aliasing-Filter. Bei welchen Frequenzen erscheinen
+Signale mit 7 kHz, 12 kHz und 19 kHz? Welche Grenzfrequenz bräuchte ein Anti-Aliasing-Filter?
+
+<Loesung>
+
+$f_\mathrm{s}/2 = 5\,\mathrm{kHz}$ – alles darüber wird „heruntergefaltet“: $f_\mathrm{alias} = \lvert f - k f_\mathrm{s} \rvert$
+
+- 7 kHz: $\lvert 7 - 10 \rvert\,\mathrm{kHz} = 3\,\mathrm{kHz}$
+- 12 kHz: $\lvert 12 - 10 \rvert\,\mathrm{kHz} = 2\,\mathrm{kHz}$
+- 19 kHz: $\lvert 19 - 20 \rvert\,\mathrm{kHz} = 1\,\mathrm{kHz}$
+
+**Ergebnis:** 3 kHz, 2 kHz und 1 kHz – nicht von echten Signalen dieser Frequenz zu unterscheiden. Ein Tiefpass muss alles oberhalb von
+5 kHz ausreichend dämpfen. Weil ein einfaches RC-Glied nur langsam abfällt, legt man seine Grenzfrequenz deutlich tiefer (z. B. 1 kHz) oder
+nimmt ein [Filter höherer Ordnung](/filter/theorie/).
+
+</Loesung>
+
+## Auflösung einer FFT
+
+<Stufe wert="standard" />
+
+Ein Oszilloskop zeichnet $N = 8192$ Werte mit $f_\mathrm{s} = 100\,\mathrm{kS/s}$ auf.
+
+a) Wie lange dauert die Aufzeichnung, wie groß sind $\Delta f$ und $f_\mathrm{max}$?
+b) Kann man damit 50 Hz und 60 Hz (Netzbrummen in Europa und Amerika) unterscheiden?
+c) Wie lange muss man aufzeichnen, damit die Linien mindestens 1 Hz auseinanderliegen?
+
+<Loesung>
+
+a) $T_\mathrm{Aufz} = \dfrac{8192}{100\,000\,\mathrm{s^{-1}}} \approx 82\,\mathrm{ms}$ · $\Delta f = \dfrac{100\,\mathrm{kHz}}{8192} \approx 12{,}2\,\mathrm{Hz}$ · $f_\mathrm{max} = 50\,\mathrm{kHz}$
+
+b) Der Abstand von 10 Hz ist **kleiner** als die Auflösung von 12,2 Hz – beide fallen in dieselben Linien. Nein.
+
+c) $T_\mathrm{Aufz} \geq \dfrac{1}{1\,\mathrm{Hz}} = 1\,\mathrm{s}$ → bei 100 kS/s wären das 100 000 Werte. Besser: Abtastrate senken (z. B. 2 kS/s,
+   $f_\mathrm{max} = 1\,\mathrm{kHz}$ genügt für Brummen) und 2048 Werte aufzeichnen.
+
+**Ergebnis:** 82 ms, 12,2 Hz, 50 kHz. Die Auflösung hängt nur von der Aufzeichnungsdauer ab, nicht von der Abtastrate.
+
+</Loesung>
+
+## Rechteck durch einen Tiefpass
+
+<Stufe wert="vertiefung" />
+
+Ein Rechteck ($\pm 1\,\mathrm{V}$, $f_0 = 1\,\mathrm{kHz}$) läuft durch einen RC-Tiefpass mit $f_\mathrm{g} = 1\,\mathrm{kHz}$. Wie stark werden
+Grundschwingung, 3. und 5. Harmonische gedämpft? Was bedeutet das für die Kurvenform?
+
+<Loesung>
+
+Betragsgang des [RC-Tiefpasses](/filter/theorie/): $\lvert H \rvert = \dfrac{1}{\sqrt{1 + (f/f_\mathrm{g})^2}}$
+
+| Linie | vorher $\hat{u}_n$ | $\lvert H \rvert$ | nachher |
+| --- | --- | --- | --- |
+| 1 kHz | 1,27 V | 0,707 (−3 dB) | 0,90 V |
+| 3 kHz | 0,42 V | 0,316 (−10 dB) | 0,13 V |
+| 5 kHz | 0,25 V | 0,196 (−14 dB) | 0,05 V |
+
+**Ergebnis:** Die Oberschwingungen werden viel stärker gedämpft als die Grundschwingung. Das Signal nähert sich einem Sinus, die Flanken
+werden flach (Ladekurve des Kondensators). Ein Filter wirkt auf jede Spektrallinie einzeln – das ist der Grund, warum man Filter im
+Frequenzbereich beschreibt.
 
 </Loesung>

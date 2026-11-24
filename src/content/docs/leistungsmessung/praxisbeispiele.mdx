@@ -34,15 +34,19 @@ Ein günstiges Energiekosten-Messgerät zeigt:
 
 Mit einer Stromzange soll der Strom eines Wasserkochers gemessen werden.
 
-1. Was zeigt die Zange, wenn man das ganze Anschlusskabel umschließt?
-2. Warum zeigt eine einfache Stromzange (Stromwandler) an der Gleichstromleitung eines Solarmoduls nichts an?
+1. Welches Prinzip nutzt die Stromzange, um ohne Auftrennen der Leitung zu messen?
+2. Was zeigt die Zange, wenn man das ganze Anschlusskabel umschließt?
+3. Warum zeigt eine einfache Stromzange (Stromwandler) an der Gleichstromleitung eines Solarmoduls nichts an?
 
 <Loesung>
 
-1. **Null** (oder fast null): Hin- und Rückleiter führen gleich große, entgegengesetzte Ströme, ihre Magnetfelder heben sich
+1. Der Strom erzeugt ein Magnetfeld um den Leiter. Der Eisenkern der Zange führt den Fluss, ein Sensor misst ihn (bei Wechselstrom
+   eine Wicklung wie beim Transformator, sonst ein Hall-Sensor). Nach dem Durchflutungssatz ist der Fluss proportional zum
+   **umschlossenen** Strom.
+2. **Null** (oder fast null): Hin- und Rückleiter führen gleich große, entgegengesetzte Ströme, ihre Magnetfelder heben sich
    auf. Man muss **einen** Leiter umschließen – dafür gibt es Adapter, die L und N getrennt herausführen. (Genau dieses
    Prinzip nutzt der FI-Schutzschalter: Er misst die Differenz.)
-2. Ein Stromwandler arbeitet nach dem Transformatorprinzip und braucht ein **sich änderndes** Magnetfeld. Für Gleichstrom
+3. Ein Stromwandler arbeitet nach dem Transformatorprinzip und braucht ein **sich änderndes** Magnetfeld. Für Gleichstrom
    braucht man eine Zange mit **Hall-Sensor** (Aufschrift „AC/DC“). Vor der Messung Nullabgleich drücken – der Hall-Sensor
    hat einen Offset.
 

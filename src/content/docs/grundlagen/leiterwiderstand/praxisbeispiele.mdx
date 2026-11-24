@@ -1,6 +1,6 @@
 ---
 title: Praxisbeispiele – Leiterwiderstand und Temperatur
-description: Kabeltrommel, Leiterbahnbreite auf Platinen, NTC als Temperatursensor und Einschaltstrombegrenzer, PTC als rückstellende Sicherung.
+description: Kabeltrommel, Leiterbahnbreite auf Platinen, PTC als rückstellende Sicherung.
 ---
 
 import Loesung from '../../../../components/Loesung.astro';
@@ -37,26 +37,6 @@ Beim Platinenentwurf wird die Leiterbahnbreite nach dem Strom gewählt. Standard
    $P = (2\,\mathrm{A})^2 \cdot 0{,}051\,\Omega \approx 0{,}2\,\mathrm{W}$ pro 10 cm.
 2. Größere Flächen bedeuten einen kleinen Widerstand (weniger Spannungsfall und Erwärmung) und sie verteilen die Wärme.
    Außerdem verbessern Masseflächen die elektromagnetische Verträglichkeit.
-
-</Loesung>
-
-## NTC: Sensor und Einschaltstrombegrenzer
-
-Ein NTC (Heißleiter) begegnet dir in zwei ganz unterschiedlichen Rollen:
-
-- **Temperatursensor:** z. B. im Akku-Pack eines E-Bikes oder Laptops, in der Waschmaschine, im 3D-Drucker.
-- **Einschaltstrombegrenzer:** in Netzteilen in Reihe zum Netzeingang.
-
-1. Wie funktioniert der NTC als Einschaltstrombegrenzer? Warum braucht man ihn überhaupt?
-2. Warum muss man nach dem Ausschalten eines solchen Netzteils kurz warten, bevor der Schutz wieder voll wirkt?
-
-<Loesung>
-
-1. Beim Einschalten ist der Siebkondensator im Netzteil leer und würde einen sehr großen Ladestrom ziehen
-   (Sicherung löst aus, Kontakte verschweißen). Der **kalte** NTC ist hochohmig und begrenzt diesen Strom.
-   Im Betrieb erwärmt er sich durch den Strom, wird **niederohmig** und verursacht kaum noch Verluste.
-2. Der NTC muss erst **abkühlen**, um wieder hochohmig zu werden. Schaltet man sofort wieder ein, ist er noch heiß
-   und begrenzt den Einschaltstrom kaum.
 
 </Loesung>
 

@@ -46,7 +46,7 @@ fragen:
 
   - typ: zahl
     stufe: standard
-    frage: 'Wie viele Elementarladungen ergeben zusammen eine Ladung von $1\,\mathrm{C}$? Gib das Ergebnis in der Form „6,24e18“ ein.'
+    frage: 'Wie viele Elementarladungen ergeben zusammen eine Ladung von $1\,\mathrm{C}$? Gib das Ergebnis in Exponentialschreibweise ein, z. B. „3,5e12“ für $3{,}5 \cdot 10^{12}$.'
     loesung: 6.242e18
     einheit: ''
     toleranz: 1

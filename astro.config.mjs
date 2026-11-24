@@ -44,6 +44,10 @@ const thema = (label, ordner, { theorieOrdner = false, zusatz = [], rechenLabel 
 
 // Grundlagen der Elektrotechnik: Theorie steht im Schulbuch, daher pro Thema nur
 // Übersicht, Rechenbeispiele, Praxisbeispiele und Quiz. Ordner: src/content/docs/grundlagen/<ordner>/
+// Regel: Rechenbeispiele = Aufgaben mit gegebenen Werten und Rechenweg (wie im Test);
+//        Praxisbeispiele = echter Gegenstand oder Messung aus Alltag/Labor, Schwerpunkt Verstehen und Abschätzen.
+// Wo sich das nicht sinnvoll trennen lässt, gibt es nur „Beispiele“ (Datei rechenbeispiele.mdx, kein praxisbeispiele.mdx).
+const nurBeispiele = new Set(['netzwerke', 'komplexe-rechnung']);
 const grundlagenThemen = [
 	['Grundbegriffe, Strom und Spannung', 'grundbegriffe'],
 	['Ohmsches Gesetz und Quellen', 'ohmsches-gesetz'],
@@ -70,8 +74,12 @@ const grundlagen = {
 			collapsed: true,
 			items: [
 				{ label: 'Übersicht', slug: `grundlagen/${ordner}` },
-				{ label: 'Rechenbeispiele', slug: `grundlagen/${ordner}/rechenbeispiele` },
-				{ label: 'Praxisbeispiele', slug: `grundlagen/${ordner}/praxisbeispiele` },
+				...(nurBeispiele.has(ordner)
+					? [{ label: 'Beispiele', slug: `grundlagen/${ordner}/rechenbeispiele` }]
+					: [
+							{ label: 'Rechenbeispiele', slug: `grundlagen/${ordner}/rechenbeispiele` },
+							{ label: 'Praxisbeispiele', slug: `grundlagen/${ordner}/praxisbeispiele` },
+						]),
 				{ label: 'Quiz', slug: `grundlagen/${ordner}/quiz` },
 			],
 		})),
@@ -118,7 +126,7 @@ export default defineConfig({
 						thema('Dioden', 'dioden'),
 						thema('Transistoren', 'transistoren', { theorieOrdner: true }),
 						thema('Operationsverstärker', 'operationsverstaerker'),
-						thema('Filter', 'filter'),
+						thema('Filter und Spektren', 'filter', { theorieOrdner: true }),
 						thema('Oszillatoren', 'oszillatoren', { theorieOrdner: true }),
 						thema('Thermische Auslegung', 'thermische-auslegung'),
 						// Ergänzung: nur C-Grundlagen für einfache Mikrocontroller-Programme (wird nicht erweitert)
@@ -149,7 +157,7 @@ export default defineConfig({
 					items: [
 						thema('Grundlagen der Messtechnik', 'messtechnik'),
 						thema('Messfehler und Messunsicherheit', 'messfehler'),
-						thema('Signalkennwerte', 'signalkennwerte', { theorieOrdner: true }),
+						thema('Signalkennwerte', 'signalkennwerte'),
 						thema('Sensoren', 'sensoren'),
 						thema('Messwerke und Messbereiche', 'messwerke'),
 						thema('Messbrücken', 'messbruecken'),
